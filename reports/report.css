@@ -1,0 +1,144 @@
+/* The one stylesheet the generated pages share.
+ *
+ * A stylesheet is not a script: `R-9` asks that no page need JavaScript to be read, and every
+ * page here reads fine with this file missing. Nothing below moves anything or hides anything. */
+
+:root {
+    color-scheme: light dark;
+    --ink: #1b1b1b;
+    --paper: #fdfdfc;
+    --quiet: #5b5b57;
+    --rule: #d8d8d2;
+    --link: #1a4f8a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ink: #e4e4e0;
+        --paper: #17171a;
+        --quiet: #9a9a94;
+        --rule: #33333a;
+        --link: #8ab4e8;
+    }
+}
+
+body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    margin: 0 auto;
+    max-width: 62rem;
+    padding: 2rem 1rem 4rem;
+}
+
+h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+}
+
+h2 {
+    border-bottom: 1px solid var(--rule);
+    font-size: 1.1rem;
+    margin: 2.2rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+}
+
+p.note {
+    color: var(--quiet);
+    margin: 0 0 0.8rem;
+}
+
+p.where {
+    font-size: 0.9rem;
+    margin: 0 0 1.4rem;
+}
+
+span.count {
+    color: var(--quiet);
+    font-weight: normal;
+}
+
+span.count::before {
+    content: "(";
+}
+
+span.count::after {
+    content: ")";
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.5rem 0;
+}
+
+code {
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+a {
+    color: var(--link);
+}
+
+span.said {
+    color: var(--quiet);
+    font-size: 0.92rem;
+}
+
+span.beside {
+    font-size: 0.85rem;
+}
+
+/* A `.4x` file rendered as a page.
+ *
+ * Sean, 2026-09-28: "I like the html can be used to make text clean, readable, and sometimes
+ * syntax highlighting." The marking is emitted by the generator and coloured here, so the page
+ * needs no script and still reads with this file missing. */
+
+pre.four-x {
+    background: color-mix(in srgb, var(--ink) 4%, var(--paper));
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font: 0.88rem/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow-x: auto;
+    padding: 1rem 1.1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+pre.four-x .prose {
+    color: var(--quiet);
+    font-style: normal;
+}
+
+pre.four-x .prose strong {
+    color: var(--ink);
+}
+
+pre.four-x .relation {
+    color: var(--link);
+    font-weight: 600;
+}
+
+pre.four-x .key {
+    color: var(--ink);
+}
+
+pre.four-x .colon,
+pre.four-x .brace {
+    color: var(--quiet);
+}
+
+pre.four-x .value {
+    color: color-mix(in srgb, var(--link) 45%, var(--ink));
+}
+
+pre.four-x .arrow {
+    color: var(--quiet);
+    font-weight: 600;
+}

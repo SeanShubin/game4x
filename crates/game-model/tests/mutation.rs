@@ -28,6 +28,7 @@
 //! other asks whether *this* value is the one that matters.
 
 use std::collections::{BTreeMap, BTreeSet};
+use std::path::PathBuf;
 
 use game_model::engine::Game;
 use game_model::notation::{Row, read, write};
@@ -850,7 +851,34 @@ fn recorded(file: &str, what: &str) -> bool {
         .any(|entry| entry.ends_with(&tail))
 }
 
-fn report(title: &str, tried: usize, survived: &[Survived], files: &BTreeMap<String, String>) {
+/// Where a sweep leaves its findings, so they can be browsed and diffed rather than scrolled.
+///
+/// **A report only in a CI log is a report nobody navigates.** Sean, 2026-09-28, asking for the
+/// index back: *I want to re-create a structure that allows me to navigate all information about
+/// my tests and supporting data indexed from an html file.* **A dead rule is information about
+/// his tests** - it is the list of what they do not reach - so it is written where the index can
+/// point at it.
+///
+/// **Committed, so a change in what is dead shows as a diff.** The sweep runs on `--ignored` and
+/// in CI, so this file is rewritten rarely; its header says which commit produced it, because a
+/// file that changes seldom is one that goes stale without anyone noticing.
+fn written_to(slug: &str, text: &str) {
+    let at = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../reports")
+        .join(format!("{slug}.md"));
+    if let Some(under) = at.parent() {
+        std::fs::create_dir_all(under).unwrap_or_else(|why| panic!("{}: {why}", under.display()));
+    }
+    std::fs::write(&at, text).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+}
+
+fn report(
+    title: &str,
+    slug: &str,
+    tried: usize,
+    survived: &[Survived],
+    files: &BTreeMap<String, String>,
+) {
     let whole = Whole::of(files);
     // **Two populations and only one of them is a gap.** Sean, 2026-09-28: *my main concern is
     // that the tests I review cover the rules specific to the game. I am not concerned with every
@@ -880,17 +908,23 @@ fn report(title: &str, tried: usize, survived: &[Survived], files: &BTreeMap<Str
     let count =
         |what: &BTreeMap<String, Vec<&Survived>>| -> usize { what.values().map(Vec::len).sum() };
 
-    println!("\n{title}");
-    println!(
+    // **Built as text and then both printed and written**, because the CI log and the browsable
+    // copy have to be the same report. Two renderings of one finding is two things that drift.
+    let mut out = String::new();
+    out.push_str(&format!("# {title}\n\n"));
+    out.push_str(&format!(
         "{tried} mutations tried; {} of them nothing noticed - {} in the ruleset, {} in the \
-         machinery and vocabulary around it.",
+         machinery and vocabulary around it.\n",
         survived.len(),
         count(&of_rules),
         count(&of_machinery)
-    );
+    ));
 
-    let say = |heading: &str, note: &str, what: &BTreeMap<String, Vec<&Survived>>| {
-        println!("\n{heading}  ({} row(s))\n  {note}", count(what));
+    let mut say = |heading: &str, note: &str, what: &BTreeMap<String, Vec<&Survived>>| {
+        out.push_str(&format!(
+            "\n## {heading}  ({} row(s))\n\n{note}\n",
+            count(what)
+        ));
         let mut order: Vec<(&String, &Vec<&Survived>)> = what.iter().collect();
         order.sort_by_key(|(_, rows)| usize::MAX - rows.len());
         for (said, rows) in order {
@@ -910,31 +944,36 @@ fn report(title: &str, tried: usize, survived: &[Survived], files: &BTreeMap<Str
                 n if n == rows.len() => "no earlier run saw rows of these kinds".to_string(),
                 n => format!("{n} of a kind no earlier run saw"),
             };
-            println!("\n  {} row(s) - {said}\n  ({since})", rows.len());
+            out.push_str(&format!(
+                "\n### {} row(s) - {said}\n\n({since})\n\n```text\n",
+                rows.len()
+            ));
             for one in rows {
                 let mark = if recorded(&one.file, &one.what) {
                     " "
                 } else {
                     "*"
                 };
-                println!("    {mark} {}:{}  {}", one.file, one.line, one.row);
+                out.push_str(&format!("{mark} {}:{}  {}\n", one.file, one.line, one.row));
             }
+            out.push_str("```\n");
         }
     };
 
     say(
-        "-- Ruleset rows no reviewed behaviour depends on --",
+        "Ruleset rows no reviewed behaviour depends on",
         "This is the one that goes to zero, and each row goes one of two ways: a test of the \
          behaviour that needs it, or the row deleted because nothing needs it.",
         &of_rules,
     );
     say(
-        "-- The machinery and vocabulary around them --",
+        "The machinery and vocabulary around them",
         "Reported rather than enforced. A vocabulary row wants a test of whatever reads it: a \
          territory of each biome would pin all six at once.",
         &of_machinery,
     );
-    println!();
+    print!("\n{out}");
+    written_to(slug, &out);
 }
 
 fn rows_of(text: &str) -> Vec<(usize, Row)> {
@@ -1032,6 +1071,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 
     report(
         "== Rows the `.4x` suite would not miss ==",
+        "unused-rows",
         tried,
         &survived,
         &files,
@@ -1268,6 +1308,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 
     report(
         "== Values the `.4x` suite would not miss ==",
+        "unused-values",
         tried,
         &survived,
         &files,

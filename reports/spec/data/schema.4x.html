@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/data/schema.4x</title>
+<link rel="stylesheet" href="../../report.css">
+</head>
+<body>
+<h1><code>spec/data/schema.4x</code></h1>
+<p class="note">The shared schema: every relation, its columns in order, and what points at what.</p>
+<p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/data/schema.4x">the file itself, as text</a></p>
+<pre class="four-x"><span class="prose">The shared schema: every relation, its columns in order, and what points at what.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Every reference is to a single opaque integer id</strong> - Sean, 2026-09-15: *I want the truth of the</span>
+<span class="prose">data model to be fully normalized, which I believe means always referencing by ids, and a single</span>
+<span class="prose">id at that.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sixteen relations are keyed by such an id and one is not.</strong> <code>residency</code> carries a <code>quantity</code></span>
+<span class="prose">and is keyed by its description, <code>(what, where)</code> - Sean, 2026-09-15: *it would make no sense to</span>
+<span class="prose">have both an id and a quantity in the same logical model.* <strong>Nothing references a residency</strong>,</span>
+<span class="prose">which is what lets it do without one.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The ids mean nothing and are not meant to be read.</strong> Making them legible is the user-facing</span>
+<span class="prose">style's job, not this one's. What is legible here is the <code>name</code> column, which is decoration -</span>
+<span class="prose">with two exceptions worth knowing: a row names its relation by <code>relation.name</code>, and a row's</span>
+<span class="prose">values are keyed by <code>column.name</code>, so those two decorations are what the notation is written in.</span>
+
+
+<span class="prose"># Every relation, and its columns in order</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">reference</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">state</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">role</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">name</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">7</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">8</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">9</span> <span class="key">name</span><span class="colon">:</span><span class="value">binding</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">12</span> <span class="key">name</span><span class="colon">:</span><span class="value">primitive</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">13</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">15</span> <span class="key">name</span><span class="colon">:</span><span class="value">adjacency</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">17</span> <span class="key">name</span><span class="colon">:</span><span class="value">literal</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">18</span> <span class="key">name</span><span class="colon">:</span><span class="value">deposit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">19</span> <span class="key">name</span><span class="colon">:</span><span class="value">extractor</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">21</span> <span class="key">name</span><span class="colon">:</span><span class="value">reading</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">22</span> <span class="key">name</span><span class="colon">:</span><span class="value">attribute</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation-of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">name</span><span class="colon">:</span><span class="value">family</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">25</span> <span class="key">name</span><span class="colon">:</span><span class="value">member</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">26</span> <span class="key">name</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">27</span> <span class="key">name</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">28</span> <span class="key">name</span><span class="colon">:</span><span class="value">scout</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">29</span> <span class="key">name</span><span class="colon">:</span><span class="value">labor</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">30</span> <span class="key">name</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">31</span> <span class="key">name</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">33</span> <span class="key">name</span><span class="colon">:</span><span class="value">supply</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">34</span> <span class="key">name</span><span class="colon">:</span><span class="value">provides</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">35</span> <span class="key">name</span><span class="colon">:</span><span class="value">transport</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">36</span> <span class="key">name</span><span class="colon">:</span><span class="value">consumes</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">37</span> <span class="key">name</span><span class="colon">:</span><span class="value">assigns</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">38</span> <span class="key">name</span><span class="colon">:</span><span class="value">trait</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">39</span> <span class="key">name</span><span class="colon">:</span><span class="value">carries</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">40</span> <span class="key">name</span><span class="colon">:</span><span class="value">part</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">41</span> <span class="key">name</span><span class="colon">:</span><span class="value">argument</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">42</span> <span class="key">name</span><span class="colon">:</span><span class="value">bin</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">43</span> <span class="key">name</span><span class="colon">:</span><span class="value">capacity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">44</span> <span class="key">name</span><span class="colon">:</span><span class="value">loose</span><span class="brace">}</span>
+
+
+<span class="prose"># The columns</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">seq</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">7</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">8</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">9</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">to</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">10</span> <span class="key">relation</span><span class="colon">:</span><span class="value">state</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">11</span> <span class="key">relation</span><span class="colon">:</span><span class="value">state</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">12</span> <span class="key">relation</span><span class="colon">:</span><span class="value">role</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">13</span> <span class="key">relation</span><span class="colon">:</span><span class="value">role</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">14</span> <span class="key">relation</span><span class="colon">:</span><span class="value">rule</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">15</span> <span class="key">relation</span><span class="colon">:</span><span class="value">rule</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">16</span> <span class="key">relation</span><span class="colon">:</span><span class="value">input</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">17</span> <span class="key">relation</span><span class="colon">:</span><span class="value">input</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">18</span> <span class="key">relation</span><span class="colon">:</span><span class="value">input</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">seq</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">19</span> <span class="key">relation</span><span class="colon">:</span><span class="value">input</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">20</span> <span class="key">relation</span><span class="colon">:</span><span class="value">input</span> <span class="key">seq</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">21</span> <span class="key">relation</span><span class="colon">:</span><span class="value">clause</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">22</span> <span class="key">relation</span><span class="colon">:</span><span class="value">clause</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">relation</span><span class="colon">:</span><span class="value">clause</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">seq</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">relation</span><span class="colon">:</span><span class="value">clause</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">role</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">25</span> <span class="key">relation</span><span class="colon">:</span><span class="value">clause</span> <span class="key">seq</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">26</span> <span class="key">relation</span><span class="colon">:</span><span class="value">binding</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">27</span> <span class="key">relation</span><span class="colon">:</span><span class="value">binding</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">28</span> <span class="key">relation</span><span class="colon">:</span><span class="value">binding</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">29</span> <span class="key">relation</span><span class="colon">:</span><span class="value">binding</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">36</span> <span class="key">relation</span><span class="colon">:</span><span class="value">primitive</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">37</span> <span class="key">relation</span><span class="colon">:</span><span class="value">primitive</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">word</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">38</span> <span class="key">relation</span><span class="colon">:</span><span class="value">territory</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">41</span> <span class="key">relation</span><span class="colon">:</span><span class="value">adjacency</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">42</span> <span class="key">relation</span><span class="colon">:</span><span class="value">adjacency</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">from</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">43</span> <span class="key">relation</span><span class="colon">:</span><span class="value">adjacency</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">to</span><span class="brace">}</span>
+
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">47</span> <span class="key">relation</span><span class="colon">:</span><span class="value">literal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">48</span> <span class="key">relation</span><span class="colon">:</span><span class="value">literal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">49</span> <span class="key">relation</span><span class="colon">:</span><span class="value">literal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">50</span> <span class="key">relation</span><span class="colon">:</span><span class="value">literal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">value</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">51</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">52</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">53</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">density</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">54</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">55</span> <span class="key">relation</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">56</span> <span class="key">relation</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">101</span> <span class="key">relation</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">working</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">57</span> <span class="key">relation</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">60</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reading</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">61</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reading</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">62</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reading</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">63</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reading</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">64</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reading</span> <span class="key">seq</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">takes</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">65</span> <span class="key">relation</span><span class="colon">:</span><span class="value">attribute</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">66</span> <span class="key">relation</span><span class="colon">:</span><span class="value">attribute</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">67</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation-of</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">68</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation-of</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">69</span> <span class="key">relation</span><span class="colon">:</span><span class="value">family</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">70</span> <span class="key">relation</span><span class="colon">:</span><span class="value">member</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">71</span> <span class="key">relation</span><span class="colon">:</span><span class="value">member</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">family</span><span class="brace">}</span>
+
+
+<span class="prose"># The families, and the kinds that belong to them</span>
+<span class="prose"></span>
+<span class="prose"><strong>A family is an abstract relation: columns and no rows.</strong> The columns are the shape its members</span>
+<span class="prose">share, and <code>{member ...}</code> is the set - Sean, 2026-09-17, having considered an exists/not-exists</span>
+<span class="prose">trait and a set of kinds and asking whether both were relevant: they are the same mechanism.</span>
+<span class="prose"><code>spec/data/families.4x</code> writes it this way already, and <code>spec/data/for.4x</code> uses it for exactly</span>
+<span class="prose">what it is for here: <code>{for block:build-extractor seq:3 kind:$resource}</code>.</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">72</span> <span class="key">relation</span><span class="colon">:</span><span class="value">unit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">98</span> <span class="key">relation</span><span class="colon">:</span><span class="value">unit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">73</span> <span class="key">relation</span><span class="colon">:</span><span class="value">unit</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">74</span> <span class="key">relation</span><span class="colon">:</span><span class="value">resource</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">75</span> <span class="key">relation</span><span class="colon">:</span><span class="value">resource</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+
+<span class="prose"># Every kind of thing, as a relation of its own</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-17</strong>, looking at a deposit, an extractor and a labor in one territory: *I notice</span>
+<span class="prose">that in territory-1, we have a deposit, an extractor, and a food. Yet the way we specify this is</span>
+<span class="prose">different.* <strong>It was: two of them had their kind in the schema and one had it in a column.</strong> A</span>
+<span class="prose">kind is a relation now, and <code>residency</code> and <code>thing</code> are both gone.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This is <code>spec/data/carries.4x</code> said in the notation</strong> - a kind and the traits it carries is a</span>
+<span class="prose">relation and its columns.</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">76</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scout</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">99</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scout</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">77</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scout</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">78</span> <span class="key">relation</span><span class="colon">:</span><span class="value">labor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">79</span> <span class="key">relation</span><span class="colon">:</span><span class="value">labor</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">80</span> <span class="key">relation</span><span class="colon">:</span><span class="value">metal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">81</span> <span class="key">relation</span><span class="colon">:</span><span class="value">metal</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">82</span> <span class="key">relation</span><span class="colon">:</span><span class="value">food</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">83</span> <span class="key">relation</span><span class="colon">:</span><span class="value">food</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+
+<span class="prose"># How many times a thing may still act</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-17</strong>, on an extractor that can be worked as often as there is labor for it:</span>
+<span class="prose">*rediness is going to end up being a number of times we can do something rather than whether we</span>
+<span class="prose">have done something.* <strong>So it is a quantity, and a quantity is a relation's.</strong></span>
+<span class="prose"></span>
+<span class="prose"><strong>An allowance is its own counted relation rather than a column on the thing.</strong> A column would</span>
+<span class="prose">have meant going from <code>working:3</code> to <code>working:2</code>, which is arithmetic on a named column and</span>
+<span class="prose">something the engine cannot do; a quantity is arithmetic it already does, and running out is the</span>
+<span class="prose">refusal it already gives. <strong>What that gives up is which extractor was worked</strong> - and two</span>
+<span class="prose">extractors with one work each cannot be told from two extractors sharing two works by anything</span>
+<span class="prose">the game can ask, because extractors are fungible.</span>
+<span class="prose"></span>
+<span class="prose"><strong>One relation per kind of readiness</strong>, named for the activity, which is what <code>spec/data/traits.4x</code></span>
+<span class="prose">does with <code>working</code>, <code>moving</code>, <code>laboring</code> and <code>bearing</code>. Each is a column of the thing that has</span>
+<span class="prose">it, so a readiness cannot outnumber the things holding it without anything saying so.</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">102</span> <span class="key">relation</span><span class="colon">:</span><span class="value">assigns</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">103</span> <span class="key">relation</span><span class="colon">:</span><span class="value">assigns</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">104</span> <span class="key">relation</span><span class="colon">:</span><span class="value">assigns</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">105</span> <span class="key">relation</span><span class="colon">:</span><span class="value">assigns</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">value</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">106</span> <span class="key">relation</span><span class="colon">:</span><span class="value">trait</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">107</span> <span class="key">relation</span><span class="colon">:</span><span class="value">trait</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">108</span> <span class="key">relation</span><span class="colon">:</span><span class="value">carries</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">109</span> <span class="key">relation</span><span class="colon">:</span><span class="value">carries</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">trait</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">110</span> <span class="key">relation</span><span class="colon">:</span><span class="value">part</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">111</span> <span class="key">relation</span><span class="colon">:</span><span class="value">part</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">112</span> <span class="key">relation</span><span class="colon">:</span><span class="value">part</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">is</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">113</span> <span class="key">relation</span><span class="colon">:</span><span class="value">part</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">seq</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">114</span> <span class="key">relation</span><span class="colon">:</span><span class="value">argument</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">115</span> <span class="key">relation</span><span class="colon">:</span><span class="value">argument</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">part</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">116</span> <span class="key">relation</span><span class="colon">:</span><span class="value">argument</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">117</span> <span class="key">relation</span><span class="colon">:</span><span class="value">argument</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">value</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">118</span> <span class="key">relation</span><span class="colon">:</span><span class="value">bin</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">119</span> <span class="key">relation</span><span class="colon">:</span><span class="value">bin</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">120</span> <span class="key">relation</span><span class="colon">:</span><span class="value">bin</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">121</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">122</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">for</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">123</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">124</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">per</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">125</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span> <span class="key">seq</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">126</span> <span class="key">relation</span><span class="colon">:</span><span class="value">loose</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+
+
+<span class="prose"># What a place has room for, and what each kind takes up</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-17</strong>: *I am thinking of inventing a resource that vehicles take up and having a</span>
+<span class="prose">certain limit per territory that is the same across all territories. A lot of real time strategy</span>
+<span class="prose">games do this, and I know the board game twilight imperium does this as well.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>The allowance is a constant and the rate is per kind</strong>, which is the half <code>spec/data/limit.4x</code></span>
+<span class="prose">cannot write: <code>{limit container:territory contained:ark n:2}</code> counts arks, and a transport worth</span>
+<span class="prose">two scouts has nowhere to be said.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A pool names the kind of place it is an allowance of</strong>, and a drawing kind's place is whichever</span>
+<span class="prose">of its columns points at that - so the engine finds it rather than knowing the game calls it</span>
+<span class="prose"><code>where</code>.</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">87</span> <span class="key">relation</span><span class="colon">:</span><span class="value">supply</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">88</span> <span class="key">relation</span><span class="colon">:</span><span class="value">supply</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">89</span> <span class="key">relation</span><span class="colon">:</span><span class="value">supply</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">per</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">90</span> <span class="key">relation</span><span class="colon">:</span><span class="value">provides</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">91</span> <span class="key">relation</span><span class="colon">:</span><span class="value">provides</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">92</span> <span class="key">relation</span><span class="colon">:</span><span class="value">provides</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">93</span> <span class="key">relation</span><span class="colon">:</span><span class="value">consumes</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">94</span> <span class="key">relation</span><span class="colon">:</span><span class="value">consumes</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">what</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">95</span> <span class="key">relation</span><span class="colon">:</span><span class="value">consumes</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">96</span> <span class="key">relation</span><span class="colon">:</span><span class="value">transport</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">100</span> <span class="key">relation</span><span class="colon">:</span><span class="value">transport</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">97</span> <span class="key">relation</span><span class="colon">:</span><span class="value">transport</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+
+<span class="prose"># What points at what</span>
+<span class="prose"></span>
+<span class="prose"><strong>A reference is always to a relation's <code>id</code>.</strong> The engine checks that such a row is there, so a</span>
+<span class="prose">value pointing at nothing is refused when the data is read rather than when it is used.</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">column</span><span class="colon">:</span><span class="value">4</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">column</span><span class="colon">:</span><span class="value">8</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">column</span><span class="colon">:</span><span class="value">9</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">column</span><span class="colon">:</span><span class="value">11</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">column</span><span class="colon">:</span><span class="value">17</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">column</span><span class="colon">:</span><span class="value">20</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">7</span> <span class="key">column</span><span class="colon">:</span><span class="value">22</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">8</span> <span class="key">column</span><span class="colon">:</span><span class="value">24</span> <span class="key">to</span><span class="colon">:</span><span class="value">role</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">9</span> <span class="key">column</span><span class="colon">:</span><span class="value">25</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">10</span> <span class="key">column</span><span class="colon">:</span><span class="value">27</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">11</span> <span class="key">column</span><span class="colon">:</span><span class="value">28</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">12</span> <span class="key">column</span><span class="colon">:</span><span class="value">29</span> <span class="key">to</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">16</span> <span class="key">column</span><span class="colon">:</span><span class="value">42</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">17</span> <span class="key">column</span><span class="colon">:</span><span class="value">43</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">20</span> <span class="key">column</span><span class="colon">:</span><span class="value">48</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">21</span> <span class="key">column</span><span class="colon">:</span><span class="value">49</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">22</span> <span class="key">column</span><span class="colon">:</span><span class="value">51</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">column</span><span class="colon">:</span><span class="value">52</span> <span class="key">to</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">column</span><span class="colon">:</span><span class="value">55</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">25</span> <span class="key">column</span><span class="colon">:</span><span class="value">56</span> <span class="key">to</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">28</span> <span class="key">column</span><span class="colon">:</span><span class="value">61</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">29</span> <span class="key">column</span><span class="colon">:</span><span class="value">62</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">30</span> <span class="key">column</span><span class="colon">:</span><span class="value">63</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">31</span> <span class="key">column</span><span class="colon">:</span><span class="value">64</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">32</span> <span class="key">column</span><span class="colon">:</span><span class="value">65</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">33</span> <span class="key">column</span><span class="colon">:</span><span class="value">66</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">34</span> <span class="key">column</span><span class="colon">:</span><span class="value">67</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">35</span> <span class="key">column</span><span class="colon">:</span><span class="value">68</span> <span class="key">to</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">36</span> <span class="key">column</span><span class="colon">:</span><span class="value">69</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">37</span> <span class="key">column</span><span class="colon">:</span><span class="value">70</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">38</span> <span class="key">column</span><span class="colon">:</span><span class="value">71</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">41</span> <span class="key">column</span><span class="colon">:</span><span class="value">76</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">42</span> <span class="key">column</span><span class="colon">:</span><span class="value">78</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">43</span> <span class="key">column</span><span class="colon">:</span><span class="value">80</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">44</span> <span class="key">column</span><span class="colon">:</span><span class="value">82</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">45</span> <span class="key">column</span><span class="colon">:</span><span class="value">103</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">46</span> <span class="key">column</span><span class="colon">:</span><span class="value">104</span> <span class="key">to</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">47</span> <span class="key">column</span><span class="colon">:</span><span class="value">89</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">48</span> <span class="key">column</span><span class="colon">:</span><span class="value">90</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">49</span> <span class="key">column</span><span class="colon">:</span><span class="value">91</span> <span class="key">to</span><span class="colon">:</span><span class="value">supply</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">50</span> <span class="key">column</span><span class="colon">:</span><span class="value">93</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">51</span> <span class="key">column</span><span class="colon">:</span><span class="value">94</span> <span class="key">to</span><span class="colon">:</span><span class="value">supply</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">52</span> <span class="key">column</span><span class="colon">:</span><span class="value">96</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">53</span> <span class="key">column</span><span class="colon">:</span><span class="value">108</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">54</span> <span class="key">column</span><span class="colon">:</span><span class="value">109</span> <span class="key">to</span><span class="colon">:</span><span class="value">trait</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">55</span> <span class="key">column</span><span class="colon">:</span><span class="value">111</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">56</span> <span class="key">column</span><span class="colon">:</span><span class="value">112</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">57</span> <span class="key">column</span><span class="colon">:</span><span class="value">115</span> <span class="key">to</span><span class="colon">:</span><span class="value">part</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">58</span> <span class="key">column</span><span class="colon">:</span><span class="value">116</span> <span class="key">to</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">59</span> <span class="key">column</span><span class="colon">:</span><span class="value">118</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">60</span> <span class="key">column</span><span class="colon">:</span><span class="value">119</span> <span class="key">to</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">61</span> <span class="key">column</span><span class="colon">:</span><span class="value">121</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">62</span> <span class="key">column</span><span class="colon">:</span><span class="value">122</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">63</span> <span class="key">column</span><span class="colon">:</span><span class="value">123</span> <span class="key">to</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">64</span> <span class="key">column</span><span class="colon">:</span><span class="value">124</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">65</span> <span class="key">column</span><span class="colon">:</span><span class="value">126</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+
+<span class="prose"># Which relations are the game's state</span>
+<span class="prose"></span>
+<span class="prose"><strong>This is what bounds the comparison.</strong> <code>expected.4x</code> states the state after, and a diff has to</span>
+<span class="prose">know which relations to look at - without this it would compare the rule and the command too.</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">relation</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">relation</span><span class="colon">:</span><span class="value">adjacency</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">relation</span><span class="colon">:</span><span class="value">extractor</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">7</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scout</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">8</span> <span class="key">relation</span><span class="colon">:</span><span class="value">labor</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">9</span> <span class="key">relation</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">10</span> <span class="key">relation</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">12</span> <span class="key">relation</span><span class="colon">:</span><span class="value">transport</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">13</span> <span class="key">relation</span><span class="colon">:</span><span class="value">provides</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">14</span> <span class="key">relation</span><span class="colon">:</span><span class="value">consumes</span><span class="brace">}</span>
+
+
+<span class="prose"># Which relations are families, and who belongs</span>
+<span class="prose"></span>
+<span class="prose"><strong>A <code>unit</code> may be moved and a <code>resource</code> may be extracted</strong>, and those are the two sets any rule</span>
+<span class="prose">here ranges over. <strong><code>move</code> is typed <code>of:unit</code></strong>, so a deposit is not offered to it because the</span>
+<span class="prose">game says a deposit is not a unit - rather than because <code>move</code>'s add clause happens to leave a</span>
+<span class="prose">column unbound, which is how it would have been excluded without this.</span>
+
+<span class="brace">{</span><span class="relation">family</span> <span class="key">relation</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">family</span> <span class="key">relation</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">family</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">scout</span> <span class="key">family</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">ark</span> <span class="key">family</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">transport</span> <span class="key">family</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">metal</span> <span class="key">family</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">food</span> <span class="key">family</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">energy</span> <span class="key">family</span><span class="colon">:</span><span class="value">resource</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">metal</span> <span class="key">family</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">food</span> <span class="key">family</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">labor</span> <span class="key">family</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">energy</span> <span class="key">family</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+
+
+<span class="prose"># What a deposit's density is, and what a deposit holds</span>
+<span class="prose"></span>
+<span class="prose"><strong>A density is a fact about a deposit and not part of what a deposit is.</strong> Sean, 2026-09-17,</span>
+<span class="prose">ruling out the alternative: a territory may have deposits of two grades, or the notation may be</span>
+<span class="prose">uniform and minimal, and it cannot have both - <em>we are dropping (2)</em>. <code>spec/planet.md</code> asks for</span>
+<span class="prose">one: *For each resource, a territory has capacity for some number of extractors, and a density</span>
+<span class="prose">that each of them yields.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>So a second grade is two rows with one key and the structure refuses it</strong>, which is the whole</span>
+<span class="prose">reason the column is marked: with density in the key it would be a legal state nothing could</span>
+<span class="prose">name.</span>
+
+<span class="brace">{</span><span class="relation">attribute</span> <span class="key">column</span><span class="colon">:</span><span class="value">53</span> <span class="key">relation</span><span class="colon">:</span><span class="value">deposit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">attribute</span> <span class="key">column</span><span class="colon">:</span><span class="value">66</span> <span class="key">relation</span><span class="colon">:</span><span class="value">attribute</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">attribute</span> <span class="key">column</span><span class="colon">:</span><span class="value">68</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation-of</span><span class="brace">}</span>
+
+
+<span class="prose"><strong>An extractor stands in a deposit, so there cannot be more of them than there are deposits.</strong></span>
+<span class="prose">Sean: <em>We can't place an extractor if there are no available deposits.</em> <em></em>That is a capacity and</span>
+<span class="prose">nothing else<em></em>, and every world that states an extractor says so:</span>
+<span class="prose"></span>
+<span class="prose"><code></code>`text</span>
+<span class="prose">{capacity of:deposit for:extractor what:resource per:place} -&gt; 1</span>
+<span class="prose"><code></code>`</span>
+<span class="prose"></span>
+<span class="prose"><strong>It was a second mechanism until 2026-09-20.</strong> <code>{limit held:extractor by:deposit}</code> compared the</span>
+<span class="prose">two relations key for key and refused the world outright - the same arithmetic reached by a</span>
+<span class="prose">different road, and a road <code>{soft ...}</code> cannot walk down, because softness caps a line at the</span>
+<span class="prose">room there is and a limit is not a room.</span>
+<span class="prose"></span>
+<span class="prose"><strong>What it cost is that the row is stated in a world rather than here, and that is not a choice.</strong></span>
+<span class="prose"><code>{state relation:capacity}</code> makes a capacity part of what a world is, and a world is what a test</span>
+<span class="prose">states and what its <code>then</code> compares - so a capacity row sitting beside this paragraph would have</span>
+<span class="prose">to appear in every <code>then</code> section in the suite. <strong>A structural row is one no world states</strong>, which</span>
+<span class="prose"><code>{loose ...}</code>, <code>{stands-in ...}</code> and <code>{supply ...}</code> are and this is not.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It was tried the other way first and the suite said so at once</strong>: every test compared a world</span>
+<span class="prose">three capacity rows short. <strong>The rule that came out of it is worth more than the row</strong> - a stated</span>
+<span class="prose">relation belongs to a world, and only what is never stated belongs in this file.</span>
+<span class="prose"></span>
+<span class="prose"><strong>So every world holding a deposit and an extractor says what a deposit holds.</strong> That is more</span>
+<span class="prose">places than the structural fact took, and it is also what Sean asked for everywhere else: *I need</span>
+<span class="prose">see what the actual numbers are, not some hidden default.*</span>
+
+
+
+<span class="prose"># What a supply is, and what it is measured in</span>
+<span class="prose"></span>
+<span class="prose"><strong>How much is provided and how much is consumed are rows of the world</strong>, stated in each test's</span>
+<span class="prose"><code>given</code> - Sean, 2026-09-17: *there are certain things I always want to see in tests because I</span>
+<span class="prose">need to compute the tests in my head.<em> </em>*A layer that kept them out of a scenario would be a</span>
+<span class="prose">layer hiding what the test is about<em></em>, and he ruled that comprehension wins where the two</span>
+<span class="prose">conflict.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This declares the supply and nothing else.</strong> <code>per</code> says what it is measured in, so the check</span>
+<span class="prose">does not have to work out which relation every provider and consumer has in common.</span>
+
+<span class="brace">{</span><span class="relation">supply</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">berth</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+
+<span class="prose"># The three roles a clause can have</span>
+<span class="prose"></span>
+<span class="prose"><strong>The engine branches on the <code>name</code>, not on the id.</strong> An id is arbitrary, so a rule that says</span>
+<span class="prose"><code>role:2</code> means nothing until the row is looked up - which makes <code>role.name</code> load-bearing where</span>
+<span class="prose">every other <code>name</code> is decoration.</span>
+
+<span class="brace">{</span><span class="relation">role</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">require</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">role</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">remove</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">role</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">add</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">role</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">put</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">role</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">keep</span><span class="brace">}</span>
+
+
+<span class="prose"># What a trait is, and which kinds carry one</span>
+
+<span class="prose"><strong>A trait is an allowance a kind carries</strong>, and it is the column that holds how many are left.</span>
+<span class="prose"><code>moving</code> is one and <code>working</code> is another; a scout has a <code>moving</code> and an extractor has a</span>
+<span class="prose"><code>working</code>, and <code>refresh</code> is one rule over both because the trait is an argument rather than</span>
+<span class="prose">part of the rule's name.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>: *I don't like that I have a separate refresh command for each resource, I</span>
+<span class="prose">feel like this should be parameterized somehow.* And on what the parameterisation has to reach:</span>
+<span class="prose">*I should be able to declare separate things with separate commands, as well as explicitly</span>
+<span class="prose">declare group commands. So i can refresh a scout, refresh a transport, refresh all movable,</span>
+<span class="prose">refresh all workable, and their intersections.*</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>carries</code> is checked both ways</strong>, which is what stops it drifting from the columns it</span>
+<span class="prose">describes: a kind that carries a trait declares a column of that name, and a column named for a</span>
+<span class="prose">trait is carried by the relation that declares it. Neither half is derivable from the other -</span>
+<span class="prose">the first would let a column go undeclared, the second would let a <code>carries</code> row name nothing -</span>
+<span class="prose">so the check is a pair and <code>src/schema.rs</code> states it as one.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A family carries what its members carry.</strong> <code>unit</code> declares <code>moving</code> because <code>scout</code> and</span>
+<span class="prose"><code>transport</code> do, so <code>{refresh what:unit trait:moving}</code> is the group command and</span>
+<span class="prose"><code>{refresh what:scout trait:moving}</code> is the separate one. That is Sean's <em>their intersections</em></span>
+<span class="prose">with no third mechanism: the pair of arguments is the intersection.</span>
+
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">working</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">unit</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">scout</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">transport</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">trait</span><span class="colon">:</span><span class="value">working</span><span class="brace">}</span>
+
+
+<span class="prose"># What a composite is, and why the tree is the point</span>
+
+<span class="prose"><strong>A rule is a leaf or a composite, and a composite names rules in order.</strong> `{part id:1</span>
+<span class="prose">of:end-turn is:refresh seq:1}<code> says ending a turn does a refresh first; </code>{argument id:1 part:1</span>
+<span class="prose">input:what value:unit}` says which refresh.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It is the clause layer one level up, and deliberately the same shape.</strong> A clause has an id and</span>
+<span class="prose"><code>{binding ...}</code> rows name it; a part has an id and <code>{argument ...}</code> rows name it. Nothing here</span>
+<span class="prose">is a new idea about how a rule is described - it is the existing idea applied to rules rather</span>
+<span class="prose">than to rows.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>, on what the structure has to be: *Whatever it turns out to mean, it must be</span>
+<span class="prose">able to organize the entirety of game rules is some type of acyclic graph or tree. Otherwise it</span>
+<span class="prose">will be impossible for a human player to understand how to play the game.* So <code>src/schema.rs</code></span>
+<span class="prose">refuses a cycle and refuses a rule with two parents, and <code>examples/tree.rs</code> prints the whole of</span>
+<span class="prose">it on one screen.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A rule with one parent may still be named twice by it.</strong> <code>end-turn</code> refreshes twice, once per</span>
+<span class="prose">trait, and those are two steps of one order rather than two parents - which is what a person</span>
+<span class="prose">reading the tree sees and what the check counts.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The roots are the player's menu.</strong> A rule that is somebody's part is fired by that somebody; a</span>
+<span class="prose">rule that is nobody's part is offered. So nothing declares an owner: <code>spec/data/block.4x</code> says</span>
+<span class="prose"><code>owner:world</code> and here the tree says it, which is one fact in one place rather than two that can</span>
+<span class="prose">disagree.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>, on why a part is still a command in its own right: *Why can't refresh be</span>
+<span class="prose">both a player command and part of the turn. It seems it will make it easier to read tests across</span>
+<span class="prose">multiple turns if i see an end turn command, and it will be easier to test the end turn command</span>
+<span class="prose">itself if i can test its parts.* <strong>Fired by name and offered to a player are two questions</strong>, and</span>
+<span class="prose">this lane had collapsed them into one.</span>
+
+
+<span class="prose"># A bin, and how many of each a place has room for</span>
+
+<span class="prose"><strong>A bin is a kind like any other</strong> - <code>{bin where:territory-1 what:metal} -&gt; 4</code> is four metal bins</span>
+<span class="prose">standing in territory-1, keyed by the pair the way an extractor is.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It is called a bin and not a store, because <code>store</code> is the engine's word.</strong> <code>src/store.rs</code> is</span>
+<span class="prose">where rows are kept and five of the eight modules say <code>store</code> in a line that runs, so a game</span>
+<span class="prose">noun of that name cannot satisfy <code>tests/isolation.rs</code> - *no relation or rule the data names</span>
+<span class="prose">appears in code that runs*. <strong>The check found it; the name was not chosen for taste.</strong></span>
+<span class="prose"></span>
+<span class="prose"><strong><code>spec/logistics.md</code> draws the same line and drew it first</strong>: *A bin is a thing. What holds a</span>
+<span class="prose">kind is a store for that kind, and a thing with two bins holds two stores.* The thing is the</span>
+<span class="prose">bin; what it is for a resource is the store. Sean asked for storage and this is the thing half</span>
+<span class="prose">of it.</span>
+<span class="prose"></span>
+<span class="prose"><strong>How many a thing has room for is <code>{capacity ...}</code>, which is a table and not a number.</strong></span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>: *a territory has many types of capacities: one for bins, one for berth, one</span>
+<span class="prose">for extractors. A bin can have many types of capacities: one for metal, one for food, one for</span>
+<span class="prose">energy. A metal transport has 2 types of capacities: one for metal, one energy (which it uses as</span>
+<span class="prose">fuel). If we omit a capacity, we can default that to mean it may carry none of that thing.*</span>
+<span class="prose"></span>
+<span class="prose"><code></code>`text</span>
+<span class="prose">{capacity of:territory for:bin      what:resource per:territory} -&gt; 4</span>
+<span class="prose">{capacity of:bin       for:resource what:resource per:territory} -&gt; 10</span>
+<span class="prose"><code></code>`</span>
+<span class="prose"></span>
+<span class="prose"><strong>One trait column, and it restricts whichever side declares one.</strong> A territory has no <code>what</code>,</span>
+<span class="prose">so the first row is about every territory; a bin has one, so it is about bins carrying that</span>
+<span class="prose">resource. <strong>Two columns - one per side - was the first draft and it does not work</strong>: <code>of:territory</code></span>
+<span class="prose">has nothing to qualify, every column of a row must be present, and there is no way to write *not</span>
+<span class="prose">applicable*.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A family named where a member is expected means each member</strong>, which is the rule</span>
+<span class="prose"><code>{refresh what:unit trait:moving}</code> already runs on. <em></em>Named twice in one row it means the same</span>
+<span class="prose">member<em></em>, so <code>for:resource what:resource</code> is a bin holding what it carries and not what it does</span>
+<span class="prose">not. That sentence is the whole of the templating, and it needs no notation: <code>src/notation.rs</code></span>
+<span class="prose">still has no types and every value is still a word.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>, on why this is the shape to take: *so it is macro substitution, not</span>
+<span class="prose">computation, yes, that indicates to me we are on the right track.* Expansion is bounded by the</span>
+<span class="prose">family's size and cannot recurse, so what every check sees is the plain rows it always saw.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>per</code> is declared and not guessed</strong>, for the reason already written on <code>{supply ... per:...}</code>:</span>
+<span class="prose">a container may be the place or be in it, and working out which relation every side has in</span>
+<span class="prose">common is a guess where this is a fact.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Omitting a capacity already meant none.</strong> <code>nothing_crowds_a_place</code> says so in a comment - *a</span>
+<span class="prose">kind named by neither is not in the arithmetic at all* - so the default is being written down</span>
+<span class="prose">rather than added.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-17</strong>: *Each territory will have a limit of how many storage structures of each</span>
+<span class="prose">type it can hold.* <strong>This needed no new mechanism, and <code>backlog.md</code> said it would</strong> - it said the</span>
+<span class="prose">cap had to be <em>per description, not per relation</em>, and that the weighted pool could not say it</span>
+<span class="prose"><em>because a pool is named per kind</em>. Both true, and both about the pool. <em></em>The limit was already</span>
+<span class="prose">the right instrument and nobody had looked at it.<em></em></span>
+<span class="prose"></span>
+<span class="prose"><strong><code>spec/logistics.md</code> had the shape too</strong>: *What a thing may contain is a maximum per kind, per</span>
+<span class="prose">family of kinds, or <strong>per kind carrying a particular value of a trait</strong>*. A bin carrying</span>
+<span class="prose"><code>what:metal</code> is the third case.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A deviation worth seeing rather than settling.</strong> The same document says a place *declares none</span>
+<span class="prose">of its own* capacity - it is the sum of what stands there. Here a territory does declare it, as</span>
+<span class="prose">it already does for berths with <code>{provides kind:territory what:berth} -&gt; 6</code>. <em></em>The number has to</span>
+<span class="prose">be visible in the test<em></em>, which is Sean's rule and decides it for now: *I need see what the</span>
+<span class="prose">actual numbers are, not some hidden default.*</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">15</span> <span class="key">relation</span><span class="colon">:</span><span class="value">bin</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">16</span> <span class="key">relation</span><span class="colon">:</span><span class="value">capacity</span><span class="brace">}</span>
+
+
+<span class="prose"># What may lie loose, and what may not</span>
+
+<span class="prose"><strong>A resource over its capacity is in disorder; a structure over its capacity cannot exist.</strong></span>
+<span class="prose">Sean, 2026-09-19, on why one word has two behaviours: *structures behave differently from</span>
+<span class="prose">resources in this regard. This is because structures are intentionally built for the purpose of</span>
+<span class="prose">having that structure there, while resources are mined to be spent or stored.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>So a capacity is a maximum unless the thing it holds is loose.</strong> <code>{loose kind:resource}</code> names</span>
+<span class="prose">the kinds that may exceed one, and there is nothing else it does: the check stops refusing, and</span>
+<span class="prose"><code>discard-disorder</code> takes the excess at the turn's end.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Over capacity is still usable, which is the point.</strong> Sean: *i am going to have mechanics that</span>
+<span class="prose">allow for stuff over capacity to be used in other recipies to avoid the waste.*</span>
+<span class="prose"><code>spec/resources.md</code> had already said it: *Matter that is out of its source may be spent, whether</span>
+<span class="prose">it is in disorder or in order.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>A family names its members</strong>, so one row covers every resource. It is not <code>{state ...}</code> and so</span>
+<span class="prose">is not reified - a structural fact belongs beside <code>{supply ...}</code> and <code>{stands-in ...}</code> rather than</span>
+<span class="prose">in every test's <code>given</code>.</span>
+<span class="prose"></span>
+<span class="prose"><strong>What is lost is lost, and does not go anywhere.</strong> <code>spec/resources.md</code> says disorder *returns to</span>
+<span class="prose">its source<em>; Sean, 2026-09-19: </em>This was a thematic statement rather than a mechanical one, I am</span>
+<span class="prose">not sure our thin-engine needs that theme yet.* <strong>There are no sources here</strong>, so nothing has</span>
+<span class="prose">anywhere to return to, and the theme is noted rather than built.</span>
+
+<span class="brace">{</span><span class="relation">loose</span> <span class="key">kind</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+
+<span class="prose"><strong>Labour is loose and nothing holds it, which together are the whole of <em>unspent labour is lost</em>.</strong></span>
+<span class="prose">Sean, 2026-09-20: <em>unspent labor does not survive the turn</em> and *excess labor to be removed the</span>
+<span class="prose">same as discard-disorder.* <strong>No capacity row says nothing holds it</strong>; the absence of one does,</span>
+<span class="prose">because a loose kind nothing gives room for has no room.</span>
+
+
+
+<span class="prose"># A rule that fires as many times as it can, and the place it fires in</span>
+
+<span class="prose"><strong><code>{repeats rule:R}</code></strong> is how a varying amount is said without arithmetic. <code>spec/invariants.md</code>:</span>
+<span class="prose">*where a rule would need a quantity that varies, it is written as a smaller rule that fires as</span>
+<span class="prose">many times as it can*, and the quantity is then how often it fired. Feeding a population is that</span>
+<span class="prose">shape - as many citizens eat as there is food for, and nothing computes a minimum.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It draws from the world as it was when it began.</strong> What a firing makes cannot be spent by its</span>
+<span class="prose">own later firings, so a rule that produces what it consumes cannot run away. Sean, 2026-09-19, on</span>
+<span class="prose">the framing that gives it: *I am thinking that repeat should always have consume-once rather than</span>
+<span class="prose">consume semantics.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>That is the termination proof</strong>: the pool it draws from is finite and only ever shrinks, so the</span>
+<span class="prose">repetition stops without anything counting the turns. A rule that removes nothing has no such</span>
+<span class="prose">pool and is refused - <code>Malformed::NeverStops</code>.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>{scope rule:R input:I}</code></strong> says an input is filled by the engine, once per row of whatever it</span>
+<span class="prose">is typed as - not by a command and not by an argument. <em></em>A world-owned rule has no caller to</span>
+<span class="prose">supply a place<em></em>, and <code>upkeep</code> has to take a citizen and a food <em>from the same territory</em>, which</span>
+<span class="prose">is a join every other rule makes through an argument.</span>
+<span class="prose"></span>
+<span class="prose"><strong>On the rule and not on the part</strong>, so firing it by hand and firing it from the turn do the same</span>
+<span class="prose">thing. Sean, 2026-09-19: *there are some things that happen in sequence, and others that can be</span>
+<span class="prose">declared once and applied separately.* A scope is the second kind: it is true of the rule always.</span>
+<span class="prose"></span>
+<span class="prose"><strong>So it is scoped per rule rather than per composite</strong>, which Sean's sketch put it on. The two</span>
+<span class="prose">give the same answer here because these rules are place-local - all of <code>upkeep</code> everywhere then</span>
+<span class="prose">all of <code>perish</code> everywhere is the same world as both in one territory then both in the next - and</span>
+<span class="prose">the per-rule form needs no way for a part to be handed its parent's argument.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A scoped rule is therefore a part and never a root.</strong> The engine fills the input, so there is</span>
+<span class="prose">nothing for a player to choose, and <code>offered</code> skips anything a part names.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">45</span> <span class="key">name</span><span class="colon">:</span><span class="value">repeats</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">46</span> <span class="key">name</span><span class="colon">:</span><span class="value">scope</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">53</span> <span class="key">name</span><span class="colon">:</span><span class="value">soft</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">127</span> <span class="key">relation</span><span class="colon">:</span><span class="value">repeats</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">128</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scope</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">129</span> <span class="key">relation</span><span class="colon">:</span><span class="value">scope</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">149</span> <span class="key">relation</span><span class="colon">:</span><span class="value">soft</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">66</span> <span class="key">column</span><span class="colon">:</span><span class="value">127</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">67</span> <span class="key">column</span><span class="colon">:</span><span class="value">128</span> <span class="key">to</span><span class="colon">:</span><span class="value">rule</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">68</span> <span class="key">column</span><span class="colon">:</span><span class="value">129</span> <span class="key">to</span><span class="colon">:</span><span class="value">input</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">75</span> <span class="key">column</span><span class="colon">:</span><span class="value">149</span> <span class="key">to</span><span class="colon">:</span><span class="value">clause</span><span class="brace">}</span>
+
+
+<span class="prose"># A line that takes what room there is</span>
+
+<span class="prose"><strong>Sean, 2026-09-20</strong>, on an ark that lands where there is nothing to mine: *it is legal to deploy</span>
+<span class="prose">an ark anywhere, individual rules may fail but the deployment succeeds. Consequences of legal</span>
+<span class="prose">moves may be disastrous, but that is player choice.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>Every other role refuses the world it would leave</strong>, which is the right default and the wrong</span>
+<span class="prose">answer here: a deployment that cannot place a food extractor would place nothing at all, and the</span>
+<span class="prose">ark would be spent on nothing or not spent at all. <em></em><code>{soft clause:C}</code> says that one line takes</span>
+<span class="prose">the room there is<em></em> - all of it, some of it, or none - and the rest of the rule goes on.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It reads the same arithmetic the world check reads</strong>, so what a soft line fits and what the</span>
+<span class="prose">world would refuse cannot disagree.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A kind nothing gives room for is unbounded, and a soft line about it is a plain one.</strong> *Nothing</span>
+<span class="prose">says how much room there is<em> and </em>there is no room* are different worlds - which is why two</span>
+<span class="prose">citizens always land and two extractors may not.</span>
+
+
+<span class="prose"># A citizen, and the hunger a turn gives it</span>
+
+<span class="prose"><strong>A citizen is not one person.</strong> <code>spec/population.md</code>: *It is the smallest group that can sustain</span>
+<span class="prose">reproduction.* A count of them is a density across a territory, the same way a deposit is.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>hungry</code> is an obligation where <code>moving</code> and <code>working</code> are capacities.</strong> The machinery is the</span>
+<span class="prose">same - one per turn, restored by the turn, spent by acting - and the difference is what unspent</span>
+<span class="prose">means: a scout that did not move is fine, and a citizen that did not eat is dead.</span>
+<span class="prose"></span>
+<span class="prose"><strong>That consequence lives in <code>perish</code></strong>, a named step of the turn, rather than in the trait. Sean,</span>
+<span class="prose">2026-09-19: *Hungry seems like not so much a capacity as it does a need, it seems the difference</span>
+<span class="prose">is relevant and why it doesn't read as well as bearing.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>It was <code>hunger</code> for a day, and a noun was the wrong part of speech.</strong> The rule that chose it</span>
+<span class="prose">was sound - a capacity is a gerund, <code>moving</code> and <code>working</code> and <code>bearing</code>, and an obligation is</span>
+<span class="prose">not one - but <strong>a noun takes an amount</strong>. <code>hunger:1</code> reads as <em>how much a citizen eats</em>, which is</span>
+<span class="prose">the one thing it does not mean: every citizen eats exactly one food and the trait is one bit.</span>
+<span class="prose"></span>
+<span class="prose"><strong>An adjective cannot be misread that way.</strong> You can have two hunger; you cannot be two hungry.</span>
+<span class="prose"><strong>The evidence is as good as naming evidence gets</strong> - Sean read it back as *so hunger is how much</span>
+<span class="prose">a citizen eats?* on 2026-09-20, having been handed the model the day before. A name that misleads</span>
+<span class="prose">the person it was explained to is a name that misleads.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The distinction the noun was for survives</strong>, because an adjective among gerunds is still a</span>
+<span class="prose">visibly different part of speech. <strong>What it costs is the turn</strong>: `refresh what:citizen</span>
+<span class="prose">trait:hungry` reads less well than <em>restore hunger</em> - one use against the two clauses that match</span>
+<span class="prose">on it, which is why it was the trade to take.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>{state ...}</code> says a citizen is something a world holds</strong>, which two things read: templating,</span>
+<span class="prose">so that a row naming a family becomes one per member, and the test harness, which refuses a</span>
+<span class="prose"><code>given</code> stating anything that is not a world. <strong>The second is what caught its absence</strong> - this</span>
+<span class="prose">lane left the row out on the strength of the first reader alone.</span>
+
+<span class="prose"><strong><code>bearing</code> is a capacity where <code>hungry</code> is an obligation</strong>, and the grammar says which: a gerund</span>
+<span class="prose">for something a thing may do, a noun or an adjective for something it owes. Sean, 2026-09-19:</span>
+<span class="prose"><em>Bearing is their capacity to reproduce, that makes sense to me.</em></span>
+<span class="prose"></span>
+<span class="prose"><strong>It is what stops one citizen breeding with the whole surplus</strong>, exactly as <code>hungry</code> stops one</span>
+<span class="prose">eating all the food. <code>breed</code> consumes the parent and returns it as one of two, with its bearing</span>
+<span class="prose">spent - so no citizen breeds twice in a turn, and <em>at most doubling</em> falls out of the rule rather</span>
+<span class="prose">than being stated anywhere.</span>
+<span class="prose"></span>
+<span class="prose"><strong>That is what replaces <code>borrow</code> and the mainline's <code>fertility</code> token.</strong> Sean, 2026-09-19,</span>
+<span class="prose">choosing: *clarity is more important than conciseness, so yes, lets not have borrow, and lean on</span>
+<span class="prose">traits.* A borrowed citizen could be borrowed again; a consumed one that comes back spent cannot.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A citizen now has two traits, so a place can hold two citizen rows</strong>, and a clause that matches</span>
+<span class="prose">citizens without naming both is ambiguous. <em></em><code>upkeep</code> and <code>perish</code> name only <code>hungry</code> and are</span>
+<span class="prose">safe because <code>bearing</code> is uniform when they run<em></em> - the turn restores it last, so every citizen</span>
+<span class="prose">enters a turn fertile and the split exists only between <code>breed</code> and the refreshes. <em></em>If that ever</span>
+<span class="prose">stops being true the engine refuses rather than guessing<em></em>, which is <code>Refused::NotOneToTake</code> doing</span>
+<span class="prose">the job it was built for.</span>
+
+<span class="prose"><strong><code>laboring</code> is a citizen's capacity to work, and it is a gerund like the rest.</strong> Sean,</span>
+<span class="prose">2026-09-20: <em>citizen produces a labor that work then spends.</em> <code>spec/data/traits.4x</code> already names</span>
+<span class="prose">it beside <code>working</code>, <code>moving</code> and <code>bearing</code>, and <code>schema.4x</code> has quoted that list since the</span>
+<span class="prose">allowances were built - so this is the fourth use of a mechanism rather than a new one.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It closes the loop.</strong> <code>labor</code> was consumed by three rules and produced by none: every test that</span>
+<span class="prose">spent one stated it in a <code>given</code>, so a population could grow and starve but nothing it did made</span>
+<span class="prose">the food it lived on. A citizen makes one labour a turn, and <code>work</code> spends it on an extractor.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">47</span> <span class="key">name</span><span class="colon">:</span><span class="value">citizen</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">130</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">131</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">hungry</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">133</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">bearing</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">137</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">laboring</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">132</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">seq</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">69</span> <span class="key">column</span><span class="colon">:</span><span class="value">130</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">17</span> <span class="key">relation</span><span class="colon">:</span><span class="value">citizen</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">hungry</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">bearing</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">laboring</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">trait</span><span class="colon">:</span><span class="value">hungry</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">trait</span><span class="colon">:</span><span class="value">bearing</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">citizen</span> <span class="key">trait</span><span class="colon">:</span><span class="value">laboring</span><span class="brace">}</span>
+
+<span class="prose"><strong>A place is a layer of a territory, and a thing stands in a place rather than in a territory.</strong></span>
+<span class="prose">Sean, 2026-09-20: *I no longer think orbits should be separate territories with adjacencies like</span>
+<span class="prose">they are in the mainline spec. I think orbits should be part of the territory.* <code>spec/orbit.md</code></span>
+<span class="prose">says the same from the other side - <em>an orbit is not a territory</em> - and <code>spec/console.md</code> says</span>
+<span class="prose"><em>the orbit above a territory is named by naming the territory</em>, which is what <code>of</code> does here.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Adjacency stays between territories and does not learn about places.</strong> Sean, 2026-09-20: *I</span>
+<span class="prose">don't want to be "stating adjacency between places".* So the graph is one thing and <code>move</code> pays</span>
+<span class="prose">for the join, reading each place's territory before it asks whether the two are neighbours.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Only the surface exists yet.</strong> <code>layer</code> carries one value, which is honest rather than useful -</span>
+<span class="prose">what it buys is that orbit is a row and not a change. The rules that tell the layers apart, and</span>
+<span class="prose">the capacity that gives them different room, are the two increments after this one.</span>
+
+<span class="prose"><strong><code>stock</code> is what a place holds a number of, and it is the set that may lie loose.</strong> Metal, food</span>
+<span class="prose">and labour: each is somewhere, each is a count, and each piles up beyond what there is room for.</span>
+<span class="prose"><code>resource</code> is the two a recipe may name - <code>work what:food</code> is a sentence and <code>work what:labor</code> is</span>
+<span class="prose">not - so the two families overlap and are not the same set.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It exists so that what may lie loose is stated once.</strong> Sean, 2026-09-20, on the rule that</span>
+<span class="prose">discards it: <em>always discard whatever is in disorder, so no need to specify <code>what:resource</code>.</em></span>
+<span class="prose"><strong>There had been two statements of the set</strong> - <code>{loose ...}</code> saying what may exceed a capacity,</span>
+<span class="prose">and a <code>{part ...}</code> per kind saying what gets trimmed - and nothing made them agree. Add a loose</span>
+<span class="prose">kind and forget the part, and it may exceed its capacity forever while every check passes.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The sweep could not have caught that</strong>, and not by oversight: it deletes rows and changes</span>
+<span class="prose">values, and never adds one. <strong>A mistake with no instrument pointed at it</strong> is the kind this</span>
+<span class="prose">prototype exists to find, so the answer is a shape where it cannot be made.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A kind may belong to two families</strong>, because <code>{member ...}</code> is keyed by both its columns - so</span>
+<span class="prose">metal is a resource and a stock, and neither statement is a copy of the other.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">50</span> <span class="key">name</span><span class="colon">:</span><span class="value">energy</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">140</span> <span class="key">relation</span><span class="colon">:</span><span class="value">energy</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">141</span> <span class="key">relation</span><span class="colon">:</span><span class="value">energy</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">71</span> <span class="key">column</span><span class="colon">:</span><span class="value">140</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">19</span> <span class="key">relation</span><span class="colon">:</span><span class="value">energy</span><span class="brace">}</span>
+
+<span class="prose"><strong>An ark is a unit that can only be in orbit.</strong> Sean, 2026-09-20: *ark can only be in orbit; can</span>
+<span class="prose">spend one energy and one move to move from orbit to orbit; contains a storage container for 1</span>
+<span class="prose">energy; can collect 1 energy from the sun each turn.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>It joins <code>unit</code>, so <code>move</code>, the refresh of <code>moving</code> and the berth pool all reach it</strong> without a</span>
+<span class="prose">word being added anywhere. <code>gathering</code> is the second allowance it carries - the one it spends on</span>
+<span class="prose">the sun - and it is a gerund because it is a capacity rather than an obligation.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It consumes no berths, and nothing says otherwise yet.</strong> A kind with no <code>{consumes ...}</code> row</span>
+<span class="prose">contributes nothing to a pool, so an orbit holds as many arks as anyone states. That is a row</span>
+<span class="prose">waiting for a test rather than an oversight.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">51</span> <span class="key">name</span><span class="colon">:</span><span class="value">ark</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">142</span> <span class="key">relation</span><span class="colon">:</span><span class="value">ark</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">143</span> <span class="key">relation</span><span class="colon">:</span><span class="value">ark</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">144</span> <span class="key">relation</span><span class="colon">:</span><span class="value">ark</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">gathering</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">145</span> <span class="key">relation</span><span class="colon">:</span><span class="value">ark</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">72</span> <span class="key">column</span><span class="colon">:</span><span class="value">142</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">20</span> <span class="key">relation</span><span class="colon">:</span><span class="value">ark</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">trait</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">name</span><span class="colon">:</span><span class="value">gathering</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">ark</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">ark</span> <span class="key">trait</span><span class="colon">:</span><span class="value">gathering</span><span class="brace">}</span>
+
+<span class="prose"><em></em><code>{stands-in ...}</code> says which layer a kind may stand in, and it is how an orbit has capacity for</span>
+<span class="prose">no extractors.<em></em> <code>spec/orbit.md</code>: *an orbit is not a territory: it has capacity for no extractors,</span>
+<span class="prose">and nothing is extracted there.*</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>per</code> says which of the kind's columns is the place</strong>, because following a reference is not</span>
+<span class="prose">enough: an extractor points at a place and at a resource, and choosing between them is the</span>
+<span class="prose">guessing this engine refuses. It is the same word <code>{capacity ... per:place}</code> and</span>
+<span class="prose"><code>{supply ... per:place}</code> already use, read by the same <code>place_of</code>.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Everything after <code>kind</code> and <code>per</code> is a constraint on the place's row, matched by column name.</strong></span>
+<span class="prose">So <code>layer</code> is never a word the engine knows - it is read off this relation's own columns, the way</span>
+<span class="prose">a trait's name is the column's name - and a second constraint would need no code at all.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A kind with no row may stand anywhere.</strong> With two layers that is the same as <em>either</em>, and it</span>
+<span class="prose">stops being the same at three - which is worth knowing before a third arrives.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">52</span> <span class="key">name</span><span class="colon">:</span><span class="value">stands-in</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">146</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stands-in</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">kind</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">147</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stands-in</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">per</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">148</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stands-in</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">layer</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">73</span> <span class="key">column</span><span class="colon">:</span><span class="value">146</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">74</span> <span class="key">column</span><span class="colon">:</span><span class="value">147</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">stands-in</span> <span class="key">kind</span><span class="colon">:</span><span class="value">ark</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span> <span class="key">layer</span><span class="colon">:</span><span class="value">orbit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">stands-in</span> <span class="key">kind</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span><span class="brace">}</span>
+
+<span class="prose"><strong><code>energy</code> is what a star gives and a recipe spends, and <em>fuel</em> is what it is called in a tank.</strong></span>
+<span class="prose">Sean, 2026-09-20: *fuel is the same thing as energy, when I say fuel I tend to mean energy that</span>
+<span class="prose">happens to be used for movement in this context.* So there is one relation and one capacity to</span>
+<span class="prose">reason about, which is what makes a transport's two containers sum.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It is a resource and a stock</strong>: a recipe may name it, and it lies loose, so what a place holds</span>
+<span class="prose">beyond its room is lost at the turn's end. <code>spec/invariants.md</code> calls the source endless - *a</span>
+<span class="prose">star's energy and a planet's material* - and an endless source is not a gain.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">49</span> <span class="key">name</span><span class="colon">:</span><span class="value">stock</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">138</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stock</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">139</span> <span class="key">relation</span><span class="colon">:</span><span class="value">stock</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">48</span> <span class="key">name</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">134</span> <span class="key">relation</span><span class="colon">:</span><span class="value">place</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">135</span> <span class="key">relation</span><span class="colon">:</span><span class="value">place</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">136</span> <span class="key">relation</span><span class="colon">:</span><span class="value">place</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">layer</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">70</span> <span class="key">column</span><span class="colon">:</span><span class="value">135</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">18</span> <span class="key">relation</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+
+<span class="prose"># A pioneer, and what it shares with an ark</span>
+
+<span class="prose"><strong>Sean, 2026-09-20</strong>: <em>Pioneer [...] can deploy with the same result as an ark</em>, and *pioneer</span>
+<span class="prose">deploys from same territory, surface deploys to surface.*</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>founder</code> is the family of what a deployment spends</strong>, and it exists so that <code>deploy</code> is one</span>
+<span class="prose">rule rather than two. An ark stands in an orbit and the ground it settles is the surface below; a</span>
+<span class="prose">pioneer stands on that surface and the ground it settles is the one it is standing on. <em></em>Both are</span>
+<span class="prose"><em>the surface of the place's territory</em><em></em>, so the rule that finds one finds the other, and neither</span>
+<span class="prose">case is written down.</span>
+<span class="prose"></span>
+<span class="prose"><strong>What made it one rule was taking a literal away.</strong> <code>deploy</code> required the place it is given to be</span>
+<span class="prose">an orbit; it no longer says, and the two sentences of Sean's above fall out of <code>{stands-in ...}</code></span>
+<span class="prose">instead - an ark may only be in orbit and a pioneer may only be on a surface, so what each of them</span>
+<span class="prose">can be asked to do is already decided.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A pioneer is a unit and a founder both</strong>, which a kind may be: <code>{member ...}</code> is keyed by both</span>
+<span class="prose">its columns. It moves, so <code>move</code> carries it with no change; it does not gather, because turning to</span>
+<span class="prose">the sun is what an ark is for.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Its store of two fuel is not here.</strong> Sean asked for one, and a capacity is a row of a world</span>
+<span class="prose">rather than a structural fact - so it belongs in the test that needs it, and no test does yet.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">54</span> <span class="key">name</span><span class="colon">:</span><span class="value">pioneer</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">55</span> <span class="key">name</span><span class="colon">:</span><span class="value">founder</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">150</span> <span class="key">relation</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">151</span> <span class="key">relation</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">152</span> <span class="key">relation</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">153</span> <span class="key">relation</span><span class="colon">:</span><span class="value">founder</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">154</span> <span class="key">relation</span><span class="colon">:</span><span class="value">founder</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">76</span> <span class="key">column</span><span class="colon">:</span><span class="value">150</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">21</span> <span class="key">relation</span><span class="colon">:</span><span class="value">pioneer</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">family</span> <span class="key">relation</span><span class="colon">:</span><span class="value">founder</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">family</span><span class="colon">:</span><span class="value">unit</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">family</span><span class="colon">:</span><span class="value">founder</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">member</span> <span class="key">kind</span><span class="colon">:</span><span class="value">ark</span> <span class="key">family</span><span class="colon">:</span><span class="value">founder</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">carries</span> <span class="key">kind</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">stands-in</span> <span class="key">kind</span><span class="colon">:</span><span class="value">pioneer</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span><span class="brace">}</span>
+
+<span class="prose"># A biome, and which territory has which</span>
+
+<span class="prose"><strong>A biome is a table and a territory's biome is a join</strong>, which is <code>trait</code> and <code>carries</code> one</span>
+<span class="prose">relation along: <code>{trait id:1 name:moving}</code> is the table and <code>{carries kind:scout trait:moving}</code></span>
+<span class="prose">says who has it. <strong>A property of a biome goes in the table</strong> - Sean, 2026-09-27: *the reason I</span>
+<span class="prose">see for biomes as a relation is so that we can expand upon properties of a biome in one place.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>It starts with a name and nothing else</strong>, because the only thing that reads a biome is the</span>
+<span class="prose">realistic drawing. <strong>A colour or a terrain profile is a column here when the drawing needs one</strong>,</span>
+<span class="prose">in one place, rather than something whatever draws it has to know.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>biome</code> is vocabulary and <code>terrain</code> is state</strong>, which is why only the second carries a</span>
+<span class="prose"><code>{state}</code> row - the six do not change while a game runs, and which territory has which is the</span>
+<span class="prose">world. <code>trait</code> is not state either, for the same reason.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">56</span> <span class="key">name</span><span class="colon">:</span><span class="value">biome</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">57</span> <span class="key">name</span><span class="colon">:</span><span class="value">terrain</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">155</span> <span class="key">relation</span><span class="colon">:</span><span class="value">biome</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">156</span> <span class="key">relation</span><span class="colon">:</span><span class="value">biome</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">157</span> <span class="key">relation</span><span class="colon">:</span><span class="value">terrain</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">of</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">158</span> <span class="key">relation</span><span class="colon">:</span><span class="value">terrain</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">is</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">ocean</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">ice</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">desert</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">grassland</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">5</span> <span class="key">name</span><span class="colon">:</span><span class="value">jungle</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">biome</span> <span class="key">id</span><span class="colon">:</span><span class="value">6</span> <span class="key">name</span><span class="colon">:</span><span class="value">mountain</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">77</span> <span class="key">column</span><span class="colon">:</span><span class="value">157</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">78</span> <span class="key">column</span><span class="colon">:</span><span class="value">158</span> <span class="key">to</span><span class="colon">:</span><span class="value">biome</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">22</span> <span class="key">relation</span><span class="colon">:</span><span class="value">terrain</span><span class="brace">}</span>
+<span class="prose"># A yard, and the arks it is where the making of</span>
+
+<span class="prose"><strong><code>spec/structures.md</code></strong>: <em>A Yard produces Arks.</em> <em></em>The requirement was in the old ruleset and was</span>
+<span class="prose">not ported<em></em> - its <code>launch ark</code> recipe carried <code>require 1 yard</code> and the rule here did not. Sean,</span>
+<span class="prose">2026-09-27: *it sounds like build yard happened to be one thing that should have been ported from</span>
+<span class="prose">the old ruleset that was not.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>A yard has a place and a count and nothing else.</strong> A bin carries <code>what</code> because it is built for</span>
+<span class="prose">one resource; a yard makes one thing, so there is nothing for it to be built <em>for</em>. <strong>It is state</strong>,</span>
+<span class="prose">the way an extractor is: it is in the world and the world changes.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Nothing here says how many a place may hold.</strong> The old table gave a yard <em>a capacity of 1</em> and no</span>
+<span class="prose"><code>{capacity}</code> row is stated, so a second is legal today - which is <code>build-bin</code> saying nothing about</span>
+<span class="prose">capacity said again, and is stated in the test rather than assumed here.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">58</span> <span class="key">name</span><span class="colon">:</span><span class="value">yard</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">159</span> <span class="key">relation</span><span class="colon">:</span><span class="value">yard</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">where</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">160</span> <span class="key">relation</span><span class="colon">:</span><span class="value">yard</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">quantity</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">79</span> <span class="key">column</span><span class="colon">:</span><span class="value">159</span> <span class="key">to</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">relation</span><span class="colon">:</span><span class="value">yard</span><span class="brace">}</span>
+</pre>
+</body>
+</html>

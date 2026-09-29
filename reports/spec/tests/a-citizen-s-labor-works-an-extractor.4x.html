@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/a-citizen-s-labor-works-an-extractor.4x</title>
+<link rel="stylesheet" href="../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/a-citizen-s-labor-works-an-extractor.4x</code></h1>
+<p class="note">The loop, closed: a citizen makes a labour, the labour works a food extractor, and one food in</p>
+<p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/tests/a-citizen-s-labor-works-an-extractor.4x">the file itself, as text</a></p>
+<pre class="four-x"><span class="prose">The loop, closed: a citizen makes a labour, the labour works a food extractor, and one food in</span>
+<span class="prose">becomes six out.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This is the half of Sean's loop that had no mechanism until now.</strong> *citizen works food extractor</span>
+<span class="prose">/ food extractor generates enough food for more than one citizen* - and <code>labor</code> was consumed by</span>
+<span class="prose">three rules and produced by none, so every test that spent one stated it in a <code>given</code>. <em></em>A</span>
+<span class="prose">population could grow and starve while nothing it did made the food it lived on.<em></em></span>
+<span class="prose"></span>
+<span class="prose"><strong>Both halves are the player's.</strong> Sean, 2026-09-20: *I was expecting citizens to generate labor</span>
+<span class="prose">during a regular turn.* So <code>toil</code> is a command and not a step of the turn - working is a choice,</span>
+<span class="prose">and a citizen that is not put to work keeps its <code>laboring</code> until the turn restores it anyway.</span>
+<span class="prose"></span>
+<span class="prose"><strong>One command works the whole place</strong>, because <code>toil</code> repeats: it fires once per citizen that</span>
+<span class="prose">still has its <code>laboring</code> and stops when none has. Here that is one citizen and one labour.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The extractor is spent afterwards and the labour is gone</strong>, so nothing in this world can work</span>
+<span class="prose">again until a turn restores the one and a citizen makes the other.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">a-citizen-s-labor-works-an-extractor</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">for</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">deposit</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">density</span><span class="colon">:</span><span class="value">6</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">extractor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">working</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">toil</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">work</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">for</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">deposit</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">density</span><span class="colon">:</span><span class="value">6</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">extractor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">working</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">food</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 6</span>
+</pre>
+</body>
+</html>

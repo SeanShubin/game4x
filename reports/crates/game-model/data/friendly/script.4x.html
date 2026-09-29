@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>crates/game-model/data/friendly/script.4x</title>
+<link rel="stylesheet" href="../../../../report.css">
+</head>
+<body>
+<h1><code>crates/game-model/data/friendly/script.4x</code></h1>
+<p class="note">The script's own vocabulary, declared the way the game's is.</p>
+<p class="where"><a href="../../../../index.html">The index</a> · <a href="../../../../../crates/game-model/data/friendly/script.4x">the file itself, as text</a></p>
+<pre class="four-x"><span class="prose">The script's own vocabulary, declared the way the game's is.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Declaring this does not make the engine stop implementing it.</strong> A <code>load</code> row has a <code>file</code> and</span>
+<span class="prose">an <code>into</code>; what loading <em>is</em> stays a branch in <code>src/script.rs</code>, and <code>engine.4x</code> lists every such</span>
+<span class="prose">branch.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The bootstrap, said rather than hidden.</strong> <code>test.4x</code> loads this file, so the <code>load</code> step that</span>
+<span class="prose">fetches it runs before its own description is available. <em></em>That is the one place the data cannot</span>
+<span class="prose">describe itself.<em></em> Every other step is validated before it runs.</span>
+
+
+<span class="prose"># The relations a test is written in</span>
+<span class="prose"></span>
+<span class="prose"><strong>Including the three the declarations themselves are written in.</strong> Without them the rows</span>
+<span class="prose">of this file are rows of relations nothing declares, and the script store goes unchecked -</span>
+<span class="prose">which is how a column here could be deleted and nothing noticed.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">17</span> <span class="key">name</span><span class="colon">:</span><span class="value">store</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">18</span> <span class="key">name</span><span class="colon">:</span><span class="value">test</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">19</span> <span class="key">name</span><span class="colon">:</span><span class="value">load</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">25</span> <span class="key">name</span><span class="colon">:</span><span class="value">reference</span><span class="brace">}</span>
+
+
+<span class="prose"># Their columns</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">47</span> <span class="key">relation</span><span class="colon">:</span><span class="value">store</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">48</span> <span class="key">relation</span><span class="colon">:</span><span class="value">store</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">50</span> <span class="key">relation</span><span class="colon">:</span><span class="value">test</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">53</span> <span class="key">relation</span><span class="colon">:</span><span class="value">load</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">file</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">54</span> <span class="key">relation</span><span class="colon">:</span><span class="value">load</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">into</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">65</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">66</span> <span class="key">relation</span><span class="colon">:</span><span class="value">relation</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">67</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">68</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">69</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">seq</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">70</span> <span class="key">relation</span><span class="colon">:</span><span class="value">column</span> <span class="key">seq</span><span class="colon">:</span><span class="value">4</span> <span class="key">name</span><span class="colon">:</span><span class="value">name</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">71</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">72</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">73</span> <span class="key">relation</span><span class="colon">:</span><span class="value">reference</span> <span class="key">seq</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">to</span><span class="brace">}</span>
+
+
+<span class="prose"># What points at what</span>
+
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">20</span> <span class="key">column</span><span class="colon">:</span><span class="value">54</span> <span class="key">to</span><span class="colon">:</span><span class="value">store</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">column</span><span class="colon">:</span><span class="value">68</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">column</span><span class="colon">:</span><span class="value">72</span> <span class="key">to</span><span class="colon">:</span><span class="value">column</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">25</span> <span class="key">column</span><span class="colon">:</span><span class="value">73</span> <span class="key">to</span><span class="colon">:</span><span class="value">relation</span><span class="brace">}</span>
+
+
+<span class="prose"># The stores a test has</span>
+<span class="prose"></span>
+<span class="prose"><strong>The engine branches on the <code>name</code> here too</strong>, for the same reason it does for a role: <code>into:2</code></span>
+<span class="prose">means nothing until the row is looked up.</span>
+
+<span class="brace">{</span><span class="relation">store</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">script</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">store</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">game</span><span class="brace">}</span>
+</pre>
+</body>
+</html>

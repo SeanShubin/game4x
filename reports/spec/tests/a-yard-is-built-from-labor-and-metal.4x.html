@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/a-yard-is-built-from-labor-and-metal.4x</title>
+<link rel="stylesheet" href="../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/a-yard-is-built-from-labor-and-metal.4x</code></h1>
+<p class="note">A yard costs one labor and one metal, the same as an extractor and a bin, and stands where it was</p>
+<p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/tests/a-yard-is-built-from-labor-and-metal.4x">the file itself, as text</a></p>
+<pre class="four-x"><span class="prose">A yard costs one labor and one metal, the same as an extractor and a bin, and stands where it was</span>
+<span class="prose">built.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>spec/structures.md</code></strong>: <em>A Yard produces Arks.</em> <em></em>That requirement was in the old ruleset and</span>
+<span class="prose">was not ported<em></em> - <code>launch ark</code> carried <code>require 1 yard</code> and the rule the data now holds does not.</span>
+<span class="prose">Sean, 2026-09-27: *it sounds like build yard happened to be one thing that should have been ported</span>
+<span class="prose">from the old ruleset that was not.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>The cost is not the old one and the difference is stated rather than hidden.</strong> The old table</span>
+<span class="prose">charged one labor and fifteen metal. <strong>This lane chose one and one</strong>, because the rule beside it</span>
+<span class="prose">says why: Sean, 2026-09-20, quoted in <code>spec/data/rules.4x</code>, *tuning is going to be separate, for</span>
+<span class="prose">now I am making everything cheap* - so fifteen would be the only number in the new data that is</span>
+<span class="prose">not cheap. <strong>If the fifteen was the point, this is the test to reject.</strong></span>
+<span class="prose"></span>
+<span class="prose"><strong><code>build-yard</code> says nothing about how many a place may hold</strong>, the way <code>build-bin</code> says nothing</span>
+<span class="prose">about capacity and <code>build-extractor</code> nothing about deposits: the world it would leave either fits</span>
+<span class="prose">or it does not, and every rule already refuses one that does not. <em></em>The old table gave a yard a</span>
+<span class="prose">capacity of 1 per place<em></em> and no capacity row is stated here, so today a second yard is legal.</span>
+<span class="prose">That is the second thing to reject if it is wrong.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">a-yard-is-built-from-labor-and-metal</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">labor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">metal</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">build-yard</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">yard</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+</pre>
+</body>
+</html>

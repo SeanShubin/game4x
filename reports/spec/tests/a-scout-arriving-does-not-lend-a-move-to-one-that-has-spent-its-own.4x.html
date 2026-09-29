@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x</title>
+<link rel="stylesheet" href="../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x</code></h1>
+<p class="note">A spent scout stands where a fresh one arrives, and the two do not pool their moves.</p>
+<p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x">the file itself, as text</a></p>
+<pre class="four-x"><span class="prose">A spent scout stands where a fresh one arrives, and the two do not pool their moves.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>: *or allow a scout that has moved on a previous turn to pick up a move from</span>
+<span class="prose">a scout on the place it moved to.* The arriving scout spends its move getting there, so the</span>
+<span class="prose">territory holds two scouts and no moves.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This is why the allowance is a key column.</strong> Were it not, the two scouts would be one row of</span>
+<span class="prose">two and the move left in the group would be anybody's.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-3</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">3</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-3</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-3</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">adjacency</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">from</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">adjacency</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">from</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory-3</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">moving</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">move</span> <span class="key">what</span><span class="colon">:</span><span class="value">scout</span> <span class="key">from</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">move</span> <span class="key">what</span><span class="colon">:</span><span class="value">scout</span> <span class="key">from</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">to</span><span class="colon">:</span><span class="value">place-3</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">refused</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+</pre>
+</body>
+</html>
