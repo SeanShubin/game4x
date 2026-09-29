@@ -263,6 +263,28 @@ session's old `Game`, so they move when the console does.
 what is deleted; **this is the size of what has to be written first**, and the two are not the
 same question.
 
+## What the 144 does not count, measured 2026-09-29
+
+**A use of a type is not the same as a line that depends on the old model's shape**, and the port
+has both. `containment.rs` renders the state as a tree of things, and the engine has no equivalent -
+`view::tree` renders the **rule** tree, which is a different picture of a different thing.
+
+```
+containment.rs 1-600     Description, Entry, Capacity, Kind   format, survives the port
+containment.rs 601-937   tree, describe_unit, entry_for_unit, capacities_of   337 lines to rewrite
+containment.rs 938-1267  its tests
+```
+
+**Those 337 walk `game.territories`, `game.units_on`, `game.room_in`, `game.held_in`,
+`game.adjacency` and `game.phase`** - the old model's structure rather than its type names. They
+come back as a walk over rows with `where` columns and `{capacity}`, which is the same tree from a
+flatter source.
+
+**This was nearly reported as 1,267 lines with no engine equivalent**, which would have been the
+sixth instance of the class below in a day. **What corrected it was asking where the functions
+start** rather than reading the file's length - the format machinery is two thirds of it and is not
+about the model at all.
+
 ## The number was wrong twice before it was right, and the shape is the one from tonight
 
 **A bare-name count over the whole tree said 179 in 10 files.** It credited `planet-bevy`,
