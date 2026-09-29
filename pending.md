@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-586** - `R-11` reworded: the intent stands and the `.txt` twin comes out · `decide/proposals.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **D-6** - I can accept one type of thing at a time · `releases/rules-become-data.md`
