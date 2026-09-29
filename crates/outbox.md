@@ -61,7 +61,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-179 - `D-1` and `D-4` are built on this lane's side, and two documents still describe the ruleset that went
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `5367098e` · **source** finishing the port · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-175`, `S-216`
+
+**derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
+
+**Filed rather than said in a commit, which is `S-218`.** This lane may build these and may not
+mark them `vetted`.
+
+## What is built
+
+**`BEING_REPLACED` is zero.** Eight modules and **6,704 lines** are deleted - `game`, `identity`,
+`rejection`, `rules`, `territory`, `thing`, `transition`, `unit` - with `population_two_ways.rs`,
+which compared the old model's five recipes against the old model's closed form.
+
+**The console plays the engine.** `Session` holds rows while a world is being designed and a
+`Game` after `{start}`; what a player may fire is read from `spec/data/rules.4x` rather than
+written into `grammar.rs`. **A rule added to the data is a command with no Rust edited**, which is
+`D-1`'s *vetted when* said at the console.
+
+**`S-216` is finished rather than sequenced.** `C-171` put it behind `D-4` because removing
+`set-force` reset a reviewed expectation; the expectation is gone and so is the command.
+
+## Two engine defects the port found
+
+**A world of twenty-six territories or more would not load.** `schema::reified` expanded any
+reference whose value matched a family's relation id, so `{place id:51 of:26}` read territory 26
+as the relation `unit` and became four places numbered 51. **No world in the tree had ever had
+that many**, and `tiny-12` passed throughout.
+
+**And `Refused` and `Malformed` were not `Clone`**, which a console carrying a refusal in its own
+error type needs.
+
+## What is left, and both are yours
+
+**`docs/designing-rules.md` is written over the old ruleset.** Its running examples are `grow`,
+`muster`, `bear`, `create labor` and `mine energy`, in the present tense - and `D-4` asks that **no
+test, report or document is left describing a rule the game does not play by**. `reports/` is
+clean; this is the document that is not.
+
+**`docs/architecture.md` rule 4 says the scoping is to those modules** *because that crate holds
+two models until the migration finishes*. **It holds one.** The sentence is true of the day it was
+written and false now, and the countdown it names is at zero.
+
+## Three checks moved because a population shrank honestly
+
+**Each says which, and none was lowered quietly.**
+
+```
+ENGINE_MODULES                                   7 -> 8, lib.rs back in scope
+only_game_model_and_a_fixture_write_the_games_state   deleted; its subject was game.rs
+the quotation floor                              120/157 -> 90/117
+```
+
+**The first immediately caught a real thing.** `no_floating_point_anywhere` lived in `src/lib.rs`
+and walks `src/`, so it says `std::fs` - which the engine may not, and which nothing could see
+while `lib.rs` was excepted by name. **It moved to `tests/isolation.rs`**, beside the other walk
+over the same directory.
+
+**The second is the one worth the sentence.** It floored on the exceptions it allowed rather than
+on the population it walked, and the port emptied them - a world is built from rows and mutated
+nowhere. Its rule is the compiler's now: `engine::Game` holds its schema and its rows privately.
+---
+
 ### C-178 - Two cases in `regression/rules` are stale from `P-587` and `S-221`, and the deletion is Sean's
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `2374fe79` · **source** the suites running after the scenario played again · **cites** `P-587`, `S-221`, `C-177`
 
