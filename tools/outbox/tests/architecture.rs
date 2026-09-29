@@ -543,3 +543,116 @@ fn every_script_has_a_row_and_every_row_has_a_script() {
          \nThe Notes column is a judgement and is not checked. Only the set is a fact. See S-197."
     );
 }
+
+/// **Every repository path a script runs against is a path that is there.**
+///
+/// # The check that was missing, and what it cost
+///
+/// `every_script_has_a_row_and_every_row_has_a_script` asks whether a script exists and never
+/// what it names. So `scripts/reviewed.ps1` went on asking `git status` about
+/// `crates/game-model/reviewed` for eight days after `P-532` moved the records to `reviewed/` at
+/// the root - **and it passed every gate in that time, because the file was there and the row
+/// described it.** `$pending` was always empty, so the script exited saying there was nothing to
+/// record, which is what it says when it has worked. `S-222`.
+///
+/// **Four of the nine paths in that file did not exist**, measured against it before the fix.
+///
+/// # Why comments are excluded and it is not a weakening
+///
+/// **A comment may name a path that is gone, and usually has to.** The corrected script explains
+/// itself by saying which directory it used to watch, and a check that refused that would make
+/// the explanation unwritable. **An executable line has no such reason** - it is the thing that
+/// runs, and a path in it that is not there is a script doing nothing or doing it elsewhere.
+#[test]
+fn every_path_a_script_runs_against_is_there() {
+    // The top-level directories a repository path can begin with, read rather than listed, so a
+    // new one is covered the day it appears.
+    let tops: BTreeSet<String> = std::fs::read_dir(root())
+        .expect("the repository root")
+        .filter_map(|it| it.ok())
+        .filter(|it| it.path().is_dir())
+        .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .filter(|name| !name.starts_with('.') && name != "target")
+        .collect();
+    assert!(
+        tops.len() > 5,
+        "only {} top-level director(ies), so this would match almost no path",
+        tops.len()
+    );
+
+    let mut files: Vec<std::path::PathBuf> = Vec::new();
+    for under in ["scripts", "hooks"] {
+        for entry in std::fs::read_dir(root().join(under)).expect("a directory of scripts") {
+            let path = entry.expect("an entry").path();
+            // **What runs, rather than what sits beside it.** `scripts/README.md` is the index
+            // and prose, not an instruction - it names paths inside sentences and inside
+            // trailing ellipses, and the other test in this file is the one that keeps it
+            // honest. A hook has no extension at all, which is why this is a list of what to
+            // take rather than a list of what to skip.
+            let runs = matches!(
+                path.extension().and_then(|it| it.to_str()),
+                Some("sh") | Some("ps1") | None
+            );
+            if path.is_file() && runs {
+                files.push(path);
+            }
+        }
+    }
+    assert!(files.len() > 15, "only {} script(s) were read", files.len());
+
+    let mut checked = 0;
+    let mut missing: Vec<String> = Vec::new();
+    for file in &files {
+        let text = std::fs::read_to_string(file).expect("a script");
+        let name = file.file_name().and_then(|it| it.to_str()).unwrap_or("?");
+        for (at, line) in text.lines().enumerate() {
+            if line.trim_start().starts_with('#') {
+                continue;
+            }
+            for said in paths_in(line, &tops) {
+                checked += 1;
+                if !root().join(&said).exists() {
+                    missing.push(format!("{name}:{} names {said}", at + 1));
+                }
+            }
+        }
+    }
+
+    // **A count over nothing is the same failure with the sign flipped.** With no paths found,
+    // every path exists vacuously - which is what a changed quoting style would produce.
+    assert!(
+        checked > 20,
+        "only {checked} path(s) were found across {} script(s), so the reader is not reading them",
+        files.len()
+    );
+    assert!(
+        missing.is_empty(),
+        "{} path(s) a script runs against are not there, so the script does nothing or does it \
+         somewhere else:\n  {}",
+        missing.len(),
+        missing.join("\n  ")
+    );
+}
+
+/// Every repository path in one line, by its first segment being a directory that exists.
+///
+/// **A path with a variable in it is skipped rather than guessed at.** `"$root/spec/tests/$name"`
+/// names a file whose name the script computes, and resolving it would mean running the script.
+/// The fixed part of such a path is still covered wherever the script writes it out in full.
+fn paths_in(line: &str, tops: &BTreeSet<String>) -> Vec<String> {
+    let mut found = Vec::new();
+    for word in line.split(|c: char| c.is_whitespace() || c == '"' || c == '\'' || c == '(') {
+        let word = word.trim_matches(|c| matches!(c, ',' | ';' | ')' | '`' | '\\'));
+        let Some((first, _)) = word.split_once('/') else {
+            continue;
+        };
+        if !tops.contains(first) {
+            continue;
+        }
+        if word.contains('$') || word.contains('*') || word.contains('{') {
+            continue;
+        }
+        found.push(word.trim_end_matches('/').to_string());
+    }
+    found
+}
