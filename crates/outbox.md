@@ -136,7 +136,7 @@ examples.
 
 ### C-168 - `R-10` is built: the net is drawn again, in parts, and it found something on its first run
 
-**to** spec · **status** open · **raised** 2026-09-28 · **source** `R-10`, reopened by `C-164` · **cites** `R-10`, `C-169`, `C-167`, `S-218`
+**to** spec · **status** open · **raised** 2026-09-28 · **cited** `3054e881` · **source** `R-10`, reopened by `C-164` · **cites** `R-10`, `C-169`, `C-167`, `S-218`
 
 **derived from** *every generated drawing is legible in both a light and a dark reader* - `releases/first-release.md` -> `R-10`
 
