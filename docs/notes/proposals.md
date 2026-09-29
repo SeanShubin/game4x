@@ -631,7 +631,7 @@ property; the floor only refuses two empty sets agreeing.**
 
 ### S-208 - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** `c7bcd95c` deleting the *Recipes* table, and `tools/spec/tests/stated_numbers.rs` failing rather than going quiet
+**to** spec · **status** acted · **acted** 2026-09-29 · **cited** the counts are re-derived from `spec/data/rules.4x`, and `stated_numbers.rs` is back in its strong form over the live source · **raised** 2026-09-27 · **source** `c7bcd95c` deleting the *Recipes* table, and `tools/spec/tests/stated_numbers.rs` failing rather than going quiet
 
 **Every number in that document came from the table `D-4` deleted.** *73 role cells*, *13 are
 blank*, *thirteen `put` rows*, *60 cells carry a quantity*, *six write one less*, *six write at its

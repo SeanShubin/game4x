@@ -7,14 +7,12 @@ expressible.
 
 The recipes are a **coloured Petri net**, and the difference from a plain one is load-bearing.
 
-**Superseded in one respect, 2026-09-27: every number and every recipe name below is of the old
-ruleset.** The counts were derived from the *Recipes* table of `releases/first-release.md`, which
-`c7bcd95c` deleted on Sean's word under `D-4` - so *thirteen `put` rows*, *73 role cells* and the
-recipes they name are a record of a ruleset the game no longer plays. **The formalism is not
-superseded**: what a `put` row is, why identity costs the net nothing, and how to tell whether a
-formula is allowed hold over any ruleset. **What has not been done is re-deriving the counts against
-`spec/data/rules.4x`**, which declares fifteen rules where the table stated twenty-one, and that is
-`S-208`.
+**Re-derived against the data, 2026-09-29.** The counts here were taken from the *Recipes* table of
+`releases/first-release.md`, which `c7bcd95c` deleted; they are now taken from `spec/data/rules.4x`,
+which is where the rules live since `D-1`. **What is dated or cited beside an item is history and is
+meant to be** - `P-522` cutting force, `P-431` making a row a `put`, the research lane's own
+encoding. **What is in the present tense is the game as it stands**, and `S-208` is closed.
+
 
 **A place holds a count, a recipe is a transition, and a row is an arc carrying a constant weight.**
 That is not an analogy - it is the mapping `crates/game-console/src/petri.rs` builds and
@@ -82,22 +80,24 @@ token carries a colour, and an arc that preserves the colour is an ordinary arc.
 an extension of the formalism - it is the coloured version of what `consume`/`produce` was
 approximating badly, and it buys identity **at no cost to any guarantee in this document**.
 
-**The thirteen rows split six, six and one, and only the second half is interesting.**
+**There is one `put` now, and it is the interesting half.** The rules are data rather than a table
+since `D-1`, and the shape the table needed thirteen rows to show takes one: **`spec/data/rules.4x`
+declares sixteen rules in fifty-five clauses, one of which is a `put`.**
 
-- **Six write *one less*** - `move`, `create labor`, `mine energy`, `work`, `bear` and `age`. Each is
-  preceded by a `require ... at least 1`, so the value is known before it is written. **An ordinary
-  decrement arc**, and four of the six are player recipes
-- **Six write *at its maximum*** - five `refresh`'s and `upkeep`'s `paid`, both **world** recipes. **The test is what the amount is, not what the row looks like**: *at its maximum* is
-  **how much is missing**, so the amount depends on the current marking. *One less* is a fixed
-  decrement and reads nothing. **This is the reset arc, and it is confined to the rules that
-  restore what time gives back**
-- **One writes neither**, and is a state change that is not a count
+- **`refresh` is the `put`**, and it is one rule over every relation and every trait rather than five
+  rows - `{clause id:15 rule:refresh seq:1 role:put relation:unit}`, with the relation an input and
+  `{assigns ... value:1}` setting the trait. **That is the reset arc**, and it is still confined to
+  restoring what time gives back
+- **A decrement is no longer a `put`.** What the table wrote as *one less* is a `remove` and an `add`
+  in the data - `toil` takes a citizen at `laboring:1` and puts one back at `laboring:0` - so the
+  ordinary decrement arc is two clauses that say what they do rather than one that reads a marking
+- **`keep` is a second role the table had no word for**, used once, by `discard-disorder`
 
-**One row looks like a marking read and is not**, which is the same distinction from the other
-side. `work` produces *`$where`'s density for that resource*. **A density is a trait of the place -
-constant, and a colour.** `muster` produced *that citizen's force* and was the second such row
-until `P-522` cut force from the release. What makes an amount illegal is depending on *how much is there*, not on being
-written as a phrase instead of a number.
+**One clause looks like a marking read and is not**, which is the same distinction from the other
+side. `work` reads the deposit's density into what it produces. **A density is a trait of the place -
+constant, and a colour.** What makes an amount illegal is depending on *how much is there*, not on
+being written as a reading instead of a literal.
+
 
 
 **That confinement is the whole reason `put` is free.** `spec/invariants.md` already names time as
@@ -105,12 +105,15 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 73 role cells**, so it
-can be re-run: **60 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the thirteen `put` rows.** Of the 60, one reads a trait - *`$where`'s density for that resource* - which is a colour
-rather than a marking read. **It was three until `P-522`**, which cut `muster` and `stand` and
-took the two strength reads with them.
+**Counted from `spec/data/rules.4x`**, so it can be re-run: **thirty-seven of the fifty-five clauses
+carry a quantity as a literal** and the rest take theirs from a reading, an assignment or nothing at
+all. **The one reading that looks like a marking read and is not** is `work`'s, which takes the
+deposit's density - a trait of the place, constant, and a colour.
 
-**Corrected 2026-09-12, and both numbers went stale from promotions this lane made.** It read 81
+**The table this counted until 2026-09-29 had 73 role cells and thirteen `put` rows**, and
+`c7bcd95c` deleted it. `tools/spec/tests/stated_numbers.rs` derives the figures above from the data
+and fails if either the document or the data moves without the other.
+
 cells and twelve `put` rows. **`P-427` took four `store` rows out of founding**, so 81 became 77;
 **`P-431` made `age`'s second row a `put`**, so twelve became thirteen. **Nothing edited this
 paragraph and nothing had to** - which is `C-9`'s shape, and it was found by re-deriving the figures
@@ -377,10 +380,12 @@ rule: `C-75` measured that adopting it would cost nothing, and `P-385` has since
 two rows it would have governed, so it is now free and proves nothing. **`P-423` asks whether to
 adopt it**, and the three ways out are stated there.
 
-**Nothing says which of two idioms a rule should use for *the same thing, changed*.** `work` writes
-`require` then `put`; `age` writes `consume` then `produce`, for the same operation. Both are legal
-and they differ only in whether identity survives - which is invisible while nothing that ages has
-an id. **`P-424` asks it.**
+**Nothing says which of two idioms a rule should use for *the same thing, changed*.** In the data
+`toil` writes `remove` then `add` and `refresh` writes a `put`, for the same kind of operation - one
+takes the row and puts a changed one back, the other changes it in place. **Both are legal and they
+differ only in whether identity survives**, which is invisible while nothing that changes this way
+carries an id. **`P-424` asks it**, and the examples it was written over were `work` and `age`.
+
 
 **The worked example and the counter-example were both rewritten on 2026-09-12**, and the reason is
 worth keeping. The example borrowed `stand` and `garrison` from the release and had a garrison

@@ -26,7 +26,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
-- **D-4** - `5367098` D-4's scenario: the old playthrough goes and the world description stays · still open in `releases/rules-become-data.md`
+- **D-1** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
+- **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
@@ -59,9 +60,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (44)
+### To spec (43)
 
-- **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`

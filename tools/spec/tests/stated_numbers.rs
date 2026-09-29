@@ -67,7 +67,33 @@ struct Stated {
 /// this file needs to know is still true.
 #[test]
 fn every_number_the_documents_state_is_the_number_that_is_there() {
-    let stated: [Stated; 0] = [];
+    let data = read("spec/data/rules.4x");
+    let count = |kind: &str| {
+        data.lines()
+            .filter(|line| line.starts_with(&format!("{{{kind} ")))
+            .count()
+    };
+    let role = |name: &str| data.matches(&format!("role:{name} ")).count();
+    let stated = [
+        Stated {
+            document: "docs/designing-rules.md",
+            says: "sixteen rules",
+            derived: count("rule"),
+        },
+        Stated {
+            document: "docs/designing-rules.md",
+            says: "fifty-five clauses",
+            derived: count("clause"),
+        },
+    ];
+    // **Both roles asserted where the document names them**, because a count alone cannot tell that
+    // the document still says it - which is how an older message in this file went on naming `hold`.
+    assert_eq!(role("put"), 1, "`put` clauses in spec/data/rules.4x");
+    assert_eq!(
+        role("keep"),
+        1,
+        "`keep` clauses, which the document says is used once"
+    );
 
     for Stated {
         document,
@@ -89,6 +115,8 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
                 // than reading as zero, which is the only property this list needs.
                 s if s.contains("eleven") => Some(11),
                 s if s.contains("seventeen") => Some(17),
+                s if s.contains("sixteen") => Some(16),
+                s if s.contains("fifty-five") => Some(55),
                 s if s.contains("fifteen") => Some(15),
                 s if s.contains("thirteen") => Some(13),
                 s if s.contains("twelve") => Some(12),
@@ -104,25 +132,17 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let release = read("releases/first-release.md");
     assert!(
         !release.contains("## Recipes"),
-        "the release has a Recipes section again, so the strong form of this test is available \
-         and should be restored rather than left in its weak form"
+        "the release has a Recipes section again, so a document counting it would have two sources"
     );
+    // **The numbers are derived from the data now, which is `S-208` closed.** The document counted
+    // the release's *Recipes* table until `c7bcd95c` deleted it; `spec/data/rules.4x` is where the
+    // rules live since `D-1`, so that is what the figures are re-derived from and what the list
+    // above reads.
     let rules = read("docs/designing-rules.md");
     assert!(
-        rules.contains("Superseded in one respect, 2026-09-27"),
-        "docs/designing-rules.md states counts of a table that no longer exists and no longer \
-         says so - either mark it or re-derive it"
+        rules.contains("The table this counted until 2026-09-29 had 73 role cells"),
+        "docs/designing-rules.md no longer says where its old figures came from, so a reader meeting          73 anywhere has nothing to date it by"
     );
-    // **Both ways, because the marker alone would be satisfied by a document that had quietly
-    // dropped the numbers instead.** The marker is about these figures, so they have to be the
-    // figures that are there.
-    for figure in ["73 role cells", "thirteen `put` rows"] {
-        assert!(
-            rules.contains(figure),
-            "the marker says {figure:?} is of the old ruleset and the document no longer states \
-             it, so the marker is about nothing"
-        );
-    }
 }
 
 /// **A document points at a generated report and does not restate its counts.**
