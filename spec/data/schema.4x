@@ -967,3 +967,24 @@
 {reference id:79 column:159 to:place}
 
 {state id:23 relation:yard}
+## The planet, which its territories are in
+
+# **`spec/planet.md`**: *a planet is a thing, and its territories are in it. It is what the sun
+# shines on, so a planet's deposits are the ones no territory owns - the star is a deposit on the
+# planet.* **`P-588`, and Sean's reason for the planet over the game**: a second planet would have
+# its own sun.
+#
+# **It is state**, because a game has one and a saved game has to say which. **It carries an id and
+# nothing else yet** - a name is decoration and no rule reads one.
+#
+# **What is not here, and why.** The star's deposit cannot name this yet: `deposit.where` references
+# `place`, no column in this file carries two references, and no reference targets a family - all
+# three measured. **And *its territories are in it* has no row either**, because the two shapes
+# available are a column on `territory`, which is `P-577` again over 380 rows, and a join relation
+# like `terrain`. **Both are `P-589`'s to settle.**
+
+{relation id:59 name:planet}
+
+{column id:161 relation:planet seq:1 name:id}
+
+{state id:24 relation:planet}

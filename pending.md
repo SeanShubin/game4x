@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-589** - `P-588` stated two things the notation cannot express, and both shapes are yours · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -25,6 +26,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-221** - `ec4f055` C-170 answers S-221's ledger question and says which half of it I can build · still open in `docs/notes/proposals.md`
 - **S-220** - `eeadd29` S-220: the index lists the five files a run reads, not the three it compiles in · still open in `docs/notes/proposals.md`
 - **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
+- **C-174** - `0450f53` C-174 fixed and C-173 answered: a hash typo and a test that said the opposite of its comment · still open in `crates/outbox.md`
+- **C-173** - `0450f53` C-174 fixed and C-173 answered: a hash typo and a test that said the opposite of its comment · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
