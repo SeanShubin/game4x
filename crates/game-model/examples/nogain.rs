@@ -736,6 +736,10 @@ pub struct Ground {
     pub rule: Rule,
     /// The line under the rule in the report: how this grounding was reached.
     pub how: String,
+    /// What it takes, before the fold - the arcs into the transition.
+    pub took: BTreeMap<Place, i64>,
+    /// What it makes, before the fold - the arcs out of it.
+    pub made: BTreeMap<Place, i64>,
 }
 
 /// **Rules that move nothing**, named rather than dropped - `end-turn`, which is only its parts,
@@ -763,9 +767,9 @@ pub fn read() -> Read {
         };
         let mut any = false;
         for with in &ways {
-            for (_name, rule, how) in grounded(&schema, one, with) {
+            for one in grounded(&schema, one, with) {
                 any = true;
-                ground.push(Ground { rule, how });
+                ground.push(one);
             }
         }
         if !any {
@@ -787,11 +791,7 @@ pub fn read() -> Read {
 }
 
 /// One stated rule, as every rule it stands for.
-fn grounded(
-    schema: &Schema,
-    one: &Stated,
-    with: &BTreeMap<String, String>,
-) -> Vec<(String, Rule, String)> {
+fn grounded(schema: &Schema, one: &Stated, with: &BTreeMap<String, String>) -> Vec<Ground> {
     // **What a rule is about is what its `{relation-of ...}` clause is declared over**, and the
     // argument where a `{part ...}` gives one. `work` is about `resource`, so it is three rules;
     // `refresh` is declared over `unit` and called with `extractor`, and the call is what says so.
@@ -816,7 +816,11 @@ fn grounded(
 
     let mut out = Vec::new();
     for spelling in spellings {
-        let mut delta: BTreeMap<Place, i64> = BTreeMap::new();
+        // **Every arc as it is laid down, rather than only the sum.** The decision needs the sum
+        // - a P-invariant is about `made - taken` - but a drawing of the net needs both ends,
+        // and a place a rule takes and remakes in equal measure vanishes from the sum. `move`
+        // is the case: it takes a scout and makes a scout, and only `moving` survives the fold.
+        let mut arcs: Vec<(Place, i64)> = Vec::new();
         let mut reads: Vec<(Place, Place)> = Vec::new();
         let mut said: Vec<String> = Vec::new();
 
@@ -865,7 +869,7 @@ fn grounded(
                         match quantity {
                             Many::Fixed(many) => {
                                 for place in places(schema, &kind, &clause.fixed) {
-                                    *delta.entry(place).or_insert(0) += sign * many;
+                                    arcs.push((place, sign * many));
                                 }
                             }
                             Many::Read => {
@@ -880,8 +884,8 @@ fn grounded(
                                     kind: "the planet".into(),
                                     state: String::new(),
                                 };
-                                *delta.entry(made.clone()).or_insert(0) += sign;
-                                *delta.entry(from.clone()).or_insert(0) -= sign;
+                                arcs.push((made.clone(), sign));
+                                arcs.push((from.clone(), -sign));
                                 reads.push((made, from));
                                 said.push(format!(
                                     "`{}` reads its quantity from a required row, so it is \
@@ -902,24 +906,27 @@ fn grounded(
                         }
                         // **A put raises a count, and the invariant says what pays for it**:
                         // *anything that exhausts draws on time for a turn*.
-                        *delta
-                            .entry(Place {
+                        arcs.push((
+                            Place {
                                 kind: "time".into(),
                                 state: String::new(),
-                            })
-                            .or_insert(0) -= 1;
-                        *delta
-                            .entry(Place {
+                            },
+                            -1,
+                        ));
+                        arcs.push((
+                            Place {
                                 kind: kind.clone(),
                                 state: format!("{what} 0"),
-                            })
-                            .or_insert(0) -= 1;
-                        *delta
-                            .entry(Place {
+                            },
+                            -1,
+                        ));
+                        arcs.push((
+                            Place {
                                 kind: kind.clone(),
                                 state: format!("{what} {to}"),
-                            })
-                            .or_insert(0) += 1;
+                            },
+                            1,
+                        ));
                     }
                     other => panic!(
                         "`{}` has role `{other}`, which this reader does not know",
@@ -929,6 +936,14 @@ fn grounded(
             }
         }
 
+        let mut took: BTreeMap<Place, i64> = BTreeMap::new();
+        let mut made: BTreeMap<Place, i64> = BTreeMap::new();
+        let mut delta: BTreeMap<Place, i64> = BTreeMap::new();
+        for (place, by) in &arcs {
+            *delta.entry(place.clone()).or_insert(0) += by;
+            let side = if *by < 0 { &mut took } else { &mut made };
+            *side.entry(place.clone()).or_insert(0) += by.abs();
+        }
         delta.retain(|_, by| *by != 0);
         if delta.is_empty() {
             continue;
@@ -954,14 +969,15 @@ fn grounded(
         } else {
             said.join(" ")
         };
-        out.push((
-            name.clone(),
-            Rule {
+        out.push(Ground {
+            rule: Rule {
                 name: name.clone(),
                 delta,
             },
             how,
-        ));
+            took,
+            made,
+        });
 
         // **The unbounded draw gets a rule of its own.** A clause whose quantity is read moves
         // `n` of something and `n` from a source, for an `n` nobody here knows. Counting it once
@@ -970,16 +986,18 @@ fn grounded(
         // further unit is non-increasing at all of them.
         for (made, from) in reads {
             let mut only: BTreeMap<Place, i64> = BTreeMap::new();
-            *only.entry(made).or_insert(0) += 1;
-            *only.entry(from).or_insert(0) -= 1;
-            out.push((
-                name.clone(),
-                Rule {
+            *only.entry(made.clone()).or_insert(0) += 1;
+            *only.entry(from.clone()).or_insert(0) -= 1;
+            out.push(Ground {
+                rule: Rule {
                     name: format!("{name}, per unit of density"),
                     delta: only,
                 },
-                "the coefficient of the density, which fixing it at one would not cover".into(),
-            ));
+                how: "the coefficient of the density, which fixing it at one would not cover"
+                    .into(),
+                took: BTreeMap::from([(from, 1)]),
+                made: BTreeMap::from([(made, 1)]),
+            });
         }
     }
     out

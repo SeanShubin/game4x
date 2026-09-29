@@ -61,9 +61,144 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-169 - Nothing ever spends a citizen's `bearing`, so a trait, a column and a turn's part do nothing
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** the net drawn for `R-10`: `citizen, bearing 0` is a place nothing fills · **cites** `C-163`, `C-168`
+
+**derived from** *`breed` consumes the parent and returns it as one of two, with its bearing spent* - `spec/data/schema.4x`
+
+**Found by the drawing on its first run**, which is what `R-10` is for.
+
+## The measurement
+
+**Every clause in `spec/data/rules.4x` that touches a citizen's `bearing`, all ten of them:**
+
+```
+upkeep     remove   clause-21    bearing not named
+upkeep     add      clause-23    bearing read from clause-28
+upkeep     require  clause-28    bearing not named
+perish     remove   clause-24    bearing not named
+breed      remove   clause-25    bearing = 1
+breed      add      clause-27    bearing = 1
+toil       require  clause-31    bearing not named
+toil       remove   clause-32    bearing not named
+toil       add      clause-33    bearing read from clause-31
+deploy     add      clause-51    bearing = 1
+```
+
+**Not one of them ever writes a nought.** `breed` takes a citizen bearing `1` and puts back two
+bearing `1`; `deploy` makes them bearing `1`; `upkeep` and `toil` read the parent's and preserve
+it; `perish` does not name it. **The only `bearing:0` anywhere in the tree is in one test's
+hand-written starting world**, `toil-works-the-unworked-citizens-of-one-place.4x`, which states it
+so a reading can be seen doing its work.
+
+**So three things follow, and none of them is a matter of opinion.** `citizen, bearing 0` is a
+place no rule can fill. `refresh (citizen, bearing)` is a part of every turn that can never fire.
+And `bearing` is a column whose value is `1` in every world the rules can reach, so it tells two
+citizens apart in no world that can happen.
+
+## What the data says about itself, twice, and the two disagree
+
+`spec/data/schema.4x` says the parent comes back spent: *`breed` consumes the parent and returns
+it as one of two, with its bearing spent - so no citizen breeds twice in a turn, and at most
+doubling falls out of the rule rather than being stated anywhere.*
+
+`spec/data/rules.4x` says the opposite about the same rule, and it is the one the data agrees
+with: *`repeats` holds what a firing made aside and the next firing never sees it;
+`breeding-does-not-reach-the-citizens-it-just-made` is what says so, and it says it by the food it
+did not eat rather than by a `bearing` of nought.*
+
+**The behaviour is safe either way and that is why nobody noticed.** No citizen breeds twice in a
+turn, and breeding is still capped at doubling - but it is `repeats` doing it, not `bearing`. **One
+of the two explanations is of a mechanism that is not there.**
+
+## The choice, and it is not this lane's
+
+- **Spend it**, so `breed` removes `bearing 1` and adds `bearing 0`. `refresh` then has something
+  to restore, the trait becomes the thing `schema.4x` describes, and `repeats` stops being the
+  only thing holding the cap.
+- **Drop it**, as a mechanism that `repeats` made redundant - the column, the trait, the
+  `{argument}` that refreshes it, and the two paragraphs.
+
+**This lane has not guessed which and has changed nothing.** The choice decides whether a citizen
+that has bred can be told from one that has not, which is a question about the game.
+
+## Two instruments, one fact, and only one of them named the cause
+
+**The sweep already had this and it was unreadable.** `reports/unused-values.md` carries nine
+entries over six distinct rows, every one a `bearing:1` in a test's world that no reviewed test
+would notice changing - the same fact seen from the other end, sitting in 448 lines about test
+data. **The net says why**, in one line,
+because a place nothing fills is a structural fact about the rules rather than a count over
+examples.
+
+---
+
+### C-168 - `R-10` is built: the net is drawn again, in parts, and it found something on its first run
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** `R-10`, reopened by `C-164` · **cites** `R-10`, `C-169`, `C-167`, `S-218`
+
+**derived from** *every generated drawing is legible in both a light and a dark reader* - `releases/first-release.md` -> `R-10`
+
+**Filed rather than said in a commit, which is `S-218`.** The code lane sets `built`; only Sean
+sets `vetted`.
+
+## What is there now
+
+`crates/game-model/examples/petri.rs` draws `reports/petri.html`, linked from the index, with
+`reports/petri.md` beside it to diff. **Thirty-two parts, one per rule**, each an inline SVG.
+
+**It draws the net the decision is made on** rather than reading the rules a second way. A drawing
+from its own reader could disagree with the verdict beside it and neither would be wrong about
+itself, which is this repository's recurring failure wearing a new hat.
+
+## The three clauses, each held by a check rather than asserted
+
+```
+nothing_in_a_drawing_declares_a_colour_the_theme_does_not_supply   772 declarations, every one a custom property
+every_node_in_every_drawing_carries_its_own_name                  164 nodes, and labels >= shapes
+every_part_says_what_it_leaves_out                                32 parts, 32 say so
+what_a_part_leaves_out_is_computed_from_the_arcs                  re-derived per part, both directions
+the_committed_drawing_is_what_the_generator_writes                the one that stops it rotting
+```
+
+**The fourth is the one worth arguing for**, and `R-10` asks for it by name: *computed from the
+arcs, so a recipe added tomorrow appears in the parts it touches with nobody maintaining a list.*
+It checks both directions - every rule that shares a place is named, and no rule that shares none
+is - so **a list of everything pasted under every part fails where a computed one passes.**
+
+**Observed rather than asserted, which is the half this lane can do.** The page was opened in a
+browser and read in both themes; the drawing takes its colours from `--ink`, `--paper` and
+`--quiet`, confirmed by overriding them and watching every circle, bar and arrowhead follow.
+**Sean's reading is still the thing that vets it**, and what is claimed here is that the mechanism
+is in place.
+
+## One thing the report did not say and this lane changed
+
+**A part's two lists were unreadable together.** *Leaves out 1 other rule reaching `scout, moving
+0` · `scout, moving 1`: `refresh (scout, moving)`* is three things and reads as five, because a
+place's own name has a comma in it. They are two labelled lines now - *Shares* and *Leaves out* -
+which is the same defect `C-167`'s page had and the same fix.
+
+## What the parts cannot show, so the page says it separately
+
+**A place nothing fills can only fall; a place nothing empties can only rise.** That is a fact
+about every part at once, so no drawing of one rule can carry it:
+
+- **nothing fills** `the planet` and `time` - the named sources, which is what an endless well
+  looks like in a net - and `citizen, bearing 0`, **which is `C-169`**
+- **nothing empties** `bin` and `yard` - built and never taken down, which is a choice rather than
+  a defect, and the shape to look at when an unbounded accumulation is suspected
+
+**That third entry is the drawing earning its place on the day it was built.** `R-10`'s reason, in
+Sean's words, is *it gives me confidence that we would immediately detect an infinite resource
+glitch* - and what it detected first was a trait that does nothing.
+---
+
 ### C-167 - `S-219` is built: the no-gain property is decided again, and the check bites
 
-**to** spec · **status** open · **raised** 2026-09-28 · **source** `S-219` · **cites** `S-219`, `C-166`, `C-165`, `S-218`
+
+**to** spec · **status** open · **raised** 2026-09-28 · **cited** `d3c11732`, `f828fd70` · **source** `S-219` · **cites** `S-219`, `C-166`, `C-165`, `S-218`
 
 **derived from** *whether this holds is decided mechanically, from the rules alone* - `spec/invariants.md` -> Nothing comes back round with more
 
@@ -138,9 +273,10 @@ different property again.
 
 ## What the data says, and what it does not
 
-**`spec/invariants.md` names three sources** - the planet, the star and time - and says *anything
-that exhausts draws on time for a turn... the way an extractor draws material out of the planet
-and is spent doing it.* **Two of those three are legible in the shape of a clause**: a `put` that
+`spec/invariants.md` names three sources - the planet, the star and time - and says which draw is
+which: *Anything that exhausts draws on time for a turn: it spends a count it carries, and
+only the turn's end restores that count, the way an extractor draws material out of the planet and
+is spent doing it.* **Two of those three are legible in the shape of a clause**: a `put` that
 restores a count is the turn's end, and a quantity read out of a `{require}`d deposit is the well
 behind a pump. So the reader charges those two without guessing.
 
