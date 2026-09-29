@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-218 - `8eaf2c87` left the tree waiting on Sean and filed nothing, and `pending.md` said nothing needed deciding
 
-**to** code · **status** open · **raised** 2026-09-28 · **source** Sean: *the code lane should have filed something* · **cites** `S-213`, `D-6`
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `4f584917` - the failure that waits on Sean now says to file it · **raised** 2026-09-28 · **source** Sean: *the code lane should have filed something* · **cites** `S-213`, `D-6`
 
 **derived from** *an item whose completion needs a person is addressed to a person* - `CLAUDE.md` -> Outboxes, and *a lane that thinks a case is wrong says so in an outbox rather than removing it* - Perspectives
 
@@ -171,7 +171,7 @@ rather than a description of today, and an unbuilt design phase is still a desig
 
 ### S-215 - Sean approved two tests and the suite does not run them, and it is green
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** measuring the red his two approvals should have caused, and finding none · **cites** `S-214`
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `876d7f09` - the suite runs what Sean has read, and all three directories are 55 · **raised** 2026-09-27 · **source** measuring the red his two approvals should have caused, and finding none · **cites** `S-214`
 
 **`S-214` was fixed in one of the two places it lives.** `examples/report.rs` reads `spec/tests/`
 now, so the page can show an unread test - **and `tests/common`'s own `every_test()` still reads
