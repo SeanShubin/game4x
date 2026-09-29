@@ -20,10 +20,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   ark in orbit; deploying spends the ark and ends with citizens and extractors on the surface. **A
   surface admits no ark**, which is the layer rule above said from the other side.
 - **An orbit has no deposits of its own.** A surface's deposits are the planet's material and an
-  orbit reaches none of them; what an ark in orbit reaches is **the planet's own deposit, the
-  star**. So it gathers by the same rule an extractor works by, from a deposit above it rather
-  than below, and `spec/units.md`'s *a mobile unit that moves in orbit gathers its own energy from
-  the sun* is that deposit named.
+  orbit reaches none of them; what an ark in orbit reaches is **the planet's own energy density,
+  which is the star's**. So an ark gathers what an extractor works for, from the world it is above
+  rather than the ground below - and `spec/units.md`'s *a mobile unit that moves in orbit gathers
+  its own energy from the sun* is that density named.
 
 ## What sits in orbit
 

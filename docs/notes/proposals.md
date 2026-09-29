@@ -10451,6 +10451,7 @@ work the release exists to order.
 | P-586, `R-11` reworded: the intent stands and the `.txt` twin comes out                                                      | `releases/first-release.md` -> R-11                                                                                                                                                                      | 2026-09-29 |
 | P-587, `bearing` becomes load-bearing: `breed` puts the parent back spent, the way `toil` does                               | `spec/data/rules.4x`                                                                                                                                                                                     | 2026-09-29 |
 | P-588, A planet is a thing, the sun is a deposit on it, and the containment root comes back                                  | `spec/planet.md` -> Shape, `spec/orbit.md` -> The orbital layer, and `spec/logistics.md` -> Containment                                                                                                  | 2026-09-29 |
+| P-589, The planet carries the star's density itself, which is two words in two bullets                                       | `spec/planet.md` -> Shape and `spec/orbit.md` -> The orbital layer                                                                                                                                       | 2026-09-29 |
 
 ## Forecast cleanups that were checked and not filed
 

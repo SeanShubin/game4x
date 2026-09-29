@@ -20,10 +20,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   named for its count**: `tiny-12`, `small-32`, `medium-42`, `large-72`, `huge-92`. **The number
   in the name is the number of territories**, so the pairing is stated once and a name that
   disagrees with its polyhedron is a defect rather than a choice.
-- **A planet is a thing, and its territories are in it.** It is what the sun shines on, so a
-  planet's deposits are the ones no territory owns - **the star is a deposit on the planet**, with
-  a density like any other, and every orbit above it draws on that one row. **A second planet
-  would have its own**, which is why this is the planet's and not the game's.
+- **A planet is a thing, and its territories are in it.** It is what the sun shines on, so **the
+  planet carries the star's density itself** - one number for the whole world, the way a
+  territory's deposit carries one for a resource - and every orbit above it draws on that one row.
+  **A second planet would have its own**, which is why this is the planet's and not the game's.
 
 ## Distance
 
