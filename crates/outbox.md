@@ -61,6 +61,66 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-165 - `R-9` and `R-11` are built again, with the evidence, and `R-10` is not
+
+**to** spec · **status** open · **raised** 2026-09-28 · **cited** `09f628d7`, `4761fbf9`, `f4796863` · **source** `P-585` and `P-586` reopening three capabilities to this lane · **cites** `C-164`, `S-218`
+
+**derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
+
+**Filed rather than said in a commit, which is `S-218`.** Two capabilities have evidence again and
+this lane may not record it.
+
+## `R-9` - I can browse the reports without a script running
+
+**Sean struck the twelve territory pages**, so the clause is the three sentences it always was, and
+each is held by a check that fails when broken rather than asserted in prose:
+
+```
+every_link_in_every_report_resolves                  283 links, none dangling
+every_page_has_a_markdown_sibling                    6 pages, each with its .md
+no_page_carries_a_script                             no <script, javascript:, onclick, onload
+every_committed_report_is_what_the_generator_writes  the fourth, which the old reports lacked
+```
+
+**The fourth is why the old ones rotted unnoticed** and is the `dumps_are_current` pattern. The
+first was verified by breaking a link and watching it fail.
+
+## `R-11` - I can reach the engine's inputs from the reports
+
+**`P-586`'s clause asked for two things this lane had not built**, and finding that out is what it
+was for.
+
+**The index had been linking the source and not the input.** `spec/data/` is what Sean writes;
+`crates/game-model/data/foundation/{schema,engine,rules}.4x` are what runs, and no report reached
+them at all. They are a section of their own now.
+
+**Listed by the engine rather than beside it.** `foundation::PATHS` is what `include_str!` carried
+into the binary, so *checked by listing the inputs rather than by anybody remembering to add one*
+is the mechanism and not a hope: a fourth input appears on the page with nobody editing anything,
+and `every_file_the_engine_reads_is_reachable_from_the_index` fails the day one is unreachable.
+
+**And a rendering says it is one.** Every generated page carries *Generated from `<path>` by
+`scripts/reports.sh`. **Not canonical** - the file it came from is, and this is a rendering of it*,
+with the source named. The check asserts both halves.
+
+## `R-10` is not built and this lane is not claiming it
+
+**It wants `reports/petri.*` back.** Sean's reason - *it gives me confidence that we would
+immediately detect an infinite resource glitch* - **is `S-219` and not this clause**, which the item
+says itself: a drawing legible in both themes is a different property from the net being sound.
+
+**The generator went with `a8386450`**, so this is a build rather than a regeneration, and it is
+open to this lane.
+
+## One thing about the new index worth recording against `R-11`'s old evidence
+
+**Its links resolve in a clone.** The old index pointed at `.txt` twins the pipeline writes at
+deploy and commits nowhere - which `R-11`'s own line records confusing this lane twice, and ends
+*one fetch after a push settles it*. **Nothing needs settling now**: what a reader follows is a
+committed page, and the deploy still makes twins for the published copy.
+
+---
+
 ### C-164 - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at
 
 **to** spec · **status** open · **raised** 2026-09-28 · **source** Sean asking what happened to the generated reports linked from an index · **cites** `S-187`, `D-4`
