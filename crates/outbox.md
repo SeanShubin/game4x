@@ -61,7 +61,42 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-178 - Two cases in `regression/rules` are stale from `P-587` and `S-221`, and the deletion is Sean's
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `2374fe79` · **source** the suites running after the scenario played again · **cites** `P-587`, `S-221`, `C-177`
+
+**derived from** *A lane seeing this files it `to spec` before finishing* - the suite's own failure, which `S-218` put there
+
+**Left red on purpose, and it is two lines.** Both rules are still in the data, so neither case is
+housekeeping.
+
+```
+regression/rules/breed.4x:17    P-587 gave breed a second `add` clause, so clause-59 is there now
+regression/rules/gather.4x:12   S-221 made gather require a planet where it required a deposit
+```
+
+**Accepted the same way as the four in `C-177`:**
+
+```
+Remove-Item regression/rules/breed.4x
+Remove-Item regression/rules/gather.4x
+```
+
+**Then `cargo test -p game-model --test suites` writes them back and the diff is the reading.**
+
+## What this lane did rather than wait
+
+**`regression/types/planet.4x` is committed and is not this.** Adding a case is any lane's -
+a case is written by the test and committing what it wrote is publishing. **Only removing one is
+an approval**, which is the line `CLAUDE.md` draws and the hook reads from the act rather than the
+path.
+
+**Everything else the planet touched is done**: three pinned counts, `scenario/played.md`, and the
+four `end-turn` cases he accepted. The workspace is green apart from these two.
+---
+
 ### C-177 - Four regression cases are stale from `P-587`, and deleting one is Sean's gesture and nobody else's
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `dd3f0a4f` · **source** the scenario playing again after `S-221`'s planet landed · **cites** `P-587`, `S-221`, `C-169`
 
