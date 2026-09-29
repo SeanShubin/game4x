@@ -334,6 +334,7 @@ fn the_report_says_which_relations_it_compared() {
             "metal",
             "pioneer",
             "place",
+            "planet",
             "provides",
             "scout",
             "terrain",
@@ -358,7 +359,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, ark, bin, capacity, citizen, consumes, deposit, energy, extractor, food, labor, metal, pioneer, place, provides, scout, terrain, territory, transport, yard\n  \
+           compared  adjacency, ark, bin, capacity, citizen, consumes, deposit, energy, extractor, food, labor, metal, pioneer, place, planet, provides, scout, terrain, territory, transport, yard\n  \
            result    as expected"
     );
 }

@@ -54,15 +54,15 @@
 //!
 //! **Charging every density draw to the planet was this reader's guess and has stopped being
 //! one.** `P-588` landed on 2026-09-29, and `spec/planet.md` now says: *A planet is a thing, and
-//! its territories are in it. It is what the sun shines on, so a planet's deposits are the ones
-//! no territory owns - the star is a deposit on the planet, with a density like any other, and
-//! every orbit above it draws on that one row.*
+//! its territories are in it. It is what the sun shines on, so the planet carries the star's
+//! density itself - one number for the whole world, the way a territory's deposit carries one for
+//! a resource - and every orbit above it draws on that one row.*
 //!
-//! **So there is no second well to miss.** A mine and a sunlit orbit read a density off a deposit,
-//! and every deposit hangs on the planet - which is what this reader was already doing, for a
-//! reason it did not have at the time. `C-166` asked whether the sources should be named in the
-//! data and `P-588` answered it by a different route: the sun is a deposit, so nothing needs
-//! naming.
+//! **So there is no second well to miss.** A mine reads a density off a deposit and a sunlit orbit
+//! reads one off the planet, and the planet is where both sit - which is what this reader was
+//! already doing, for a reason it did not have at the time. `C-166` asked whether the sources
+//! should be named in the data and `P-588` answered it by a different route: the star is a density
+//! the planet carries, so there is nothing left to name.
 //!
 //! **One well rather than two is also the stricter arithmetic**, which is why `S-221` says the
 //! verdict is not at stake either way: one weight has to sit above metal, food and energy at
@@ -1404,8 +1404,8 @@ pub fn write_report(decision: &Decision) -> usize {
          nothing. A `put` draws on time and a density reading draws on the planet, which is \
          `spec/invariants.md`'s own sentence about what exhausts. **There are two wells here and \
          not three**, and since `P-588` that is what the specification says rather than this \
-         reader's guess: the star is a deposit on the planet, so every orbit above it draws on \
-         that one row and there is no separate star to miss."
+         reader's guess: the planet carries the star's density itself, so every orbit above it \
+         draws on that one row and there is no separate star to miss."
             .to_string(),
     ));
 

@@ -532,13 +532,12 @@
 
 {input id:19 rule:12 seq:1 name:where of:48}
 
-{clause id:39 rule:12 seq:1 role:1 relation:18}
+{clause id:39 rule:12 seq:1 role:1 relation:59}
 {clause id:35 rule:12 seq:2 role:1 relation:51}
 {clause id:36 rule:12 seq:3 role:2 relation:51}
 {clause id:37 rule:12 seq:4 role:3 relation:51}
 {clause id:38 rule:12 seq:5 role:3 relation:50}
 
-{binding id:52 clause:39 column:51 input:19}
 {binding id:48 clause:35 column:142 input:19}
 {binding id:49 clause:36 column:142 input:19}
 {binding id:50 clause:37 column:142 input:19}
@@ -549,10 +548,9 @@
 {literal id:51 clause:36 column:145 value:1}
 {literal id:52 clause:37 column:144 value:0}
 {literal id:53 clause:37 column:145 value:1}
-{literal id:55 clause:39 column:52 value:50}
 
 {reading id:8 clause:37 column:143 of:35 takes:143}
-{reading id:9 clause:38 column:141 of:39 takes:53}
+{reading id:9 clause:38 column:141 of:39 takes:162}
 
 # **`launch` builds an ark and puts it in orbit, and that is one action.** Sean, 2026-09-20:
 # *building/launching an ark will be one action, removing the resources required to build an ark

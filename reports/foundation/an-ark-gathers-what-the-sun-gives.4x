@@ -7,13 +7,13 @@
 {given}
 {territory id:1}
 {place id:1 of:1 layer:orbit}
-{deposit where:1 what:50 density:3 quantity:1}
+{planet id:1 energy:3}
 {ark where:1 moving:1 gathering:1 quantity:1}
 {when}
 {gather where:1}
 {then}
 {territory id:1}
 {place id:1 of:1 layer:orbit}
-{deposit where:1 what:50 density:3 quantity:1}
+{planet id:1 energy:3}
 {ark where:1 moving:1 gathering:0 quantity:1}
 {energy where:1 quantity:3}

@@ -979,6 +979,36 @@
 <span class="brace">{</span><span class="relation">reference</span> <span class="key">id</span><span class="colon">:</span><span class="value">79</span> <span class="key">column</span><span class="colon">:</span><span class="value">159</span> <span class="key">to</span><span class="colon">:</span><span class="value">48</span><span class="brace">}</span>
 
 <span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">23</span> <span class="key">relation</span><span class="colon">:</span><span class="value">58</span><span class="brace">}</span>
+<span class="prose"># The planet, which its territories are in</span>
+
+<span class="prose"><strong><code>spec/planet.md</code></strong>: *a planet is a thing, and its territories are in it. It is what the sun</span>
+<span class="prose">shines on, so a planet's deposits are the ones no territory owns - the star is a deposit on the</span>
+<span class="prose">planet.* <strong><code>P-588</code>, and Sean's reason for the planet over the game</strong>: a second planet would have</span>
+<span class="prose">its own sun.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It is state</strong>, because a game has one and a saved game has to say which. <em></em>It carries an id and</span>
+<span class="prose">nothing else yet<em></em> - a name is decoration and no rule reads one.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The star's density is a column here rather than a deposit row</strong>, which is Sean's own shape and is</span>
+<span class="prose"><code>P-589</code>: <code>deposit.where</code> references <code>place</code>, no column in this file carries two references and no</span>
+<span class="prose">reference targets a family - all three measured - so a deposit on the planet had nowhere to be.</span>
+<span class="prose"><strong>A column has nowhere to go wrong.</strong></span>
+<span class="prose"></span>
+<span class="prose"><strong><code>gather</code> requires a planet and binds nothing</strong>, so it matches the one planet there is and refuses</span>
+<span class="prose">two - <code>NotOne</code>, and Sean, 2026-09-15: *we should never have non-determinism from what row happens</span>
+<span class="prose">to be encountered first.* <strong>So a second planet is a refusal rather than a wrong number</strong>, which is</span>
+<span class="prose">why this is the planet's and not the game's.</span>
+<span class="prose"></span>
+<span class="prose"><strong>And <em>its territories are in it</em> still has no row.</strong> It is not needed while <code>gather</code> has one</span>
+<span class="prose">planet to find; when it is, the shapes are a column on <code>territory</code> - <code>P-577</code> again over 380 rows -</span>
+<span class="prose">and a join like <code>terrain</code>, which is <code>P-578</code> and is what this lane would take.</span>
+
+<span class="brace">{</span><span class="relation">relation</span> <span class="key">id</span><span class="colon">:</span><span class="value">59</span> <span class="key">name</span><span class="colon">:</span><span class="value">planet</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">161</span> <span class="key">relation</span><span class="colon">:</span><span class="value">59</span> <span class="key">seq</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">id</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">column</span> <span class="key">id</span><span class="colon">:</span><span class="value">162</span> <span class="key">relation</span><span class="colon">:</span><span class="value">59</span> <span class="key">seq</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">energy</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">state</span> <span class="key">id</span><span class="colon">:</span><span class="value">24</span> <span class="key">relation</span><span class="colon">:</span><span class="value">59</span><span class="brace">}</span>
 </pre>
 </body>
 </html>

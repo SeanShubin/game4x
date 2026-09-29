@@ -967,3 +967,33 @@
 {reference id:79 column:159 to:48}
 
 {state id:23 relation:58}
+## The planet, which its territories are in
+
+# **`spec/planet.md`**: *a planet is a thing, and its territories are in it. It is what the sun
+# shines on, so a planet's deposits are the ones no territory owns - the star is a deposit on the
+# planet.* **`P-588`, and Sean's reason for the planet over the game**: a second planet would have
+# its own sun.
+#
+# **It is state**, because a game has one and a saved game has to say which. **It carries an id and
+# nothing else yet** - a name is decoration and no rule reads one.
+#
+# **The star's density is a column here rather than a deposit row**, which is Sean's own shape and is
+# `P-589`: `deposit.where` references `place`, no column in this file carries two references and no
+# reference targets a family - all three measured - so a deposit on the planet had nowhere to be.
+# **A column has nowhere to go wrong.**
+#
+# **`gather` requires a planet and binds nothing**, so it matches the one planet there is and refuses
+# two - `NotOne`, and Sean, 2026-09-15: *we should never have non-determinism from what row happens
+# to be encountered first.* **So a second planet is a refusal rather than a wrong number**, which is
+# why this is the planet's and not the game's.
+#
+# **And *its territories are in it* still has no row.** It is not needed while `gather` has one
+# planet to find; when it is, the shapes are a column on `territory` - `P-577` again over 380 rows -
+# and a join like `terrain`, which is `P-578` and is what this lane would take.
+
+{relation id:59 name:planet}
+
+{column id:161 relation:59 seq:1 name:id}
+{column id:162 relation:59 seq:2 name:energy}
+
+{state id:24 relation:59}

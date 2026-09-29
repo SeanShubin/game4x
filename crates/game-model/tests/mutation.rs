@@ -177,6 +177,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "metal",
             "pioneer",
             "place",
+            "planet",
             "provides",
             "scout",
             "terrain",
