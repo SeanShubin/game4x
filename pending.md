@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-588** - `spec/invariants.md` names three sources and the data names none, so everything is charged to the planet · `decide/questions.md`
+- **P-587** - A citizen's `bearing` is `1` in every world the rules can reach, so the trait tells nothing apart · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
