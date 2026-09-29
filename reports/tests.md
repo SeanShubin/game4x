@@ -4,12 +4,14 @@ One file per test, in the form it is written in. The foundation form beside each
 
 [The index](index.md)
 
-## Tests  (55)
+## Tests  (57)
 
 - [spec/tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html](spec/tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html) - [as text](../spec/tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x) · [foundation form](foundation/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html) · [the record he read it, as text](../reviewed/a-bin-cannot-be-built-where-the-capacity-is-taken.4x)
   a-bin-cannot-be-built-where-the-capacity-is-taken - Two metal bins in a territory with room for two, and a third has nowhere to stand.
 - [spec/tests/a-bin-is-built-from-labor-and-metal.4x.html](spec/tests/a-bin-is-built-from-labor-and-metal.4x.html) - [as text](../spec/tests/a-bin-is-built-from-labor-and-metal.4x) · [foundation form](foundation/a-bin-is-built-from-labor-and-metal.4x.html) · [the record he read it, as text](../reviewed/a-bin-is-built-from-labor-and-metal.4x)
   a-bin-is-built-from-labor-and-metal - A bin costs one labor and one metal, the same as an extractor, and stands where it was built.
+- [spec/tests/a-citizen-breeds-once-and-its-bearing-is-spent.4x.html](spec/tests/a-citizen-breeds-once-and-its-bearing-is-spent.4x.html) - [as text](../spec/tests/a-citizen-breeds-once-and-its-bearing-is-spent.4x) · [foundation form](foundation/a-citizen-breeds-once-and-its-bearing-is-spent.4x.html) · [the record he read it, as text](../reviewed/a-citizen-breeds-once-and-its-bearing-is-spent.4x)
+  a-citizen-breeds-once-and-its-bearing-is-spent - A citizen that breeds comes back unable to breed again, and the child can.
 - [spec/tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x.html](spec/tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x.html) - [as text](../spec/tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x) · [foundation form](foundation/a-citizen-eats-and-one-there-is-no-food-for-starves.4x.html) · [the record he read it, as text](../reviewed/a-citizen-eats-and-one-there-is-no-food-for-starves.4x)
   a-citizen-eats-and-one-there-is-no-food-for-starves - Three citizens, two food, a turn ends, and two citizens are left.
 - [spec/tests/a-citizen-s-labor-works-an-extractor.4x.html](spec/tests/a-citizen-s-labor-works-an-extractor.4x.html) - [as text](../spec/tests/a-citizen-s-labor-works-an-extractor.4x) · [foundation form](foundation/a-citizen-s-labor-works-an-extractor.4x.html) · [the record he read it, as text](../reviewed/a-citizen-s-labor-works-an-extractor.4x)
@@ -64,6 +66,8 @@ One file per test, in the form it is written in. The foundation form beside each
   an-extractor-is-built-from-labor-and-metal - Building an extractor spends a labor and a metal, and puts the extractor in a deposit.
 - [spec/tests/an-extractor-pulls-its-deposits-density.4x.html](spec/tests/an-extractor-pulls-its-deposits-density.4x.html) - [as text](../spec/tests/an-extractor-pulls-its-deposits-density.4x) · [foundation form](foundation/an-extractor-pulls-its-deposits-density.4x.html) · [the record he read it, as text](../reviewed/an-extractor-pulls-its-deposits-density.4x)
   an-extractor-pulls-its-deposits-density - An extractor works its deposit and produces the deposit's density, not one.
+- [spec/tests/breeding-does-not-give-a-citizen-its-labor-back.4x.html](spec/tests/breeding-does-not-give-a-citizen-its-labor-back.4x.html) - [as text](../spec/tests/breeding-does-not-give-a-citizen-its-labor-back.4x) · [foundation form](foundation/breeding-does-not-give-a-citizen-its-labor-back.4x.html) · [the record he read it, as text](../reviewed/breeding-does-not-give-a-citizen-its-labor-back.4x)
+  breeding-does-not-give-a-citizen-its-labor-back - A citizen that has spent its labour still has it spent after it breeds.
 - [spec/tests/breeding-does-not-reach-the-citizens-it-just-made.4x.html](spec/tests/breeding-does-not-reach-the-citizens-it-just-made.4x.html) - [as text](../spec/tests/breeding-does-not-reach-the-citizens-it-just-made.4x) · [foundation form](foundation/breeding-does-not-reach-the-citizens-it-just-made.4x.html) · [the record he read it, as text](../reviewed/breeding-does-not-reach-the-citizens-it-just-made.4x)
   breeding-does-not-reach-the-citizens-it-just-made - Two fed citizens and five food, breeding fired on its own: four citizens and three food.
 - [spec/tests/breeding-stops-when-the-food-does.4x.html](spec/tests/breeding-stops-when-the-food-does.4x.html) - [as text](../spec/tests/breeding-stops-when-the-food-does.4x) · [foundation form](foundation/breeding-stops-when-the-food-does.4x.html) · [the record he read it, as text](../reviewed/breeding-stops-when-the-food-does.4x)

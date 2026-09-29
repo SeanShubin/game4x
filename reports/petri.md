@@ -6,11 +6,10 @@ Generated from `spec/data/rules.4x` by `scripts/reports.sh`. **Not canonical** -
 
 **32 places and 32 transitions**, drawn one rule at a time. A circle is a place - a kind of thing in a state - and a rectangle is a rule. An arc into the rectangle is what the rule takes; an arc out of it is what it makes, and a number on an arc is how many. **There is no drawing of the whole net**, because one that held every arc could not give every node a readable name - so each part says what it leaves out, by naming the other rules that reach the same places.
 
-## Places nothing fills (3)
+## Places nothing fills (2)
 
 These can only fall. **The planet and time are meant to be here** - they are the endless wells the invariant names, and a well nothing refills is what an endless well looks like in a net. **Anything else here is a kind the game can spend and cannot make.**
 
-- `citizen, bearing 0` - nothing fills it; emptied by `refresh (citizen, bearing)`
 - `the planet` - nothing fills it; emptied by `work (metal)`, `work (metal), per unit of density`, `work (food)`, `work (food), per unit of density`, `work (energy)`, `work (energy), per unit of density`, `gather`, `gather, per unit of density` - **a named source**, so this is what it is meant to be
 - `time` - nothing fills it; emptied by `refresh (scout, moving)`, `refresh (ark, moving)`, `refresh (transport, moving)`, `refresh (pioneer, moving)`, `refresh (extractor, working)`, `refresh (citizen, hungry)`, `refresh (citizen, bearing)`, `refresh (citizen, laboring)`, `refresh (ark, gathering)` - **a named source**, so this is what it is meant to be
 
@@ -144,7 +143,7 @@ These can only rise. **That is the shape of an unbounded accumulation**, which i
 
 - takes: citizen, bearing 0 · time
 - makes: citizen, bearing 1
-- shares: `citizen, bearing 1` · `time`
+- shares: `citizen, bearing 0` · `citizen, bearing 1` · `time`
 - leaves out: the 11 other rule(s) that reach them - `breed`, `deploy (ark)`, `deploy (pioneer)`, `refresh (ark, gathering)`, `refresh (ark, moving)`, `refresh (citizen, hungry)`, `refresh (citizen, laboring)`, `refresh (extractor, working)`, `refresh (pioneer, moving)`, `refresh (scout, moving)`, `refresh (transport, moving)`
 
 ## refresh (citizen, laboring)
@@ -185,8 +184,8 @@ These can only rise. **That is the shape of an unbounded accumulation**, which i
 ## breed
 
 - takes: citizen · citizen, bearing 1 · citizen, hungry 0 · food
-- makes: 2 × citizen · 2 × citizen, bearing 1 · 2 × citizen, hungry 0 · 2 × citizen, laboring 1
-- shares: `citizen` · `citizen, bearing 1` · `citizen, hungry 0` · `citizen, laboring 1` · `food`
+- makes: 2 × citizen · citizen, bearing 0 · citizen, bearing 1 · 2 × citizen, hungry 0 · citizen, laboring 1
+- shares: `citizen` · `citizen, bearing 0` · `citizen, bearing 1` · `citizen, hungry 0` · `citizen, laboring 1` · `food`
 - leaves out: the 10 other rule(s) that reach them - `deploy (ark)`, `deploy (pioneer)`, `perish`, `refresh (citizen, bearing)`, `refresh (citizen, hungry)`, `refresh (citizen, laboring)`, `toil`, `upkeep`, `work (food)`, `work (food), per unit of density`
 
 ## toil

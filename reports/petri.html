@@ -10,10 +10,9 @@
 <p class="note">Generated from <code>spec/data/rules.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the rules are, and this is a drawing of them.</p>
 <p class="where"><a href="index.html">The index</a> · <a href="petri.md">this page as markdown</a> · <a href="nogain.html">whether it can come back round with more</a></p>
 <p><strong>32 places and 32 transitions</strong>, drawn one rule at a time. A circle is a place - a kind of thing in a state - and a rectangle is a rule. An arc into the rectangle is what the rule takes; an arc out of it is what it makes, and a number on an arc is how many. <strong>There is no drawing of the whole net</strong>, because one that held every arc could not give every node a readable name - so each part says what it leaves out, by naming the other rules that reach the same places.</p>
-<h2>Places nothing fills (3)</h2>
+<h2>Places nothing fills (2)</h2>
 <p>These can only fall. <strong>The planet and time are meant to be here</strong> - they are the endless wells the invariant names, and a well nothing refills is what an endless well looks like in a net. <strong>Anything else here is a kind the game can spend and cannot make.</strong></p>
 <ul>
-<li><code>citizen, bearing 0</code> - nothing fills it; emptied by <code>refresh (citizen, bearing)</code></li>
 <li><code>the planet</code> - nothing fills it; emptied by <code>work (metal)</code>, <code>work (metal), per unit of density</code>, <code>work (food)</code>, <code>work (food), per unit of density</code>, <code>work (energy)</code>, <code>work (energy), per unit of density</code>, <code>gather</code>, <code>gather, per unit of density</code> - <strong>a named source</strong>, so this is what it is meant to be</li>
 <li><code>time</code> - nothing fills it; emptied by <code>refresh (scout, moving)</code>, <code>refresh (ark, moving)</code>, <code>refresh (transport, moving)</code>, <code>refresh (pioneer, moving)</code>, <code>refresh (extractor, working)</code>, <code>refresh (citizen, hungry)</code>, <code>refresh (citizen, bearing)</code>, <code>refresh (citizen, laboring)</code>, <code>refresh (ark, gathering)</code> - <strong>a named source</strong>, so this is what it is meant to be</li>
 </ul>
@@ -402,7 +401,7 @@
 <line x1="435" y1="60" x2="473.8" y2="60.0" stroke="var(--ink)" stroke-width="1.5"/>
 <polygon points="480.8,60.0 473.8,63.5 473.8,56.5" fill="var(--ink)"/>
 </svg>
-<p class="generated"><strong>Shares</strong> <code>citizen, bearing 1</code> · <code>time</code><br><strong>Leaves out</strong> the 11 other rules that reach them: <code>breed</code>, <code>deploy (ark)</code>, <code>deploy (pioneer)</code>, <code>refresh (ark, gathering)</code>, <code>refresh (ark, moving)</code>, <code>refresh (citizen, hungry)</code>, <code>refresh (citizen, laboring)</code>, <code>refresh (extractor, working)</code>, <code>refresh (pioneer, moving)</code>, <code>refresh (scout, moving)</code>, <code>refresh (transport, moving)</code></p>
+<p class="generated"><strong>Shares</strong> <code>citizen, bearing 0</code> · <code>citizen, bearing 1</code> · <code>time</code><br><strong>Leaves out</strong> the 11 other rules that reach them: <code>breed</code>, <code>deploy (ark)</code>, <code>deploy (pioneer)</code>, <code>refresh (ark, gathering)</code>, <code>refresh (ark, moving)</code>, <code>refresh (citizen, hungry)</code>, <code>refresh (citizen, laboring)</code>, <code>refresh (extractor, working)</code>, <code>refresh (pioneer, moving)</code>, <code>refresh (scout, moving)</code>, <code>refresh (transport, moving)</code></p>
 <h2>refresh (citizen, laboring)</h2>
 <svg class="net" viewBox="0 0 680 120" width="680" height="120" role="img" aria-label="The rule refresh (citizen, laboring) as a net" xmlns="http://www.w3.org/2000/svg">
 <rect x="231" y="8" width="218" height="104" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
@@ -498,47 +497,49 @@
 </svg>
 <p class="generated"><strong>Shares</strong> <code>citizen</code> · <code>citizen, hungry 1</code><br><strong>Leaves out</strong> the 6 other rules that reach them: <code>breed</code>, <code>deploy (ark)</code>, <code>deploy (pioneer)</code>, <code>refresh (citizen, hungry)</code>, <code>toil</code>, <code>upkeep</code></p>
 <h2>breed</h2>
-<svg class="net" viewBox="0 0 568 208" width="568" height="208" role="img" aria-label="The rule breed as a net" xmlns="http://www.w3.org/2000/svg">
-<rect x="224" y="8" width="114" height="192" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="281" y="108" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="600">breed</text>
-<circle cx="167" cy="38" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="146" y="42" text-anchor="end" fill="var(--ink)" font-size="13">citizen</text>
-<line x1="178" y1="38" x2="219.6" y2="98.3" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="223.6,104.0 216.7,100.3 222.5,96.3" fill="var(--ink)"/>
-<circle cx="167" cy="82" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="146" y="86" text-anchor="end" fill="var(--ink)" font-size="13">citizen, bearing 1</text>
-<line x1="178" y1="82" x2="217.3" y2="101.0" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="223.6,104.0 215.8,104.1 218.8,97.8" fill="var(--ink)"/>
-<circle cx="167" cy="126" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="146" y="130" text-anchor="end" fill="var(--ink)" font-size="13">citizen, hungry 0</text>
-<line x1="178" y1="126" x2="217.3" y2="107.0" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="223.6,104.0 218.8,110.2 215.8,103.9" fill="var(--ink)"/>
-<circle cx="167" cy="170" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="146" y="174" text-anchor="end" fill="var(--ink)" font-size="13">food</text>
-<line x1="178" y1="170" x2="219.6" y2="109.7" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="223.6,104.0 222.5,111.7 216.7,107.7" fill="var(--ink)"/>
+<svg class="net" viewBox="0 0 568 252" width="568" height="252" role="img" aria-label="The rule breed as a net" xmlns="http://www.w3.org/2000/svg">
+<rect x="224" y="8" width="114" height="236" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="281" y="130" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="600">breed</text>
+<circle cx="167" cy="60" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="146" y="64" text-anchor="end" fill="var(--ink)" font-size="13">citizen</text>
+<line x1="178" y1="60" x2="219.6" y2="120.3" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="223.6,126.0 216.7,122.3 222.5,118.3" fill="var(--ink)"/>
+<circle cx="167" cy="104" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="146" y="108" text-anchor="end" fill="var(--ink)" font-size="13">citizen, bearing 1</text>
+<line x1="178" y1="104" x2="217.3" y2="123.0" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="223.6,126.0 215.8,126.1 218.8,119.8" fill="var(--ink)"/>
+<circle cx="167" cy="148" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="146" y="152" text-anchor="end" fill="var(--ink)" font-size="13">citizen, hungry 0</text>
+<line x1="178" y1="148" x2="217.3" y2="129.0" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="223.6,126.0 218.8,132.2 215.8,125.9" fill="var(--ink)"/>
+<circle cx="167" cy="192" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="146" y="196" text-anchor="end" fill="var(--ink)" font-size="13">food</text>
+<line x1="178" y1="192" x2="219.6" y2="131.7" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="223.6,126.0 222.5,133.7 216.7,129.7" fill="var(--ink)"/>
 <circle cx="395" cy="38" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
 <text x="416" y="42" text-anchor="start" fill="var(--ink)" font-size="13">citizen</text>
-<line x1="338" y1="104" x2="379.6" y2="43.7" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="383.6,38.0 382.5,45.7 376.7,41.7" fill="var(--ink)"/>
-<text x="361" y="65" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
+<line x1="338" y1="126" x2="380.4" y2="44.2" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="383.6,38.0 383.5,45.8 377.3,42.6" fill="var(--ink)"/>
+<text x="361" y="76" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
 <circle cx="395" cy="82" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="416" y="86" text-anchor="start" fill="var(--ink)" font-size="13">citizen, bearing 1</text>
-<line x1="338" y1="104" x2="377.3" y2="85.0" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="383.6,82.0 378.8,88.2 375.8,81.9" fill="var(--ink)"/>
-<text x="361" y="87" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
+<text x="416" y="86" text-anchor="start" fill="var(--ink)" font-size="13">citizen, bearing 0</text>
+<line x1="338" y1="126" x2="378.5" y2="86.8" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="383.6,82.0 381.0,89.4 376.1,84.3" fill="var(--ink)"/>
 <circle cx="395" cy="126" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="416" y="130" text-anchor="start" fill="var(--ink)" font-size="13">citizen, hungry 0</text>
-<line x1="338" y1="104" x2="377.3" y2="123.0" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="383.6,126.0 375.8,126.1 378.8,119.8" fill="var(--ink)"/>
-<text x="361" y="109" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
+<text x="416" y="130" text-anchor="start" fill="var(--ink)" font-size="13">citizen, bearing 1</text>
+<line x1="338" y1="126" x2="376.6" y2="126.0" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="383.6,126.0 376.6,129.5 376.6,122.5" fill="var(--ink)"/>
 <circle cx="395" cy="170" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-<text x="416" y="174" text-anchor="start" fill="var(--ink)" font-size="13">citizen, laboring 1</text>
-<line x1="338" y1="104" x2="379.6" y2="164.3" stroke="var(--ink)" stroke-width="1.5"/>
-<polygon points="383.6,170.0 376.7,166.3 382.5,162.3" fill="var(--ink)"/>
-<text x="361" y="131" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
+<text x="416" y="174" text-anchor="start" fill="var(--ink)" font-size="13">citizen, hungry 0</text>
+<line x1="338" y1="126" x2="378.5" y2="165.2" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="383.6,170.0 376.1,167.7 381.0,162.6" fill="var(--ink)"/>
+<text x="361" y="142" text-anchor="middle" fill="var(--quiet)" font-size="12">2</text>
+<circle cx="395" cy="214" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+<text x="416" y="218" text-anchor="start" fill="var(--ink)" font-size="13">citizen, laboring 1</text>
+<line x1="338" y1="126" x2="380.4" y2="207.8" stroke="var(--ink)" stroke-width="1.5"/>
+<polygon points="383.6,214.0 377.3,209.4 383.5,206.2" fill="var(--ink)"/>
 </svg>
-<p class="generated"><strong>Shares</strong> <code>citizen</code> · <code>citizen, bearing 1</code> · <code>citizen, hungry 0</code> · <code>citizen, laboring 1</code> · <code>food</code><br><strong>Leaves out</strong> the 10 other rules that reach them: <code>deploy (ark)</code>, <code>deploy (pioneer)</code>, <code>perish</code>, <code>refresh (citizen, bearing)</code>, <code>refresh (citizen, hungry)</code>, <code>refresh (citizen, laboring)</code>, <code>toil</code>, <code>upkeep</code>, <code>work (food)</code>, <code>work (food), per unit of density</code></p>
+<p class="generated"><strong>Shares</strong> <code>citizen</code> · <code>citizen, bearing 0</code> · <code>citizen, bearing 1</code> · <code>citizen, hungry 0</code> · <code>citizen, laboring 1</code> · <code>food</code><br><strong>Leaves out</strong> the 10 other rules that reach them: <code>deploy (ark)</code>, <code>deploy (pioneer)</code>, <code>perish</code>, <code>refresh (citizen, bearing)</code>, <code>refresh (citizen, hungry)</code>, <code>refresh (citizen, laboring)</code>, <code>toil</code>, <code>upkeep</code>, <code>work (food)</code>, <code>work (food), per unit of density</code></p>
 <h2>toil</h2>
 <svg class="net" viewBox="0 0 576 164" width="576" height="164" role="img" aria-label="The rule toil as a net" xmlns="http://www.w3.org/2000/svg">
 <rect x="231" y="8" width="114" height="148" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>

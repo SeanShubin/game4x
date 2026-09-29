@@ -36,7 +36,7 @@
 //! `moving 1` and arriving at `moving 0`, and `refresh` is what puts it back - which is the pair
 //! the invariant is actually about.
 //!
-//! # Where each reading comes from, and the one that is a guess
+//! # Where each reading comes from, and why none of them is a guess any more
 //!
 //! **Both draws are the invariant's own sentence rather than this reader's idea.**
 //! `spec/invariants.md`: *Anything that exhausts draws on time for a turn: it spends a count it
@@ -52,15 +52,21 @@
 //! as an exemption would let every rule that touches it out of the arithmetic; giving it a weight
 //! with nothing that refills it lets it be weighed as heavily as the solver needs.
 //!
-//! **What is guessed is which well, and the data cannot say.** The invariant names three sources -
-//! the planet, the star and time - and `spec/data/` names none of them. A density reading is the
-//! same shape whether it is a mine or a sunlit orbit, so **every density draw here is charged to
-//! the planet and the star is drawn on by nothing.** `C-166` is that question.
+//! **Charging every density draw to the planet was this reader's guess and has stopped being
+//! one.** `P-588` landed on 2026-09-29, and `spec/planet.md` now says: *A planet is a thing, and
+//! its territories are in it. It is what the sun shines on, so a planet's deposits are the ones
+//! no territory owns - the star is a deposit on the planet, with a density like any other, and
+//! every orbit above it draws on that one row.*
 //!
-//! **Charging them all to one well is the strict reading, not a convenient one.** One well means
-//! one weight that has to sit above metal, food and energy at once; splitting them could only
-//! give the solver more room. So the verdict below holds under a reading at least as demanding as
-//! the one the invariant intends.
+//! **So there is no second well to miss.** A mine and a sunlit orbit read a density off a deposit,
+//! and every deposit hangs on the planet - which is what this reader was already doing, for a
+//! reason it did not have at the time. `C-166` asked whether the sources should be named in the
+//! data and `P-588` answered it by a different route: the sun is a deposit, so nothing needs
+//! naming.
+//!
+//! **One well rather than two is also the stricter arithmetic**, which is why `S-221` says the
+//! verdict is not at stake either way: one weight has to sit above metal, food and energy at
+//! once, where splitting them could only give the solver more room.
 //!
 //! # What a rule does not name, it leaves as it found it
 //!
@@ -1392,14 +1398,14 @@ pub fn write_report(decision: &Decision) -> usize {
     }
 
     parts.push(Part::Said(
-        "**What this reads, and the one thing it guesses, is at the top of \
-         `crates/game-model/examples/nogain.rs`.** The short of it: a place is a kind, or a kind \
-         with one trait pinned, because a weighting over bare kinds would call `move` and \
-         `refresh` no-ops and report the whole economy as doing nothing. A `put` draws on time \
-         and a density reading draws on the planet, which is `spec/invariants.md`'s own sentence \
-         about what exhausts. **Which well a density reading draws on is the guess** - the data \
-         names no sources, so every one is charged to the planet and the star is drawn on by \
-         nothing, which is `C-166`."
+        "**What this reads is at the top of `crates/game-model/examples/nogain.rs`.** The short \
+         of it: a place is a kind, or a kind with one trait pinned, because a weighting over bare \
+         kinds would call `move` and `refresh` no-ops and report the whole economy as doing \
+         nothing. A `put` draws on time and a density reading draws on the planet, which is \
+         `spec/invariants.md`'s own sentence about what exhausts. **There are two wells here and \
+         not three**, and since `P-588` that is what the specification says rather than this \
+         reader's guess: the star is a deposit on the planet, so every orbit above it draws on \
+         that one row and there is no separate star to miss."
             .to_string(),
     ));
 

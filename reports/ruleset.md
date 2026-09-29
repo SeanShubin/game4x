@@ -25,7 +25,7 @@ Each rule links to its generated case, which holds the lines of `spec/data/rules
 - [regression/rules/perish.4x.html](regression/rules/perish.4x.html) - [as text](../regression/rules/perish.4x) · [in the ruleset](spec/data/rules.4x.html)
   the rule `perish` - no test commands it; 9 reach it through a part
 - [regression/rules/breed.4x.html](regression/rules/breed.4x.html) - [as text](../regression/rules/breed.4x) · [in the ruleset](spec/data/rules.4x.html)
-  the rule `breed` - 1 test(s) command it, 9 more reach it through a part
+  the rule `breed` - 3 test(s) command it, 9 more reach it through a part
 - [regression/rules/toil.4x.html](regression/rules/toil.4x.html) - [as text](../regression/rules/toil.4x) · [in the ruleset](spec/data/rules.4x.html)
   the rule `toil` - 2 reviewed test(s) command it
 - [regression/rules/gather.4x.html](regression/rules/gather.4x.html) - [as text](../regression/rules/gather.4x) · [in the ruleset](spec/data/rules.4x.html)

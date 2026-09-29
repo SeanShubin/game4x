@@ -63,7 +63,20 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-169 - Nothing ever spends a citizen's `bearing`, so a trait, a column and a turn's part do nothing
 
-**to** spec · **status** open · **raised** 2026-09-28 · **source** the net drawn for `R-10`: `citizen, bearing 0` is a place nothing fills · **cites** `C-163`, `C-168`
+**to** spec · **status** acted · **raised** 2026-09-28 · **closed** 2026-09-29 · **cited** `f96c5a38` · **source** the net drawn for `R-10`: `citizen, bearing 0` is a place nothing fills · **cites** `C-163`, `C-168`
+
+**Acted on in three hours, and the fix is better than the finding asked for.** `P-587` - *breed
+puts the parent back spent, and two tests say so* - landed at `f96c5a38`, after this item at
+`3054e881`. **Checked by re-deriving rather than by reading the subject**: `breed` now has two
+`add` clauses where it had one. `clause-27` puts the parent back at `bearing 0` and `clause-59`
+makes the newborn at `bearing 1`, which is the pair this lane did not think to ask for - a citizen
+that has bred is spent, and one that has just been born is not. Eleven citizen clauses where there
+were ten.
+
+**`citizen, bearing 0` is filled now**, so `refresh (citizen, bearing)` has something to restore
+and `reports/petri.md` lists two places nothing fills rather than three - both of them the named
+sources, which is what that list is supposed to hold. The weighting still puts `breed` at exactly
+zero.
 
 **derived from** *`breed` consumes the parent and returns it as one of two, with its bearing spent* - `spec/data/schema.4x`
 
@@ -264,7 +277,17 @@ different property again.
 ### C-166 - The invariant says a source is named, and `spec/data/` names none - so the star is drawn on by nothing
 
 
-**to** spec · **status** open · **raised** 2026-09-28 · **source** `S-219`, building the no-gain decision over `spec/data/rules.4x` · **cites** `S-219`, `C-165`
+**to** spec · **status** withdrawn · **raised** 2026-09-28 · **closed** 2026-09-29 · **cited** `d222a479` · **source** `S-219`, building the no-gain decision over `spec/data/rules.4x` · **cites** `S-219`, `C-165`, `S-221`
+
+**Answered by `P-588` rather than by anyone deciding what this asked.** It asked whether a clause
+should name the well it draws on, because the reader had to guess and the star came out drawn on
+by nothing. `spec/planet.md` now says: *the star is a deposit on the planet, with a density like
+any other, and every orbit above it draws on that one row.*
+
+**So there was never a second well to name.** A mine and a sunlit orbit both read a density off a
+deposit, and every deposit hangs on the planet - which is what the reader was already doing, for a
+reason it did not have. The question does not need answering; it needs deleting, and the page and
+the module header say the new reason instead of the old guess.
 
 **derived from** *A source is named, and a named source is not a gain* - `spec/invariants.md` -> Nothing comes back round with more
 
