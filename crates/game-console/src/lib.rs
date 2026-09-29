@@ -19,7 +19,9 @@ pub mod binding;
 pub mod containment;
 pub mod grammar;
 pub mod report;
+pub mod rules;
 pub mod state;
+pub mod world;
 
 use command_language::{Failure, Grammar, parse_line};
 use game_model::{Game, Rejection};
