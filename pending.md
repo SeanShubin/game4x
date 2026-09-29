@@ -23,7 +23,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-222** - `1cc20af` S-222: the reviewed script watches the right directory, and generates the form · still open in `docs/notes/proposals.md`
-- **S-221** - `ec4f055` C-170 answers S-221's ledger question and says which half of it I can build · still open in `docs/notes/proposals.md`
+- **S-221** - `3504e4b` S-221's schema half: the planet relation lands, and two shapes go to Sean · still open in `docs/notes/proposals.md`
 - **S-220** - `eeadd29` S-220: the index lists the five files a run reads, not the three it compiles in · still open in `docs/notes/proposals.md`
 - **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
 - **C-174** - `0450f53` C-174 fixed and C-173 answered: a hash typo and a test that said the opposite of its comment · still open in `crates/outbox.md`
