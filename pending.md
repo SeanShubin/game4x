@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **R-9** - I can browse the reports without a script running · `releases/first-release.md`
+- **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **D-6** - I can accept one type of thing at a time · `releases/rules-become-data.md`
@@ -25,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (15)
 
+- **S-220** - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable · `docs/notes/proposals.md`
 - **S-219** - `spec/invariants.md` says the no-gain property is decided mechanically, and nothing decides it · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
@@ -34,9 +37,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
-- **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`

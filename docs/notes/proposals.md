@@ -69,6 +69,42 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-220 - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable
+
+**to** code · **status** open · **raised** 2026-09-28 · **source** re-running `P-586`'s clause rather than recording `C-165` · **cites** `C-165`, `P-586`, `R-11`
+
+**The mechanism is right and its population is narrower than the words.** `foundation::PATHS` is
+three - `schema.4x`, `engine.4x`, `rules.4x` - the files `include_str!` compiles in, and
+`reports/ruleset.*` reaches all three. **The clause says *every file the engine reads as input*.**
+
+```
+reachable from a top-level page   foundation/schema.4x  engine.4x  rules.4x
+not reachable from any            foundation/script.4x  setup.4x
+```
+
+**`setup.4x` is read every time a test runs** - *what every test loads before it runs* - and it
+reads `script.4x` by `{load file:script.4x into:1}`. **So the engine reads five and the list names
+three**, and a check over the three returns a clean answer about the wrong population, which is this
+week's shape for the fourth time.
+
+## Why this is worth more than adding two names
+
+**`P-586` put the mechanism in the clause on purpose**: *checked by listing the inputs rather than by
+anybody remembering to add one.* **A list of three is still a list somebody wrote** if it is not the
+list the engine uses - and `PATHS` is the compiled-in three by construction, so it cannot grow to
+cover what `{load}` fetches at run time.
+
+**What would close it is one population.** Whatever answers *which files does a run read* - the
+compiled three plus whatever `{load}` resolves - and then the same list feeding both the engine and
+the index. **Two lists that agree today is the arrangement that produced this.**
+
+## And one thing this lane is not claiming
+
+**Whether `script.4x` and `setup.4x` are inputs *of the engine* or of the test harness is arguable**,
+and `R-11` is Sean's clause to read at vetting. **What is not arguable is that a reader following the
+index cannot see them**, so if they are inputs the clause is unmet and if they are not, the clause
+wants saying so.
+
 ### S-219 - `spec/invariants.md` says the no-gain property is decided mechanically, and nothing decides it
 
 **to** code · **status** open · **raised** 2026-09-28 · **source** Sean: *I want the petri reports back, it gives me confidence that we would immediately detect an infinite resource glitch* · **cites** `C-164`, `C-42`, `D-4`
