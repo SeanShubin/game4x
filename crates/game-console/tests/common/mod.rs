@@ -20,8 +20,8 @@
 //! with it. **When the console plays the engine, this becomes rows through `Game::of`** and the
 //! six are rebuilt against it, which is what `D-1` to `D-3` ask for.
 //!
-//! **Three of the commands below are ones `C-176` proposes removing**, `set-resource` and
-//! `set-biome` among them. They are what exists today; the fixture moves with them.
+//! **`add-ark-orbit` below is out of `spec/console.md` and still built**, because nothing else
+//! puts a unit anywhere - `C-180`. `set-resource` is out of the cull on Sean's own sequencing.
 
 #![allow(dead_code)]
 // **Each test binary compiles this whole module**, so a helper only one file uses is dead code in
@@ -35,7 +35,7 @@ use game_console::{Embedded, Session};
 /// world that says more than that is a world whose details they would start depending on.
 pub const SETUP: &str = "\
 {create-planet size:tiny-12}
-{set-biome territory:1 biome:grassland}
+{set-resource territory:1 resource:food extractors:1 density:4}
 {set-resource territory:1 resource:food extractors:2 density:4}
 {set-resource territory:1 resource:metal extractors:2 density:4}
 {set-resource territory:1 resource:energy extractors:2 density:4}

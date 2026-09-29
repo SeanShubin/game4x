@@ -9,7 +9,11 @@
 # bare ground beyond.
 
 {run file:nodes}
-{run file:biomes}
+
+# **`biomes.4x` is gone and the biomes are not.** `P-591` took `set biome` out of the
+# specification - *a command that can be expressed as a row is not needed* - and
+# `{create-planet}` already gives every territory the biome the terrain field computes, which is
+# what the twelve hand-written lines were overriding. `S-223`.
 
 # One ark, waiting above the planet. Nothing is on the planet yet.
 {add-ark-orbit territory:1}

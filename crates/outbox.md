@@ -61,7 +61,54 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-180 - `set biome` is removed and `add <unit> orbit` is not, by the rule's own second half
+
+**to** spec · **status** open · **raised** 2026-09-29 · **source** `S-223` · **cites** `S-223`, `P-591`, `C-176`
+
+**derived from** *a command that can be expressed as a row is not needed... and it goes when the notation can say what it said, not before* - `spec/console.md`
+
+**One of the two is gone and the other cannot be, and the sentence that holds it back is in the
+same paragraph as the one that removes it.**
+
+## `set biome` went, and nothing was lost
+
+**`create planet` already gives every territory the biome the terrain field computes.** The twelve
+lines in `scenario/commands/biomes.4x` were overriding a value that arrives anyway, so the file is
+deleted and the world still has its biomes. The form, the binding arm, the `Biome` reader they
+needed and the row-builder are out.
+
+## `add <unit> orbit` cannot go yet, and this is not a disagreement with `P-591`
+
+**Nothing else puts a unit anywhere.** Measured:
+
+```
+{add-ark-orbit territory:1}   scenario/commands/world.4x - the only thing that places the ark
+generate-planet               specified since before today, and no Rust mentions it
+launch                        makes an ark from labor, metal, energy and a yard
+```
+
+**`launch` cannot bootstrap**, because labor comes from citizens, citizens come from `deploy`, and
+`deploy` consumes a founder that has to be there already. **So removing the command removes the
+release's opening position** and leaves no way to state one.
+
+**That is `S-223`'s own argument for `set resource`**, said of a different command: *removing it now
+removes the capability rather than replacing it.* And it is the rule's second half rather than an
+exception to it - `spec/console.md` says a command goes **when the notation can say what it said,
+not before**, and the notation cannot yet say *an ark is in this orbit* in a session.
+
+## What would retire it, and neither is this lane's to start
+
+- **`generate-planet`**, which `spec/console.md` already specifies as making *everything a designed
+  one needs* - a starting unit among them, on a reading this lane has not been given
+- **The tree that normalizes into rows**, which `S-223` says retires `set resource` and would
+  retire this for the same reason
+
+**Say which and this lane builds it.** What it has not done is remove a command with nothing behind
+it, which would have made `scenario/commands/` unable to describe the world it exists to describe.
+---
+
 ### C-179 - `D-1` and `D-4` are built on this lane's side, and two documents still describe the ruleset that went
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `5367098e` · **source** finishing the port · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-175`, `S-216`
 

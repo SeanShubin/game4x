@@ -18,7 +18,7 @@ use std::collections::BTreeMap;
 
 use command_language::{Failure, Utterance};
 use game_model::notation::Row;
-use planet_model::{Biome, PlanetSize};
+use planet_model::PlanetSize;
 
 use crate::grammar::form;
 use crate::world;
@@ -107,14 +107,6 @@ impl From<Failure> for Misreading {
 /// Reads one parsed command as a meaning.
 pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
     let territory = |hole: &str| -> Result<u32, Misreading> { Ok(utterance.number(hole)? as u32) };
-    let biome = |hole: &str| -> Result<Biome, Misreading> {
-        let word = utterance.name(hole)?;
-        Biome::named(word).ok_or_else(|| Misreading::Unknown {
-            what: "biome",
-            word: word.to_string(),
-            expected: Biome::ALL.iter().map(|it| it.name().to_string()).collect(),
-        })
-    };
 
     let meaning = match utterance.form {
         // -- Before `start`: what is there ---------------------------------------------------
@@ -143,7 +135,6 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
                 utterance.number("density")? as u32,
             ))
         }
-        form::SET_BIOME => Meaning::Build(world::terrain(territory("territory")?, biome("biome")?)),
         form::ADD_ARK => Meaning::Build(world::in_orbit(territory("territory")?, "ark")),
         form::ADD_PIONEER => Meaning::Build(world::in_orbit(territory("territory")?, "pioneer")),
         form::START => Meaning::Start,
@@ -223,7 +214,6 @@ pub fn handled() -> Vec<&'static str> {
     vec![
         form::CREATE_PLANET,
         form::SET_RESOURCE,
-        form::SET_BIOME,
         form::ADD_ARK,
         form::ADD_PIONEER,
         form::START,
@@ -411,11 +401,13 @@ mod tests {
         };
         assert_eq!(rows.len(), 114, "a tiny planet is 114 rows");
 
-        let Meaning::Build(rows) = meaning("{set-biome territory:2 biome:jungle}") else {
+        let Meaning::Build(rows) =
+            meaning("{set-resource territory:2 resource:metal extractors:1 density:4}")
+        else {
             panic!("not a build");
         };
-        assert_eq!(rows.len(), 1, "a biome is one row");
-        assert_eq!(rows[0].relation, "terrain");
+        assert_eq!(rows.len(), 1, "a deposit is one row");
+        assert_eq!(rows[0].relation, "deposit");
 
         assert_eq!(meaning("{start}"), Meaning::Start);
     }
@@ -495,7 +487,11 @@ mod tests {
     fn every_refusal_over_a_closed_set_says_what_was_expected() {
         let cases = [
             ("{create-planet size:enormous}", "planet size", "tiny-12"),
-            ("{set-biome territory:1 biome:swamp}", "biome", "grassland"),
+            (
+                "{set-resource territory:1 resource:gold extractors:1 density:4}",
+                "kind",
+                "metal",
+            ),
             ("{work where:1 what:gold}", "kind", "metal"),
         ];
         let mut checked = 0;

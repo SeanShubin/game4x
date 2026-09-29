@@ -234,7 +234,6 @@ mod tests {
             "{create-planet size:tiny-12}",
             "{set-resource territory:1 resource:food extractors:1 density:4}",
             "{set-resource territory:1 resource:metal extractors:1 density:4}",
-            "{set-biome territory:1 biome:grassland}",
             "{add-ark-orbit territory:1}",
             "{start}",
         ])

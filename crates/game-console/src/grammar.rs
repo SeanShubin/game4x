@@ -13,7 +13,6 @@ use command_language::{Form, Grammar, Kind, Term};
 pub mod form {
     pub const CREATE_PLANET: &str = "create-planet";
     pub const SET_RESOURCE: &str = "set-resource";
-    pub const SET_BIOME: &str = "set-biome";
     pub const ADD_ARK: &str = "add-ark-orbit";
     pub const ADD_PIONEER: &str = "add-pioneer-orbit";
     pub const START: &str = "start";
@@ -83,15 +82,6 @@ pub fn grammar() -> Grammar {
                 Term::required("density", Kind::Number),
             ],
             "say how many extractors a territory has room for, and what each yields",
-        ),
-        Form::new(
-            form::SET_BIOME,
-            vec![
-                Term::Keyword("set-biome"),
-                Term::required("territory", Kind::Number),
-                Term::required("biome", Kind::Name),
-            ],
-            "give a territory its biome",
         ),
         // **Which orbit** - `S-55`. There are twelve, one above each territory, and
         // `add ark orbit` put a unit above nowhere.
@@ -206,7 +196,6 @@ mod tests {
                 "{set-resource territory:1 resource:food extractors:3 density:4}",
                 form::SET_RESOURCE,
             ),
-            ("{set-biome territory:1 biome:grassland}", form::SET_BIOME),
             ("{add-ark-orbit territory:1}", form::ADD_ARK),
             ("{start}", form::START),
         ];

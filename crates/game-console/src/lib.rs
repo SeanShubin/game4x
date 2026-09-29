@@ -261,7 +261,7 @@ impl World {
 ///
 /// # Saying a thing twice is saying it once
 ///
-/// **`{create-planet}` gives every territory a biome and `{set-biome}` changes one**, and before
+/// **`{create-planet}` gives every territory a biome and a deposit can be restated**, and before
 /// this the two were both kept: two `{terrain of:2 ...}` rows, which `Game::of` refused at
 /// `{start}` for naming one territory's ground twice. **Correctly** - a world cannot hold two
 /// answers to one question, and the design phase is where a player describes a world rather than
@@ -683,13 +683,16 @@ mod tests {
             .run("{create-planet size:tiny-12}", &NoLibrary)
             .unwrap();
         session
-            .run("{set-biome territory:1 biome:grassland}", &NoLibrary)
+            .run(
+                "{set-resource territory:1 resource:food extractors:1 density:4}",
+                &NoLibrary,
+            )
             .unwrap();
         assert_eq!(
             session.history(),
             [
                 "{create-planet size:tiny-12}",
-                "{set-biome territory:1 biome:grassland}"
+                "{set-resource territory:1 resource:food extractors:1 density:4}"
             ]
         );
     }
@@ -701,7 +704,7 @@ mod tests {
         let library = Embedded::of(&[(
             "world",
             "{create-planet size:tiny-12}
-{set-biome territory:1 biome:grassland}
+{set-resource territory:1 resource:food extractors:1 density:4}
 ",
         )]);
         let mut session = Session::new();
@@ -710,7 +713,7 @@ mod tests {
             session.history(),
             [
                 "{create-planet size:tiny-12}",
-                "{set-biome territory:1 biome:grassland}"
+                "{set-resource territory:1 resource:food extractors:1 density:4}"
             ]
         );
 
@@ -806,11 +809,11 @@ mod tests {
         let library = Embedded::of(&[
             (
                 "world",
-                "{create-planet size:tiny-12}\n{run file:biomes}\n{start}\n",
+                "{create-planet size:tiny-12}\n{run file:deposits}\n{start}\n",
             ),
             (
-                "biomes",
-                "{set-biome territory:1 biome:grassland}\n{set-biome territory:2 biome:jungle}\n",
+                "deposits",
+                "{set-resource territory:1 resource:food extractors:1 density:4}\n{set-resource territory:2 resource:metal extractors:1 density:4}\n",
             ),
         ]);
         let mut session = Session::new();
@@ -819,13 +822,12 @@ mod tests {
             how_many(session.game().expect("play has begun"), "territory"),
             12
         );
-        // **The second file's own row**, so this shows the whole subroutine ran rather than its
-        // first statement - which is what a test of one file calling another is for.
-        // **Twelve from the planet and two the file stated**, which is the second file's own
-        // rows arriving - a test of one file calling another wants the callee's work visible.
+        // **The second file's own rows**, so this shows the whole subroutine ran rather than its
+        // first statement - which is what a test of one file calling another is for. A planet
+        // states no deposits, so the two are the callee's and nothing else's.
         assert_eq!(
-            how_many(session.game().expect("play has begun"), "terrain"),
-            14
+            how_many(session.game().expect("play has begun"), "deposit"),
+            2
         );
     }
 

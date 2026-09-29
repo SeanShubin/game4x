@@ -12,11 +12,15 @@
 //!
 //! # Why `create-planet` survived the cut and the rest did not
 //!
-//! **Sean, 2026-09-29**: *we don't need a command that can be expressed as a row.* `set-biome`
-//! writes one row and `add-ark-orbit` writes one, so a player could have typed the row. **This
-//! writes ninety-six at `tiny-12` and eight hundred and sixteen at `huge-92`**, and the adjacency
-//! among them comes out of `sphere_tessellation` - not tedious to write by hand but not possible
-//! to write correctly. `C-176` is the promotion that removes the others.
+//! **`spec/console.md`, since `P-591`**: *a command that can be expressed as a row is not needed.*
+//! `set biome` wrote one row and is gone - `create planet` already gives every territory the biome
+//! the terrain field computes. **This writes a hundred and fourteen at `tiny-12` and eight hundred
+//! and sixteen at `huge-92`**, and the adjacency among them comes out of `sphere_tessellation` -
+//! not tedious to write by hand but not possible to write correctly.
+//!
+//! **`add <unit> orbit` is out of the specification and is still here**, because the same rule
+//! says *it goes when the notation can say what it said, not before* - and nothing else puts the
+//! release's ark anywhere. `C-180`.
 //!
 //! # The numbering is stated here because two modules rely on it
 //!
