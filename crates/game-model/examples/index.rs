@@ -507,19 +507,29 @@ pub fn write_all() -> (usize, usize) {
     // missing from that index, which is checked by listing the inputs rather than by anybody
     // remembering to add one.*
     //
-    // **`foundation::PATHS` is the list and it is not a copy of one.** Those three files are
-    // carried in the binary by `include_str!`, so what the engine reads is decided at compile
-    // time and read back here - a fourth input would appear on this page with nobody editing it.
+    // **`foundation::READ_BY_A_RUN` is the list and it is not a copy of one.** It is asserted
+    // against `data/foundation/` itself by `the_foundation_is_every_file_in_its_directory`, so a
+    // sixth input appears on this page with nobody editing anything.
+    //
+    // **It was `PATHS` until `S-220`, and `PATHS` is three where a run reads five.** Those three
+    // are what `include_str!` carries; `setup.4x` is what every test loads before it runs and it
+    // fetches `script.4x`. A check over the three returned a clean answer about the wrong
+    // population - so the page said *every file the engine reads* and showed three fifths of them.
     //
     // **They are the generated form and the friendly source is above.** `spec/data/` is what Sean
     // writes; these are what runs.
-    let inputs = game_model::foundation::PATHS
+    let inputs = game_model::foundation::READ_BY_A_RUN
         .iter()
         .map(|at| {
             let rel = format!("crates/game-model/{at}");
+            let how = if game_model::foundation::PATHS.contains(at) {
+                "carried in the binary and read at startup"
+            } else {
+                "fetched by a script, through `{load ...}`"
+            };
             Entry {
                 at: rendered(&rel),
-                said: format!("`{at}`, carried in the binary and read at startup"),
+                said: format!("`{at}`, {how}"),
                 beside: vec![("as text".to_string(), up("", &rel))],
             }
         })

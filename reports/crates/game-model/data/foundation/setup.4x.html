@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>crates/game-model/data/foundation/setup.4x</title>
+<link rel="stylesheet" href="../../../../report.css">
+</head>
+<body>
+<h1><code>crates/game-model/data/foundation/setup.4x</code></h1>
+<p class="note">What every test loads before it runs.</p>
+<p class="where"><a href="../../../../index.html">The index</a> · <a href="../../../../../crates/game-model/data/foundation/setup.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>crates/game-model/data/foundation/setup.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">What every test loads before it runs.</span>
+<span class="prose"></span>
+<span class="prose"><strong>One file rather than four lines in each test.</strong> Sean, 2026-09-15: *the supporting</span>
+<span class="prose">infrastructure should eat up no more than one line per test file* - so a test states its name and</span>
+<span class="prose">its three sections, and what the engine needs to read them is here.</span>
+
+<span class="brace">{</span><span class="relation">load</span> <span class="key">file</span><span class="colon">:</span><span class="value">script.4x</span> <span class="key">into</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">load</span> <span class="key">file</span><span class="colon">:</span><span class="value">schema.4x</span> <span class="key">into</span><span class="colon">:</span><span class="value">2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">load</span> <span class="key">file</span><span class="colon">:</span><span class="value">engine.4x</span> <span class="key">into</span><span class="colon">:</span><span class="value">2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">load</span> <span class="key">file</span><span class="colon">:</span><span class="value">rules.4x</span> <span class="key">into</span><span class="colon">:</span><span class="value">2</span><span class="brace">}</span>
+</pre>
+</body>
+</html>

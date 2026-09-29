@@ -39,7 +39,7 @@ Each rule links to its generated case, which holds the lines of `spec/data/rules
 - [regression/rules/build-yard.4x.html](regression/rules/build-yard.4x.html) - [as text](../regression/rules/build-yard.4x) · [in the ruleset](spec/data/rules.4x.html)
   the rule `build-yard` - 1 reviewed test(s) command it
 
-## What the engine reads  (3)
+## What the engine reads  (5)
 
 - [crates/game-model/data/foundation/schema.4x.html](crates/game-model/data/foundation/schema.4x.html) - [as text](../crates/game-model/data/foundation/schema.4x)
   `data/foundation/schema.4x`, carried in the binary and read at startup
@@ -47,6 +47,10 @@ Each rule links to its generated case, which holds the lines of `spec/data/rules
   `data/foundation/engine.4x`, carried in the binary and read at startup
 - [crates/game-model/data/foundation/rules.4x.html](crates/game-model/data/foundation/rules.4x.html) - [as text](../crates/game-model/data/foundation/rules.4x)
   `data/foundation/rules.4x`, carried in the binary and read at startup
+- [crates/game-model/data/foundation/script.4x.html](crates/game-model/data/foundation/script.4x.html) - [as text](../crates/game-model/data/foundation/script.4x)
+  `data/foundation/script.4x`, fetched by a script, through `{load ...}`
+- [crates/game-model/data/foundation/setup.4x.html](crates/game-model/data/foundation/setup.4x.html) - [as text](../crates/game-model/data/foundation/setup.4x)
+  `data/foundation/setup.4x`, fetched by a script, through `{load ...}`
 
 ## The friendly source those come from  (5)
 

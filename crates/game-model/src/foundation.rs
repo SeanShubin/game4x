@@ -83,6 +83,34 @@ pub const FOUNDATION: [(&str, &str, &str); 3] = [
 /// **`tests/common`'s `LOADED` is this**, so a file moving between columns is one edit.
 pub const PATHS: [&str; 3] = [FOUNDATION[0].1, FOUNDATION[1].1, FOUNDATION[2].1];
 
+/// Every foundation file a run reads - the three above, and the two a script fetches.
+///
+/// # `PATHS` answers a narrower question than *what does a run read*
+///
+/// **`S-220`, and it is this week's shape for the fifth time.** `R-11` asks that every file the
+/// engine reads as input be reachable from the index, the index listed `PATHS`, and `PATHS` is
+/// what `include_str!` compiles in. **`setup.4x` is read every time a test runs** - it is what
+/// every test loads before it runs - and it reaches `script.4x` by `{load file:script.4x
+/// into:1}`. So the engine read five and the list named three, and a check over the three
+/// returned a clean answer about the wrong population.
+///
+/// **This is not a second list that agrees with the first today**, which `S-220` says is the
+/// arrangement that produced the defect. `the_foundation_is_every_file_in_its_directory` compares
+/// it against the directory itself, so a sixth file makes the check red on the day it lands
+/// rather than on the day somebody notices the page is short.
+///
+/// **Why the two are not `include_str!`-ed beside the three.** What carries a file into the
+/// binary is what the engine loads without being asked; these are fetched by a script, and
+/// `script.rs` resolves them through the harness. **Listing them is about a reader finding them**,
+/// which is what `R-11` asks for, and says nothing about how they are carried.
+pub const READ_BY_A_RUN: [&str; 5] = [
+    FOUNDATION[0].1,
+    FOUNDATION[1].1,
+    FOUNDATION[2].1,
+    "data/foundation/script.4x",
+    "data/foundation/setup.4x",
+];
+
 /// Every row of the foundation, read out of the bytes carried above.
 ///
 /// **A malformed file is a failure of this build and not of this call**, since the bytes are
@@ -109,6 +137,52 @@ pub fn game() -> Result<Game, Malformed> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// **`READ_BY_A_RUN` is the directory, not a list beside it.**
+    ///
+    /// **This is what stops `S-220` happening again**, and the item says why a list would not:
+    /// *two lists that agree today is the arrangement that produced this.* So the population is
+    /// asked of the disk and the constant is required to be exactly it - a sixth file makes this
+    /// red on the day it lands.
+    ///
+    /// **`tests/` is a directory and is excluded by being one.** What is counted is the files a
+    /// run loads, and the tests under it are loaded one at a time by name.
+    #[test]
+    fn the_foundation_is_every_file_in_its_directory() {
+        let at = format!(
+            "{}/data/foundation",
+            env!("CARGO_MANIFEST_DIR").replace('\\', "/")
+        );
+        let mut on_disk: Vec<String> = std::fs::read_dir(&at)
+            .unwrap_or_else(|why| panic!("cannot read {at}: {why}"))
+            .filter_map(|it| it.ok())
+            .map(|it| it.path())
+            .filter(|it| it.is_file())
+            .filter_map(|it| {
+                it.file_name()
+                    .and_then(|it| it.to_str())
+                    .map(str::to_string)
+            })
+            .filter(|name| name.ends_with(".4x"))
+            .map(|name| format!("data/foundation/{name}"))
+            .collect();
+        on_disk.sort();
+
+        // **A count over nothing is the same failure with the sign flipped** - an unreadable
+        // directory would make the two lists agree at zero.
+        assert!(
+            on_disk.len() >= 5,
+            "only {} foundation file(s) on disk, so this compared almost nothing",
+            on_disk.len()
+        );
+
+        let mut listed: Vec<String> = READ_BY_A_RUN.iter().map(|it| it.to_string()).collect();
+        listed.sort();
+        assert_eq!(
+            listed, on_disk,
+            "`READ_BY_A_RUN` and `data/foundation/` disagree - a file a run reads that nothing              lists is one no reader can reach from the index, which is `R-11`"
+        );
+    }
 
     /// **What is carried is what is on disk, byte for byte.**
     ///

@@ -202,17 +202,21 @@ fn said(at: &Path) -> String {
 
 /// **Nothing the engine reads is missing from the index** - `R-11`.
 ///
-/// **Asked of the engine, not of a list here.** `foundation::PATHS` is what `include_str!` put in
-/// the binary, so a fourth input fails this the day it is added rather than the day somebody
-/// notices the page is short. `R-11`: *checked by listing the inputs rather than by anybody
-/// remembering to add one.*
+/// **Asked of the engine, not of a list here.** `foundation::READ_BY_A_RUN` is checked against
+/// `data/foundation/` itself, so a sixth input fails this the day it is added rather than the day
+/// somebody notices the page is short. `R-11`: *checked by listing the inputs rather than by
+/// anybody remembering to add one.*
+///
+/// **It was `PATHS` and `PATHS` is three of the five** - `S-220`. Those three are what
+/// `include_str!` carries; `setup.4x` is read every time a test runs and fetches `script.4x`. The
+/// check passed, because it was a true answer about a narrower population than the clause names.
 ///
 /// **And reading it is what following the link does.** Every input is reachable as a rendering,
 /// which the browser shows, rather than as a `.4x` it would offer to download - which is the
 /// clause Sean added in September after the published site handed him a file instead of a page.
 #[test]
 fn every_file_the_engine_reads_is_reachable_from_the_index() {
-    let inputs = game_model::foundation::PATHS;
+    let inputs = game_model::foundation::READ_BY_A_RUN;
     assert!(
         !inputs.is_empty(),
         "the engine reads nothing, so this checked nothing"

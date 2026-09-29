@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-222** - `1cc20af` S-222: the reviewed script watches the right directory, and generates the form · still open in `docs/notes/proposals.md`
 - **S-221** - `ec4f055` C-170 answers S-221's ledger question and says which half of it I can build · still open in `docs/notes/proposals.md`
 - **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
 - **R-9** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
