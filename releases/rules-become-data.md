@@ -87,8 +87,7 @@ across or is written again is the code lane's to choose, and no capability here 
   **I delete one of them, run, and the diff holds that suite's cases and no others** - and when a
   failure names stale cases it prints the deletion for each grain, so I paste it rather than
   compose it. **Every case in `rules/` is one of the fifteen rules and every rule has one**, and
-    the same both ways for the sixty words in `primitives/`, so a suite cannot be partly
-
+  the same both ways for the sixty words in `primitives/`, so a suite cannot be partly
   built and look finished
 
 ## Out of scope
