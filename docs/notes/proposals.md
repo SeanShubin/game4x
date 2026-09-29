@@ -69,6 +69,55 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-222 - `scripts/reviewed.ps1` watches a directory that moved eight days ago, and the reading it publishes still does not bite
+
+**to** code · **status** open · **raised** 2026-09-29 · **source** Sean asking what script would make a reading reach the suite faster · **cites** `S-215`, `S-197`
+
+**The script points at `crates/game-model/reviewed`, which does not exist.** `P-532` moved the
+records to `reviewed/` at the root and `f7d49e1e` committed the fifty-two there. **So `$pending` is
+always empty and the `git add` stages three paths that are all gone** - the script cannot have worked
+since 2026-09-21.
+
+```
+scripts/reviewed.ps1:34   git status --porcelain -- "crates/game-model/reviewed"
+                  :56     add "crates/game-model/reviewed"
+                  :57     add "crates/game-model/report.html"
+                  :58     add "crates/game-model/report.txt"
+```
+
+**`S-197` caught the row in `scripts/README.md` describing this script by the old path and it was
+fixed.** The script itself was not, which is the index and the thing disagreeing in the other
+direction.
+
+## The second half is what he actually asked about
+
+**A reading does not bite until `data/foundation/tests/` has its form**, and nothing runs
+`cargo run -p game-model --example foundation` - not a hook, not the gate, not a script.
+`scripts/reports.ps1` names it in a comment. **So the window between *I have read this* and *this
+constrains the game* is however long until somebody runs the generator**, and it has caught the same
+work twice in two days.
+
+**The obvious fix is one line in this script**: publish the records, then generate. **And it cannot
+be one commit**, which is the part worth knowing before writing it.
+
+## Why the window is structural rather than an oversight
+
+```
+reviewed/*                             column: sean
+crates/game-model/data/foundation/*    column: code
+```
+
+**`hooks/pre-commit` refuses a commit spanning two columns**, so the record and the form it needs can
+never land together. **That is the guarantee working** - a record must not land beside the thing it
+judges - and it means the fix is two commits from one script rather than one.
+
+## What this lane is not proposing
+
+**Not a hook that generates.** `hooks/` running a generator makes a commit rewrite the tree under
+whoever is committing, and the gate already names the gap precisely - *2 test(s) have been read and
+the suite does not run them*, with the command in the message. **The red is a good red**; what is
+missing is only that nobody has to hit it if the script does its job first.
+
 ### S-221 - `P-588` landed: a planet is a thing, and the sun is a deposit on it
 
 **to** code · **status** open · **raised** 2026-09-29 · **source** promoting `P-588` · **cites** `P-588`, `C-166`, `S-219`

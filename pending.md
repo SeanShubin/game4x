@@ -29,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
+- **S-222** - `scripts/reviewed.ps1` watches a directory that moved eight days ago, and the reading it publishes still does not bite · `docs/notes/proposals.md`
 - **S-221** - `P-588` landed: a planet is a thing, and the sun is a deposit on it · `docs/notes/proposals.md`
 - **S-220** - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
