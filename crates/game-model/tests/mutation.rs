@@ -528,6 +528,8 @@ struct Whole {
     rule_of_part: BTreeMap<String, String>,
     /// The rules some test's `when` names, expanded through `{part}`.
     fired: BTreeSet<String>,
+    /// A rule's id to its name, because the form the sweep reads names a rule by id.
+    rule_name: BTreeMap<String, String>,
     /// A relation's name to its id, because a reference names a relation by id.
     relation_id: BTreeMap<String, String>,
     /// For each relation id, the `(relation, column)` pairs that can hold a key of it.
@@ -537,8 +539,9 @@ struct Whole {
 impl Whole {
     fn of(files: &BTreeMap<String, String>) -> Self {
         let mut every = Vec::new();
-        let mut rule_of_clause = BTreeMap::new();
-        let mut rule_of_part = BTreeMap::new();
+        let mut rule_of_clause: BTreeMap<String, String> = BTreeMap::new();
+        let mut rule_of_part: BTreeMap<String, String> = BTreeMap::new();
+        let mut rule_name: BTreeMap<String, String> = BTreeMap::new();
         let mut named: BTreeSet<String> = BTreeSet::new();
         let mut parts: Vec<(String, String)> = Vec::new();
         for (name, text) in files {
@@ -552,13 +555,24 @@ impl Whole {
                 if name.starts_with("tests/") && inside == "when" {
                     named.insert(row.relation.clone());
                 }
+                // **By id, because this reads the foundation form.** The friendly source writes
+                // `{clause ... name:clause-29 rule:move}` and the generated one writes
+                // `{clause id:29 rule:1}` - no name, and the rule by id. **This logic was
+                // borrowed from `examples/suites.rs`, which reads the friendly side**, so every
+                // lookup missed and the report said nothing in the ruleset was dead when
+                // forty-three rows were.
                 if row.relation == "clause"
-                    && let (Some(it), Some(rule)) = (row.value("name"), row.value("rule"))
+                    && let (Some(it), Some(rule)) = (row.value("id"), row.value("rule"))
                 {
                     rule_of_clause.insert(it.to_string(), rule.to_string());
                 }
+                if row.relation == "rule"
+                    && let (Some(id), Some(name)) = (row.value("id"), row.value("name"))
+                {
+                    rule_name.insert(id.to_string(), name.to_string());
+                }
                 if row.relation == "part" {
-                    if let (Some(it), Some(of)) = (row.value("name"), row.value("of")) {
+                    if let (Some(it), Some(of)) = (row.value("id"), row.value("of")) {
                         rule_of_part.insert(it.to_string(), of.to_string());
                     }
                     if let (Some(of), Some(is)) = (row.value("of"), row.value("is")) {
@@ -568,6 +582,14 @@ impl Whole {
                 every.push(row);
             }
         }
+        // **The maps hold rule ids until here, and a reader wants the name.** Resolved once
+        // rather than at every lookup, so `rule_of` answers `gather` and not `12`.
+        for value in rule_of_clause.values_mut().chain(rule_of_part.values_mut()) {
+            if let Some(name) = rule_name.get(value.as_str()) {
+                *value = name.clone();
+            }
+        }
+
         // **A rule a test fires through `{part}` is fired**, which is most of them: `end-turn`
         // names one command and runs ten rules. Expanded to a fixed point, because a part may
         // name a rule that has parts of its own.
@@ -648,6 +670,7 @@ impl Whole {
             rule_of_clause,
             rule_of_part,
             fired,
+            rule_name,
             relation_id,
             refers_to,
         }
@@ -714,8 +737,14 @@ impl Whole {
     fn rule_of(&self, row: &Row) -> Option<String> {
         match row.relation.as_str() {
             "rule" => row.value("name").map(str::to_string),
-            "input" | "clause" | "repeats" | "scope" => row.value("rule").map(str::to_string),
-            "part" => row.value("of").map(str::to_string),
+            // **Resolved through the rule's name**, because these carry an id in the form the
+            // sweep reads and a reader wants `gather`.
+            "input" | "clause" | "repeats" | "scope" => row
+                .value("rule")
+                .map(|it| self.rule_name.get(it).cloned().unwrap_or(it.to_string())),
+            "part" => row
+                .value("of")
+                .map(|it| self.rule_name.get(it).cloned().unwrap_or(it.to_string())),
             "argument" => row
                 .value("part")
                 .and_then(|it| self.rule_of_part.get(it).cloned()),
@@ -745,20 +774,34 @@ impl Whole {
 ///
 /// **A row fitting none of them is the same thing with nothing suggested**, which is why it is
 /// printed first and counted: no `.4x` test reads it and nothing here can even say what would.
-fn why(one: &Survived, row: &Row, whole: &Whole) -> String {
+fn why(one: &Survived, row: &Row, whole: &Whole) -> (bool, String) {
     if let Some(test) = one.file.strip_prefix("tests/") {
-        return format!(
-            "`{}` reaches its ending without it",
-            test.trim_end_matches(".4x")
+        return (
+            false,
+            format!(
+                "`{}` reaches its ending without it",
+                test.trim_end_matches(".4x")
+            ),
         );
     }
-    if let Some(rule) = whole.rule_of(row)
-        && !whole.fired.contains(&rule)
-    {
-        return format!("no test's `when` fires `{rule}`");
+    if let Some(rule) = whole.rule_of(row) {
+        // **A row under a rule is a rule of the game**, and this is the half Sean is asking
+        // about. Sean, 2026-09-28: *my main concern is that the tests I review cover the rules
+        // specific to the game. I am not concerned with every primitive being used as an error
+        // condition, but I would like a report about it.*
+        //
+        // **So the gap is named by its rule rather than by its row's sort.** `3 binding, 4
+        // literal, 1 reading` under `gather` is a sentence about the game; twenty bindings
+        // scattered over eleven rules is not.
+        let said = if whole.fired.contains(&rule) {
+            format!("nothing a reviewed test asserts depends on this part of `{rule}`")
+        } else {
+            format!("no test's `when` fires `{rule}` at all")
+        };
+        return (true, said);
     }
     if let Some(key) = whole.unused_key(row) {
-        return key;
+        return (false, key);
     }
     // **A Rust test naming the relation is a lead and not an answer**, which is why it is appended
     // to the unaccounted line rather than being a category of its own.
@@ -778,7 +821,10 @@ fn why(one: &Survived, row: &Row, whole: &Whole) -> String {
     } else {
         format!(" (the word `{}` appears in {})", one.what, named.join(", "))
     };
-    format!("NOT ACCOUNTED FOR - no `.4x` test reads it and no rule here says why{lead}")
+    (
+        false,
+        format!("no `.4x` test reads it and no rule here says why{lead}"),
+    )
 }
 
 /// The report Sean reads in the build output.
@@ -806,63 +852,89 @@ fn recorded(file: &str, what: &str) -> bool {
 
 fn report(title: &str, tried: usize, survived: &[Survived], files: &BTreeMap<String, String>) {
     let whole = Whole::of(files);
-    let mut by_reason: BTreeMap<String, Vec<&Survived>> = BTreeMap::new();
+    // **Two populations and only one of them is a gap.** Sean, 2026-09-28: *my main concern is
+    // that the tests I review cover the rules specific to the game. I am not concerned with every
+    // primitive being used as an error condition, but I would like a report about it.*
+    //
+    // **And what a test asserts is behaviour, not a rule.** Him again, the same day: *I don't
+    // test the rules directly. I test the behavior that depends on the rules, and make sure there
+    // are no unnecessary rules.* **So a dead rule row is a fork rather than a task**: either some
+    // behaviour depends on it and no reviewed test asserts that behaviour, or nothing depends on
+    // it and the ruleset does not need the row. The report says both, because it cannot tell
+    // which - and that judgement is the reading he does.
+    let mut of_rules: BTreeMap<String, Vec<&Survived>> = BTreeMap::new();
+    let mut of_machinery: BTreeMap<String, Vec<&Survived>> = BTreeMap::new();
     for one in survived {
         let parsed = read(&one.row).ok().and_then(|it| it.first().cloned());
-        let said = match &parsed {
+        let (is_rule, said) = match &parsed {
             Some(row) => why(one, row, &whole),
-            None => "the row could not be read back".to_string(),
+            None => (false, "the row could not be read back".to_string()),
         };
-        by_reason.entry(said).or_default().push(one);
+        let into = if is_rule {
+            &mut of_rules
+        } else {
+            &mut of_machinery
+        };
+        into.entry(said).or_default().push(one);
     }
-    let unaccounted: usize = by_reason
-        .iter()
-        .filter(|(said, _)| said.starts_with("NOT ACCOUNTED"))
-        .map(|(_, rows)| rows.len())
-        .sum();
+    let count =
+        |what: &BTreeMap<String, Vec<&Survived>>| -> usize { what.values().map(Vec::len).sum() };
+
     println!("\n{title}");
     println!(
-        "{tried} mutations tried; {} of them nothing noticed, in {} group(s); {unaccounted} not \
-         accounted for.",
+        "{tried} mutations tried; {} of them nothing noticed - {} in the ruleset, {} in the \
+         machinery and vocabulary around it.",
         survived.len(),
-        by_reason.len()
+        count(&of_rules),
+        count(&of_machinery)
     );
-    let mut order: Vec<(&String, &Vec<&Survived>)> = by_reason.iter().collect();
-    order.sort_by_key(|(said, rows)| (!said.starts_with("NOT ACCOUNTED"), usize::MAX - rows.len()));
-    for (said, rows) in order {
-        let fresh = rows
-            .iter()
-            .filter(|one| !recorded(&one.file, &one.what))
-            .count();
-        let since = match fresh {
-            0 => "all recorded by an earlier run".to_string(),
-            n if n == rows.len() => "none recorded before".to_string(),
-            n => format!("{n} not recorded before"),
-        };
-        println!("\n  {} row(s) - {said}\n  ({since})", rows.len());
-        for one in rows {
-            let mark = if recorded(&one.file, &one.what) {
-                " "
-            } else {
-                "*"
+
+    let say = |heading: &str, note: &str, what: &BTreeMap<String, Vec<&Survived>>| {
+        println!("\n{heading}  ({} row(s))\n  {note}", count(what));
+        let mut order: Vec<(&String, &Vec<&Survived>)> = what.iter().collect();
+        order.sort_by_key(|(_, rows)| usize::MAX - rows.len());
+        for (said, rows) in order {
+            let fresh = rows
+                .iter()
+                .filter(|one| !recorded(&one.file, &one.what))
+                .count();
+            // **Coarser than it reads, and the wording says so.** The old lists were aggregated
+            // per file and relation - `12 rules.4x binding` - so this can only answer *did an
+            // earlier run see a `binding` of `rules.4x` at all*, never whether it saw this one.
+            //
+            // **Said plainly because the short version misled its own author**: `launch`'s eight
+            // showed as *all recorded by an earlier run*, and this lane read that as *none of
+            // these is new* and wrote it into `C-163`. Four of them are from `P-583`, days old.
+            let since = match fresh {
+                0 => "an earlier run saw rows of each of these kinds".to_string(),
+                n if n == rows.len() => "no earlier run saw rows of these kinds".to_string(),
+                n => format!("{n} of a kind no earlier run saw"),
             };
-            println!("    {mark} {}:{}  {}", one.file, one.line, one.row);
+            println!("\n  {} row(s) - {said}\n  ({since})", rows.len());
+            for one in rows {
+                let mark = if recorded(&one.file, &one.what) {
+                    " "
+                } else {
+                    "*"
+                };
+                println!("    {mark} {}:{}  {}", one.file, one.line, one.row);
+            }
         }
-    }
-    // **What would close each group, so the report ends on the work rather than on the excuse.**
-    // Sean intends zero exceptions; every group above is a test that has not been written, and
-    // naming the kind is the difference between a list to tolerate and a list to finish.
-    println!(
-        "\n  To empty a group, write the test it names:\n\
-         \x20   `<test>` reaches its ending without it  -> that test states more world than it\n\
-         \x20       needs, or a second test should turn on the part it states and does not use\n\
-         \x20   no test's `when` fires `<rule>`          -> a `.4x` test that fires that rule\n\
-         \x20   nothing else names that <thing>          -> a test of whatever reads it - a biome\n\
-         \x20       affects the realistic drawing, so a drawing test is what makes it matter\n\
-         \x20   NOT ACCOUNTED FOR                        -> either a `.4x` test, or a decision\n\
-         \x20       that the Rust suite is where it lives - which this sweep cannot see, so\n\
-         \x20       saying so once is itself a rule. The bracketed word is a lead, not a reason.\n"
+    };
+
+    say(
+        "-- Ruleset rows no reviewed behaviour depends on --",
+        "This is the one that goes to zero, and each row goes one of two ways: a test of the \
+         behaviour that needs it, or the row deleted because nothing needs it.",
+        &of_rules,
     );
+    say(
+        "-- The machinery and vocabulary around them --",
+        "Reported rather than enforced. A vocabulary row wants a test of whatever reads it: a \
+         territory of each biome would pin all six at once.",
+        &of_machinery,
+    );
+    println!();
 }
 
 fn rows_of(text: &str) -> Vec<(usize, Row)> {

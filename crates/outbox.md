@@ -61,6 +61,101 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-163 - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** the mutation sweep, rewritten to name every row it finds · **cites** `C-162`
+
+**derived from** *I test the behavior that depends on the rules, and make sure there are no
+unnecessary rules* - Sean, 2026-09-28
+
+**Each of these is a fork and this lane cannot take either branch.** Sean's framing is that a test
+asserts behaviour and never a rule, so a rule row nothing depends on is **either a behaviour no
+reviewed test asserts, or a row the ruleset does not need**. The first wants a test, which is
+yours to write and his to read; the second wants a row deleted from `spec/data/rules.4x`, which is
+yours. **Neither is a coverage number to drive down** - the sweep cannot tell which a row is, and
+that judgement is the whole of the work.
+
+## What the sweep found, deleting each of 1,616 rows in turn
+
+```
+ 8  gather            3 binding, 4 literal, 1 reading
+ 8  launch            4 binding, 4 literal
+ 4  build-bin         2 binding, 2 literal
+ 4  build-pioneer     2 binding, 2 literal
+ 4  build-yard        2 binding, 2 literal
+ 3  build-extractor   2 binding, 1 literal
+ 3  upkeep            1 binding, 2 reading
+ 3  breed             1 binding, 2 literal
+ 3  toil              1 binding, 2 reading
+ 2  deploy            1 binding, 1 literal
+ 1  work              1 binding
+43  across eleven rules
+```
+
+**Every one of those eleven rules is fired by a reviewed test**, so this is not untested rules. It
+is **parts of rules that no asserted behaviour reaches** - a binding or a literal that could be
+deleted and all fifty-five tests would still pass.
+
+**`launch` is worth reading first**, because `P-583` gave it a `require yard` clause days ago and
+renumbered the four clauses below it - so half of its eight are recent, and nothing Sean has read
+depends on any of them.
+
+**This item first said the report marked those four as new and it does not.** The novelty marker
+compares against lists aggregated per file and relation - `12 rules.4x binding` - so it can only
+answer *did an earlier run see a `binding` of `rules.4x` at all*, and it says yes for every row
+here. **Corrected before you acted on it**, and the marker's wording is fixed to say what it
+checks.
+
+## Where to read the rows themselves
+
+**`cargo test --release -p game-model -- --ignored`**, which CI runs and the push gate skips. The
+report prints each row as `file:line` and the row, under the rule it belongs to, in a section of
+its own - *Ruleset rows no reviewed behaviour depends on*. **It reports and no longer asserts**,
+on his instruction, and only until the list is understood: *I intend to enforce with zero
+exceptions once I understand what is going on, this is only a temporary weakening.*
+
+## What this lane is not doing and why
+
+**Not deleting a row**, because whether the ruleset needs it is a statement about the game.
+**Not writing the test**, because `spec/tests/` is yours and the reading is his. **And not
+bumping a list to make the build green** - that is what the old `DELETABLE` did, and it is why
+neither of us could judge it.
+
+### C-162 - A territory of each biome would pin all six, and it is Sean's own suggestion
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** Sean, reading the sweep's report
+
+**Sean, 2026-09-28**: *I would think that simply having a test that creates a territory of each
+biome would make sure no biome definitions are unused.*
+
+**The sweep agrees, and it is the one group with an obvious ending.** Six `{biome ...}` rows can
+each be deleted with nothing failing, and six `biome.name` values can each be changed:
+
+```
+schema.4x:936  {biome id:1 name:ocean}
+schema.4x:937  {biome id:2 name:ice}
+schema.4x:938  {biome id:3 name:desert}
+schema.4x:939  {biome id:4 name:grassland}
+schema.4x:940  {biome id:5 name:jungle}
+schema.4x:941  {biome id:6 name:mountain}
+```
+
+**`terrain` has no rows anywhere**, which is what makes them unreferred: `P-578` stated the join's
+form - `{terrain of:territory-1 is:grassland}` - and nothing has written one. **So the test is a
+world with six territories and a `{terrain}` row each**, and it makes twelve dead entries
+load-bearing at once.
+
+**He named the reason a biome matters**: *even though biome has no effect on game mechanics right
+now, it does affect realistic rendering, so we could create a test that fails if a territory does
+not reveal a supported biome for rendering.* **A `.4x` test cannot assert a drawing**, so what it
+can assert is the half below it - that every biome is namable by a territory and that the six are
+the six `spec/planet.md` states. **Whether that is enough is yours**; this lane's part is that the
+sweep will go quiet either way, and only one of the two is about rendering.
+
+**`spec/tests/` is your column and the reading is his**, so this is filed rather than written.
+
+---
+
 ### C-161 - `D-6` is built, and its *vetted when* says sixty-three words where the data says sixty
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** building the `primitives/` suite and deriving its count from the data rather than from the clause · **cites** `D-6`
