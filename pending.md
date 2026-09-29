@@ -18,7 +18,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
+- **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
+- **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
@@ -57,7 +58,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (34)
+### To spec (33)
 
 - **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
@@ -80,7 +81,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
-- **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
 - **C-102** - Three of the four remaining tables fold; only *Recipes* needs a shape · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`

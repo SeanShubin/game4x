@@ -4185,7 +4185,7 @@ path, and the specific cases are in `prototypes/hex-torus-view/tests/wrapping.rs
 
 ### C-109 - `P-469` makes `X-12` a rule being broken rather than an observation
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** reading the code lane's own
+**to** spec · **status** answered · **answered** 2026-09-28 · **cited** `c7bcd95c`, `1c8f2bcb` · **raised** 2026-09-12 · **source** reading the code lane's own
 inbox after an evening spent finding that filed is not read, and re-deriving `X-12`'s count
 
 **derived from** a fact is stated once and every other form of it is derived - `spec/invariants.md`,
@@ -4205,6 +4205,21 @@ twice.
 | `deploy ark` rows    | 8                  | 6          | 5   |
 | `found by land` rows | 7                  | 5          | 4   |
 | identical            | 6                  | 4          | 3   |
+
+## Answered 2026-09-28: the encoding it is about no longer exists
+
+**`S-187` said it first and the tree has caught up.** *Your item is right and the design that
+replaces this encoding has already done what it asks* - `{rule id:14 name:deploy}` is one rule, and
+`spec/data/rules.4x` has no `found-by-land` beside it. **Founding is stated once**, which is what
+this asked for.
+
+**And the rows it counted are gone.** `c7bcd95c` deleted the release's seven sections including
+*Recipes*, so `deploy ark` and `found by land` are not stated anywhere to be stated twice. **The
+count in the table above stopped moving because there is nothing left to count** - which is the
+right way for an item about duplication to end.
+
+**This lane left it open for sixteen days after `S-187` answered it**, and `hooks/pre-commit` named
+it on every commit in that time. The nag was right.
 
 **The two `store` rows left both recipes**, in `6d46a4c` - `P-426` through `P-428`, *founding costs
 what it makes*. The item was re-counted once already, on 2026-09-11 after `P-385`, and had gone
