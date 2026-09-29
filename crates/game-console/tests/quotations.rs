@@ -871,14 +871,20 @@ fn every_quotation_of_the_specification_says_what_it_says_now() {
     // The test has to be able to fail. If the convention were ever renamed, this would
     // quietly check nothing and pass forever, which is the failure mode of every scanner.
     //
-    // **157 today, and the floor is 120.** `Q-101` measured what a loose floor is worth and it was
+    // **117 today, and the floor is 90.** `Q-101` measured what a loose floor is worth and it was
     // worse than feared - one at `1000` against `2004` tolerated a reader losing half its input,
-    // and this one at `40` against 157 tolerated three quarters. **There is no second derivation of
+    // and one at `40` against 157 tolerated three quarters. **There is no second derivation of
     // how many quotations ought to exist**, so a floor is what is available; what it can do is
-    // catch a collapse rather than a trim, and 120 leaves room for ordinary deletion.
+    // catch a collapse rather than a trim.
+    //
+    // **It was 157 against a floor of 120 until the old model went.** Eight modules and six and a
+    // half thousand lines carried forty quotations of `spec/` away with them, and the floor
+    // caught the drop - which is the floor working, and the third check this sitting to go red
+    // because a population shrank honestly rather than because a reader broke. **Lowered with the
+    // population rather than to it**: 90 against 117 leaves the room 120 left against 157.
     assert!(
-        checked >= 120,
-        "only {checked} quotations found, and there were 157; the convention has probably changed \
+        checked >= 90,
+        "only {checked} quotations found, and there were 117; the convention has probably changed \
          and this test has stopped watching most of what it watched"
     );
     assert!(

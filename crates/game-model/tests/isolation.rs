@@ -242,3 +242,65 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         common::ENGINE_MODULES
     );
 }
+
+/// The integers-only rule, enforced rather than asserted in prose.
+///
+/// **It lived in `src/lib.rs` until the old model went.** A test that walks `src/` has to read
+/// files, and `nothing_in_src_reads_a_file_or_depends_on_another_crate` forbids `std::fs` there -
+/// which it could not see while `lib.rs` was excepted by name for declaring the eight modules
+/// being replaced. **The exception retiring is what uncovered it**, and this is its proper home:
+/// beside the other walk over the same directory.
+///
+/// Beyond reproducing identically on every machine, the rule is what makes resolving territories
+/// in any order safe: integer addition is associative, so a sum does not depend on how the work
+/// was split. Floating point addition is not, so it would.
+#[test]
+fn no_floating_point_anywhere() {
+    let mut offences = Vec::new();
+    let mut scanned = 0;
+    for entry in std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/src")).unwrap() {
+        let path = entry.unwrap().path();
+        if path.extension().and_then(|e| e.to_str()) != Some("rs") {
+            continue;
+        }
+        scanned += 1;
+        let text = std::fs::read_to_string(&path).unwrap();
+        // The rule binds the code that ships. This very test has to name what it
+        // forbids in order to look for it, and so does any test that builds a fixture.
+        let code = match text.find("#[cfg(test)]") {
+            Some(at) => &text[..at],
+            None => &text[..],
+        };
+        for (number, line) in code.lines().enumerate() {
+            if line.trim_start().starts_with("//") {
+                continue;
+            }
+            if line.contains("f32") || line.contains("f64") {
+                offences.push(format!(
+                    "{}:{}",
+                    path.file_name().unwrap().to_string_lossy(),
+                    number + 1
+                ));
+            }
+        }
+    }
+    assert!(
+        offences.is_empty(),
+        "floating point in the model:\n{}",
+        offences.join("\n")
+    );
+    // **`Q-51`: how many files it read, because an empty scan finds nothing.**
+    //
+    // `read_dir` is not recursive, and a directory entry has no `rs` extension - so it
+    // is skipped by the same `continue` that skips a `Cargo.toml`. **A module moved into
+    // a subdirectory of `src/` would be unscanned and this would stay green**, which is
+    // the shape where a rule quietly stops binding the code it names.
+    //
+    // A floor rather than an exact count: the number is a property of how this crate is
+    // laid out, and a bound needing an edit whenever a file is added would be edited
+    // without being thought about. What it has to catch is the scan collapsing.
+    assert!(
+        scanned >= 6,
+        "only {scanned} files scanned for floating point, which is not this crate"
+    );
+}

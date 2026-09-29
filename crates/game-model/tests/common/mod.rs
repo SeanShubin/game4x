@@ -26,22 +26,19 @@ use game_model::schema::Malformed;
 /// while the crate was only the engine. It is the same statement about the same code now; what
 /// changed is that the crate holds something else too, and naming that something else is more
 /// precise than widening the rule to admit it.
-pub const BEING_REPLACED: [&str; 8] = [
-    "game",
-    "identity",
-    "rejection",
-    "rules",
-    "territory",
-    "thing",
-    "transition",
-    "unit",
-];
+/// **It reached zero on 2026-09-29**, which is `D-1`'s measure: *the measure is that it stops
+/// holding rules, not that it holds fewer.* Eight modules, six thousand five hundred and sixty
+/// lines, and the checks that excepted them now range over the whole crate again.
+///
+/// **Kept at zero rather than deleted, for one release.** The comment above is the account of a
+/// countdown that finished, and a reader meeting `skipped == 0` in the assertion below has
+/// somewhere to find out why it is zero. It goes when `releases/rules-become-data.md` does.
+pub const BEING_REPLACED: [&str; 0] = [];
 
-/// **`lib.rs` is excepted for a different reason and it is temporary too.** It declares both
-/// module sets, so it says `pub mod territory;` and `pub mod unit;` - two words that are
-/// relations the data names. **It is a declaration of the modules above rather than the engine
-/// naming a noun**, and it comes back into scope the moment there is nothing left to declare.
-pub const SHARED: [&str; 1] = ["lib"];
+/// **`lib.rs` was excepted while it declared the modules above**, because `pub mod territory;`
+/// and `pub mod unit;` are two words that are relations the data names. **It declares neither
+/// now**, so the exception is gone and the engine's own walk reads it like any other module.
+pub const SHARED: [&str; 0] = [];
 
 /// Modules that are **beside** the engine rather than part of it.
 ///
@@ -118,7 +115,11 @@ pub fn engine_modules() -> Vec<PathBuf> {
 
 /// **Asserted rather than derived**, so that a module vanishing is a failure and not a smaller
 /// population every check downstream then passes over.
-pub const ENGINE_MODULES: usize = 7;
+///
+/// **Seven until the old model went, and eight now.** `lib.rs` was excepted while it declared the
+/// modules being replaced; it declares none, so it is read like any other - which is the
+/// exception retiring and the engine's own rules reaching one more file rather than fewer.
+pub const ENGINE_MODULES: usize = 8;
 
 /// **The only directory anything here reads**, which is what `S-136` means by isolated.
 pub fn mine() -> PathBuf {

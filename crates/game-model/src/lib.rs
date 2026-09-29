@@ -58,20 +58,13 @@ pub mod view;
 // walk skips it.
 pub mod foundation;
 
-// **The model being replaced.** Eight modules, a struct per noun and a method per rule, and the
-// list `tests/isolation.rs` excepts by name. **It is a countdown rather than a catalogue**: a
-// module deleted here is deleted there, and when both are empty the exception goes with them.
-pub mod game;
-pub mod identity;
-pub mod rejection;
-pub mod rules;
-pub mod territory;
-pub mod thing;
-pub mod transition;
-pub mod unit;
-
-pub use game::{Game, Phase};
-pub use identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
+// **The model being replaced is gone.** Eight modules, a struct per noun and a method per rule,
+// and `tests/common`'s `BEING_REPLACED` counted them down from eight to none.
+//
+// **`D-1` measures this by the crate stopping holding rules rather than holding fewer** - *the
+// measure is that it stops holding rules, not that it holds fewer* - so the list that excepted
+// them from the engine's own checks goes with them, and the checks are about the whole crate
+// again.
 
 /// What kind of ground a territory is, from [`planet_model`].
 ///
@@ -79,66 +72,3 @@ pub use identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 /// and every rule that reads one is here. What is *not* here is the definition, because
 /// `planet-terrain` and `planet-render` need it too and neither of them is the game.
 pub use planet_model::Biome;
-pub use rejection::Rejection;
-pub use territory::{Deposit, Extractor, Territory};
-pub use transition::Transition;
-pub use unit::{Location, Unit};
-
-#[cfg(test)]
-mod tests {
-    /// The integers-only rule, enforced rather than asserted in prose.
-    ///
-    /// Beyond reproducing identically on every machine, this is what makes resolving
-    /// territories in any order safe: integer addition is associative, so a sum does not
-    /// depend on how the work was split. Floating point addition is not, so it would.
-    #[test]
-    fn no_floating_point_anywhere() {
-        let mut offences = Vec::new();
-        let mut scanned = 0;
-        for entry in std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/src")).unwrap() {
-            let path = entry.unwrap().path();
-            if path.extension().and_then(|e| e.to_str()) != Some("rs") {
-                continue;
-            }
-            scanned += 1;
-            let text = std::fs::read_to_string(&path).unwrap();
-            // The rule binds the code that ships. This very test has to name what it
-            // forbids in order to look for it, and so does any test that builds a fixture.
-            let code = match text.find("#[cfg(test)]") {
-                Some(at) => &text[..at],
-                None => &text[..],
-            };
-            for (number, line) in code.lines().enumerate() {
-                if line.trim_start().starts_with("//") {
-                    continue;
-                }
-                if line.contains("f32") || line.contains("f64") {
-                    offences.push(format!(
-                        "{}:{}",
-                        path.file_name().unwrap().to_string_lossy(),
-                        number + 1
-                    ));
-                }
-            }
-        }
-        assert!(
-            offences.is_empty(),
-            "floating point in the model:\n{}",
-            offences.join("\n")
-        );
-        // **`Q-51`: how many files it read, because an empty scan finds nothing.**
-        //
-        // `read_dir` is not recursive, and a directory entry has no `rs` extension - so it
-        // is skipped by the same `continue` that skips a `Cargo.toml`. **A module moved into
-        // a subdirectory of `src/` would be unscanned and this would stay green**, which is
-        // the shape where a rule quietly stops binding the code it names.
-        //
-        // A floor rather than an exact count: the number is a property of how this crate is
-        // laid out, and a bound needing an edit whenever a file is added would be edited
-        // without being thought about. What it has to catch is the scan collapsing.
-        assert!(
-            scanned >= 6,
-            "only {scanned} files scanned for floating point, which is not this crate"
-        );
-    }
-}
