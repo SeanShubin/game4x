@@ -14,14 +14,20 @@
 {clause id:25 rule:breed seq:1 role:remove relation:citizen name:clause-25}
 {clause id:26 rule:breed seq:2 role:remove relation:food name:clause-26}
 {clause id:27 rule:breed seq:3 role:add relation:citizen name:clause-27}
+{clause id:59 rule:breed seq:4 role:add relation:citizen name:clause-59}
 {binding id:38 clause:clause-25 column:130 input:where}
 {binding id:39 clause:clause-26 column:82 input:where}
 {binding id:40 clause:clause-27 column:130 input:where}
+{binding id:66 clause:clause-59 column:130 input:where}
 {literal id:29 clause:clause-25 column:131 value:0}
 {literal id:30 clause:clause-25 column:133 value:1}
 {literal id:31 clause:clause-25 column:132 value:1}
 {literal id:32 clause:clause-26 column:83 value:1}
 {literal id:33 clause:clause-27 column:131 value:0}
-{literal id:34 clause:clause-27 column:133 value:1}
-{literal id:48 clause:clause-27 column:137 value:1}
-{literal id:35 clause:clause-27 column:132 value:2}
+{literal id:34 clause:clause-27 column:133 value:0}
+{literal id:35 clause:clause-27 column:132 value:1}
+{literal id:84 clause:clause-59 column:131 value:0}
+{literal id:85 clause:clause-59 column:133 value:1}
+{literal id:86 clause:clause-59 column:137 value:1}
+{literal id:87 clause:clause-59 column:132 value:1}
+{reading id:17 clause:clause-27 column:137 of:clause-25 takes:137}
