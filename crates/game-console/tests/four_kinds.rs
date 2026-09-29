@@ -44,40 +44,12 @@
 //! expected instead* - so this check is also a consumer of that rule, and would go red if a
 //! refusal stopped carrying its expectations.
 
-use game_console::{Library, Meaning, Outcome, Session};
+use game_console::{Meaning, Outcome, Session};
 use std::collections::BTreeMap;
-use std::path::PathBuf;
 
-struct Files(PathBuf);
+mod common;
 
-impl Library for Files {
-    fn fetch(&self, name: &str) -> Option<String> {
-        std::fs::read_to_string(self.0.join(format!("{name}.4x"))).ok()
-    }
-
-    fn names(&self) -> Vec<String> {
-        Vec::new()
-    }
-}
-
-fn root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
-}
-
-fn files() -> Files {
-    Files(root().join("scenario/commands"))
-}
-
-/// A designed planet with play begun, so every form has something real to act on.
-fn playing() -> Session {
-    let mut session = Session::new();
-    for line in ["{run file:setup}", "{start}"] {
-        session
-            .run(line, &files())
-            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
-    }
-    session
-}
+use common::{library as files, playing};
 
 /// A line for one form, with every hole filled - asking the console what it expected whenever
 /// a word names nothing.
@@ -314,10 +286,27 @@ fn nothing_in_the_history_is_anything_but_a_game_command() {
         );
         checked += 1;
     }
-    assert!(
-        checked > 200,
-        "only {checked} history lines examined, and the scenario is 211 commands - a run that \
-         recorded almost nothing would satisfy every assertion above"
+    // **The population it runs over has to contain the thing it refuses**, and for months it did
+    // not: this ran over `scenario/commands/play.4x`, whose 366 lines asked nothing at all, so
+    // *no question is in the history* was a true statement about no questions. The fixture asks
+    // three, and this fails if they stop being asked.
+    assert_eq!(
+        common::ASKED.len(),
+        3,
+        "the fixture asks nothing, so a history free of questions says nothing"
+    );
+    for asked in common::ASKED {
+        assert!(
+            !session.history().iter().any(|line| line == asked),
+            "`{asked}` was asked and is in the history"
+        );
+    }
+    assert_eq!(
+        checked,
+        common::commands_issued(),
+        "the history holds {checked} lines and the fixture issued {} commands - every one of \
+         them should be there and nothing else should",
+        common::commands_issued()
     );
 }
 

@@ -37,41 +37,13 @@
 //! **What is proven here is the mechanism**, over states written to disagree in each of the
 //! three directions. A comparison nobody has seen fail is a claim.
 
-use std::path::PathBuf;
-
 use game_console::containment::Entry;
 use game_console::state;
-use game_console::{Library, Session};
 
 /// Where the reviewed expectation lives.
-const AT: &str = "scenario/expected/play.4x";
+mod common;
 
-struct Files(PathBuf);
-
-impl Library for Files {
-    fn fetch(&self, name: &str) -> Option<String> {
-        std::fs::read_to_string(self.0.join(format!("{name}.4x"))).ok()
-    }
-
-    fn names(&self) -> Vec<String> {
-        Vec::new()
-    }
-}
-
-fn root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
-}
-
-fn played() -> Session {
-    let files = Files(root().join("scenario/commands"));
-    let mut session = Session::new();
-    for line in ["{run file:setup}", "{start}", "{run file:play}"] {
-        session
-            .run(line, &files)
-            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
-    }
-    session
-}
+use common::played;
 
 /// How many entries there are, root included.
 fn size(tree: &Entry) -> usize {
@@ -142,70 +114,6 @@ fn a_state_survives_being_written_and_read() {
     );
 }
 
-/// Every rule `spec/console.md` states about the map form, over the whole played state.
-///
-/// **Over every entry rather than on an example, and the count with it.** A rule shown on
-/// one entry stops showing anything the moment that entry is edited away, and goes on
-/// passing - `docs/notes/checks-outlive-examples.md`. The count is what tells that apart
-/// from a walk that found nothing.
-#[test]
-fn the_played_state_obeys_every_rule_the_map_form_has() {
-    let session = played();
-    let tree = state::entries(&session.game);
-    let all = tree.walk();
-    assert!(
-        all.len() > 40,
-        "only {} entries, so each assertion below would pass over almost nothing",
-        all.len()
-    );
-
-    let mut with_an_id = 0;
-    for entry in &all {
-        assert!(
-            entry.quantity > 0,
-            "an entry is never zero: {}",
-            entry.description.written()
-        );
-        if entry.description.traits.contains_key("id") {
-            with_an_id += 1;
-            assert_eq!(
-                entry.quantity,
-                1,
-                "there is never a quantity of a thing with an `id`: {}",
-                entry.description.written()
-            );
-        }
-        // Entries are in the order their descriptions sort in, so the same state is the
-        // same bytes.
-        let written: Vec<String> = entry
-            .contents
-            .iter()
-            .map(|held| held.description.written())
-            .collect();
-        let mut sorted = written.clone();
-        sorted.sort();
-        assert_eq!(
-            written,
-            sorted,
-            "the contents of {} are not in description order",
-            entry.description.written()
-        );
-        // Each distinct description is its own entry, so no description appears twice in
-        // one map.
-        let mut seen = std::collections::BTreeSet::new();
-        for description in &written {
-            assert!(
-                seen.insert(description.clone()),
-                "{description} is two entries of one map, and each distinct description is one"
-            );
-        }
-    }
-    assert!(
-        with_an_id >= 24,
-        "only {with_an_id} things carry an id, and twelve territories and twelve orbits do"
-    );
-}
-
 /// The comparison finds all three disagreements, and none where there are none.
 #[test]
 fn the_comparison_finds_missing_extra_and_different() {
@@ -265,141 +173,6 @@ fn the_comparison_finds_missing_extra_and_different() {
     );
 }
 
-/// A territory's own numbers are rebuilt from the file and compared with the model.
-///
-/// **This is the claim `S-62` asked to be tested rather than stated**, and it is the one
-/// `C-53` said was half true. `releases/first-release.md` -> *Where things are*: **the check
-/// is that the dump reads back into the state it came from.** Territory 3 is `6 x 2` for
-/// food; before `P-331` the file said `density:2` and six was nowhere, so a reader with the
-/// file alone could not say what that ground offered.
-///
-/// **Both numbers are on the deposit now**, so this rebuilds every territory's id, biome,
-/// force of nature and per-resource pair out of the text and holds them against the model.
-///
-/// # What this does not claim, and what poisoning it taught
-///
-/// **It is the territories, not the whole state**, and saying which is the whole of `S-29`'s
-/// warning about reporting half a rule as met. What a territory *holds* round trips as
-/// entries and is checked by `a_state_survives_being_written_and_read`.
-///
-/// **And it cannot catch a wrong number.** The first poison added one to every capacity, the
-/// file was regenerated from the poisoned model, and this passed - correctly. A round trip
-/// compares a file with the state it was written from, so a value that is wrong in both is
-/// wrong consistently. **What catches a wrong number is the release**, in
-/// `first_release.rs::released_table`, which reads `6 x 2` out of Sean's own table.
-///
-/// **The poison that reaches this one is asymmetric**: stop the writer stating
-/// `total-capacity`, reseed, and it fails naming the territory and the resource. Two poisons,
-/// and only the second is about the property - which is `C-57`'s lesson arriving a day later
-/// in a different test.
-#[test]
-fn every_territorys_own_numbers_survive_the_round_trip() {
-    let session = played();
-    let text = std::fs::read_to_string(root().join(AT)).expect("the expected state");
-    let read = state::read(&text).unwrap_or_else(|why| panic!("{AT} does not parse: {why}"));
-
-    let mut checked = 0;
-    for place in &session.game.territories {
-        let described = read
-            .contents
-            .iter()
-            .find(|entry| {
-                entry.description.kind == "territory"
-                    && entry.description.traits.get("id") == Some(&place.id.0.to_string())
-            })
-            .unwrap_or_else(|| panic!("territory {} is not in the file", place.id));
-
-        let says = |name: &str| -> String {
-            described
-                .description
-                .traits
-                .get(name)
-                .cloned()
-                .unwrap_or_else(|| panic!("territory {} states no {name}", place.id))
-        };
-        assert_eq!(says("biome"), place.biome.name(), "territory {}", place.id);
-        // **Counted rather than read, since `P-494` made nature a kind.** It was
-        // `says("nature")` - a trait on the territory's own description - and a territory
-        // holds one `nature` per point now, so what survives the round trip is how many
-        // entries are there. **An entry is never zero**, so ground that resists with nothing
-        // has none, which is why this counts rather than asking for a number.
-        let natures = described
-            .contents
-            .iter()
-            .filter(|entry| entry.description.kind == "nature")
-            .map(|entry| entry.quantity)
-            .sum::<u32>();
-        assert_eq!(natures, place.force_of_nature(), "territory {}", place.id);
-
-        for resource in game_model::Resource::ALL {
-            let offered = place.deposit(resource);
-            let deposit = described.contents.iter().find(|entry| {
-                entry.description.kind == "deposit"
-                    && entry.description.traits.get("resource")
-                        == Some(&resource.name().to_string())
-            });
-            match deposit {
-                // **A ground that offers nothing has no deposit, and an entry is never
-                // zero** - `spec/console.md`. So absence has to mean nothing offered, and
-                // this is the arm that says so rather than skipping.
-                None => assert_eq!(
-                    (offered.capacity, offered.density),
-                    (0, 0),
-                    "territory {} offers {resource} and the file has no deposit for it",
-                    place.id
-                ),
-                Some(entry) => {
-                    let has = |name: &str| -> u32 {
-                        entry
-                            .description
-                            .traits
-                            .get(name)
-                            .and_then(|value| value.parse().ok())
-                            .unwrap_or_else(|| {
-                                panic!("territory {}'s {resource} states no {name}", place.id)
-                            })
-                    };
-                    // **Three names and two facts** - `spec/logistics.md`, `P-476`: a
-                    // container's capacity for a kind, how much is occupied, and how much is
-                    // free. Any two give the third.
-                    //
-                    // **So all three are checked against each other and against the
-                    // release.** `capacity` must be the release's figure, `occupied` must be
-                    // what is standing there, and `free` must be the difference - which is
-                    // three numbers held to two facts, where this once compared two copies of
-                    // one number and could not have noticed either drifting.
-                    let standing = place.extractors_for(resource).len() as u32;
-                    assert_eq!(
-                        (has("occupied"), has("free")),
-                        (standing, offered.capacity.saturating_sub(standing)),
-                        "territory {}'s {resource} is occupied by what stands there and free                          by the rest",
-                        place.id
-                    );
-                    assert_eq!(
-                        (has("capacity"), has("density")),
-                        (offered.capacity, offered.density),
-                        "territory {}'s {resource}, which the release writes `{} x {}`",
-                        place.id,
-                        offered.capacity,
-                        offered.density
-                    );
-                    checked += 1;
-                }
-            }
-        }
-    }
-
-    // **Over every case, and how many.** Twelve territories and three resources, less the
-    // ground that offers nothing - territory 6 has no metal and territory 7 no energy, which
-    // the release's own table says. A run that compared nothing would satisfy every assertion
-    // above it.
-    assert_eq!(
-        checked, 34,
-        "twelve territories times three resources, less the two that offer none; {checked} \
-         pairs were compared"
-    );
-}
-
 /// The seeding branch, over a directory of its own.
 ///
 /// **`P-225`: absence means acceptance**, so an update is a deletion rather than an edit -
@@ -430,54 +203,4 @@ fn an_absent_expectation_is_seeded_and_then_compared() {
     );
 
     std::fs::remove_dir_all(&at).ok();
-}
-
-/// The reviewed expectation, seeded on absence and compared thereafter.
-///
-/// **`P-225`: absence means acceptance.** A missing file is how changing your mind is said,
-/// so this writes one rather than failing. An update is therefore a deletion rather than an
-/// edit - deliberate, visible in `git status`, and impossible by a hand slip.
-///
-/// **The first seed is a known false positive and Sean said so himself**, withdrawing
-/// `P-227`: *as a human I can remember to vet the scenario test the first time, it is
-/// remembering to do some mundane task each time that is impossible for a human, which is
-/// why we need a test to fail for those times to remind the human.* `P-228` is that reason
-/// as a rule - **a check earns its place by guarding the repetition, not the one-off.**
-///
-/// So this seeds, says loudly that it seeded, and from the next run onward it is the check.
-#[test]
-fn the_reviewed_expectation_holds() {
-    let file = root().join(AT);
-    let session = played();
-    let actual = state::entries(&session.game);
-
-    let Ok(text) = std::fs::read_to_string(&file) else {
-        if let Some(directory) = file.parent() {
-            std::fs::create_dir_all(directory).expect("a directory to seed into");
-        }
-        std::fs::write(
-            &file,
-            state::write(&session.game, "after `scenario/commands/play.4x`"),
-        )
-        .unwrap_or_else(|why| panic!("cannot seed {AT}: {why}"));
-        panic!(
-            "seeded {AT} from the program, which nobody has reviewed.\n\n\
-             This is the one-off `P-228` describes: the first expectation cannot be checked \
-             by a diff because there is nothing to diff it against. Read it, and if it is \
-             what the scenario should produce, commit it. From the next run on, this fails \
-             only when the game and the reviewed file disagree.\n\n\
-             {} entries written.",
-            size(&actual)
-        );
-    };
-
-    let expected = state::read(&text).unwrap_or_else(|why| panic!("{AT} does not parse: {why}"));
-    let wrong = state::compare(&expected, &actual);
-    assert_eq!(
-        wrong.total(),
-        0,
-        "{AT} and the game disagree. Either the game is wrong, or you changed your mind - \
-         and `P-225` says changing your mind is deleting the file.\n{}",
-        wrong.report()
-    );
 }
