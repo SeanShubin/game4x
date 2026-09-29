@@ -144,12 +144,26 @@ line.
 filing is an item `to spec` saying the scenario moved and which cases are waiting on a deletion, and
 this lane turns it into something he reads. **One line would have done it.**
 
-## And one claim in `regression.rs` is narrower than it reads
+## Withdrawn 2026-09-28: the sentence this lane corrected was not in the file
 
-**Its comment says *the naming now makes his edit rename nothing*.** Measured on this insert: a
-command at position eight renamed the two behind it. The sentence beside it is the honest one - *a
-scheme that renames less is not a scheme that renames never* - **so the claim holds for an append and
-not for an insert**, and an insert is what a new rule in the middle of a turn always is.
+**It said `regression.rs` claims *the naming now makes his edit rename nothing*, and the file has not
+said that since 2026-09-27.** `64c8fb2f` wrote it and `bff55c02` removed it, in the commit that put a
+case's position back into its filename - **the day before the insert that was measured against it.**
+What line 236 says now is the honest version already: *a case's position in its turn is back in the
+filename and does renumber.*
+
+**The measurement was right and the quotation was not.** The insert did rename two cases; there was
+no claim left to correct.
+
+**The cause is the rule this lane is meant to follow**, `CLAUDE.md`: *re-read before asserting - a
+file read earlier in the session may have been rewritten by another instance since, and anything
+claimed about code needs a fresh look, not a memory.* That comment was read hours earlier while
+looking at the orphan check, and quoted from that reading rather than from the file. **A quotation is
+the one thing a stale read cannot survive**, because it carries no hedge.
+
+**Found by the code lane checking a correction before accepting it**, which is the half of its own
+instruction that is easy to skip.
+
 
 ### S-217 - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one
 
