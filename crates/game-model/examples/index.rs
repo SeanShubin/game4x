@@ -194,10 +194,14 @@ fn rendered(rel: &str) -> String {
          <title>{}</title>\n<link rel=\"stylesheet\" href=\"{up}report.css\">\n</head>\n<body>\n\
          <h1><code>{}</code></h1>\n<p class=\"note\">{}</p>\n\
          <p class=\"where\"><a href=\"{up}index.html\">The index</a> \u{b7} \
-         <a href=\"{out_of_reports}{}\">the file itself, as text</a></p>\n<pre class=\"four-x\">",
+         <a href=\"{out_of_reports}{}\">the file itself, as text</a></p>\n\
+         <p class=\"generated\">Generated from <code>{}</code> by \
+         <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from \
+         is, and this is a rendering of it.</p>\n<pre class=\"four-x\">",
         escaped(rel),
         escaped(rel),
         escaped(&title),
+        escaped(rel),
         escaped(rel)
     );
     for line in text.lines() {
@@ -499,6 +503,28 @@ pub fn write_all() -> (usize, usize) {
             beside: vec![("as text".to_string(), up("", at))],
         });
     }
+    // **The engine's inputs, listed by the engine** - `R-11`: *nothing the engine reads is
+    // missing from that index, which is checked by listing the inputs rather than by anybody
+    // remembering to add one.*
+    //
+    // **`foundation::PATHS` is the list and it is not a copy of one.** Those three files are
+    // carried in the binary by `include_str!`, so what the engine reads is decided at compile
+    // time and read back here - a fourth input would appear on this page with nobody editing it.
+    //
+    // **They are the generated form and the friendly source is above.** `spec/data/` is what Sean
+    // writes; these are what runs.
+    let inputs = game_model::foundation::PATHS
+        .iter()
+        .map(|at| {
+            let rel = format!("crates/game-model/{at}");
+            Entry {
+                at: rendered(&rel),
+                said: format!("`{at}`, carried in the binary and read at startup"),
+                beside: vec![("as text".to_string(), up("", &rel))],
+            }
+        })
+        .collect();
+
     pages.push(Page {
         slug: "ruleset".to_string(),
         title: "The ruleset, and the data under it".to_string(),
@@ -508,7 +534,8 @@ pub fn write_all() -> (usize, usize) {
                 .to_string(),
         sections: vec![
             ("Rules".to_string(), ruleset),
-            ("The data files".to_string(), data),
+            ("What the engine reads".to_string(), inputs),
+            ("The friendly source those come from".to_string(), data),
         ],
     });
 

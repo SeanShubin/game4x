@@ -142,3 +142,12 @@ pre.four-x .arrow {
     color: var(--quiet);
     font-weight: 600;
 }
+
+p.generated {
+    background: color-mix(in srgb, var(--quiet) 8%, var(--paper));
+    border-left: 3px solid var(--rule);
+    color: var(--quiet);
+    font-size: 0.86rem;
+    margin: 0 0 1rem;
+    padding: 0.5rem 0.8rem;
+}

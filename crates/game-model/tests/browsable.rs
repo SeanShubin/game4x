@@ -199,3 +199,55 @@ fn said(at: &Path) -> String {
         .unwrap_or("?")
         .to_string()
 }
+
+/// **Nothing the engine reads is missing from the index** - `R-11`.
+///
+/// **Asked of the engine, not of a list here.** `foundation::PATHS` is what `include_str!` put in
+/// the binary, so a fourth input fails this the day it is added rather than the day somebody
+/// notices the page is short. `R-11`: *checked by listing the inputs rather than by anybody
+/// remembering to add one.*
+///
+/// **And reading it is what following the link does.** Every input is reachable as a rendering,
+/// which the browser shows, rather than as a `.4x` it would offer to download - which is the
+/// clause Sean added in September after the published site handed him a file instead of a page.
+#[test]
+fn every_file_the_engine_reads_is_reachable_from_the_index() {
+    let inputs = game_model::foundation::PATHS;
+    assert!(
+        !inputs.is_empty(),
+        "the engine reads nothing, so this checked nothing"
+    );
+
+    let pages: String = std::fs::read_dir(reports())
+        .expect("reports/")
+        .filter_map(|it| it.ok())
+        .map(|it| it.path())
+        .filter(|it| it.extension().and_then(|e| e.to_str()) == Some("html"))
+        .map(|it| std::fs::read_to_string(it).unwrap_or_default())
+        .collect();
+
+    for at in inputs {
+        let rendering = format!("crates/game-model/{at}.html");
+        assert!(
+            pages.contains(&rendering),
+            "the engine reads `{at}` and no page links `{rendering}` - `R-11` asks that nothing \
+             it reads be missing from the index"
+        );
+        assert!(
+            reports().join(&rendering).is_file(),
+            "`{rendering}` is linked and not there"
+        );
+    }
+
+    // **And the rendering says what it is**, which is the other half of the clause: a copy that
+    // does not say it is a copy is one a reader may take for the file.
+    for at in inputs {
+        let page = std::fs::read_to_string(reports().join(format!("crates/game-model/{at}.html")))
+            .expect("a rendering");
+        assert!(
+            page.contains("Not canonical") && page.contains(at),
+            "the rendering of `{at}` does not say it is generated and not canonical, and which \
+             file it came from"
+        );
+    }
+}
