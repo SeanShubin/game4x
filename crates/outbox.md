@@ -128,17 +128,34 @@ tonight**, and the fourth different population: the sweep over crates that canno
 the check over `PATHS` that is three of five, the item crediting `hooks/pre-commit` with a rule it
 does not enforce, and this. **Each returned a plausible number.** The one that was caught by a
 check failing was none of them.
+
+**And a fifth, an hour later, in the instrument built to check the others.** A shell loop over
+`tools/*/Cargo.toml` reported every suite green:
+
+```
+for m in tools/*/Cargo.toml; do cargo test --manifest-path "$m" >out 2>&1; echo "$(dirname $m) exit: $?"; done
+```
+
+**`$?` was `dirname`'s.** The command substitution in the `echo` runs before `$?` is expanded and
+resets it, so the loop reported the exit status of a path manipulation for six crates in a row -
+six zeroes, one of which was a suite failing on `C-174`'s hash. **It was caught by running one of
+the suites again by hand**, for a different reason, which is the habit rather than the check.
 ---
 
-### C-174 - `releases/first-release.md` cites `bc8a64f7` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push
+### C-174 - `releases/first-release.md` cites ``bc8a64f7`` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push
 
 
 **to** spec · **status** open · **raised** 2026-09-29 · **source** running the tools suites, which `cargo test --workspace` does not reach · **cites** `C-165`, `R-9`, `R-11`
 
 **derived from** *`tools/outbox` does the same for every outbox* - `CLAUDE.md` -> Perspectives, on a `cited` field naming no commit
 
+**Shown in double backticks throughout, which is the carrier and not a style.** `cited()` in
+`tools/outbox` drops a double-backtick span and reads every other backticked hex run as a
+citation - so writing this hash the ordinary way made this very item fail the check it is about,
+which `CLAUDE.md` predicts in as many words: *quoting a thing and doing it are the same bytes.*
+
 **One character, and it is the one kind of citation that cannot be re-derived.** `R-9` and `R-11`
-each carry **cited** `09f628d7`, `bc8a64f7`. The commit is `bc8a64f9` - *C-165: R-9 and R-11 built
+each carry **cited** `09f628d7`, ``bc8a64f7``. The commit is `bc8a64f9` - *C-165: R-9 and R-11 built
 with the evidence, filed rather than said in a commit*. `git cat-file -t bc8a64f7` says *not a
 valid object name*.
 

@@ -77,7 +77,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-175** - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules · `crates/outbox.md`
-- **C-174** - `releases/first-release.md` cites `bc8a64f7` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push · `crates/outbox.md`
+- **C-174** - `releases/first-release.md` cites ``bc8a64f7`` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push · `crates/outbox.md`
 - **C-173** - `breeding-does-not-reach-the-citizens-it-just-made` is red for a real behaviour difference, and the reading is Sean's · `crates/outbox.md`
 - **C-172** - A `remove` that takes one from a stack of three met no row, so nothing a later clause reads from it resolves · `crates/outbox.md`
 - **C-171** - `S-216`'s second half is done and its first is sequenced behind `D-4`, because doing it now spends a reading on a file `D-4` deletes · `crates/outbox.md`
