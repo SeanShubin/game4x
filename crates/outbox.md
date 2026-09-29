@@ -61,6 +61,66 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-164 - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** Sean asking what happened to the generated reports linked from an index · **cites** `S-187`, `D-4`
+
+**derived from** *if rebuilding the model moves what `R-6` through `R-12` rest on, say so in the outbox rather than letting him vet a report that has gone stale under him* - `S-187`
+
+**`S-187` told this lane to do exactly this and it did not.** Three capabilities sit in
+`pending.md` under *What must be decided*, addressed to him, `built` and waiting on his eye -
+**and their evidence no longer exists.** He would open nothing.
+
+## What each rests on, and where it went
+
+```
+R-9   every reference a link, a diffable sibling for every view, two shared
+      stylesheets, a page plus a sibling for each of the twelve territories
+      -> reports/index.html, state.*, entities.*, relations.*, containment.*,
+         commands.*, turns.*, territory-1..12.*, report.css, reset.css
+      -> deleted in `e40325c2`, this lane, 2026-09-27
+
+R-10  every label in reports/petri.html declares a fill, 295 of 295; one drawing
+      per recipe in reports/petri.md
+      -> deleted in `a8386450`, this lane, earlier under the same capability
+
+R-11  nineteen links over three directories, each reachable from
+      reports/index.html
+      -> the index is gone with `e40325c2`, so the clause names a page that is not
+         there. **And this lane changed the mechanism under it too**: `13cbdb55`
+         replaced the deploy's twin count, which is what `R-11` is vetted by
+```
+
+**`R-12` is the one that survives.** `reports/foundation/` is 55 files, written by
+`examples/foundation.rs` from `reviewed/`, and the pipeline still publishes the engine's tests at
+`/game4x/reports/thin-engine/`. **Nothing about that clause moved.**
+
+## Why the deletions were right and the silence was not
+
+**`D-4` asks for exactly this**: *no test, report or document is left describing a rule the game
+does not play by*, and those reports were generated from `scenario/commands/play.4x`, the old
+ruleset's scenario. **Putting them back would be undoing `D-4`.**
+
+**What was owed was a sentence.** `S-218` is the same failure three days running: a lane changes
+something, the change is right, and what waits on a person is left in a reply instead of an item.
+Here it is worse than a reply - **it was not said at all**, and `pending.md` has been listing
+three capabilities as waiting on his eye while there has been nothing to look at.
+
+## What this lane is not deciding
+
+**Whether `R-9` and `R-10` get new evidence over the new engine, or are withdrawn, or wait for
+`D-1`.** The first release's reports were about a ruleset that is going; what a report over the
+new one should show is a question about the release, which is yours and his.
+
+**`R-11` may be the cheapest of the three**, because its clause is about reaching the engine's
+inputs and the engine still has inputs - but it names `reports/index.html` by hand, so the
+wording moves either way.
+
+**Nothing is blocked on this lane**, and nothing is red: the gate passes. What is wrong is that
+three items say they are waiting on Sean and are not waiting on anything he can do.
+
+---
+
 ### C-163 - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule
 
 **to** spec · **status** open · **raised** 2026-09-28 · **source** the mutation sweep, rewritten to name every row it finds · **cites** `C-162`

@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-218** - `4f58491` S-218: the failure that waits on Sean now says to file it · still open in `docs/notes/proposals.md`
 - **S-215** - `876d7f0` S-215 closed: the suite runs what Sean has read, and the generator removes what he unread · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
@@ -59,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (33)
+### To spec (34)
 
 - **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
@@ -70,6 +71,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-164** - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at · `crates/outbox.md`
 - **C-163** - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule · `crates/outbox.md`
 - **C-162** - A territory of each biome would pin all six, and it is Sean's own suggestion · `crates/outbox.md`
 - **C-161** - `D-6` is built, and its *vetted when* says sixty-three words where the data says sixty · `crates/outbox.md`
