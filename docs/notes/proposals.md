@@ -69,6 +69,44 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-223 - `set biome` and `add <unit> orbit` are out of the specification, and `set resource` is not
+
+**to** code · **status** open · **raised** 2026-09-29 · **source** promoting `P-591` · **cites** `C-176`, `S-216`
+
+**`spec/console.md` names four design commands where it named six.** `set biome` and
+`add <unit> orbit` are gone, counted before and after, and the rule that removed them is in the same
+section: **a command that can be expressed as a row is not needed.**
+
+```
+create planet      stays - a tessellation computes its rows
+generate-planet    stays - same reason
+set resource       stays for now, and see below
+start              stays - it changes the phase and writes no rows
+```
+
+**So `C-176` is answered in part.** The two that needed nothing built are out of the specification and
+their implementations are yours to remove. **`set force` was never on the list**, since `P-522` cut
+force.
+
+## `set resource` is the one that waits, and why is Sean's reason rather than this lane's
+
+**Sean, 2026-09-29**: *build the tree-normalizing first and the command falls away by itself.* He
+chose the sequencing over the cull because **removing `set-resource` now removes the capability
+rather than replacing it** - a territory's resources would have no way to be said.
+
+**What replaces it is a tree that normalizes into rows**, which the notation cannot do: nothing in
+`spec/` says a tree is normalized and no rule reads one, measured at zero. **Do not remove
+`set-resource` ahead of that**, and if you build the normalization, that is the thing that retires
+it.
+
+## And the larger reason it is worth building, in his words
+
+**He wants the entirety of game state as a tree** - *for debugging and possibly specification and
+regression tests.* It is in `docs/notes/spec-backlog.md` and is deliberately unproposed: nothing has
+been said about how a tree is written or what refuses an ambiguous one. **The physical model
+`spec/console.md` already names** - *every thing inside the thing that holds it, a tree from the
+game down* - is what it would be a way of writing.
+
 ### S-222 - `scripts/reviewed.ps1` watches a directory that moved eight days ago, and the reading it publishes still does not bite
 
 **to** code · **status** acted · **acted** 2026-09-29 · **cited** `1cc20afb` - the script watches `reviewed/` and generates the form, and the check that would have caught it exists · **raised** 2026-09-29 · **source** Sean asking what script would make a reading reach the suite faster · **cites** `S-215`, `S-197`
@@ -10452,6 +10490,7 @@ work the release exists to order.
 | P-587, `bearing` becomes load-bearing: `breed` puts the parent back spent, the way `toil` does                               | `spec/data/rules.4x`                                                                                                                                                                                     | 2026-09-29 |
 | P-588, A planet is a thing, the sun is a deposit on it, and the containment root comes back                                  | `spec/planet.md` -> Shape, `spec/orbit.md` -> The orbital layer, and `spec/logistics.md` -> Containment                                                                                                  | 2026-09-29 |
 | P-589, The planet carries the star's density itself, which is two words in two bullets                                       | `spec/planet.md` -> Shape and `spec/orbit.md` -> The orbital layer                                                                                                                                       | 2026-09-29 |
+| P-591, A command that can be expressed as a row is not needed, and two of them can be today                                  | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-29 |
 
 ## Forecast cleanups that were checked and not filed
 

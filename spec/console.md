@@ -245,9 +245,14 @@ Available only before `start`:
   the same policy give the same planet.**
 - `set resource <territory> <resource> <extractors> <density>` - give a territory its
   capacity and its density for one resource
-- `set biome <territory> <biome>` - give a territory its biome
-- `add <unit> orbit` - place a unit in orbit before play begins
 - `start` - end the design phase and begin play
+
+**A command that can be expressed as a row is not needed.** What a design command does is put rows
+in the world before play begins, so one that writes rows a person could write is a shorthand rather
+than a capability - **and it goes when the notation can say what it said, not before.** What earns
+a command is that its rows are computed rather than written: `create planet` runs a tessellation,
+and the adjacency of a ninety-two-face Goldberg polyhedron is not tedious to write but impossible
+to write correctly.
 
 A line beginning with `/` directs the front end rather than the game. `/game`, `/console` and
 `/browser` choose a surface; `/new <size>` abandons the current game and starts one on a planet
