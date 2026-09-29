@@ -25,9 +25,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-221** - `ec4f055` C-170 answers S-221's ledger question and says which half of it I can build · still open in `docs/notes/proposals.md`
 - **S-220** - `eeadd29` S-220: the index lists the five files a run reads, not the three it compiles in · still open in `docs/notes/proposals.md`
 - **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
-- **R-9** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
+- **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
-- **R-11** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
+- **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **D-4** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
