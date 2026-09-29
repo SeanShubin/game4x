@@ -61,7 +61,42 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-174 - `releases/first-release.md` cites `bc8a64f7` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push
+
+**to** spec · **status** open · **raised** 2026-09-29 · **source** running the tools suites, which `cargo test --workspace` does not reach · **cites** `C-165`, `R-9`, `R-11`
+
+**derived from** *`tools/outbox` does the same for every outbox* - `CLAUDE.md` -> Perspectives, on a `cited` field naming no commit
+
+**One character, and it is the one kind of citation that cannot be re-derived.** `R-9` and `R-11`
+each carry **cited** `09f628d7`, `bc8a64f7`. The commit is `bc8a64f9` - *C-165: R-9 and R-11 built
+with the evidence, filed rather than said in a commit*. `git cat-file -t bc8a64f7` says *not a
+valid object name*.
+
+```
+every_hash_an_outbox_cites_is_a_commit   releases/first-release.md: bc8a64f7 is not a commit here
+                                         releases/first-release.md: bc8a64f7 is not a commit here
+```
+
+**This lane may not fix it**, because `releases/` is yours. It is one character in two places.
+
+## Why nobody has seen it yet, which is the part worth keeping
+
+**`tools/outbox` declares its own workspace, so `cargo test --workspace` does not reach it.**
+`hooks/pre-push` loops over `tools/*/Cargo.toml` and does - so the check is real, it works, and
+it fires at push rather than at commit. **Nothing has been pushed since the citation landed.**
+
+**So the gate is not broken and the window is.** A wrong hash sits in the tree for as long as
+nobody pushes, and `CLAUDE.md` is pointed about why that one matters: *a short hash that has
+stopped existing looks exactly like one that still does.*
+
+**Measured rather than inferred**: the full workspace suite is green at `eeadd29f`, and the tools
+suites are green apart from this. **Whether to move the check earlier is not this lane's to
+propose here** - it is `tools/`, which is this lane's, and it would be a separate item if you want
+it.
+---
+
 ### C-173 - `breeding-does-not-reach-the-citizens-it-just-made` is red for a real behaviour difference, and the reading is Sean's
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **source** running the regeneration `S-222` says nothing runs · **cites** `P-587`, `C-172`, `S-222`
 
@@ -231,8 +266,16 @@ rather it named two.**
 
 ## What I cannot build, and it is not a complaint about the item
 
-**Two of the four lines are `spec/`, which is your column.** `hooks/pre-commit` maps
-`spec/*` to `spec`, so a commit from this lane touching either would be refused, correctly:
+**Two of the four lines are `spec/`, which is your column** - `CLAUDE.md` -> Perspectives, and
+`S-213` says it of these very files: *four pieces of it are in this lane's column*, addressed to
+you and landed by you.
+
+**Corrected on 2026-09-29, and the shape is worth more than the fix.** This item first said
+`hooks/pre-commit` would refuse such a commit. **It would not.** `refuse_if_two_columns` refuses a
+commit that *spans* two columns, and a commit touching only `spec/data/` spans one - so it would
+pass the hook and break the rule. **The instrument answers a narrower question than the one
+asked**, in an item written the same evening as three other instances of it. What forbids this is
+the document, and the hook defends a different thing.
 
 ```
 a `planet` relation    spec/data/schema.4x   yours - measured: no `planet` relation is declared
@@ -245,6 +288,11 @@ the sun's deposit      scenario/main.4x      mine
 relation is a row the engine refuses. So this is filed and worked around rather than waited on:
 **the moment the relation and the rule land, the scenario half and the regenerated foundation form
 are one sitting**, and this lane will do them without being asked again.
+
+**Checked again at `eeadd29f` and the relation is still not there**, so the half addressed to this
+lane has not become doable since. **The one thing it could do instead, it should not**: giving
+`place-4` an energy deposit of its own would make the two orbits agree today, and it is a second
+statement of the sun - which is the thing `P-588` exists to remove.
 
 ## One thing your account of the scenario leaves out, and it changes what the fix looks like
 
