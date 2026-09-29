@@ -329,7 +329,9 @@ pub fn check(suite: &str, cases: &[Case]) -> Option<String> {
     ));
     Some(format!(
         "{} of {} case(s) in `{suite}` no longer say what the data does.\n\
-         **Delete what you are happy with, run again, and read the diff in version control.**\n\n\
+         **Delete what you are happy with, run again, and read the diff in version control.**\n\
+         A lane seeing this files it `to spec` before finishing, because only Sean may delete one \
+         and `pending.md` is generated from the outboxes - `S-218`.\n\n\
          {out}",
         stale.len(),
         cases.len()

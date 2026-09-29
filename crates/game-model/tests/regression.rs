@@ -356,7 +356,10 @@ fn every_command_has_an_expectation_and_it_is_current() {
             "{} case(s) on disk are not cases of this run, because a command was inserted and \
              the turn renumbered.\n\
              **Their commands are still played, so deleting one is your approval and no lane may \
-             do it.**\n{out}",
+             do it.**\n\
+             A lane seeing this files it `to spec` before finishing: Sean cannot be addressed \
+             directly, and `pending.md` is generated from the outboxes - so until an item exists, \
+             the file whose job is to say what waits on a person says nothing. `S-218`.\n{out}",
             renamed.len()
         );
     }
