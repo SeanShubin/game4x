@@ -13,19 +13,26 @@
 <pre class="four-x"><span class="prose">Two fed citizens and five food, breeding fired on its own: four citizens and three food.</span>
 <span class="prose"></span>
 <span class="prose"><strong>It stops at two with three food standing, and the food is the evidence.</strong> Were the newborns</span>
-<span class="prose">reached, five food would have gone rather than two. <em></em>They arrive at <code>bearing:1</code> and it changes</span>
-<span class="prose">nothing<em></em>, because <code>repeats</code> holds what a firing made aside - so what stops this is the repetition</span>
-<span class="prose">and never the value, which was measured on 2026-09-20 by setting it the other way and finding the</span>
-<span class="prose">same four citizens and the same three food.</span>
+<span class="prose">reached, five food would have gone rather than two. <strong>What stops it is <code>repeats</code></strong>, which holds</span>
+<span class="prose">what a firing made aside - measured on 2026-09-20 by setting the newborns' <code>bearing</code> the other way</span>
+<span class="prose">and finding the same four citizens and the same three food.</span>
 <span class="prose"></span>
-<span class="prose"><em></em>The two newborns arrive with their <code>bearing</code> already</span>
-<span class="prose">spent, so they are not parents this turn - and the parents that made them spent theirs in the</span>
-<span class="prose">making. <strong>That is <em>at most doubling</em>, and nothing states it</strong>: it falls out of the rule consuming</span>
-<span class="prose">the citizen it breeds from.</span>
+<span class="prose"><strong>The two parents come back spent and the two newborns arrive whole</strong>, which is <code>P-587</code>: <code>breed</code></span>
+<span class="prose">puts the parent back at <code>bearing:0</code> the way <code>toil</code> puts a citizen back at <code>laboring:0</code>, and</span>
+<span class="prose">everything made arrives at full capability. <strong>So the <code>then</code> tells them apart now</strong>, and the pair at</span>
+<span class="prose"><code>bearing:1</code> is exactly the pair the rule did not reach.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This header said both things before <code>P-587</code> and the rows said neither.</strong> One paragraph had the</span>
+<span class="prose">newborns arriving spent and another had them arriving at <code>bearing:1</code>; the rows had all four alike,</span>
+<span class="prose">so what ran was a game where nothing was ever spent and <code>bearing</code> told nothing apart. <em></em>The</span>
+<span class="prose">comment described the game Sean meant and the rows described the game there was<em></em> - which is</span>
+<span class="prose"><code>spec/README.md</code> rule 3 from the inside: where prose and a test disagree the test is right, and</span>
+<span class="prose">here the test was right about a thing nobody wanted.</span>
 <span class="prose"></span>
 <span class="prose"><strong>This is what <code>bearing</code> is for</strong>, and it is the same shape as <code>hungry</code> one trait along: one stops</span>
 <span class="prose">a citizen eating all the food, the other stops one breeding with all the surplus. Sean,</span>
-<span class="prose">2026-09-19: <em>Bearing is their capacity to reproduce.</em></span>
+<span class="prose">2026-09-19: <em>Bearing is their capacity to reproduce.</em> Sean, 2026-09-28: *that is a limiter so that</span>
+<span class="prose">one citizen can't have multiple children.*</span>
 <span class="prose"></span>
 <span class="prose"><strong>Fired on its own, so the refreshes do not hide it.</strong> In a whole turn the last two steps restore</span>
 <span class="prose">both traits and every citizen looks alike again; here the world is left as <code>breed</code> left it, which</span>
@@ -45,7 +52,8 @@
 <span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
 <span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
 <span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">0</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 4</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">0</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">0</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">0</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
 <span class="brace">{</span><span class="relation">food</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
 </pre>
 </body>
