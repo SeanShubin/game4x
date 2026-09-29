@@ -8,6 +8,31 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-29 - both surviving commands are macro expansions, and one of them needs no code
+
+**Sean**, on `P-591`, and saying explicitly that it is not an answer: *Create planet is essentially a
+macro expansion, which results in rows. Set resource could also be expressed as a nested structure
+within a territory, which when normalized would result in rows.*
+
+**What it reframes.** `P-591` offers two criteria - how many rows a command writes, and whether a
+person could write them - and both take *command* as the category. **This says both survivors are
+the same kind of thing**: a compact form that expands into rows, differing in what does the
+expanding.
+
+**The notation already carries the shape.** `spec/console.md`: *a command and a description of game
+state are written in the same form, and both carry a tree*, and *the language carries the tree
+whether or not a command uses one today.* **So a nested structure within a territory is already
+writable** - what is missing is anything that normalizes one into rows. Measured: nothing in `spec/`
+says a tree is normalized, and no rule reads one.
+
+**The line this suggests is not tedium.** A nested structure normalizes to rows mechanically; a
+tessellation computes them. **`set-resource` would be notation rather than a command, and
+`create-planet` would still be code** - which reaches the same answer as *impossibility* by a
+different route, and says why rather than how much.
+
+Filed against `P-591`, which is open and unanswered.
+
+
 ## 2026-09-28 - a unit test is small enough to hold in your head, and an arc is the scenario's
 
 **Sean**, on `a-second-settlement-launches-the-ark-the-first-could-not`: *looks more like a scenario
