@@ -23,11 +23,13 @@
 {citizen where:place-1 hungry:1} -> 1
 {citizen where:place-1 hungry:1} -> 1
 {citizen where:place-1 hungry:1} -> 1
+{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 2
 {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 2
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 4
+{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
 {citizen where:place-3 hungry:0 bearing:1} -> 1
 {citizen where:place-3 hungry:0 bearing:1} -> 1
-{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 2
+{citizen where:place-3 hungry:1 bearing:0 laboring:0} -> 2
+{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 4
 {citizen where:place-3 hungry:1} -> 1
 {citizen where:place-3 hungry:1} -> 1
 {citizen where:place-3 hungry:1} -> 1
@@ -64,12 +66,16 @@
 {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
 {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
 {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
+{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 1
+{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 1
 {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
 {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
 {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
 {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
+{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 1
+{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 1
+{citizen where:place-3 hungry:1 bearing:0 laboring:0} -> 2
+{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 2
 {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 2
 {citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 2
 {citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
