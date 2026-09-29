@@ -8,6 +8,33 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-29 - the entirety of game state as a tree, and why the notation needs to normalize one
+
+**Sean**, answering `P-591` by choosing the sequencing rather than the deletion: *build the
+tree-normalizing first and the command falls away by itself. I knew I was going to need this anyways
+to model the entirety of game state as a tree, which I will need for debugging and possibly
+specification and regression tests.*
+
+**This is larger than the command it settles.** `P-591` asked which design commands survive; the
+answer is that the notation grows a capability and the commands stop being needed - **and the
+capability was wanted for three other reasons already.**
+
+**Three uses named, and they are not alike.** Debugging is reading a whole world at once.
+Specification and regression tests are stating one - and he marked those two *possibly*, which is
+the word to keep: a tree may turn out to be the wrong form for a test that is meant to be small
+enough to hold in your head, which is `spec/README.md` rule 3 as `P-584` left it.
+
+**What exists and what does not.** `spec/console.md` says *a command and a description of game state
+are written in the same form, and both carry a tree*, and *the language carries the tree whether or
+not a command uses one today* - so the form is there. **Nothing normalizes a tree into rows**,
+measured at zero across `spec/`, and no rule reads one. **And the physical model is already named**:
+`spec/console.md` calls it *every thing inside the thing that holds it, a tree from the game down*,
+which is what *the entirety of game state as a tree* would be a way of writing.
+
+**Not yet a proposal.** What a tree normalizes to is a question about the notation, and nothing has
+been said about how one is written or what refuses an ambiguous one.
+
+
 ## 2026-09-29 - both surviving commands are macro expansions, and one of them needs no code
 
 **Sean**, on `P-591`, and saying explicitly that it is not an answer: *Create planet is essentially a
