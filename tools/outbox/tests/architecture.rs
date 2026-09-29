@@ -443,19 +443,22 @@ fn only_game_model_and_a_fixture_write_the_games_state() {
         walked > 40,
         "only {walked} rust files outside `game-model` were read, so the assertions below          would be about almost nothing"
     );
-    // **The fixtures are the population this rule deliberately allows**, and a count of zero
-    // offences means nothing beside a count of zero exceptions - there would be nothing for
-    // the predicate to have distinguished.
+    // **The fixture floor is gone, and what removed it was the rule becoming structural.**
     //
-    // **Measured at 8 today, and the floor was `> 8`**: the rest of `D-4` deleted seven of
-    // `game-console`'s test files with the reports they were about, and the fixtures inside
-    // them went too. **Lowered with the population rather than to the population** - a floor
-    // set at what is there today fails on the next honest deletion, which is what this one
-    // just did.
-    assert!(
-        fixtures > 5,
-        "only {fixtures} writes were found inside test modules, and this rule's whole content          is that those are allowed and others are not - with none of them, a clean result          would not show the predicate had run"
-    );
+    // **It was `> 8`, then `> 5`, and now there are none.** The first drop was `D-4` deleting
+    // seven of `game-console`'s test files; the second is the console being ported onto the
+    // engine, which builds a world from rows and mutates nothing. **So the exception this rule
+    // allowed has no members left**, and a floor on it would be a floor on something that
+    // stopped existing rather than on something that got smaller.
+    //
+    // **What keeps this from passing vacuously is above, not here.** `fields.len() >= 6` says
+    // the fields were read and `walked > 40` says the files were. Those are the populations;
+    // the fixture count was a third proxy and is the one the port emptied.
+    //
+    // **And the rule it states is now the compiler's.** `engine::Game` holds its schema and its
+    // rows privately, so nothing outside `game-model` can write the game's state whatever this
+    // says. **This check retires with `game.rs`**, which `BEING_REPLACED` is counting down.
+    let _ = fixtures;
     assert!(
         offences.is_empty(),
         "{} site(s) outside `game-model` write the game's state from the shipped path, where          `Game::after` is meant to be the only thing that moves it:

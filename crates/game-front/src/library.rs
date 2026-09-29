@@ -14,10 +14,6 @@ pub fn library() -> Embedded {
         ("world", include_str!("../../../scenario/commands/world.4x")),
         ("nodes", include_str!("../../../scenario/commands/nodes.4x")),
         (
-            "forces",
-            include_str!("../../../scenario/commands/forces.4x"),
-        ),
-        (
             "biomes",
             include_str!("../../../scenario/commands/biomes.4x"),
         ),
@@ -30,12 +26,22 @@ mod tests {
     use super::*;
     use game_console::Library;
 
+    /// What `{start}` says when the release's own world is handed to the engine.
+    #[test]
+    fn the_release_world_is_one_the_engine_will_hold() {
+        let mut session = game_console::Session::new();
+        session
+            .run("{run file:setup}", &library())
+            .expect("setup runs");
+        session.run("{start}", &library()).expect("the world holds");
+    }
+
     /// Every command file the release needs is carried in the binary, so a browser build
     /// can run exactly what a desktop build runs.
     #[test]
     fn the_release_command_files_travel_with_the_binary() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "biomes", "world", "play"] {
+        for name in ["setup", "nodes", "biomes", "world", "play"] {
             assert!(library.fetch(name).is_some(), "`{name}` is not embedded");
         }
         // The hierarchy, one level at a time: setup says which planet and defers the
@@ -61,7 +67,7 @@ mod tests {
     #[test]
     fn what_is_carried_is_what_is_on_disk() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "biomes", "world", "play"] {
+        for name in ["setup", "nodes", "biomes", "world", "play"] {
             let path = format!(
                 "{}/../../scenario/commands/{name}.4x",
                 env!("CARGO_MANIFEST_DIR").replace('\\', "/")

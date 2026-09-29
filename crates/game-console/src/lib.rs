@@ -24,7 +24,9 @@ pub mod state;
 pub mod world;
 
 use command_language::{Failure, Grammar, parse_line};
-use game_model::{Game, Rejection};
+use game_model::engine::{self, Game};
+use game_model::notation::Row;
+use game_model::refusal::Refused;
 
 pub use binding::{Meaning, Misreading, Subject, interpret};
 pub use grammar::grammar as command_grammar;
@@ -152,7 +154,21 @@ pub enum Problem {
     /// The words were read but name nothing in the game.
     Misread(Misreading),
     /// The command was understood and the rules refused it.
-    Rule(Rejection),
+    ///
+    /// **Boxed because a refusal carries the row it was about**, which is bigger than every
+    /// other arm put together - and an enum is as large as its widest.
+    Refused(Box<Refused>),
+    /// What was stated does not make a world the engine can hold.
+    ///
+    /// **Raised by `{start}` rather than by the row that was wrong.** A world is checked whole,
+    /// so the line that made it unholdable is not always the last one typed.
+    Malformed(game_model::schema::Malformed),
+    /// A thing was stated after play began.
+    NotWhilePlaying,
+    /// A rule was fired before play began.
+    NotYetPlaying,
+    /// `{start}` twice.
+    AlreadyPlaying,
     NoSuchFile {
         name: String,
         known: Vec<String>,
@@ -175,7 +191,17 @@ impl std::fmt::Display for Problem {
         match self {
             Problem::Parse(failure) => write!(out, "{failure}"),
             Problem::Misread(misreading) => write!(out, "{misreading}"),
-            Problem::Rule(rejection) => write!(out, "{rejection}"),
+            Problem::Refused(why) => write!(out, "{why}"),
+            Problem::Malformed(why) => write!(out, "{why}"),
+            Problem::NotWhilePlaying => write!(
+                out,
+                "play has begun, and after `start` a thing arrives by a rule rather than by                  being stated"
+            ),
+            Problem::NotYetPlaying => write!(
+                out,
+                "play has not begun - `start` ends the design phase, and a rule fires after it"
+            ),
+            Problem::AlreadyPlaying => write!(out, "play has already begun"),
             Problem::NoSuchFile { name, known } if known.is_empty() => {
                 write!(out, "there is no command file called {name}")
             }
@@ -208,8 +234,68 @@ impl std::error::Error for Problem {}
 /// set of names. A depth this small is far past anything a person would write.
 const DEEPEST: usize = 16;
 
+/// A world, which is two things in turn.
+///
+/// **Sean, 2026-09-29**: *build rows before `start`, fire rules after.* Before it a world is rows
+/// being stated and there is nothing to fire them against; after it the engine holds a game and
+/// nothing writes a row except a rule. **`{start}` is the one place the two meet**, and it is a
+/// one-way door - `spec/console.md` says the design phase ends there.
+pub enum World {
+    /// Rows stated so far, in the order they were stated.
+    Designing(Vec<Row>),
+    /// A game the engine plays.
+    Playing(Game),
+}
+
+impl World {
+    /// The game, once there is one.
+    pub fn playing(&self) -> Option<&Game> {
+        match self {
+            World::Playing(game) => Some(game),
+            World::Designing(_) => None,
+        }
+    }
+}
+
+/// State rows into a world being designed, replacing anything they say again.
+///
+/// # Saying a thing twice is saying it once
+///
+/// **`{create-planet}` gives every territory a biome and `{set-biome}` changes one**, and before
+/// this the two were both kept: two `{terrain of:2 ...}` rows, which `Game::of` refused at
+/// `{start}` for naming one territory's ground twice. **Correctly** - a world cannot hold two
+/// answers to one question, and the design phase is where a player describes a world rather than
+/// accumulating statements about one.
+///
+/// **The key is the schema's, not a guess.** `Relation::key` is what a reference names a row by,
+/// and it is `id` where there is one and every column but the quantity where there is not - so
+/// `{terrain of:2 is:4}` replaces `{terrain of:2 is:6}` and two deposits of different resources
+/// on one place are two rows, as they should be.
+///
+/// **A relation the foundation does not declare is appended rather than matched.** Nothing can be
+/// said about the key of a thing the schema has never heard of, and refusing it here would be
+/// this deciding something `Game::of` is about to decide better.
+fn restate(stated: &mut Vec<Row>, rows: Vec<Row>) {
+    let schema = game_model::schema::Schema::of(&game_model::foundation::rows());
+    for row in rows {
+        if let Ok(schema) = &schema
+            && let Some(declared) = schema.relation(&row.relation)
+        {
+            let key: Vec<String> = declared.key().iter().map(|it| it.to_string()).collect();
+            let same = |other: &Row| {
+                other.relation == row.relation
+                    && key.iter().all(|column| {
+                        other.value(column).is_some() && other.value(column) == row.value(column)
+                    })
+            };
+            stated.retain(|other| !same(other));
+        }
+        stated.push(row);
+    }
+}
+
 pub struct Session {
-    pub game: Game,
+    pub world: World,
     grammar: Grammar,
     history: Vec<String>,
 }
@@ -223,10 +309,19 @@ impl Default for Session {
 impl Session {
     pub fn new() -> Self {
         Self {
-            game: Game::new(),
+            world: World::Designing(Vec::new()),
             grammar: grammar::grammar(),
             history: Vec::new(),
         }
+    }
+
+    /// The game, once `{start}` has made one.
+    ///
+    /// **An `Option` because there is not always one**, which is the design phase being a real
+    /// state rather than a flag on a game that exists from the first line. It was a field until
+    /// the port, and a field cannot say *not yet*.
+    pub fn game(&self) -> Option<&Game> {
+        self.world.playing()
     }
 
     pub fn grammar(&self) -> &Grammar {
@@ -297,35 +392,63 @@ impl Session {
         let meaning = interpret(&utterance).map_err(|why| locate(Problem::Misread(why), None))?;
 
         match meaning {
-            Meaning::Change(transition) => {
+            // **Stating a row is not firing a rule, and only one of them needs a game.**
+            // `spec/invariants.md` allows exactly one way to change the world once play has
+            // begun, and it is a rule - so this refuses after `{start}` rather than letting a
+            // player state a thing into a game that is running.
+            Meaning::Build(rows) => {
+                let World::Designing(stated) = &mut self.world else {
+                    return Err(locate(Problem::NotWhilePlaying, None));
+                };
+                restate(stated, rows);
+                self.history.push(utterance.source.clone());
+                Ok(Outcome::Changed)
+            }
+
+            // **The one-way door.** What was stated goes to the engine together with the
+            // foundation it carries, and `Game::of` is where a world that does not fit its own
+            // structure is refused - before a rule has run rather than during one.
+            Meaning::Start => {
+                let World::Designing(stated) = &mut self.world else {
+                    return Err(locate(Problem::AlreadyPlaying, None));
+                };
+                let mut rows = game_model::foundation::rows();
+                rows.append(stated);
+                let game = Game::of(rows).map_err(|why| locate(Problem::Malformed(why), None))?;
+                self.world = World::Playing(game);
+                self.history.push(utterance.source.clone());
+                Ok(Outcome::Changed)
+            }
+
+            Meaning::Fire(command) => {
+                let World::Playing(game) = &self.world else {
+                    return Err(locate(Problem::NotYetPlaying, None));
+                };
                 // **`P-323`: a command may carry a `repeat`, and one without it fires once.**
-                // A count of firings rather than an argument of the recipe, so this loops over
-                // the same transition rather than handing a number to it.
+                // A count of firings rather than an argument of the recipe.
                 //
                 // **All of them or none.** `spec/invariants.md` says a command that cannot be
                 // run changes nothing, and a repeat that fails on its third firing would
                 // otherwise leave two behind - a command half executed, which is a state no
                 // history could reproduce. So the firings are applied to a copy and the copy
                 // replaces the game only once every one of them has succeeded.
-                // **A negative repeat cannot be written**: `Kind::Number` reads digits
-                // only, deliberately, because every quantity in this language is a count, a
-                // density or an identifier and none of those is ever negative.
                 //
                 // **A repeat of zero fires nothing and is accepted**, because no rule says it
-                // may not, and refusing it would be a rule this lane invented rather than
-                // one it was given. `C-54`.
+                // may not, and refusing it would be a rule this lane invented. `C-54`.
                 let repeat = utterance.optional_number("repeat").unwrap_or(1);
-                let mut next = self.game.clone();
+                let mut next = game.clone();
                 for _ in 0..repeat {
-                    next = next
-                        .after(&transition)
-                        .map_err(|why| locate(Problem::Rule(why), None))?;
+                    let (after, _) = engine::fire(&next, &command, 1)
+                        .map_err(|why| locate(Problem::Refused(Box::new(why)), None))?;
+                    next = after;
                 }
-                self.game = next;
+                self.world = World::Playing(next);
                 self.history.push(utterance.source.clone());
                 Ok(Outcome::Changed)
             }
-            Meaning::Show(subject) => Ok(Outcome::Said(report::show(&self.game, &subject))),
+            Meaning::Show(subject) => {
+                Ok(Outcome::Said(report::show(self.world.playing(), &subject)))
+            }
             Meaning::Help(command) => Ok(Outcome::Said(report::help(&self.grammar, command))),
             Meaning::History => Ok(Outcome::Said(report::history(&self.history))),
             Meaning::Run(name) => {
@@ -363,13 +486,25 @@ impl Session {
     /// the same ones `show territory 5` uses - which is what lets the browser and the
     /// console name the same thing the same way.
     pub fn entities(&self) -> Vec<Entry> {
-        report::entities(&self.game)
+        report::entities(self.world.playing())
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// How many rows of one relation the world holds.
+    ///
+    /// **A count of things is a count of rows now**, which is the engine having no `territories`
+    /// field to ask - everything it holds, it holds the same way.
+    fn how_many(game: &Game, relation: &str) -> usize {
+        game.rows()
+            .rows()
+            .iter()
+            .filter(|it| it.relation == relation)
+            .count()
+    }
     use command_language::disagreements;
 
     /// The check the predecessor did not have.
@@ -378,9 +513,22 @@ mod tests {
     /// makes them agree except this. Without it, a form nobody wrote a handler for is an
     /// error the first time a player types that command - in a program that compiled and
     /// whose other tests passed.
+    /// **One of the two is read rather than written, since the port.** `binding::handled` names
+    /// the design phase and the questions; what a player may fire comes from the rules. So the
+    /// handled set is both halves, and a rule that lost its form or a form with no rule behind
+    /// it is still what this catches.
     #[test]
     fn the_grammar_and_the_binding_describe_the_same_language() {
-        let problems = disagreements(&grammar::grammar(), &binding::handled());
+        let mut handled = binding::handled();
+        let rules = rules::playable();
+        // **A count over nothing is the same failure with the sign flipped**: with no rules
+        // read, every rule form would be reported as unhandled and the message would blame the
+        // grammar for a foundation that did not load.
+        assert!(rules.len() >= 10, "only {} rule(s) read", rules.len());
+        let named: Vec<String> = rules.into_iter().map(|it| it.name).collect();
+        handled.extend(named.iter().map(String::as_str));
+
+        let problems = disagreements(&grammar::grammar(), &handled);
         assert!(problems.is_empty(), "{}", problems.join("\n"));
     }
 
@@ -389,22 +537,21 @@ mod tests {
     fn every_command_the_specification_lists_can_be_typed() {
         let grammar = grammar::grammar();
         let verbs = [
-            "deploy-ark",
-            "launch-ark",
+            "deploy",
+            "launch",
             "move",
             "build-extractor",
-            "build-store",
+            "build-bin",
             "build-yard",
-            "produce-pioneer",
+            "build-pioneer",
             "work",
             "end-turn",
             "show-territory",
             "help",
             "history",
             "create-planet",
-            "create-labor",
+            "toil",
             "add-ark-orbit",
-            "set-force",
             "start",
         ];
         for verb in verbs {
@@ -493,8 +640,13 @@ mod tests {
                 .run(&line, &NoLibrary)
                 .unwrap_or_else(|problem| panic!("`{line}` was refused: {problem}"));
             assert_eq!(outcome, Outcome::Changed, "`{line}`");
+            // **A world is counted once the engine holds it.** Before `{start}` it is rows
+            // being stated, and a count of those would be a count of what was typed.
+            session
+                .run("{start}", &NoLibrary)
+                .unwrap_or_else(|problem| panic!("`{line}` does not start: {problem}"));
             assert_eq!(
-                session.game.territories.len(),
+                how_many(session.game().expect("play has begun"), "territory"),
                 size.territory_count(),
                 "`{line}` built the wrong number of territories"
             );
@@ -531,13 +683,13 @@ mod tests {
             .run("{create-planet size:tiny-12}", &NoLibrary)
             .unwrap();
         session
-            .run("{set-force territory:1 force:1}", &NoLibrary)
+            .run("{set-biome territory:1 biome:grassland}", &NoLibrary)
             .unwrap();
         assert_eq!(
             session.history(),
             [
                 "{create-planet size:tiny-12}",
-                "{set-force territory:1 force:1}"
+                "{set-biome territory:1 biome:grassland}"
             ]
         );
     }
@@ -549,7 +701,7 @@ mod tests {
         let library = Embedded::of(&[(
             "world",
             "{create-planet size:tiny-12}
-{set-force territory:1 force:1}
+{set-biome territory:1 biome:grassland}
 ",
         )]);
         let mut session = Session::new();
@@ -558,7 +710,7 @@ mod tests {
             session.history(),
             [
                 "{create-planet size:tiny-12}",
-                "{set-force territory:1 force:1}"
+                "{set-biome territory:1 biome:grassland}"
             ]
         );
 
@@ -572,7 +724,11 @@ mod tests {
                 &NoLibrary,
             )
             .expect("a history replays without the files it came from");
-        assert_eq!(rebuilt.game, session.game);
+        assert_eq!(
+            rebuilt.game().map(|it| it.rows().rows().len()),
+            session.game().map(|it| it.rows().rows().len()),
+            "a history replays to the same world"
+        );
     }
 
     /// The three failures, each reported by the layer that found it and in that layer's
@@ -590,7 +746,7 @@ mod tests {
         };
 
         let parse = session
-            .run("{deploy-ark territory:somewhere}", &NoLibrary)
+            .run("{deploy where:somewhere what:ark}", &NoLibrary)
             .unwrap_err();
         assert!(matches!(at(&parse), Problem::Parse(_)), "{parse}");
         // And it says its position once rather than twice: the parser already knew the
@@ -608,10 +764,11 @@ mod tests {
             .unwrap();
         session.run("{start}", &NoLibrary).unwrap();
         let rule = session
-            .run("{deploy-ark territory:1}", &NoLibrary)
+            .run("{deploy where:2 what:ark}", &NoLibrary)
             .unwrap_err();
-        assert!(matches!(at(&rule), Problem::Rule(_)), "{rule}");
-        assert!(rule.to_string().contains("no ark"), "{rule}");
+        assert!(matches!(at(&rule), Problem::Refused(_)), "{rule}");
+        assert!(rule.to_string().contains("ark"), "{rule}");
+        assert!(rule.to_string().contains("nothing matched"), "{rule}");
         // A rejection is about the whole command, so it says the line and no column.
         assert!(rule.to_string().contains("line 1"), "{rule}");
         assert!(!rule.to_string().contains("column"), "{rule}");
@@ -622,13 +779,24 @@ mod tests {
     #[test]
     fn a_refused_command_leaves_the_game_untouched() {
         let mut session = Session::new();
-        session
-            .run("{create-planet size:tiny-12}", &NoLibrary)
-            .unwrap();
-        let before = session.game.clone();
-        assert!(session.run("{deploy-ark territory:1}", &NoLibrary).is_err());
-        assert_eq!(session.game, before);
-        assert_eq!(session.history(), ["{create-planet size:tiny-12}"]);
+        for line in ["{create-planet size:tiny-12}", "{start}"] {
+            session.run(line, &NoLibrary).unwrap();
+        }
+        let before = session.game().expect("play has begun").rows().rows().len();
+        assert!(
+            session
+                .run("{deploy where:2 what:ark}", &NoLibrary)
+                .is_err()
+        );
+        assert_eq!(
+            session.game().expect("play has begun").rows().rows().len(),
+            before,
+            "a refused command changes nothing"
+        );
+        assert_eq!(
+            session.history(),
+            ["{create-planet size:tiny-12}", "{start}"]
+        );
     }
 
     /// `spec/console.md`: commands may be organized in a hierarchy of files, one file
@@ -636,22 +804,28 @@ mod tests {
     #[test]
     fn a_file_may_call_another_file() {
         let library = Embedded::of(&[
-            ("world", "{create-planet size:tiny-12}\n{run file:forces}\n"),
             (
-                "forces",
-                "{set-force territory:1 force:1}\n{set-force territory:2 force:1}\n",
+                "world",
+                "{create-planet size:tiny-12}\n{run file:biomes}\n{start}\n",
+            ),
+            (
+                "biomes",
+                "{set-biome territory:1 biome:grassland}\n{set-biome territory:2 biome:jungle}\n",
             ),
         ]);
         let mut session = Session::new();
         session.run("{run file:world}", &library).unwrap();
-        assert_eq!(session.game.territories.len(), 12);
         assert_eq!(
-            session
-                .game
-                .territory(game_model::TerritoryId(2))
-                .unwrap()
-                .force_of_nature(),
-            1
+            how_many(session.game().expect("play has begun"), "territory"),
+            12
+        );
+        // **The second file's own row**, so this shows the whole subroutine ran rather than its
+        // first statement - which is what a test of one file calling another is for.
+        // **Twelve from the planet and two the file stated**, which is the second file's own
+        // rows arriving - a test of one file calling another wants the callee's work visible.
+        assert_eq!(
+            how_many(session.game().expect("play has begun"), "terrain"),
+            14
         );
     }
 
@@ -684,7 +858,7 @@ mod tests {
     fn a_failure_inside_a_subroutine_names_its_own_line() {
         let library = Embedded::of(&[(
             "setup",
-            "{create-planet size:tiny-12}\n{deploy-ark territory:nowhere}\n",
+            "{create-planet size:tiny-12}\n{deploy where:nowhere what:ark}\n",
         )]);
         let mut session = Session::new();
         let problem = session.run("{run file:setup}", &library).unwrap_err();

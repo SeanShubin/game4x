@@ -74,12 +74,12 @@ pub const REVIEW_LINE: &str =
 const INDENT: usize = 2;
 
 /// The state as a tree of entries, which is what this file writes and reads.
-pub fn entries(game: &game_model::Game) -> Entry {
+pub fn entries(game: &game_model::engine::Game) -> Entry {
     tree(game)
 }
 
 /// The tree as a data file.
-pub fn write(game: &game_model::Game, about: &str) -> String {
+pub fn write(game: &game_model::engine::Game, about: &str) -> String {
     let mut out = format!("# {about}\n");
     out.push_str(REVIEW_LINE);
     out.push_str(
@@ -347,7 +347,7 @@ fn parse(tokens: &[Token], at: usize, named: bool) -> Result<(Description, Optio
         // The kind is compared and written as text; it is not looked up, because a data file
         // may legitimately name a kind this program does not have and the honest failure is
         // the comparison rather than the read.
-        kind: Box::leak(kind.text.clone().into_boxed_str()),
+        kind: kind.text.clone(),
         traits: Default::default(),
     };
 

@@ -10,7 +10,7 @@ use crate::notation::Row;
 use crate::schema::Malformed;
 
 /// Why a command did not happen, said in terms of the data rather than of the engine.
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Refused {
     /// Nothing states a `{command id:...}` with that id.
     NoSuchCommand { id: String },

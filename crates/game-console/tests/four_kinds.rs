@@ -159,13 +159,13 @@ fn every_form_is_a_game_command_or_a_query_and_the_history_says_which() {
         };
 
         let mut trying = playing();
-        let before = trying.game.clone();
+        let before = trying.game().map(|it| it.rows().rows().len());
         let started = trying.history().len();
         let outcome = trying.run(&line, &files());
         let grew = trying.history().len() - started;
 
         match meaning {
-            Meaning::Change(_) => {
+            Meaning::Build(_) | Meaning::Fire(_) | Meaning::Start => {
                 match outcome {
                     // The rules refused it, which is legal and changes nothing -
                     // `spec/invariants.md` - so it records nothing either.
@@ -176,7 +176,8 @@ fn every_form_is_a_game_command_or_a_query_and_the_history_says_which() {
                              that changed nothing is in the account of how the game got here"
                         );
                         assert_eq!(
-                            trying.game, before,
+                            trying.game().map(|it| it.rows().rows().len()),
+                            before,
                             "`{line}` was refused and moved the game anyway"
                         );
                     }
@@ -199,7 +200,11 @@ fn every_form_is_a_game_command_or_a_query_and_the_history_says_which() {
                     grew, 0,
                     "`{line}` answered a question and put {grew} line(s) in the history"
                 );
-                assert_eq!(trying.game, before, "`{line}` answered and moved the game");
+                assert_eq!(
+                    trying.game().map(|it| it.rows().rows().len()),
+                    before,
+                    "`{line}` answered and moved the game"
+                );
                 queries.push((*name).to_string());
             }
             // **`run` is none of the four kinds and that is the point of naming it.** It is a

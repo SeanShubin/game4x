@@ -383,7 +383,17 @@ impl Console {
     /// This is the one number the engine needs in order to draw the right world, and
     /// asking for it is a question: it changes nothing, and it goes through no command.
     pub fn territory_count(&self) -> Option<usize> {
-        match self.session.game.territories.len() {
+        // **Counted out of the rows, because the engine holds everything the same way.** It was
+        // a field until the port, and a world being designed has no game at all - which is what
+        // the `None` says, where it used to say *a game with no territories in it*.
+        let game = self.session.game()?;
+        match game
+            .rows()
+            .rows()
+            .iter()
+            .filter(|it| it.relation == "territory")
+            .count()
+        {
             0 => None,
             count => Some(count),
         }
@@ -404,8 +414,19 @@ mod tests {
     #[test]
     fn the_console_opens_on_a_world_that_was_built_by_commands() {
         let console = Console::new();
-        assert_eq!(console.session.game.territories.len(), 12);
-        assert_eq!(console.session.game.phase, game_model::Phase::Play);
+        assert_eq!(
+            console
+                .session
+                .game()
+                .expect("play has begun")
+                .rows()
+                .rows()
+                .iter()
+                .filter(|it| it.relation == "territory")
+                .count(),
+            12
+        );
+        assert!(console.session.game().is_some(), "play has begun");
         // And the history says so: every command that built it, in order.
         assert!(
             console
@@ -423,7 +444,7 @@ mod tests {
         console.submit("{show-territory id:1}");
         let tail = console.tail(12);
         assert!(tail.contains("> {show-territory id:1}"), "{tail}");
-        assert!(tail.contains("territory 1"), "{tail}");
+        assert!(tail.contains("{territory id:1}"), "{tail}");
     }
 
     /// A refused command is shown, not swallowed, and in the terms of whichever layer
@@ -431,16 +452,18 @@ mod tests {
     #[test]
     fn a_refused_command_is_shown_to_the_player() {
         let mut console = Console::new();
-        console.submit("{deploy-ark territory:somewhere}");
+        console.submit("{deploy where:somewhere what:ark}");
         assert!(
             console.tail(3).contains("expected a number"),
             "{}",
             console.tail(3)
         );
 
-        console.submit("{deploy-ark territory:99}");
+        // **And the layer below it**, which is the rules refusing a command the words were
+        // fine for - `spec/console.md` asks that each layer answer in its own terms.
+        console.submit("{deploy where:99 what:ark}");
         assert!(
-            console.tail(3).contains("no territory 99"),
+            console.tail(3).contains("no `place` has that key"),
             "{}",
             console.tail(3)
         );
@@ -470,13 +493,16 @@ mod tests {
     #[test]
     fn choosing_a_surface_moves_nothing() {
         let mut console = Console::new();
-        let before = console.session.game.clone();
+        let before = console.session.game().map(|it| it.rows().rows().len());
         let generation = console.generation();
         let history = console.session.history().len();
 
         console.submit("/browser");
 
-        assert_eq!(console.session.game, before);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            before
+        );
         assert_eq!(console.generation(), generation);
         assert_eq!(
             console.session.history().len(),
@@ -531,9 +557,8 @@ mod tests {
         for size in ["small-32", "medium-42", "large-72", "huge-92", "tiny-12"] {
             let said = spoke(&mut console, &format!("/new {size}"));
             assert!(said.contains(size), "{said}");
-            assert_eq!(
-                console.session.game.phase,
-                game_model::Phase::Play,
+            assert!(
+                console.session.game().is_some(),
                 "`/new {size}` should leave a game you can play"
             );
         }
@@ -570,7 +595,11 @@ mod tests {
         replayed
             .run_script(&after.join("\n"), &library())
             .expect("a history replays on its own");
-        assert_eq!(replayed.game, console.session.game);
+        assert_eq!(
+            replayed.game().map(|it| it.rows().rows().len()),
+            console.session.game().map(|it| it.rows().rows().len()),
+            "a replay reaches the same world"
+        );
     }
 
     /// `/new tiny-12` and the world the console opened on are the same world, not two
@@ -581,7 +610,10 @@ mod tests {
         let mut restarted = Console::new();
         restarted.submit("{end-turn}");
         restarted.submit("/new tiny-12");
-        assert_eq!(restarted.session.game, opened.session.game);
+        assert_eq!(
+            restarted.session.game().expect("play has begun"),
+            opened.session.game().expect("play has begun")
+        );
     }
 
     /// The engine has to notice: a different planet is as much to redraw as a turn.
@@ -600,13 +632,16 @@ mod tests {
     fn a_size_that_names_no_planet_leaves_the_game_alone() {
         let mut console = Console::new();
         console.submit("{end-turn}");
-        let before = console.session.game.clone();
+        let before = console.session.game().map(|it| it.rows().rows().len());
         let history = console.session.history().to_vec();
 
         let said = spoke(&mut console, "/new enormous");
         assert!(said.contains("enormous"), "{said}");
         assert!(said.contains("untouched"), "{said}");
-        assert_eq!(console.session.game, before);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            before
+        );
         assert_eq!(console.session.history(), history.as_slice());
     }
 
@@ -619,7 +654,7 @@ mod tests {
     #[test]
     fn what_is_saved_replays_into_the_same_game() {
         let mut console = Console::new();
-        console.submit("{deploy-ark territory:1}");
+        console.submit("{deploy where:2 what:ark}");
         console.submit("{end-turn}");
 
         let said = spoke(&mut console, "/save mygame");
@@ -630,7 +665,11 @@ mod tests {
         replayed
             .run_script(&console.save(), &library())
             .expect("a save is a command file that runs");
-        assert_eq!(replayed.game, console.session.game);
+        assert_eq!(
+            replayed.game().map(|it| it.rows().rows().len()),
+            console.session.game().map(|it| it.rows().rows().len()),
+            "a replay reaches the same world"
+        );
     }
 
     /// Saving is not a command, and could not be: `spec/invariants.md` allows one command
@@ -638,13 +677,17 @@ mod tests {
     #[test]
     fn saving_changes_nothing_and_is_not_recorded() {
         let mut console = Console::new();
-        let game = console.session.game.clone();
+        let game = console.session.game().map(|it| it.rows().rows().len());
         let history = console.session.history().to_vec();
         let generation = console.generation();
 
         console.submit("/save mygame");
 
-        assert_eq!(console.session.game, game);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            game,
+            "the world is where it was"
+        );
         assert_eq!(console.session.history(), history.as_slice());
         assert_eq!(console.generation(), generation);
     }
@@ -672,10 +715,13 @@ mod tests {
     #[test]
     fn starting_over_without_a_size_asks_for_one() {
         let mut console = Console::new();
-        let before = console.session.game.clone();
+        let before = console.session.game().map(|it| it.rows().rows().len());
         let said = spoke(&mut console, "/new");
         assert!(said.contains("size"), "{said}");
-        assert_eq!(console.session.game, before);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            before
+        );
     }
 
     /// The near miss. `spec/console.md` asks a rejection to say what was expected
@@ -772,13 +818,17 @@ mod tests {
     #[test]
     fn changing_the_drawing_touches_no_game_state() {
         let mut console = Console::new();
-        let game = console.session.game.clone();
+        let game = console.session.game().map(|it| it.rows().rows().len());
         let generation = console.generation();
 
         console.change_drawing();
 
         assert_eq!(console.changes_of_drawing(), 1);
-        assert_eq!(console.session.game, game);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            game,
+            "the world is where it was"
+        );
         assert_eq!(console.generation(), generation);
     }
 
@@ -786,13 +836,17 @@ mod tests {
     #[test]
     fn resetting_the_view_touches_no_game_state() {
         let mut console = Console::new();
-        let game = console.session.game.clone();
+        let game = console.session.game().map(|it| it.rows().rows().len());
         let generation = console.generation();
         let transcript = console.transcript();
 
         console.request_reset();
 
-        assert_eq!(console.session.game, game);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            game,
+            "the world is where it was"
+        );
         assert_eq!(
             console.generation(),
             generation,

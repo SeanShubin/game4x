@@ -63,8 +63,11 @@ fn size(tree: &Entry) -> usize {
 #[test]
 fn a_state_survives_being_written_and_read() {
     let session = played();
-    let direct = state::entries(&session.game);
-    let written = state::write(&session.game, "after `scenario/commands/play.4x`");
+    let direct = state::entries(session.game().expect("play has begun"));
+    let written = state::write(
+        session.game().expect("play has begun"),
+        "after `scenario/commands/play.4x`",
+    );
     let read = state::read(&written).expect("what was just written must parse");
 
     assert_eq!(size(&read), size(&direct), "every entry survived");
@@ -118,7 +121,7 @@ fn a_state_survives_being_written_and_read() {
 #[test]
 fn the_comparison_finds_missing_extra_and_different() {
     let session = played();
-    let actual = state::entries(&session.game);
+    let actual = state::entries(session.game().expect("play has begun"));
 
     let same = state::compare(&actual, &actual);
     assert_eq!(
@@ -151,7 +154,7 @@ fn the_comparison_finds_missing_extra_and_different() {
     // Missing: it was expected and did not happen.
     let mut absent = actual.clone();
     absent.contents.push(Entry {
-        description: game_console::containment::Description::of(game_model::thing::Kind::Yard),
+        description: game_console::containment::Description::of("yard"),
         quantity: 1,
         contents: Vec::new(),
         capacity: Vec::new(),
@@ -188,10 +191,14 @@ fn an_absent_expectation_is_seeded_and_then_compared() {
     let file = at.join("play.4x");
 
     let session = played();
-    let actual = state::entries(&session.game);
+    let actual = state::entries(session.game().expect("play has begun"));
 
     assert!(!file.exists(), "the point is that it is not there yet");
-    std::fs::write(&file, state::write(&session.game, "seeded")).expect("seeding writes it");
+    std::fs::write(
+        &file,
+        state::write(session.game().expect("play has begun"), "seeded"),
+    )
+    .expect("seeding writes it");
 
     let back = state::read(&std::fs::read_to_string(&file).unwrap()).expect("parses");
     let wrong = state::compare(&back, &actual);

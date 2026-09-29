@@ -1,7 +1,10 @@
 //! Answering questions about the game. Nothing here changes anything.
 
 use command_language::Grammar;
-use game_model::{Game, Phase, Resource, TerritoryId, unit::Location};
+use game_model::engine::Game;
+
+use crate::containment::{self, Entry as Held};
+use crate::state;
 
 use crate::binding::Subject;
 
@@ -21,150 +24,98 @@ pub struct Entry {
     pub components: Vec<(String, String)>,
 }
 
-pub fn show(game: &Game, subject: &Subject) -> String {
+pub fn show(game: Option<&Game>, subject: &Subject) -> String {
+    let Some(game) = game else {
+        return "designing the world; the game has not started".to_string();
+    };
+    let whole = containment::tree(game);
     match subject {
-        Subject::Turn => match game.phase {
-            Phase::Design => "designing the world; the game has not started".to_string(),
-            // **Losing is said here and winning is not, since `S-174`.** This is where a
-            // player asks how the game is going, and losing is visible in no other report - a
-            // planet with nobody on it looks like one nobody has reached yet.
-            //
-            // **Winning was said here until 2026-09-24**, when Sean removed the concept: *the
-            // user interface is going to just let you keep playing.* So there is nothing to
-            // announce, and a report that announced one would be telling a player a rule the
-            // specification has moved to `spec/future/`.
-            Phase::Play if game.has_lost() => format!(
-                "turn {} - lost: no citizens, and nothing left that becomes one",
-                game.turn
-            ),
-            Phase::Play => format!("turn {}", game.turn),
+        // **The engine keeps no turn and this stopped pretending one exists.** `end-turn` is a
+        // rule like any other; nothing counts how many times it has fired, because nothing in
+        // `spec/data/` holds a count. **A report of a number the game does not have is the shape
+        // `founded` had** - `P-288`, and the same reasoning that took `turn` out of the entity
+        // view took it out of here.
+        Subject::Turn => "playing".to_string(),
+        Subject::Territory(id) => match under(&whole, "territory", &id.to_string()) {
+            Some(found) => state::written(found),
+            None => format!("there is no territory {id}"),
         },
-        Subject::Territory(id) => match game.territory(*id) {
-            Ok(_) => territory(game, *id),
-            Err(why) => why.to_string(),
+        Subject::Planet => match whole
+            .contents
+            .iter()
+            .find(|it| it.description.kind == "planet")
+        {
+            Some(planet) => state::written(planet),
+            None => "there is no planet yet".to_string(),
         },
-        Subject::Planet => {
-            if game.territories.is_empty() {
-                return "there is no planet yet".to_string();
-            }
-            let mut lines = vec![format!("{} territories", game.territories.len())];
-            for place in &game.territories {
-                lines.push(format!(
-                    "  {:>2}  {:<9} citizens {:<3} force {:<3} extractor room {}",
-                    place.id,
-                    if place.founded() {
-                        "yours"
-                    } else {
-                        "unclaimed"
-                    },
-                    place.citizens(),
-                    game.force_in(place.id),
-                    place.total_extractor_capacity()
-                ));
-            }
-            lines.join("\n")
-        }
+        // **An orbit is a place and not a kind**, so what is in orbit is what sits under a place
+        // whose layer says so - which is `spec/orbit.md`'s own sentence rather than a list of
+        // the kinds that can be up there.
         Subject::Orbit => {
-            let above = game.units_in_orbit();
-            if above.is_empty() {
+            let found = every(&whole, &|entry: &Held| {
+                entry.description.kind == "place"
+                    && entry.description.traits.get("layer").map(String::as_str) == Some("orbit")
+            });
+            if found.iter().all(|it| it.contents.is_empty()) {
                 return "there is nothing in orbit".to_string();
             }
-            above
+            found
                 .into_iter()
-                .map(|unit| format!("{} {} in orbit", unit.kind, unit.id))
+                .filter(|it| !it.contents.is_empty())
+                .map(state::written)
                 .collect::<Vec<_>>()
-                .join("\n")
+                .join("")
         }
+        // **A unit is what the data calls one**, read from `{member family:unit}` rather than
+        // from a list here - so a kind added to the family is shown without this being edited.
         Subject::Units => {
-            if game.units.is_empty() {
+            let kinds = family(game, "unit");
+            let found = every(&whole, &|entry: &Held| {
+                kinds.contains(&entry.description.kind)
+            });
+            if found.is_empty() {
                 return "there are no units".to_string();
             }
-            game.units
-                .iter()
-                .map(|unit| {
-                    let place = match unit.location {
-                        Location::Orbit(id) => format!("in orbit above territory {id}"),
-                        Location::On(id) => format!("on territory {id}"),
-                    };
-                    // **No `unusable` suffix since `P-367`.** Nature destroys what stands
-                    // on a territory it takes back, so there is no wrecked unit to mark -
-                    // and `usable` was a trait the release never declared, which is what
-                    // made a wrecked unit unreadable in the file Sean derives by hand.
-                    // **The tank's size rather than its contents** - `S-150`. A unit holds
-                    // no energy; what it brings is room, and the energy itself is on the
-                    // territory's own line.
-                    format!(
-                        "{} {} {place}, tank {}",
-                        unit.kind,
-                        unit.id,
-                        unit.kind.fuel()
-                    )
-                })
+            found
+                .into_iter()
+                .map(state::written)
                 .collect::<Vec<_>>()
-                .join("\n")
+                .join("")
         }
     }
 }
 
-// **`how_to_win` was here and `S-174` took the question away.** It said what was left to do -
-// both acts when nothing was deployed, naming the territory when one was, *anywhere wins* when
-// two or more were - and it was built on 2026-09-24, hours before Sean removed winning. **A hint
-// towards a rule the specification does not have is worse than no hint**, which is the same
-// reason the announcement above went.
+/// Every entry the test holds, anywhere in the tree.
+fn every<'a>(root: &'a Held, holds: &dyn Fn(&Held) -> bool) -> Vec<&'a Held> {
+    root.walk().into_iter().filter(|it| holds(it)).collect()
+}
 
-fn territory(game: &Game, id: TerritoryId) -> String {
-    let Ok(place) = game.territory(id) else {
-        return format!("there is no territory {id}");
-    };
-    let mut lines = vec![format!(
-        "territory {id}, {}, {}",
-        if place.founded() {
-            "yours"
-        } else {
-            "unclaimed"
-        },
-        place.biome
-    )];
-    lines.push(format!(
-        "  citizens {}  labor left {}  force {} against nature {}",
-        place.citizens(),
-        place.labor_available(),
-        game.force_in(id),
-        place.force_of_nature()
-    ));
-    for resource in Resource::ALL {
-        // Capacity and density, which is what a territory has of a resource. It used to read
-        // as a list of nodes at their densities; `P-290` made those two numbers, which is
-        // what they had always been.
-        let offered = place.deposit(resource);
-        lines.push(format!(
-            "  {:<7} {:>3} held, {} of {} extractors{}",
-            resource.name(),
-            place.store(resource),
-            place.extractors_for(resource).len(),
-            offered.capacity,
-            match offered.capacity {
-                0 => String::new(),
-                _ => format!(" yielding {}", offered.density),
-            }
-        ));
-    }
-    match place.garrison() {
-        Some(garrison) => lines.push(format!("  garrison force {}", garrison.force)),
-        None => lines.push("  no garrison".to_string()),
-    }
-    if place.yards() > 0 {
-        lines.push(format!("  yards {}", place.yards()));
-    }
-    for unit in game.units_on(id) {
-        lines.push(format!(
-            "  {} {} with a tank of {}",
-            unit.kind,
-            unit.id,
-            unit.kind.fuel()
-        ));
-    }
-    lines.join("\n")
+/// The one entry of this kind carrying this id, wherever it sits.
+fn under<'a>(root: &'a Held, kind: &str, id: &str) -> Option<&'a Held> {
+    root.walk().into_iter().find(|it| {
+        it.description.kind == kind
+            && it.description.traits.get("id").map(String::as_str) == Some(id)
+    })
+}
+
+/// The kinds in a family, as the data declares them.
+fn family(game: &Game, of: &str) -> Vec<String> {
+    let rows = game.rows().rows();
+    let named: std::collections::BTreeMap<&str, &str> = rows
+        .iter()
+        .filter(|it| it.relation == "relation")
+        .filter_map(|it| Some((it.value("id")?, it.value("name")?)))
+        .collect();
+    let family_id = named
+        .iter()
+        .find(|(_, name)| **name == of)
+        .map(|(id, _)| *id);
+    rows.iter()
+        .filter(|it| it.relation == "member")
+        .filter(|it| Some(it.value("family").unwrap_or_default()) == family_id)
+        .filter_map(|it| named.get(it.value("kind").unwrap_or_default()).copied())
+        .map(str::to_string)
+        .collect()
 }
 
 /// `spec/console.md`: list every command, or give one command's syntax.
@@ -219,108 +170,49 @@ pub fn history(commands: &[String]) -> String {
         .join("\n")
 }
 
-/// Every entity in the game and its components.
-pub fn entities(game: &Game) -> Vec<Entry> {
-    let mut entries = Vec::new();
-
-    entries.push(Entry {
-        kind: "game".to_string(),
-        id: "the game".to_string(),
-        components: vec![
-            (
-                "phase".to_string(),
-                match game.phase {
-                    Phase::Design => "design".to_string(),
-                    Phase::Play => "play".to_string(),
-                },
-            ),
-            // **`turn` is not here either** - `P-288` and `S-48`. It went out of
-            // `dump::tables` in the same change and stayed here, which is what a rule
-            // applied to one of two renderers looks like: the markdown state lost the
-            // column and the entity view went on printing it, and nothing compared them.
-            //
-            // Found by reading `entities.md` rather than by a check, and there is no check
-            // to add here that `tests/vocabulary.rs` does not already make over the data
-            // file - this view is a presentation and `P-284` does not bind it. What binds
-            // it is `P-288` saying `turn` is not a declared trait, and a presentation
-            // showing a fact the game does not have is the shape `founded` had.
-            (
-                "territories".to_string(),
-                game.territories.len().to_string(),
-            ),
-            ("units".to_string(), game.units.len().to_string()),
-        ],
-    });
-
-    for place in &game.territories {
-        let mut components = vec![
-            ("citizens".to_string(), place.citizens().to_string()),
-            ("labor-spent".to_string(), place.labor_spent().to_string()),
-            ("nature".to_string(), place.force_of_nature().to_string()),
-            ("force".to_string(), game.force_in(place.id).to_string()),
-        ];
-        for resource in Resource::ALL {
-            components.push((
-                resource.name().to_string(),
-                place.store(resource).to_string(),
-            ));
-            let offered = place.deposit(resource);
-            components.push((
-                format!("{} capacity", resource.name()),
-                offered.capacity.to_string(),
-            ));
-            components.push((
-                format!("{} density", resource.name()),
-                offered.density.to_string(),
-            ));
-            components.push((
-                format!("{} extractors", resource.name()),
-                place.extractors_for(resource).len().to_string(),
-            ));
-        }
-        components.push((
-            "garrison".to_string(),
-            match place.garrison() {
-                Some(garrison) => format!("force {}", garrison.force),
-                None => "none".to_string(),
-            },
-        ));
-        components.push(("yards".to_string(), place.yards().to_string()));
-
-        entries.push(Entry {
-            kind: "territory".to_string(),
-            // The model's id, which is what `show territory 5` names too.
-            id: place.id.to_string(),
-            components,
-        });
-    }
-
-    for unit in &game.units {
-        entries.push(Entry {
-            kind: "unit".to_string(),
-            id: unit.id.to_string(),
-            components: vec![
-                ("kind".to_string(), unit.kind.to_string()),
-                (
-                    "location".to_string(),
-                    match unit.location {
-                        Location::Orbit(id) => format!("orbit-{id}"),
-                        Location::On(id) => format!("territory-{id}"),
-                    },
-                ),
-                // **`fuel`, and it is the tank's size** - `S-150`. This was `cells`, what the
-                // unit had left to move on; a unit holds no energy now, so what there is to
-                // say about the tank is how much room it gives the place it stands in.
-                // `releases/first-release.md` -> Traits calls that `fuel`, which is why the
-                // component is renamed rather than kept under a word for a charge.
-                ("fuel".to_string(), unit.kind.fuel().to_string()),
-                ("force".to_string(), unit.force().to_string()),
-                ("exhausted".to_string(), unit.exhausted.to_string()),
-            ],
-        });
-    }
-
-    entries
+/// Every thing in the game and its traits, for the data browser.
+///
+/// **Flattened from the tree rather than walked out of the model.** `docs/architecture.md` rule
+/// 8: a Bevy entity id is reused and is not stable across runs, so what a browser shows is named
+/// by the data's own ids - the same ones `show territory 5` uses.
+///
+/// **What a thing is, is its relation**, so a kind the data adds appears here with nothing
+/// edited. It was a match over nine of them until the port, which is why a world holding a tenth
+/// rendered as a world without one.
+pub fn entities(game: Option<&Game>) -> Vec<Entry> {
+    let Some(game) = game else {
+        return Vec::new();
+    };
+    containment::tree(game)
+        .walk()
+        .into_iter()
+        .map(|held| {
+            let description = &held.description;
+            let mut components: Vec<(String, String)> = description
+                .traits
+                .iter()
+                .map(|(name, value)| (name.clone(), value.clone()))
+                .collect();
+            // **How many is a component and not a trait**, which is the same line the tree
+            // draws: `spec/console.md` says a description is a kind and every trait, and a
+            // quantity is neither.
+            if held.quantity != 1 {
+                components.push(("quantity".to_string(), held.quantity.to_string()));
+            }
+            Entry {
+                kind: description.kind.clone(),
+                // **A thing with an `id` is named by it and one without is named by what it
+                // says.** A capacity has no id and never will - it is a fact about kinds - so
+                // naming it by its description is the only stable name it has.
+                id: description
+                    .traits
+                    .get("id")
+                    .cloned()
+                    .unwrap_or_else(|| description.written()),
+                components,
+            }
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -342,7 +234,7 @@ mod tests {
             "{create-planet size:tiny-12}",
             "{set-resource territory:1 resource:food extractors:1 density:4}",
             "{set-resource territory:1 resource:metal extractors:1 density:4}",
-            "{set-force territory:1 force:1}",
+            "{set-biome territory:1 biome:grassland}",
             "{add-ark-orbit territory:1}",
             "{start}",
         ])
@@ -363,8 +255,8 @@ mod tests {
             panic!("help said nothing");
         };
         for expected in [
-            "{deploy-ark territory:<value> [repeat:<value>]}",
-            "{end-turn}",
+            "{deploy where:<value> what:<value> [repeat:<value>]}",
+            "{end-turn [repeat:<value>]}",
             "{show-territory id:<value>}",
         ] {
             assert!(
@@ -384,7 +276,7 @@ mod tests {
         // recipe and a name is one word, so `move` is the whole name and which unit moves is
         // a field.
         assert!(
-            text.contains("{move unit:<value> from:<value> to:<value> [repeat:<value>]}"),
+            text.contains("{move what:<value> from:<value> to:<value> [repeat:<value>]}"),
             "{text}"
         );
         assert!(
@@ -408,9 +300,11 @@ mod tests {
         let Outcome::Said(text) = session.run("{show-territory id:1}", &NoLibrary).unwrap() else {
             panic!();
         };
-        assert!(text.contains("territory 1"), "{text}");
-        assert!(text.contains("food"), "{text}");
-        assert!(text.contains("no garrison"), "{text}");
+        // **What a territory holds, in the form the state file uses**, which is what `show`
+        // reports now: the same bytes a reader would diff, scoped to one thing.
+        assert!(text.contains("{territory id:1}"), "{text}");
+        assert!(text.contains("place"), "{text}");
+        assert!(text.contains("deposit"), "{text}");
     }
 
     #[test]
@@ -441,22 +335,26 @@ mod tests {
             .iter()
             .find(|entry| entry.kind == "territory" && entry.id == "5")
             .expect("territory 5 should be listed by its model id");
-        assert!(fifth.components.iter().any(|(name, _)| name == "citizens"));
+        // **A territory's only trait is its id**, which is what the data gives it - a biome
+        // is a `{terrain}` row about the ground rather than a column on the territory.
+        assert!(fifth.components.iter().any(|(name, _)| name == "id"));
 
-        // And that is the same id `show territory 5` answers to.
+        // And that is the same id `show-territory id:5` answers to.
         let mut session = session;
         let Outcome::Said(text) = session.run("{show-territory id:5}", &NoLibrary).unwrap() else {
             panic!();
         };
-        assert!(text.starts_with("territory 5"), "{text}");
+        assert!(text.starts_with("{territory id:5}"), "{text}");
     }
 
     #[test]
     fn the_browser_lists_every_territory_and_every_unit() {
         let session = tiny();
         let entries = session.entities();
+        // **A kind is a relation now**, so an ark is an `ark` and not a `unit` - which is the
+        // browser naming things the way the data does rather than the way an enum did.
         assert_eq!(entries.iter().filter(|e| e.kind == "territory").count(), 12);
-        assert_eq!(entries.iter().filter(|e| e.kind == "unit").count(), 1);
+        assert_eq!(entries.iter().filter(|e| e.kind == "ark").count(), 1);
         assert_eq!(entries.iter().filter(|e| e.kind == "game").count(), 1);
     }
 

@@ -9,7 +9,6 @@
 # bare ground beyond.
 
 {run file:nodes}
-{run file:forces}
 {run file:biomes}
 
 # One ark, waiting above the planet. Nothing is on the planet yet.

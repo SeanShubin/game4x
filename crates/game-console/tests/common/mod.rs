@@ -50,13 +50,14 @@ pub const SETUP: &str = "\
 /// statement about an empty population, which is `CLAUDE.md`'s *a count over nothing is the same
 /// failure with the sign flipped*. These three make it bite.
 pub const PLAY: &str = "\
-{deploy-ark territory:1}
+{start}
+{deploy where:2 what:ark}
 {show-planet}
-{create-labor territory:1}
-{work territory:1 resource:metal}
+{toil where:1}
+{work where:1 what:metal}
 {help}
-{create-labor territory:1}
-{work territory:1 resource:food}
+{toil where:1}
+{work where:1 what:food}
 {history}
 {end-turn}
 ";
@@ -75,7 +76,7 @@ pub fn commands_issued() -> usize {
             .filter(|line| !line.is_empty() && !ASKED.contains(line))
             .count()
     };
-    of(SETUP) + of(PLAY) + 1 // `{start}`, which `playing` runs between them
+    of(SETUP) + of(PLAY) // `{start}` is a line of PLAY, so it is already counted
 }
 
 /// The two above, as a library the console can `{run file:...}`.
@@ -87,11 +88,11 @@ pub fn library() -> Embedded {
 pub fn playing() -> Session {
     let library = library();
     let mut session = Session::new();
-    for line in ["{run file:setup}", "{start}"] {
-        session
-            .run(line, &library)
-            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
-    }
+    // **`{start}` is a line of `PLAY`**, so the design phase ends there rather than here - which
+    // is what lets a test of the design phase run this and stop.
+    session
+        .run("{run file:setup}", &library)
+        .unwrap_or_else(|why| panic!("the fixture does not set up: {why}"));
     session
 }
 

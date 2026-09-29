@@ -13,28 +13,10 @@ use command_language::{Form, Grammar, Kind, Term};
 pub mod form {
     pub const CREATE_PLANET: &str = "create-planet";
     pub const SET_RESOURCE: &str = "set-resource";
-    pub const SET_FORCE: &str = "set-force";
     pub const SET_BIOME: &str = "set-biome";
     pub const ADD_ARK: &str = "add-ark-orbit";
     pub const ADD_PIONEER: &str = "add-pioneer-orbit";
     pub const START: &str = "start";
-
-    // **One id per recipe, because a command is named for the recipe it fires** - `P-323`.
-    // `BUILD` and `PRODUCE` each covered several, choosing between them by reading a word the
-    // player had put in a positional hole; the word is part of the name now.
-    pub const DEPLOY_ARK: &str = "deploy-ark";
-    pub const LAUNCH_ARK: &str = "launch-ark";
-    pub const MINE_ENERGY: &str = "mine-energy";
-    pub const MOVE: &str = "move";
-    pub const FOUND_BY_LAND: &str = "found-by-land";
-    pub const BUILD_STORE: &str = "build-store";
-    pub const BUILD_EXTRACTOR: &str = "build-extractor";
-    pub const BUILD_YARD: &str = "build-yard";
-    pub const PRODUCE_PIONEER: &str = "produce-pioneer";
-
-    pub const CREATE_LABOR: &str = "create-labor";
-    pub const WORK: &str = "work";
-    pub const END_TURN: &str = "end-turn";
 
     pub const SHOW_TERRITORY: &str = "show-territory";
     pub const SHOW_PLANET: &str = "show-planet";
@@ -76,7 +58,12 @@ pub mod form {
 ///   carries its own name, so a word with no `name:` before it can only ever be part of a
 ///   name - and `{show-planet}` reaches the keyword form whichever way the two are listed.
 pub fn grammar() -> Grammar {
-    Grammar::new(vec![
+    // **The written half and the read half.** What a player may state is fixed by what a world
+    // is, so it is here; what a player may fire is whatever `spec/data/rules.4x` declares, so it
+    // comes from [`crate::rules`]. `D-1`: *I change a recipe by editing a data file, with no Rust
+    // edited, and the game fires the changed rule* - which a grammar with `build-yard` written
+    // into it could not do.
+    let mut forms = vec![
         // -- designing the world, before `start` --------------------------
         Form::new(
             form::CREATE_PLANET,
@@ -96,15 +83,6 @@ pub fn grammar() -> Grammar {
                 Term::required("density", Kind::Number),
             ],
             "say how many extractors a territory has room for, and what each yields",
-        ),
-        Form::new(
-            form::SET_FORCE,
-            vec![
-                Term::Keyword("set-force"),
-                Term::required("territory", Kind::Number),
-                Term::required("force", Kind::Number),
-            ],
-            "set a territory's force of nature",
         ),
         Form::new(
             form::SET_BIOME,
@@ -137,136 +115,6 @@ pub fn grammar() -> Grammar {
             form::START,
             vec![Term::Keyword("start")],
             "end the design phase and begin play",
-        ),
-        // -- playing ------------------------------------------------------
-        Form::new(
-            form::DEPLOY_ARK,
-            vec![
-                Term::Keyword("deploy-ark"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "bring an ark down from the orbit above a territory; it founds the territory",
-        ),
-        // **`P-342`: one recipe, and it takes a territory.** `produce ark` and `launch` were
-        // two commands for one thing and only one of them fired a recipe - `C-54`. This is the
-        // recipe's own name and it requires a Yard, so it has to say whose.
-        Form::new(
-            form::LAUNCH_ARK,
-            vec![
-                Term::Keyword("launch-ark"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "pay an ark's cost at a yard and send it up; nothing comes back",
-        ),
-        // **`P-552`, and it names the territory rather than the orbit.** `spec/console.md`: *a
-        // place worked out from another is not open - the orbit above a territory is named by
-        // naming the territory.* So one number, as `launch-ark` takes one, and which layer it
-        // means is the recipe's.
-        Form::new(
-            form::MINE_ENERGY,
-            vec![
-                Term::Keyword("mine-energy"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "an ark in the orbit above a territory mines a unit of energy from the sun",
-        ),
-        Form::new(
-            form::MOVE,
-            // **Two places since `P-460`, and `C-101` asked for them.** The recipe leaves
-            // `$from` and `$to` open and a command binds every place a recipe leaves open,
-            // so the player says which unit moves by saying where it is standing.
-            //
-            // **The two numbers are territories and what they mean is the kind's layer** -
-            // `S-168`. `spec/console.md`: *a place worked out from another is not open - the
-            // orbit above a territory is named by naming the territory.* So these same two
-            // fields name two orbits for an ark and two territories for a pioneer, and the
-            // form needs no word for an orbit.
-            vec![
-                Term::Keyword("move"),
-                Term::required("unit", Kind::Name),
-                Term::required("from", Kind::Number),
-                Term::required("to", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "move a unit to an adjacent place on the layer it moves on, held or not",
-        ),
-        Form::new(
-            form::FOUND_BY_LAND,
-            vec![
-                Term::Keyword("found-by-land"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "send a pioneer onto adjacent unclaimed ground and found it there",
-        ),
-        Form::new(
-            form::BUILD_STORE,
-            vec![
-                Term::Keyword("build-store"),
-                Term::required("territory", Kind::Number),
-                Term::required("resource", Kind::Name),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "build somewhere to keep one resource; a store holds ten of it",
-        ),
-        Form::new(
-            form::BUILD_EXTRACTOR,
-            vec![
-                Term::Keyword("build-extractor"),
-                Term::required("territory", Kind::Number),
-                Term::required("resource", Kind::Name),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "build an extractor for one resource, paying its cost there",
-        ),
-        Form::new(
-            form::BUILD_YARD,
-            vec![
-                Term::Keyword("build-yard"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "build a yard, paying its cost there",
-        ),
-        Form::new(
-            form::PRODUCE_PIONEER,
-            vec![
-                Term::Keyword("produce-pioneer"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "produce a pioneer, paying its cost there",
-        ),
-        Form::new(
-            form::CREATE_LABOR,
-            vec![
-                Term::Keyword("create-labor"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "turn a ready citizen into labor",
-        ),
-        // **`work`, not `work-extractor`**: the recipe is `work` and `P-328` makes a name one
-        // word, so the kind cannot ride along in it. Nothing else is worked - the recipe
-        // consumes an extractor and there is no second thing labour can be spent at - so the
-        // resource is what picks which one.
-        Form::new(
-            form::WORK,
-            vec![
-                Term::Keyword("work"),
-                Term::required("territory", Kind::Number),
-                Term::required("resource", Kind::Name),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "spend labor at an extractor this turn",
-        ),
-        Form::new(
-            form::END_TURN,
-            vec![Term::Keyword("end-turn")],
-            "consume, transform, and unspend everything",
         ),
         // -- asking, which changes nothing --------------------------------
         Form::new(
@@ -312,7 +160,9 @@ pub fn grammar() -> Grammar {
             vec![Term::Keyword("run"), Term::required("file", Kind::Name)],
             "run the commands in a file, as though they had been typed here",
         ),
-    ])
+    ];
+    forms.extend(crate::rules::forms());
+    Grammar::new(forms)
 }
 
 #[cfg(test)]
@@ -328,16 +178,15 @@ mod tests {
     /// eight lines `spec/console.md` carried in the old form, and `P-321` deleted them.
     #[test]
     fn every_example_in_the_specification_parses() {
+        // **A rule's name is its command's name**, so these are the rules' own words rather
+        // than a verb this lane chose - `{deploy ...}` where it used to be `{deploy ...}`.
         let examples = [
-            ("{deploy-ark territory:1}", form::DEPLOY_ARK),
-            ("{move unit:pioneer from:3 to:7}", form::MOVE),
-            (
-                "{build-extractor territory:3 resource:metal}",
-                form::BUILD_EXTRACTOR,
-            ),
-            ("{produce-pioneer territory:11}", form::PRODUCE_PIONEER),
-            ("{work territory:3 resource:metal}", form::WORK),
-            ("{end-turn}", form::END_TURN),
+            ("{deploy where:2 what:ark}", "deploy"),
+            ("{move what:pioneer from:3 to:7}", "move"),
+            ("{build-extractor where:3 what:metal}", "build-extractor"),
+            ("{build-pioneer where:11}", "build-pioneer"),
+            ("{work where:3 what:metal}", "work"),
+            ("{end-turn}", "end-turn"),
             ("{show-territory id:5}", form::SHOW_TERRITORY),
             ("{help command:move}", form::HELP),
         ];
@@ -357,7 +206,6 @@ mod tests {
                 "{set-resource territory:1 resource:food extractors:3 density:4}",
                 form::SET_RESOURCE,
             ),
-            ("{set-force territory:1 force:1}", form::SET_FORCE),
             ("{set-biome territory:1 biome:grassland}", form::SET_BIOME),
             ("{add-ark-orbit territory:1}", form::ADD_ARK),
             ("{start}", form::START),
@@ -375,25 +223,17 @@ mod tests {
     /// were a different command or none.
     #[test]
     fn two_fields_mean_the_same_thing_in_either_order() {
-        let one = parse_line(
-            &grammar(),
-            "{build-extractor territory:3 resource:metal}",
-            1,
-        )
-        .unwrap()
-        .unwrap();
-        let other = parse_line(
-            &grammar(),
-            "{build-extractor resource:metal territory:3}",
-            1,
-        )
-        .unwrap()
-        .unwrap();
+        let one = parse_line(&grammar(), "{build-extractor where:3 what:metal}", 1)
+            .unwrap()
+            .unwrap();
+        let other = parse_line(&grammar(), "{build-extractor what:metal where:3}", 1)
+            .unwrap()
+            .unwrap();
         assert_eq!(one.form, other.form);
-        assert_eq!(one.number("territory").unwrap(), 3);
-        assert_eq!(other.number("territory").unwrap(), 3);
-        assert_eq!(one.name("resource").unwrap(), "metal");
-        assert_eq!(other.name("resource").unwrap(), "metal");
+        assert_eq!(one.number("where").unwrap(), 3);
+        assert_eq!(other.number("where").unwrap(), 3);
+        assert_eq!(one.name("what").unwrap(), "metal");
+        assert_eq!(other.name("what").unwrap(), "metal");
     }
 
     /// A field the command does not take is named, rather than reported as surplus.
@@ -402,11 +242,11 @@ mod tests {
     /// because the thing that was wrong had never had a name - which is what `P-321` changes.
     #[test]
     fn a_field_a_command_does_not_take_says_which_field_it_is() {
-        let failure = parse_line(&grammar(), "{build-yard territory:3 resource:metal}", 1)
+        let failure = parse_line(&grammar(), "{build-yard where:3 what:metal}", 1)
             .expect_err("a yard is not built for a resource");
         let said = failure.to_string();
         assert!(
-            said.contains("resource:"),
+            said.contains("what:"),
             "the failure names the field that does not belong: {said}"
         );
     }
@@ -428,33 +268,40 @@ mod tests {
             })
             .map(|form| form.name)
             .collect();
-        // **Eleven, and every change to this number was a promotion rather than a deletion.**
-        // Twelve until `P-328` made a name one word and `move ark`/`move pioneer` became one
-        // `move`; eleven until `P-342` made `produce ark` into `launch ark` and there was one
-        // command where there had been two; ten from then until `P-552` added `mine energy`.
-        // **Eleven player recipes, eleven commands**, which is what `P-214` asked for and has
-        // held through the two changes since.
-        assert_eq!(
-            takes_repeat.len(),
-            11,
-            "eleven commands take a repeat: {takes_repeat:?}"
-        );
-        for named in [
-            form::END_TURN,
-            form::SHOW_PLANET,
-            form::RUN,
-            form::CREATE_PLANET,
-        ] {
+        // **A rule takes a repeat and nothing else does**, which is the rule rather than a
+        // number: `P-323` makes a repeat a count of firings, and only a rule fires.
+        //
+        // **`end-turn` takes one now and did not before.** It was excepted while the eleven
+        // verbs were written here, on the grounds that it fired no recipe of the player's -
+        // and under the data it is a rule like any other, so `{end-turn repeat:3}` ends three
+        // turns. **The exception went with the list that needed it.**
+        let rules: Vec<String> = crate::rules::playable()
+            .into_iter()
+            .map(|it| it.name)
+            .collect();
+        assert!(rules.len() >= 10, "only {} rule(s) read", rules.len());
+        for rule in &rules {
             assert!(
-                !takes_repeat.contains(&named),
-                "`{named}` fires no recipe of the player's and must not take a repeat"
+                takes_repeat.contains(&rule.as_str()),
+                "`{rule}` is a rule and does not take a repeat"
             );
         }
-        let parsed = parse_line(&grammar(), "{create-labor territory:1 repeat:2}", 1)
+        assert_eq!(
+            takes_repeat.len(),
+            rules.len(),
+            "only a rule takes a repeat: {takes_repeat:?}"
+        );
+        for named in [form::SHOW_PLANET, form::RUN, form::CREATE_PLANET] {
+            assert!(
+                !takes_repeat.contains(&named),
+                "`{named}` fires no rule and must not take a repeat"
+            );
+        }
+        let parsed = parse_line(&grammar(), "{toil where:1 repeat:2}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(parsed.optional_number("repeat"), Some(2));
-        let once = parse_line(&grammar(), "{create-labor territory:1}", 1)
+        let once = parse_line(&grammar(), "{toil where:1}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(
@@ -521,13 +368,13 @@ mod tests {
 
     #[test]
     fn an_optional_resource_may_be_left_off() {
-        let parsed = parse_line(&grammar(), "{build-yard territory:11}", 1)
+        let parsed = parse_line(&grammar(), "{build-yard where:11}", 1)
             .unwrap()
             .unwrap();
-        assert_eq!(parsed.optional_name("resource"), None);
+        assert_eq!(parsed.optional_name("what"), None);
         // A repeat is the optional field every player command carries, and one left off
         // means the command fires once.
-        let parsed = parse_line(&grammar(), "{create-labor territory:1 repeat:2}", 1)
+        let parsed = parse_line(&grammar(), "{toil where:1 repeat:2}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(parsed.optional_number("repeat"), Some(2));
@@ -535,13 +382,13 @@ mod tests {
 
     #[test]
     fn a_mistyped_command_is_told_what_was_expected_and_where() {
-        let failure = parse_line(&grammar(), "{deploy-ark territory:somewhere}", 1).unwrap_err();
+        let failure = parse_line(&grammar(), "{deploy where:somewhere what:ark}", 1).unwrap_err();
         assert!(
             failure.expected.contains(&"a number".to_string()),
             "{failure}"
         );
-        // At the value rather than at the field that carried it: `territory:` opens at 13
-        // and `somewhere` at 23, and the value is what has to change.
-        assert_eq!(failure.position.column, 23);
+        // At the value rather than at the field that carried it: `where:` opens at 9 and
+        // `somewhere` at 15, and the value is what has to change.
+        assert_eq!(failure.position.column, 15);
     }
 }

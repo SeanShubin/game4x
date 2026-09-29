@@ -146,7 +146,7 @@ impl Relation {
 }
 
 /// Every way the data can fail to fit the structure, said about the data and not about the reader.
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Malformed {
     /// A `{column ...}` row naming a relation nothing declares.
     ColumnOfNothing { relation: String, column: String },
@@ -877,18 +877,35 @@ pub fn reified(schema: &Schema, rows: Vec<Row>) -> Vec<Row> {
         // the reference only says the value is a name rather than a number.
         let mut slots: Vec<(String, String)> = Vec::new();
         for column in &declared.columns {
-            if column.references.is_none() {
+            let Some(points_at) = column.references.as_deref() else {
                 continue;
-            }
+            };
             let Some(value) = row.value(&column.name) else {
                 continue;
             };
             let Some(family) = schema.relation_named(value) else {
                 continue;
             };
-            if schema.members(family).is_some() {
-                slots.push((column.name.clone(), family.to_string()));
+            if schema.members(family).is_none() {
+                continue;
             }
+            // **The value has to name the family the column points at**, or point at
+            // `relation`, where what a thing has room for may be any kind.
+            //
+            // **A territory id and a relation id are different id spaces**, so a value alone
+            // cannot say which it is. `{place id:51 of:26 layer:surface}` is the surface of
+            // territory 26; relation 26 is `unit`, which is a family, so this expanded the
+            // place into one per member and the world held four places numbered 51. **Found by
+            // the console porting onto the engine**: every planet of twenty-six territories or
+            // more refused to load, and no world in the tree had ever had that many.
+            //
+            // **`capacity.what` points at `resource` and is the case this must keep.** There
+            // the value *is* the family the column points at, which is what *each member*
+            // means - and `place.of` points at `territory`, which is not a family at all.
+            if points_at != RELATION && points_at != family {
+                continue;
+            }
+            slots.push((column.name.clone(), family.to_string()));
         }
         if slots.is_empty() {
             out.push(row);

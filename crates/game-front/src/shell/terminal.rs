@@ -120,7 +120,7 @@ mod tests {
     fn a_command_prints_only_what_it_said() {
         exclusively(|| {
             let said = answer("{show-territory id:1}");
-            assert!(said.contains("territory 1"), "{said}");
+            assert!(said.contains("{territory id:1}"), "{said}");
             assert!(
                 !said.contains("> show territory 1"),
                 "the echo belongs to the terminal, not to us: {said}"

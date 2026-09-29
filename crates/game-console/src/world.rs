@@ -35,6 +35,24 @@ use planet_model::{Biome, PlanetSize};
 /// specified and not built, so this is the one seed there is until it is.
 const WORLD_SEED: u64 = 1;
 
+/// What a name is, in the form the engine reads.
+///
+/// **The foundation names nothing twice**, so a reference is an id: `{deposit what:31}` is a
+/// deposit of food, and `{terrain is:2}` is ice. This resolves the handful of names these rows
+/// carry - a relation, a supply and a biome - out of the foundation itself, so a relation
+/// renumbered in `spec/data/schema.4x` does not need finding here.
+///
+/// **It generates rather than converts, which is why `friendly-notation` is not used.** `Names`
+/// turns a friendly row into a foundation one and is right for a file somebody wrote; these rows
+/// have no author to have written them in the other form.
+fn id_of(sort: &str, name: &str) -> String {
+    game_model::foundation::rows()
+        .iter()
+        .find(|it| it.relation == sort && it.value("name") == Some(name))
+        .and_then(|it| it.value("id").map(str::to_string))
+        .unwrap_or_else(|| panic!("`{sort}` declares no `{name}`, and this row needs its id"))
+}
+
 /// One row, from a relation and its cells.
 fn row(relation: &str, cells: &[(&str, String)]) -> Row {
     Row {
@@ -114,7 +132,7 @@ pub fn planet(size: PlanetSize) -> Vec<Row> {
                 "terrain",
                 &[
                     ("of", territory.to_string()),
-                    ("is", biome.name().to_string()),
+                    ("is", id_of("biome", biome.name())),
                 ],
             ));
         }
@@ -158,46 +176,46 @@ fn limits() -> Vec<Row> {
         row(
             "capacity",
             &[
-                ("of", "deposit".into()),
-                ("for", "extractor".into()),
-                ("what", "resource".into()),
-                ("per", "place".into()),
+                ("of", id_of("relation", "deposit")),
+                ("for", id_of("relation", "extractor")),
+                ("what", id_of("relation", "resource")),
+                ("per", id_of("relation", "place")),
                 ("quantity", "1".into()),
             ],
         ),
         row(
             "capacity",
             &[
-                ("of", "place".into()),
-                ("for", "bin".into()),
-                ("what", "resource".into()),
-                ("per", "place".into()),
+                ("of", id_of("relation", "place")),
+                ("for", id_of("relation", "bin")),
+                ("what", id_of("relation", "resource")),
+                ("per", id_of("relation", "place")),
                 ("quantity", "2".into()),
             ],
         ),
         row(
             "capacity",
             &[
-                ("of", "bin".into()),
-                ("for", "resource".into()),
-                ("what", "resource".into()),
-                ("per", "place".into()),
+                ("of", id_of("relation", "bin")),
+                ("for", id_of("relation", "resource")),
+                ("what", id_of("relation", "resource")),
+                ("per", id_of("relation", "place")),
                 ("quantity", "10".into()),
             ],
         ),
         row(
             "provides",
             &[
-                ("kind", "place".into()),
-                ("what", "berth".into()),
+                ("kind", id_of("relation", "place")),
+                ("what", id_of("supply", "berth")),
                 ("quantity", "6".into()),
             ],
         ),
         row(
             "consumes",
             &[
-                ("kind", "pioneer".into()),
-                ("what", "berth".into()),
+                ("kind", id_of("relation", "pioneer")),
+                ("what", id_of("supply", "berth")),
                 ("quantity", "1".into()),
             ],
         ),
@@ -210,7 +228,7 @@ pub fn terrain(territory: u32, biome: Biome) -> Vec<Row> {
         "terrain",
         &[
             ("of", territory.to_string()),
-            ("is", biome.name().to_string()),
+            ("is", id_of("biome", biome.name())),
         ],
     )]
 }
@@ -226,6 +244,10 @@ pub fn deposit(territory: u32, resource: &str, density: u32) -> Vec<Row> {
         "deposit",
         &[
             ("where", surface_of(territory).to_string()),
+            // **Already an id, resolved where a word that names nothing is a misreading.**
+            // `crate::binding` does it, so `{set-resource ... resource:gold}` is refused with
+            // what could have been written - where this would have panicked, which is no way
+            // to answer a player.
             ("what", resource.to_string()),
             ("density", density.to_string()),
             ("quantity", "1".into()),
@@ -250,6 +272,8 @@ pub fn in_orbit(territory: u32, kind: &str) -> Vec<Row> {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::{BTreeMap, BTreeSet};
+
     use super::*;
 
     /// **The builder and the reader agree about where a territory's places are.**
@@ -296,9 +320,119 @@ mod tests {
         assert_eq!(rows.len(), 114);
     }
 
+    /// **Every id a planet writes is its own**, which the engine refuses if it is not.
+    #[test]
+    fn no_two_rows_of_one_relation_share_an_id() {
+        for size in PlanetSize::ALL {
+            let rows = planet(size);
+            let mut seen: BTreeSet<(String, String)> = BTreeSet::new();
+            for row in &rows {
+                let Some(id) = row.value("id") else { continue };
+                assert!(
+                    seen.insert((row.relation.clone(), id.to_string())),
+                    "{}: two `{}` rows have id {id}",
+                    size.name(),
+                    row.relation
+                );
+            }
+        }
+    }
+
+    /// **Every planet the console can make is a world the engine can hold.**
+    ///
+    /// # The defect this was written for
+    ///
+    /// **A planet of twenty-six territories or more would not load**, and no world in the tree
+    /// had ever had that many. `{place id:51 of:26 layer:surface}` is the surface of territory
+    /// 26; relation 26 is `unit`, which is a family, and `schema::reified` expanded the row into
+    /// one per member - so the world held four places numbered 51 and `Game::of` refused it,
+    /// correctly, for a duplicate this made.
+    ///
+    /// **A territory id and a relation id are different id spaces** and a value alone cannot say
+    /// which it is. The fix is in `schema.rs`: a value names a family only where the column
+    /// points at that family, or at `relation`.
+    ///
+    /// **Every size rather than the one that failed.** `tiny-12` passed throughout, which is
+    /// what a check on one example would have gone on saying.
+    #[test]
+    fn every_size_makes_a_world_the_engine_will_hold() {
+        let mut checked = 0;
+        for size in PlanetSize::ALL {
+            let mut rows = game_model::foundation::rows();
+            rows.extend(planet(size));
+            game_model::engine::Game::of(rows)
+                .unwrap_or_else(|why| panic!("{} does not hold: {why}", size.name()));
+            checked += 1;
+        }
+        assert_eq!(checked, 5, "every planet size");
+    }
+
     /// **The same size gives the same planet**, which is what a seed is for.
+    ///
+    /// **A history is a save file only while this holds** - the terrain is recomputed from
+    /// `{create-planet size:...}` rather than recorded, so a replay that built a different world
+    /// would replay to a different game.
     #[test]
     fn a_size_gives_the_same_planet_twice() {
         assert_eq!(planet(PlanetSize::Tiny), planet(PlanetSize::Tiny));
+    }
+
+    /// The adjacency, as territory ids, read back out of the rows.
+    fn touching(rows: &[Row]) -> BTreeMap<u32, Vec<u32>> {
+        let mut out: BTreeMap<u32, Vec<u32>> = BTreeMap::new();
+        for it in rows.iter().filter(|it| it.relation == "adjacency") {
+            let (Some(from), Some(to)) = (it.value("from"), it.value("to")) else {
+                continue;
+            };
+            if let (Ok(from), Ok(to)) = (from.parse(), to.parse()) {
+                out.entry(from).or_default().push(to);
+            }
+        }
+        out
+    }
+
+    /// **A planet is not one biome painted over twelve faces.**
+    ///
+    /// `spec/planet.md` asks that nothing in the terrain reveal how the sphere was divided, and a
+    /// world with a single biome would reveal nothing because it would say nothing.
+    #[test]
+    fn a_planet_has_more_than_one_kind_of_ground() {
+        let rows = planet(PlanetSize::Huge);
+        let kinds: BTreeSet<&str> = rows
+            .iter()
+            .filter(|it| it.relation == "terrain")
+            .filter_map(|it| it.value("is"))
+            .collect();
+        assert!(kinds.len() > 2, "ninety-two territories and only {kinds:?}");
+    }
+
+    /// **Adjacency reads the same from both ends**, or moving somewhere would not let you move
+    /// back.
+    #[test]
+    fn adjacency_agrees_with_itself() {
+        let rows = planet(PlanetSize::Tiny);
+        let near = touching(&rows);
+        let mut checked = 0;
+        for (here, there) in &near {
+            for other in there {
+                assert!(
+                    near.get(other).is_some_and(|back| back.contains(here)),
+                    "{here} lists {other} and {other} does not list {here}"
+                );
+                checked += 1;
+            }
+        }
+        assert_eq!(checked, 60, "twelve faces of five neighbours, both ways");
+    }
+
+    /// **A dodecahedron: every face touches exactly five others.**
+    #[test]
+    fn every_territory_of_the_smallest_planet_touches_five() {
+        let rows = planet(PlanetSize::Tiny);
+        let near = touching(&rows);
+        assert_eq!(near.len(), 12);
+        for (here, there) in &near {
+            assert_eq!(there.len(), 5, "territory {here} has {}", there.len());
+        }
     }
 }

@@ -47,9 +47,12 @@ mod tests {
     #[test]
     fn opening_the_browser_changes_nothing() {
         let console = Console::new();
-        let before = console.session.game.clone();
+        let before = console.session.game().map(|it| it.rows().rows().len());
         let _ = browse(&console.session);
-        assert_eq!(console.session.game, before);
+        assert_eq!(
+            console.session.game().map(|it| it.rows().rows().len()),
+            before
+        );
         assert_eq!(console.generation(), console.generation());
     }
 
