@@ -61,7 +61,77 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-175 - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `a4ee6aa0` · **source** working `D-1` to `D-3` and finding the meter cannot move · **cites** `D-1`, `D-2`, `D-3`, `D-4`
+
+**derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
+
+**The meter did not move tonight and this says why with a number.** `BEING_REPLACED` is still
+eight.
+
+## Why no module can go first
+
+```
+module       referenced by other modules in src/    resolved uses outside game-model
+game                     3                                    23  in 5 files
+identity                 7                                    75  in 6 files
+rejection                3                                     1  in 1 file
+rules                    0                                     1  in 1 file
+territory                3                                     4  in 1 file
+thing                    4                                     0  in 0 files
+transition               3                                    26  in 1 file
+unit                     4                                    14  in 2 files
+```
+
+**`thing` has no user outside the crate and still cannot go**, because `game.rs`, `rules.rs`,
+`territory.rs` and `rejection.rs` all use its `Kind` and `Trait`. **`rules` has no type at all** -
+it is `impl Game` and `impl Territory`, so a count of exported names says nothing about it, and
+what holds it is the twelve methods it hangs on those two.
+
+**So the eight are one lump, not eight steps.** Every module is held either by a consumer or by
+another module of the lump, and the lump goes when its consumers do.
+
+## What the consumers actually are, which is smaller than it looked
+
+```
+  57  crates/game-console/src/containment.rs
+  50  crates/game-console/src/binding.rs
+  15  crates/game-console/src/report.rs
+  12  crates/game-console/tests/fully_exploited.rs
+   5  crates/game-console/src/lib.rs
+   2  crates/game-console/src/state.rs
+   2  crates/game-front/src/console.rs
+   1  crates/game-console/tests/expected_state.rs
+```
+
+**144 uses across 8 files, and 142 of them are `game-console`.** `game-front`'s two are
+`game_model::Phase::Play` in one test, and they are not independent - the phase is read off the
+session's old `Game`, so they move when the console does.
+
+**`crates/outbox.md` has said 6,560 lines and eight modules since `C-158`.** That is the size of
+what is deleted; **this is the size of what has to be written first**, and the two are not the
+same question.
+
+## The number was wrong twice before it was right, and the shape is the one from tonight
+
+**A bare-name count over the whole tree said 179 in 10 files.** It credited `planet-bevy`,
+`planet-flat`, `planet-ecs`, `game-globe` and `game-inspect` with uses they cannot have - none of
+them depends on `game-model`, and `planet_model` has a `Territory` and a `Resource` of its own.
+
+**Restricting to the three crates that do depend on it still said 179**, because four of
+`game-front`'s six were `Surface::Game` - **game-front's own enum**. Resolving to `game_model::`
+paths and to names imported from it gives 144.
+
+**That is *the instrument answers a narrower question than the one asked* for the fourth time
+tonight**, and the fourth different population: the sweep over crates that cannot use the type,
+the check over `PATHS` that is three of five, the item crediting `hooks/pre-commit` with a rule it
+does not enforce, and this. **Each returned a plausible number.** The one that was caught by a
+check failing was none of them.
+---
+
 ### C-174 - `releases/first-release.md` cites `bc8a64f7` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **source** running the tools suites, which `cargo test --workspace` does not reach · **cites** `C-165`, `R-9`, `R-11`
 

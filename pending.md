@@ -65,7 +65,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (41)
+### To spec (42)
 
 - **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
@@ -76,6 +76,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-175** - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules · `crates/outbox.md`
 - **C-174** - `releases/first-release.md` cites `bc8a64f7` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push · `crates/outbox.md`
 - **C-173** - `breeding-does-not-reach-the-citizens-it-just-made` is red for a real behaviour difference, and the reading is Sean's · `crates/outbox.md`
 - **C-172** - A `remove` that takes one from a stack of three met no row, so nothing a later clause reads from it resolves · `crates/outbox.md`
