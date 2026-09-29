@@ -532,13 +532,12 @@
 
 {input id:19 rule:gather seq:1 name:where of:place}
 
-{clause id:39 rule:gather seq:1 role:require relation:deposit name:clause-39}
+{clause id:39 rule:gather seq:1 role:require relation:planet name:clause-39}
 {clause id:35 rule:gather seq:2 role:require relation:ark name:clause-35}
 {clause id:36 rule:gather seq:3 role:remove relation:ark name:clause-36}
 {clause id:37 rule:gather seq:4 role:add relation:ark name:clause-37}
 {clause id:38 rule:gather seq:5 role:add relation:energy name:clause-38}
 
-{binding id:52 clause:clause-39 column:51 input:where}
 {binding id:48 clause:clause-35 column:142 input:where}
 {binding id:49 clause:clause-36 column:142 input:where}
 {binding id:50 clause:clause-37 column:142 input:where}
@@ -549,10 +548,9 @@
 {literal id:51 clause:clause-36 column:145 value:1}
 {literal id:52 clause:clause-37 column:144 value:0}
 {literal id:53 clause:clause-37 column:145 value:1}
-{literal id:55 clause:clause-39 column:52 value:energy}
 
 {reading id:8 clause:clause-37 column:143 of:clause-35 takes:143}
-{reading id:9 clause:clause-38 column:141 of:clause-39 takes:53}
+{reading id:9 clause:clause-38 column:141 of:clause-39 takes:162}
 
 # **`launch` builds an ark and puts it in orbit, and that is one action.** Sean, 2026-09-20:
 # *building/launching an ark will be one action, removing the resources required to build an ark
