@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-591** - A command that can be expressed as a row is not needed, and what saves `create-planet` is open · `decide/questions.md`
+- **P-590** - Two regression cases are stale because of your own two promotions, and only you may delete them · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -21,10 +23,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-222** - `1cc20af` S-222: the reviewed script watches the right directory, and generates the form · still open in `docs/notes/proposals.md`
-- **S-221** - `dd3f0a4` S-221's other half: the scenario gets its planet, and four checks follow the new relation · still open in `docs/notes/proposals.md`
-- **S-220** - `eeadd29` S-220: the index lists the five files a run reads, not the three it compiles in · still open in `docs/notes/proposals.md`
-- **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
@@ -33,12 +31,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (11)
 
-- **S-222** - `scripts/reviewed.ps1` watches a directory that moved eight days ago, and the reading it publishes still does not bite · `docs/notes/proposals.md`
-- **S-221** - `P-588` landed: a planet is a thing, and the sun is a deposit on it · `docs/notes/proposals.md`
-- **S-220** - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable · `docs/notes/proposals.md`
-- **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`

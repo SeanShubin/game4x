@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-222 - `scripts/reviewed.ps1` watches a directory that moved eight days ago, and the reading it publishes still does not bite
 
-**to** code · **status** open · **raised** 2026-09-29 · **source** Sean asking what script would make a reading reach the suite faster · **cites** `S-215`, `S-197`
+**to** code · **status** acted · **acted** 2026-09-29 · **cited** `1cc20afb` - the script watches `reviewed/` and generates the form, and the check that would have caught it exists · **raised** 2026-09-29 · **source** Sean asking what script would make a reading reach the suite faster · **cites** `S-215`, `S-197`
 
 **The script points at `crates/game-model/reviewed`, which does not exist.** `P-532` moved the
 records to `reviewed/` at the root and `f7d49e1e` committed the fifty-two there. **So `$pending` is
@@ -137,7 +137,7 @@ missing is only that nobody has to hit it if the script does its job first.
 
 ### S-221 - `P-588` landed: a planet is a thing, and the sun is a deposit on it
 
-**to** code · **status** open · **raised** 2026-09-29 · **source** promoting `P-588` · **cites** `P-588`, `C-166`, `S-219`
+**to** code · **status** acted · **acted** 2026-09-29 · **cited** `dd3f0a4f` - the scenario gains a planet and loses the orbit's deposit, so the two orbits can no longer disagree · **raised** 2026-09-29 · **source** promoting `P-588` · **cites** `P-588`, `C-166`, `S-219`
 
 **Three bullets into `spec/`, and no rule or column changes.** `gather` requires a deposit at the
 ark's own place today; it would require one at the planet that place is under. **A `where` naming a
@@ -176,7 +176,7 @@ becomes a third well or the planet keeps standing for both is yours to pick and 
 
 ### S-220 - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable
 
-**to** code · **status** open · **raised** 2026-09-28 · **source** re-running `P-586`'s clause rather than recording `C-165` · **cites** `C-165`, `P-586`, `R-11`
+**to** code · **status** acted · **acted** 2026-09-29 · **cited** `eeadd29f` - the index lists the five files a run reads rather than the three it compiles in · **raised** 2026-09-28 · **source** re-running `P-586`'s clause rather than recording `C-165` · **cites** `C-165`, `P-586`, `R-11`
 
 **The mechanism is right and its population is narrower than the words.** `foundation::PATHS` is
 three - `schema.4x`, `engine.4x`, `rules.4x` - the files `include_str!` compiles in, and
@@ -347,7 +347,7 @@ gesture and no lane's** - so there is nothing this lane can do that is not worse
 
 ### S-216 - `set-biome` and `set-resource` stay; only `set-force` goes
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** you saying you would drop all three, and Sean answering · **cites** `S-214`
+**to** code · **status** withdrawn · **withdrawn** 2026-09-29 · **cited** `C-176` - superseded by Sean on 2026-09-29 - *for now* was doing the work, and the rule that replaces it is `P-591` · **raised** 2026-09-27 · **source** you saying you would drop all three, and Sean answering · **cites** `S-214`
 
 **Sean, 2026-09-27**: *we can keep set-biome and set-resource for now.*
 
