@@ -205,12 +205,11 @@ jobs:
       # the game keeps the root: `dist/` has no `reports` or `scenario` of its own.
       #
       # **`scenario/` goes too, and that is the detail the whole thing turns on.** Every link
-      # in the reports is relative, so any subpath serves them - but two leave the directory,
-      # `../scenario/commands/play.4x` and `../scenario/expected/play.4x`. They have to land
-      # beside `reports/` rather than inside it, or those two 404 on the published page while
-      # working perfectly in a clone. `tests/browsable.rs` asserts that those two are still
-      # the only ones that point outward, so a third arriving fails the gate rather than the
-      # page.
+      # in the reports is relative, so any subpath serves them - but some leave the directory,
+      # `../scenario/main.4x` and `../spec/data/` among them. They have to land beside
+      # `reports/` rather than inside it, or those 404 on the published page while working
+      # perfectly in a clone. `tests/browsable.rs` asserts that links reaching outward still
+      # resolve, so one arriving that does not fails the gate rather than the page.
       #
       # **Copied as committed rather than regenerated, and the gate is what makes that safe.**
       # `the_committed_catalog_is_what_the_release_generates` and
@@ -264,7 +263,10 @@ jobs:
           # was**: the foundation forms `R-12` serves.
           test -d crates/game4x/dist/reports/foundation
           test "$(find crates/game4x/dist/reports/foundation -name '*.4x' | wc -l)" -ge 40
-          test -f crates/game4x/dist/scenario/expected/play.4x
+          # **`scenario/main.4x` rather than `scenario/expected/play.4x`.** `D-4` deleted the
+          # old ruleset's playthrough and the expectation beside it; the scenario is one file
+          # now and it is the one the reports link.
+          test -f crates/game4x/dist/scenario/main.4x
           # **`schema.4x` rather than `kinds.4x`, which stopped existing before today.**
           # `spec/data/` is the engine's friendly source now and holds two files. This line
           # named a third and **the deploy job is the only thing that reads it**, so it would

@@ -8,6 +8,11 @@
 use game_console::Embedded;
 
 /// Every file the release needs, in the language `spec/console.md` describes.
+///
+/// **Four, and `play` is not among them since `D-4`.** These describe the release's world - a
+/// planet, what each territory has and what its ground is - and every line is a design command
+/// that survives the port. **`play.4x` was the old ruleset's playthrough**, 219 lines in a
+/// vocabulary the data no longer has, and `scenario/main.4x` is the scenario now.
 pub fn library() -> Embedded {
     Embedded::of(&[
         ("setup", include_str!("../../../scenario/commands/setup.4x")),
@@ -17,7 +22,6 @@ pub fn library() -> Embedded {
             "biomes",
             include_str!("../../../scenario/commands/biomes.4x"),
         ),
-        ("play", include_str!("../../../scenario/commands/play.4x")),
     ])
 }
 
@@ -41,7 +45,7 @@ mod tests {
     #[test]
     fn the_release_command_files_travel_with_the_binary() {
         let library = library();
-        for name in ["setup", "nodes", "biomes", "world", "play"] {
+        for name in ["setup", "nodes", "biomes", "world"] {
             assert!(library.fetch(name).is_some(), "`{name}` is not embedded");
         }
         // The hierarchy, one level at a time: setup says which planet and defers the
@@ -67,7 +71,7 @@ mod tests {
     #[test]
     fn what_is_carried_is_what_is_on_disk() {
         let library = library();
-        for name in ["setup", "nodes", "biomes", "world", "play"] {
+        for name in ["setup", "nodes", "biomes", "world"] {
             let path = format!(
                 "{}/../../scenario/commands/{name}.4x",
                 env!("CARGO_MANIFEST_DIR").replace('\\', "/")
