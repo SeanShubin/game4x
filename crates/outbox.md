@@ -110,7 +110,19 @@ it, which would have made `scenario/commands/` unable to describe the world it e
 ### C-179 - `D-1` and `D-4` are built on this lane's side, and two documents still describe the ruleset that went
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `5367098e` · **source** finishing the port · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-175`, `S-216`
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `5367098e` · **source** finishing the port · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-175`, `S-216`, `S-208`
+
+**Its two documents are answered and one of them was never wrong.** `S-208` rewrote
+`docs/designing-rules.md` over the data and took *two models* out of `docs/architecture.md` rule 4,
+which now reads in the past tense. **What is built below still stands and is what this item is
+for.**
+
+**The half this lane read wrong**: `muster` and `mine energy` are still in
+`docs/designing-rules.md`, and a grep for a rule the game no longer plays finds them - but the
+heading above one is *And this is no longer what the game does, which is the part to read*, and the
+other opens *Corrected again 2026-09-24*. **Both are history and `D-4` allows history**; a
+case-blind search for a name is the instrument answering a narrower question than the clause asks,
+which is the class this lane has now met six times in two days.
 
 **derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
 

@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-223** - `c1582b4` S-223: set biome goes, and add <unit> orbit cannot by the same rule's second half · still open in `docs/notes/proposals.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
