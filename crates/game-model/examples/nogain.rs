@@ -1067,6 +1067,11 @@ struct Cell {
     class: &'static str,
 }
 
+/// A cell as markdown, with the one character that would end the column escaped.
+fn said_as(cell: &Cell) -> String {
+    cell.said.replace('|', r"\|")
+}
+
 fn text(said: impl Into<String>) -> Cell {
     Cell {
         said: said.into(),
@@ -1161,15 +1166,42 @@ fn page(parts: &[Part], title: &str, note: &str) -> (String, String) {
                     ));
                 }
                 html.push_str("</tr>\n");
-                markdown.push_str(&format!("| {} |\n", columns.join(" | ")));
-                markdown.push_str(&format!(
-                    "| {} |\n",
-                    columns
-                        .iter()
-                        .map(|_| "---")
-                        .collect::<Vec<_>>()
-                        .join(" | ")
-                ));
+
+                // **Written in the form the padder would leave it** - `CLAUDE.md`: *padding a
+                // generated file changes nothing, and a check says so.* The widths are computed
+                // here rather than by depending on `tools/pad-tables`, which keeps its own
+                // workspace *deliberately so it never appears in `cargo tree`*; a path
+                // dependency from a member crate would undo that. What is borrowed is the rule
+                // and not the code: the widest cell in the column, and never under three so a
+                // separator is at least `---`.
+                let widths: Vec<usize> = columns
+                    .iter()
+                    .enumerate()
+                    .map(|(at, column)| {
+                        rows.iter()
+                            .filter_map(|row| row.get(at))
+                            .map(|cell| said_as(cell).chars().count())
+                            .chain(std::iter::once(column.chars().count()))
+                            .max()
+                            .unwrap_or(0)
+                            .max(3)
+                    })
+                    .collect();
+                let ruled = |cells: Vec<String>| -> String {
+                    let mut line = String::from("|");
+                    for (at, cell) in cells.iter().enumerate() {
+                        line.push(' ');
+                        line.push_str(cell);
+                        for _ in 0..widths[at].saturating_sub(cell.chars().count()) {
+                            line.push(' ');
+                        }
+                        line.push_str(" |");
+                    }
+                    line.push('\n');
+                    line
+                };
+                markdown.push_str(&ruled(columns.iter().map(|it| it.to_string()).collect()));
+                markdown.push_str(&ruled(widths.iter().map(|it| "-".repeat(*it)).collect()));
                 for row in rows {
                     html.push_str("<tr>");
                     for cell in row {
@@ -1184,13 +1216,7 @@ fn page(parts: &[Part], title: &str, note: &str) -> (String, String) {
                         ));
                     }
                     html.push_str("</tr>\n");
-                    markdown.push_str(&format!(
-                        "| {} |\n",
-                        row.iter()
-                            .map(|it| it.said.replace('|', "\\|"))
-                            .collect::<Vec<_>>()
-                            .join(" | ")
-                    ));
+                    markdown.push_str(&ruled(row.iter().map(said_as).collect()));
                 }
                 html.push_str("</table>\n");
             }

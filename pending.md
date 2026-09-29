@@ -20,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-219** - `d3c1173` S-219: the no-gain property is decided again, and the check bites · still open in `docs/notes/proposals.md`
 - **R-9** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
 - **R-11** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`

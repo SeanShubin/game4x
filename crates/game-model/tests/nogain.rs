@@ -183,6 +183,43 @@ fn a_game_that_gains_only_around_a_cycle_is_refused() {
     );
 }
 
+/// **Padding the generated page changes nothing**, which `CLAUDE.md` requires of a generated file.
+///
+/// **The property rather than the tool.** `tools/pad-tables` keeps its own workspace *deliberately
+/// so it never appears in `cargo tree`*, so this cannot call it; what it asserts instead is the
+/// invariant that tool's own test asserts - every line of a table is the same width. A generator
+/// that wrote ragged tables would be padded by `hooks/pre-commit` into something it does not
+/// write, and the check above would then fail on every commit.
+#[test]
+fn the_generated_tables_are_already_padded() {
+    let at = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../reports/nogain.md");
+    let text = std::fs::read_to_string(&at).expect("reports/nogain.md");
+
+    let mut tables = 0;
+    let mut rows = 0;
+    let mut widths: Vec<usize> = Vec::new();
+    let mut lines = text.lines().peekable();
+    while let Some(line) = lines.next() {
+        if line.starts_with('|') {
+            widths.push(line.chars().count());
+            rows += 1;
+            if lines.peek().is_none_or(|next| !next.starts_with('|')) {
+                assert!(
+                    widths.windows(2).all(|two| two[0] == two[1]),
+                    "a table in `reports/nogain.md` has rows of {widths:?} characters, so \
+                     `hooks/pre-commit` would pad it into something the generator does not write"
+                );
+                tables += 1;
+                widths.clear();
+            }
+        }
+    }
+
+    // **Assert both populations.** With no tables found, every table is padded vacuously.
+    assert!(tables >= 2, "only {tables} table(s) were checked");
+    assert!(rows >= 40, "only {rows} table row(s) were checked");
+}
+
 /// **The committed page is what the generator writes**, so a stale verdict fails the gate.
 ///
 /// **This is `dumps_are_current`'s shape**, and the reason `R-9` asks for it: a generated page
