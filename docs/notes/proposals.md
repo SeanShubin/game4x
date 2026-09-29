@@ -107,7 +107,7 @@ wants saying so.
 
 ### S-219 - `spec/invariants.md` says the no-gain property is decided mechanically, and nothing decides it
 
-**to** code · **status** open · **raised** 2026-09-28 · **source** Sean: *I want the petri reports back, it gives me confidence that we would immediately detect an infinite resource glitch* · **cites** `C-164`, `C-42`, `D-4`
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `d3c11732`, `f828fd70` - the property is asserted rather than only reported: `a_rule_that_makes_something_from_nothing_is_refused` and `a_game_that_gains_only_around_a_cycle_is_refused` are checks that would have failed before it · **raised** 2026-09-28 · **source** Sean: *I want the petri reports back, it gives me confidence that we would immediately detect an infinite resource glitch* · **cites** `C-164`, `C-42`, `D-4`
 
 **derived from** *whether this holds is decided mechanically, from the rules alone, and stays so however many rules there are* - `spec/invariants.md` -> Nothing comes back round with more
 
