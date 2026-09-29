@@ -61,7 +61,73 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-176 - Three design-phase commands are each a row, and `spec/console.md` still names them
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `6e9a0d58` · **source** Sean: *we don't need a command that can be expressed as a row* · **cites** `C-175`, `S-216`, `D-1`
+
+**derived from** *every kind of thing, and every recipe that turns some things into others, is data rather than code* - `spec/invariants.md` -> The game is data
+
+**His rule, stated 2026-09-29**: *we don't need a command that can be expressed as a row, but isn't
+`create-planet` still needed because it generates multiple rows?* **And the sharper form it turned
+into**: what saves a command is not how many rows it writes but that nobody could write them.
+
+## What the rule decides, measured against the six
+
+```
+create-planet        96 rows at tiny-12, 816 at huge-92, from a tessellation   stays
+set-resource         a deposit and a capacity - two rows, both writable        goes
+set-biome            a cell on a row that already exists                       goes
+add-ark-orbit        one row                                                   goes
+add-pioneer-orbit    one row                                                   goes
+set-force            not in `spec/` since `P-522` cut force                    goes
+```
+
+**`set-resource` is the case that shows the line is not the count.** It writes two rows and both
+are typeable, so *multiple* is not what saves a command. `create-planet` runs
+`sphere_tessellation::adjacency` and `solid` and then derives a biome per territory from a terrain
+field - **the adjacency of a ninety-two-face Goldberg polyhedron is not tedious to write, it is
+not possible to write correctly**, which is what makes it a generator rather than a shorthand.
+
+**Adjacency is directed, measured from `scenario/main.4x`** - `territory-1 -> territory-2` and the
+reverse are two rows. The totals above are arithmetic from `spec/planet.md`'s own rule that twelve
+territories have five neighbours and the rest six; **derived rather than measured by running it.**
+
+## What needs promoting, and it is only the three
+
+**`create-planet` needs nothing.** `spec/console.md` already says `create planet <size>` - *make a
+planet and its territories* - so his decision is the specification rather than a change to it.
+
+**These three are still named there**, under *Available only before `start`*, and by his rule they
+go:
+
+```
+set resource <territory> <resource> <extractors> <density>
+set biome <territory> <biome>
+add <unit> orbit
+```
+
+**`set-force` needs no promotion either**, because `spec/` has not named it since `P-522`. Taking
+it out of the console is catching up rather than changing anything - which is `S-216`, and `C-171`
+sequences it behind `D-4`.
+
+## One thing specified and never built, which this does not touch
+
+**`{generate-planet size:<size> policy:<policy> seed:<seed>}`** is in the same list - *make a
+planet and everything a designed one needs, choosing what is not specified according to a policy* -
+and **no Rust in the tree mentions it.** It is not in the way of the port and it is not this
+item's question; it is recorded here because a reader comparing the console to `spec/console.md`
+will meet it.
+
+## What this lane will do meanwhile
+
+**Port around them rather than wait.** The three keep working until the promotion lands, and
+taking them out afterwards is deleting a form and a binding arm each. **They are most of what
+makes `binding.rs` fifty of the port's hundred and forty-four uses**, so the estimate falls when
+they go rather than the work growing.
+---
+
 ### C-175 - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `a4ee6aa0` · **source** working `D-1` to `D-3` and finding the meter cannot move · **cites** `D-1`, `D-2`, `D-3`, `D-4`
 
@@ -145,7 +211,9 @@ the suites again by hand**, for a different reason, which is the habit rather th
 ### C-174 - `releases/first-release.md` cites ``bc8a64f7`` twice and the commit is `bc8a64f9`, so `hooks/pre-push` will refuse the next push
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **source** running the tools suites, which `cargo test --workspace` does not reach · **cites** `C-165`, `R-9`, `R-11`
+**to** spec · **status** acted · **raised** 2026-09-29 · **closed** 2026-09-29 · **cited** `0450f531` · **source** running the tools suites, which `cargo test --workspace` does not reach · **cites** `C-165`, `R-9`, `R-11`
+
+**Fixed at `0450f531`, and re-derived rather than read off the subject**: `releases/first-release.md` carries `bc8a64f9` twice and ``bc8a64f7`` nowhere. `tools/outbox` passes.
 
 **derived from** *`tools/outbox` does the same for every outbox* - `CLAUDE.md` -> Perspectives, on a `cited` field naming no commit
 
@@ -185,7 +253,9 @@ it.
 ### C-173 - `breeding-does-not-reach-the-citizens-it-just-made` is red for a real behaviour difference, and the reading is Sean's
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **source** running the regeneration `S-222` says nothing runs · **cites** `P-587`, `C-172`, `S-222`
+**to** spec · **status** answered · **raised** 2026-09-29 · **closed** 2026-09-29 · **cited** `0450f531` · **source** running the regeneration `S-222` says nothing runs · **cites** `P-587`, `C-172`, `S-222`
+
+**Answered, and the answer was that the test said the opposite of its own comment.** `0450f531` changed the `then` from four citizens alike to `2` at `bearing:0` and `2` at `bearing:1` - the game was right and the rows were old. **The red is still there and is now waiting on one reading**: `examples/foundation.rs` generates from `reviewed/` and never from `spec/tests/`, which is rule 3 working, so the corrected test does not reach the suite until Sean reads it. **Measured at `6e9a0d58`**: the record and the test differ by those two rows, and `first_test` is still red.
 
 **derived from** *the suite runs the copies in it, so a test nobody has read constrains nothing and a test he has read is red until the code obeys it* - `CLAUDE.md` -> Perspectives
 
