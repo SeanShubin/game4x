@@ -12,6 +12,7 @@
 #   reports/scenario.*        the main scenario, one case per command, by turn
 #   reports/types.*           one case per relation the game declares
 #   reports/primitives.*      one case per word the engine implements
+#   reports/nogain.*          whether any sequence of rules can come back round with more
 #   reports/unused-rows.md    what no reviewed behaviour depends on - written by the sweep
 #   reports/unused-values.md  the same for values
 #
@@ -27,4 +28,7 @@
 
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
+# **The no-gain page first, because the index links it only where it is there.** Running the
+# index alone must not leave a dangling reference, which is `R-9`'s first clause.
+cargo run --quiet --manifest-path "$root/Cargo.toml" -p game-model --example nogain
 cargo run --quiet --manifest-path "$root/Cargo.toml" -p game-model --example index -- "$@"

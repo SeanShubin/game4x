@@ -61,7 +61,128 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-167 - `S-219` is built: the no-gain property is decided again, and the check bites
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** `S-219` · **cites** `S-219`, `C-166`, `C-165`, `S-218`
+
+**derived from** *whether this holds is decided mechanically, from the rules alone* - `spec/invariants.md` -> Nothing comes back round with more
+
+**Filed rather than said in a commit, which is `S-218`.** This lane may build the thing and may
+not record that the item is done.
+
+## What is there now
+
+`crates/game-model/examples/nogain.rs` reads `spec/data/rules.4x` and solves for the weighting;
+`crates/game-model/tests/nogain.rs` is what fails the gate; `reports/nogain.html` is where it is
+read, linked from the index.
+
+**Sixteen rules ground to thirty-two, over thirty places, and a weighting exists** - so no
+sequence of rules ends holding more than it began with. **Sixteen of the thirty-two come out at
+exactly zero**, which is the part worth looking at: those are the loops the weighting is tight
+around, where what comes back is worth precisely what went in.
+
+## The reader is new and the solver is not, as `S-219` said
+
+**What `S-219` predicted held.** The model and the exact-rational feasibility solver are
+`a8386450`'s, recovered and unchanged in substance; everything above them is new, because a
+clause now carries its quantity as a `{literal ...}` rather than as a Qty cell.
+
+**Two things the old page did not have to do.** A rule over a family is now one rule per member -
+`work` is three rules and not one summing metal, food and energy against three of the planet -
+and a clause whose quantity is *read* gets a second row for the coefficient of what it reads, so
+the verdict covers every density rather than fixing it at one.
+
+## Why a green run here is worth something
+
+**Passing tests prove nothing on their own**, so the check is handed two games that gain and
+required to refuse both:
+
+- a rule that mints a metal and takes nothing
+- **every rule with the time taken out of it** - after which `toil` turns a citizen from
+  `laboring 1` to `laboring 0` for a labor, and `refresh` turns it back for free, and the two
+  mint labor forever
+
+**The second is the one that matters.** No single rule of it makes anything from nothing, so a
+check that looked at one rule at a time would wave it through - and **that is the shape of the
+glitch Sean gave as his reason**: *it gives me confidence that we would immediately detect an
+infinite resource glitch.*
+
+**And the weighting is checked by substitution as well as by the tableau.** The simplex says
+feasible; a second test adds every rule up under the numbers it returned and requires each to be
+at or below zero. `CLAUDE.md` records that a check cannot catch a check whose predicate is wrong -
+here there are two predicates, and they are not the same one.
+
+## What it rests on that the data does not say
+
+**One thing, and it is `C-166`**: the data names no sources, so every density draw is charged to
+the planet and the star is drawn on by nothing. **Charging them to one well is the strict
+reading** - one weight above metal, food and energy at once - so the verdict holds under a reading
+at least as demanding as the intended one.
+
+## What this does not cover, which the deleted page also said
+
+**The invariant is over the kinds.** A place here is a kind, or a kind with one trait pinned - so
+a green run says nothing about a quantity derived some other way, and `R-10`'s drawing is a
+different property again.
+---
+
+### C-166 - The invariant says a source is named, and `spec/data/` names none - so the star is drawn on by nothing
+
+
+**to** spec · **status** open · **raised** 2026-09-28 · **source** `S-219`, building the no-gain decision over `spec/data/rules.4x` · **cites** `S-219`, `C-165`
+
+**derived from** *A source is named, and a named source is not a gain* - `spec/invariants.md` -> Nothing comes back round with more
+
+**Built and filed rather than waited on**, with the assumption stated below. The decision is in
+`reports/nogain.html` and holds; what is open is whether it should rest on a reader's inference.
+
+## What the data says, and what it does not
+
+**`spec/invariants.md` names three sources** - the planet, the star and time - and says *anything
+that exhausts draws on time for a turn... the way an extractor draws material out of the planet
+and is spent doing it.* **Two of those three are legible in the shape of a clause**: a `put` that
+restores a count is the turn's end, and a quantity read out of a `{require}`d deposit is the well
+behind a pump. So the reader charges those two without guessing.
+
+**The third is not legible at all.** No row in `spec/data/` names a source. `gather` is
+`{require deposit what:energy}` followed by a reading of that deposit's density - **byte for byte
+the same shape as `work`**, which mines metal out of the ground. Nothing distinguishes a mine from
+a sunlit orbit.
+
+**So this reader charges every density draw to the planet, and the star is drawn on by nothing.**
+That is the assumption it runs under, and it is stated on the page and in the module.
+
+## Why it does not change the verdict, and why it is still worth asking
+
+**Charging them all to one well is the strict reading.** One well is one weight that has to sit
+above metal, food and energy at once; splitting the three could only give the solver more room.
+**So the green run holds under a reading at least as demanding as the intended one** - this is not
+a gap the answer depends on.
+
+**What it costs is that the decision is not quite from the rules alone.** `spec/invariants.md`
+asks for it to be *decided mechanically, from the rules alone*, and one of its three sources
+currently reaches the instrument through a sentence in `spec/units.md` - *a mobile unit that moves
+in orbit gathers its own energy from the sun* - which nothing mechanical reads.
+
+## The two shapes this could take, and neither is this lane's to pick
+
+- **A row that names it**, so a clause says which well it draws on and the reader stops inferring.
+  This is what *a source is named* reads most directly as, and it would make the star appear in
+  the weighting as a place of its own.
+- **Nothing, and the sentence moves.** If *the planet* is meant as shorthand for *whatever endless
+  well a density sits in*, then the star is not a separate source and the invariant's list of
+  three is a list of two plus a manner of speaking. **That is a decision about the specification,
+  not about the code**, which is why it is here.
+
+## What this lane did not find
+
+**No rule gains, under either reading.** The check bites: `tests/nogain.rs` hands the solver a
+rule that mints a metal and a game where a turn's refresh costs nothing, and requires it to refuse
+both - the second gains only around a cycle, with no single rule making anything from nothing.
+---
+
 ### C-165 - `R-9` and `R-11` are built again, with the evidence, and `R-10` is not
+
 
 **to** spec · **status** open · **raised** 2026-09-28 · **cited** `09f628d7`, `4761fbf9`, `f4796863` · **source** `P-585` and `P-586` reopening three capabilities to this lane · **cites** `C-164`, `S-218`
 

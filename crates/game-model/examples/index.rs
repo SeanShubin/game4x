@@ -648,6 +648,18 @@ pub fn write_all() -> (usize, usize) {
             beside: vec![("as markdown".to_string(), format!("{slug}.md"))],
         });
     }
+    // **What follows from the rules rather than what they say**, written by the no-gain example.
+    // Linked only where it is there, so running this generator alone cannot leave a dangling
+    // reference - which is `R-9`'s first clause and what `tests/browsable.rs` refuses.
+    if root().join("reports/nogain.html").is_file() {
+        hub.push(Entry {
+            at: "nogain.html".to_string(),
+            said: "whether any sequence of rules can come back round with more - solved for, \
+                   not declared"
+                .to_string(),
+            beside: vec![("as markdown".to_string(), "nogain.md".to_string())],
+        });
+    }
     // **What no reviewed behaviour depends on**, written by the mutation sweeps when they run.
     for (slug, what) in [
         (

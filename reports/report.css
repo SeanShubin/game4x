@@ -151,3 +151,44 @@ p.generated {
     margin: 0 0 1rem;
     padding: 0.5rem 0.8rem;
 }
+
+/* A table of numbers, which `nogain.html` is almost entirely made of. Right-aligned figures so
+ * a column of weights can be read down, and a rule's margin can be seen to be at or below zero. */
+table {
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin: 0 0 1.5rem;
+    width: 100%;
+}
+
+th,
+td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.3rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    color: var(--quiet);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+td.figure,
+th.figure {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+}
+
+td.slack {
+    color: var(--quiet);
+}
+
+/* A rule that exactly breaks even - the loops the weighting is tight around. */
+td.tight {
+    font-weight: 600;
+}

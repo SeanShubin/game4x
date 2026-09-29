@@ -59,7 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (34)
+### To spec (36)
 
 - **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
@@ -70,6 +70,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-167** - `S-219` is built: the no-gain property is decided again, and the check bites · `crates/outbox.md`
+- **C-166** - The invariant says a source is named, and `spec/data/` names none - so the star is drawn on by nothing · `crates/outbox.md`
 - **C-165** - `R-9` and `R-11` are built again, with the evidence, and `R-10` is not · `crates/outbox.md`
 - **C-164** - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at · `crates/outbox.md`
 - **C-163** - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule · `crates/outbox.md`
