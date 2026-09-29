@@ -61,7 +61,56 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-177 - Four regression cases are stale from `P-587`, and deleting one is Sean's gesture and nobody else's
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `dd3f0a4f` · **source** the scenario playing again after `S-221`'s planet landed · **cites** `P-587`, `S-221`, `C-169`
+
+**derived from** *no instance deletes one while the command it covers is still played* - `CLAUDE.md` -> Perspectives
+
+**Left red on purpose.** Every one of the four covers an `{end-turn}` the scenario still plays, so
+none of them is housekeeping.
+
+```
+regression/scenario/01/06-end-turn.4x:18   was  bearing:1 laboring:1 -> 4   now  bearing:0 laboring:0 -> 2
+regression/scenario/02/06-end-turn.4x:18   was  bearing:1 laboring:0 -> 2   now  bearing:0 laboring:0 -> 2
+regression/scenario/03/06-end-turn.4x:26   was  bearing:1 laboring:1 -> 4   now  bearing:0 laboring:0 -> 2
+regression/scenario/04/08-end-turn.4x:26   was  bearing:1 laboring:0 -> 2   now  bearing:0 laboring:0 -> 2
+```
+
+**It is `P-587` and not `S-221`.** Every difference is a `bearing` that is now spent - `breed` puts
+the parent back at `bearing:0`, which is what `C-169` asked for and what two tests Sean read say.
+The planet row this lane added changes what an ark gathers and touches no citizen.
+
+**They could not be seen until now**, because the scenario did not play at all between the rule
+landing and the planet arriving: `gather` needed a `{planet}` and `scenario/main.4x` had none. **A
+scenario that does not play records nothing**, so the check reported the refusal rather than the
+four.
+
+## Why this lane has not cleared it
+
+**Deleting a case is an approval** - *it is not overwritten, it is honoured, and it says I accept
+what it does now.* These four say what the game does after `P-587`, and whether that is what he
+meant is the same judgement `C-169` handed him. **The commands are still played, so nothing here
+is housekeeping any lane may do.**
+
+```
+Remove-Item regression/scenario/01/06-end-turn.4x
+Remove-Item regression/scenario/02/06-end-turn.4x
+Remove-Item regression/scenario/03/06-end-turn.4x
+Remove-Item regression/scenario/04/08-end-turn.4x
+```
+
+**Then `cargo test -p game-model --test regression` writes them back and the diff is the reading.**
+
+## What is green around it
+
+**308 of 309 across the workspace at `dd3f0a4f`**, and this is the one. `first_test` is 57 of 57,
+so every test Sean has read passes against the data as it stands - **the four are the scenario's
+record of a turn rather than a test of a rule.**
+---
+
 ### C-176 - Three design-phase commands are each a row, and `spec/console.md` still names them
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `6e9a0d58` · **source** Sean: *we don't need a command that can be expressed as a row* · **cites** `C-175`, `S-216`, `D-1`
 
@@ -406,10 +455,15 @@ with a better reason.
 ## The pick, and it is already in the tree
 
 **The planet keeps standing for both, and since `P-588` that is no longer a choice this lane is
-making.** `spec/planet.md`: *the star is a deposit on the planet, with a density like any other,
-and every orbit above it draws on that one row.* A mine and a sunlit orbit both read a density off
-a deposit; every deposit hangs on the planet; so one well is what the specification describes
-rather than a convenience.
+making.** `spec/planet.md`: *the planet carries the star's density itself - one number for the
+whole world, the way a territory's deposit carries one for a resource - and every orbit above it
+draws on that one row.* A mine reads a density off a deposit and a sunlit orbit reads one off the
+planet; so one well is what the specification describes rather than a convenience.
+
+**Its wording moved under this item on 2026-09-29 and the conclusion did not.** `P-588` first made
+the star a deposit on the planet; `S-221`'s schema half made it a density the planet carries. **A
+column rather than a row, and the ledger is the same either way** - there is one endless well and
+it is the planet.
 
 **`reports/nogain.*` said the opposite until `d88a095f`.** It called the charging a guess and
 reported *the star is drawn on by nothing, which is `C-166`* - false from the moment `P-588`
@@ -693,11 +747,12 @@ different property again.
 
 **Answered by `P-588` rather than by anyone deciding what this asked.** It asked whether a clause
 should name the well it draws on, because the reader had to guess and the star came out drawn on
-by nothing. `spec/planet.md` now says: *the star is a deposit on the planet, with a density like
-any other, and every orbit above it draws on that one row.*
+by nothing. `spec/planet.md` now says: *the planet carries the star's density itself - one number
+for the whole world, the way a territory's deposit carries one for a resource - and every orbit
+above it draws on that one row.*
 
-**So there was never a second well to name.** A mine and a sunlit orbit both read a density off a
-deposit, and every deposit hangs on the planet - which is what the reader was already doing, for a
+**So there was never a second well to name.** A mine reads a density off a deposit and a sunlit
+orbit reads one off the planet - which is what the reader was already doing, for a
 reason it did not have. The question does not need answering; it needs deleting, and the page and
 the module header say the new reason instead of the old guess.
 
