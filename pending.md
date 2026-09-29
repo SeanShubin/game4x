@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-588** - `spec/invariants.md` names three sources and the data names none, so everything is charged to the planet · `decide/questions.md`
-- **P-587** - A citizen's `bearing` is `1` in every world the rules can reach, so the trait tells nothing apart · `decide/questions.md`
+- **P-588** - The sun is a deposit of energy in orbit, and nothing says so · `decide/proposals.md`
+- **P-587** - `bearing` becomes load-bearing: `breed` puts the parent back spent, the way `toil` does · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -23,6 +23,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-588** - `9cbe7d9` P-587 and P-588: two rows nothing depends on, and both are his judgement · still open in `decide/proposals.md`
+- **P-587** - `9cbe7d9` P-587 and P-588: two rows nothing depends on, and both are his judgement · still open in `decide/proposals.md`
 - **R-9** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
