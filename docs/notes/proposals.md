@@ -111,12 +111,29 @@ crates/game-model/data/foundation/*    column: code
 never land together. **That is the guarantee working** - a record must not land beside the thing it
 judges - and it means the fix is two commits from one script rather than one.
 
+## The check that would have caught it, which does not exist
+
+**`every_script_has_a_row_and_every_row_has_a_script` asks whether a script exists, never what it
+names.** So a script whose paths were deleted passes, and this one has passed for eight days while
+doing nothing.
+
+**`scripts/README.md`'s row is correct and the script is not**, which is the sharpest form of it:
+`S-197` fixed the row to say *over `reviewed/`*, the script still says
+`crates/game-model/reviewed`, **and nothing compares a script to its own description or to the
+disk.**
+
+**A path a script names should exist.** Quoted paths in `scripts/*.ps1` and `*.sh`, resolved against
+the root, each asserted present - over a population asserted non-empty, because a matcher that finds
+no paths passes for the wrong reason. **It would have fired on 2026-09-21**, the day `P-532` moved
+the records.
+
 ## What this lane is not proposing
 
 **Not a hook that generates.** `hooks/` running a generator makes a commit rewrite the tree under
 whoever is committing, and the gate already names the gap precisely - *2 test(s) have been read and
 the suite does not run them*, with the command in the message. **The red is a good red**; what is
 missing is only that nobody has to hit it if the script does its job first.
+
 
 ### S-221 - `P-588` landed: a planet is a thing, and the sun is a deposit on it
 
