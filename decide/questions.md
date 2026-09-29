@@ -11,47 +11,50 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-588 - The sun is a deposit and it is per planet, and the data has no planet to hang it on
+### P-588 - The sun is a deposit on a container above the territory, and that container does not exist yet
 
 **to** sean · **status** open · **raised** 2026-09-28 · **asks** a decision · **kind** measured · **from** `C-166`
 
-**Your two sentences are both right and together they need a shape that is not there.** *The sun acts
-as a deposit for energy*, and *the sun is per planet, not per territory*.
+**The concept you remember is real and it is not in `spec/`.** *Every thing but the game is in
+another thing* was written in `releases/first-release.md` -> Where things are, which `c7bcd95c`
+deleted with the old ruleset's tables on your word. **It survives in `docs/notes/decisions.md`, which
+is not binding, and in `crates/outbox.md`, which is a record.** `spec/` has never said it - measured,
+zero occurrences.
+
+**What `spec/logistics.md` does say is the half that fits it**: *a thing may contain things, and is
+itself in at most one other thing.* **So the containment allows a thing above a territory; nothing
+names one.**
 
 ```
-deposit.where          names a place, and a place is one layer of one territory
-capacity.per           takes `place` (88 rows) and `territory` (2). There is no `planet`
-the schema             has no `planet` relation at all - a planet is the set of its territories
+{relation name:game}     does not exist
+{relation name:planet}   does not exist
+{store id:2 name:game}   exists - but a store is where rows live, not a thing in the world
+{primitive word:game}    exists - an engine word, not a row
 ```
 
-**So a per-planet density has nowhere to be stated once.** Stated per orbit it is stated as many
-times as there are territories, and `spec/invariants.md` says a fact is stated once.
+## So your question has a yes and a choice inside it
 
-## And the scenario already shows the cost of that, measured
+**Yes: a deposit on a container above the territory is the shape**, and it needs no new column. A
+deposit already names *where* it is; what is missing is a thing for it to name. **`gather` would not
+change at all** - it requires a deposit at the ark's place today, and would require one at the
+planet the ark's place is under.
 
-```
-scenario/main.4x   2 orbit places: place-2 above territory-1, place-4 above territory-2
-                   {deposit where:place-2 what:energy density:3}      the sun, above the first
-                   place-4                                             nothing at all
-```
+**The choice is which container**, and the two are not the same bet:
 
-**The same star gives three above one territory and nothing above the other.** An ark in territory-2's
-orbit cannot gather. **Nobody stated that; it fell out of stating a planet's fact in one place.**
+- **`planet`.** The sun shines on a planet, and `spec/planet.md` already exists to describe one.
+  **It leaves room for a second planet** without the sun becoming ambiguous, which `game` does not
+- **`game`.** It is the word the notation already uses for the root, it is the containment
+  `docs/notes/decisions.md` describes, and **one row exists for the whole world by construction.**
+  The first release's scope is *a single planet*, so today the two are the same thing - and the day
+  they are not, a sun on the game is wrong
 
-## Three shapes, and the first is the only one that states it once
+**This lane would take `planet`** - it costs nothing today, and it is the one of the two that cannot
+become wrong. **It will not write either without you**, because a noun in the data model is decided
+in `spec/invariants.md` and that is yours.
 
-- **A `planet` enters the data**, and a deposit may name it - or `per:planet` joins `per:place` and
-  `per:territory`. **The sun is then one row for the whole game**, and `gather` reads it wherever the
-  ark is. Costs a relation the model has done without so far
-- **The sun is stated per orbit and the repetition is accepted.** Twelve rows saying one thing, which
-  contradicts *a fact is stated once* - and is what the scenario does today by accident rather than
-  by choice
-- **The sun is not a deposit.** `gather` stops requiring one and takes its density from somewhere
-  else - which undoes the sentence you just gave me, so it is here to be visibly refused rather than
-  because this lane means it
+## And one thing needs doing whichever you pick
 
-**What this lane will not do is pick.** The first adds a noun to the data model, and
-`spec/invariants.md` is where nouns are decided - so it is yours whichever way it goes. **`S-219` is
-not at stake**: a weighting that holds with the star charged to the planet holds with it charged to
-the star.
-*Nothing is open. Everything filed has been decided.*
+**The containment root belongs in `spec/`.** *Every thing but the game is in another thing* is a rule
+the engine already keeps - `rooming`, `stands-in` and the capacity checks all rest on it - and it is
+currently stated in a note and a deleted release. **Say the word and it is a proposal into
+`spec/logistics.md` -> Containment**, whose first bullet is the half that assumes it.
