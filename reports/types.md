@@ -4,7 +4,7 @@ One case per relation, holding the lines of `spec/data/schema.4x` that define it
 
 [The index](index.md)
 
-## The definitions of the things  (52)
+## The definitions of the things  (53)
 
 - [regression/types/adjacency.4x.html](regression/types/adjacency.4x.html) - [as text](../regression/types/adjacency.4x)
   The thing `adjacency`
@@ -64,6 +64,8 @@ One case per relation, holding the lines of `spec/data/schema.4x` that define it
   The thing `pioneer`
 - [regression/types/place.4x.html](regression/types/place.4x.html) - [as text](../regression/types/place.4x)
   The thing `place`
+- [regression/types/planet.4x.html](regression/types/planet.4x.html) - [as text](../regression/types/planet.4x)
+  The thing `planet`
 - [regression/types/primitive.4x.html](regression/types/primitive.4x.html) - [as text](../regression/types/primitive.4x)
   The thing `primitive`
 - [regression/types/provides.4x.html](regression/types/provides.4x.html) - [as text](../regression/types/provides.4x)

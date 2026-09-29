@@ -22,7 +22,6 @@ the orbit above that.
     {end-turn}
 
   place-1: 4 citizen, 2 deposit, 2 extractor
-  place-2: 1 deposit
   place-3: 3 deposit
 
 ## Turn 2
@@ -35,7 +34,6 @@ the orbit above that.
     {end-turn}
 
   place-1: 6 citizen, 2 deposit, 2 extractor
-  place-2: 1 deposit
   place-3: 3 deposit, 1 pioneer
 
 ## Turn 3
@@ -48,7 +46,6 @@ the orbit above that.
     {end-turn}
 
   place-1: 6 citizen, 2 deposit, 2 extractor
-  place-2: 1 deposit
   place-3: 4 citizen, 3 deposit, 2 extractor
 
 ## Turn 4
@@ -63,7 +60,6 @@ the orbit above that.
     {end-turn}
 
   place-1: 1 bin, 6 citizen, 2 deposit, 2 extractor, 5 metal
-  place-2: 1 deposit
   place-3: 6 citizen, 3 deposit, 2 extractor
 
 ## Turn 5
@@ -80,7 +76,6 @@ the orbit above that.
     {end-turn}
 
   place-1: 1 bin, 6 citizen, 2 deposit, 2 extractor, 5 metal
-  place-2: 1 deposit
   place-3: 6 citizen, 3 deposit, 3 extractor, 1 yard
   place-4: 1 ark
 
@@ -141,7 +136,6 @@ notation say so.
     {consumes kind:pioneer what:berth} -> 1
     {deposit where:place-1 what:food density:6} -> 1
     {deposit where:place-1 what:metal density:6} -> 1
-    {deposit where:place-2 what:energy density:3} -> 1
     {deposit where:place-3 what:energy density:6} -> 1
     {deposit where:place-3 what:food density:6} -> 1
     {deposit where:place-3 what:metal density:6} -> 1
@@ -155,12 +149,13 @@ notation say so.
     {place id:2 of:territory-1 layer:orbit name:place-2}
     {place id:3 of:territory-2 layer:surface name:place-3}
     {place id:4 of:territory-2 layer:orbit name:place-4}
+    {planet id:1 energy:3}
     {provides kind:place what:berth} -> 6
     {territory id:1 name:territory-1}
     {territory id:2 name:territory-2}
     {yard where:place-3} -> 1
 
-36 row(s) of world, out of 698 in the store.
+36 row(s) of world, out of 706 in the store.
 
 ## What every command took and made
 
@@ -214,11 +209,19 @@ notation say so.
     took  {labor quantity:1 where:1}
     took  {energy quantity:3 where:2}
     took  {extractor quantity:1 what:31 where:1 working:0}
-    took  {citizen bearing:1 hungry:0 laboring:1 quantity:4 where:1}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
+    took  {citizen bearing:0 hungry:0 laboring:0 quantity:2 where:1}
+    took  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
+    took  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:1}
+    took  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:1}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:1}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:1}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:1}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:1}
     made  {extractor quantity:1 what:31 where:1 working:1}
-    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:1}
+    made  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:1}
 
 ### Turn 2: {toil where:place-1}
 
@@ -286,20 +289,26 @@ notation say so.
     took  {extractor quantity:1 what:31 where:1 working:0}
     took  {extractor quantity:1 what:30 where:1 working:0}
     took  {citizen bearing:1 hungry:0 laboring:0 quantity:2 where:1}
-    took  {citizen bearing:1 hungry:0 laboring:1 quantity:4 where:1}
-    took  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:1}
+    took  {citizen bearing:0 hungry:0 laboring:0 quantity:2 where:1}
+    took  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
+    took  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:1}
+    took  {citizen bearing:1 hungry:1 laboring:0 quantity:4 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:1}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:1}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:1}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:1}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:1}
     made  {pioneer moving:1 quantity:1 where:3}
     made  {extractor quantity:1 what:31 where:1 working:1}
     made  {extractor quantity:1 what:30 where:1 working:1}
     made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:1}
-    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:1}
+    made  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:1}
     made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:1}
 
 ### Turn 3: {deploy where:place-3 what:pioneer}
 
@@ -382,21 +391,29 @@ notation say so.
     took  {extractor quantity:1 what:31 where:1 working:0}
     took  {extractor quantity:1 what:31 where:3 working:0}
     took  {citizen bearing:1 hungry:0 laboring:0 quantity:6 where:1}
-    took  {citizen bearing:1 hungry:0 laboring:1 quantity:4 where:3}
+    took  {citizen bearing:0 hungry:0 laboring:0 quantity:2 where:3}
+    took  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
+    took  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:3}
     took  {citizen bearing:1 hungry:1 laboring:0 quantity:6 where:1}
+    took  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:3}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:3}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:3}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:3}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:3}
     made  {extractor quantity:1 what:31 where:1 working:1}
     made  {extractor quantity:1 what:31 where:3 working:1}
     made  {citizen bearing:1 hungry:1 laboring:0 quantity:6 where:1}
-    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:3}
+    made  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:3}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:3}
+    made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:3}
     made  {citizen bearing:1 hungry:1 laboring:1 quantity:6 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:3}
 
 ### Turn 4: {toil where:place-1}
 
@@ -511,9 +528,11 @@ notation say so.
     took  {extractor quantity:1 what:30 where:3 working:0}
     took  {citizen bearing:1 hungry:0 laboring:0 quantity:6 where:1}
     took  {citizen bearing:1 hungry:0 laboring:0 quantity:2 where:3}
-    took  {citizen bearing:1 hungry:0 laboring:1 quantity:4 where:3}
+    took  {citizen bearing:0 hungry:0 laboring:0 quantity:2 where:3}
+    took  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
+    took  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:3}
     took  {citizen bearing:1 hungry:1 laboring:0 quantity:6 where:1}
-    took  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:3}
+    took  {citizen bearing:1 hungry:1 laboring:0 quantity:4 where:3}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:1}
@@ -524,17 +543,21 @@ notation say so.
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:3}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:3}
     made  {citizen bearing:1 hungry:0 laboring:0 quantity:1 where:3}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
-    made  {citizen bearing:1 hungry:0 laboring:1 quantity:2 where:3}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:3}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:3}
+    made  {citizen bearing:0 hungry:0 laboring:0 quantity:1 where:3}
+    made  {citizen bearing:1 hungry:0 laboring:1 quantity:1 where:3}
     made  {extractor quantity:1 what:31 where:1 working:1}
     made  {extractor quantity:1 what:30 where:1 working:1}
     made  {extractor quantity:1 what:31 where:3 working:1}
     made  {extractor quantity:1 what:30 where:3 working:1}
     made  {citizen bearing:1 hungry:1 laboring:0 quantity:6 where:1}
     made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:3}
-    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:3}
-    made  {citizen bearing:1 hungry:1 laboring:1 quantity:6 where:1}
+    made  {citizen bearing:0 hungry:1 laboring:0 quantity:2 where:3}
     made  {citizen bearing:1 hungry:1 laboring:1 quantity:2 where:3}
+    made  {citizen bearing:1 hungry:1 laboring:0 quantity:2 where:3}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:6 where:1}
+    made  {citizen bearing:1 hungry:1 laboring:1 quantity:4 where:3}
 
 ### Turn 5: {toil where:place-1}
 

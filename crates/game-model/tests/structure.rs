@@ -64,10 +64,10 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        52,
-        "fifty-two in all - those twenty-nine, and the game's twenty-three: nine kinds, four
-         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen,
-         an ark, a biome, a terrain and a yard"
+        53,
+        "fifty-three in all - those twenty-nine, and the game's twenty-four: nine kinds, four
+         families, a planet, a territory, a place, an adjacency, a deposit, an extractor, a
+         citizen, an ark, a biome, a terrain and a yard"
     );
 }
 
