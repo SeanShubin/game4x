@@ -11,39 +11,6 @@ of it needs you.
 
 ## Open
 
-### P-588 - The sun is a deposit of energy in orbit, and nothing says so
-
-**to** sean · **status** open · **raised** 2026-09-28 · **answered** 2026-09-28, the sun is a deposit · **asks** approval · **kind** recovered · **shape** text · **into** `spec/orbit.md` -> The orbital layer
-
-**You described what the data already does, and no document says it.** `gather` requires a
-`{deposit}` at the ark's own place with `what:energy`, and `scenario/main.4x:87` holds
-`{deposit where:place-2 what:energy density:3}` - **a deposit in an orbit.** So the sun is not a new
-kind of thing and needs no column; it is a deposit, and the only thing missing is the sentence.
-
-**Offered as a bullet at the end of that section, after *a surface admits no ark*:**
-
-> - **An orbit has no deposits of its own, and the sun is one.** A surface's deposits are the
->   planet's material, and an orbit reaches none of them - **what it reaches instead is the star**,
->   which acts as a deposit of energy with a density like any other. So an ark in orbit gathers by
->   the same rule an extractor works by, from a deposit that is above rather than below it, and
->   `spec/units.md`'s *a mobile unit that moves in orbit gathers its own energy from the sun* is that
->   deposit named.
-
-## What this settles that `C-166` raised
-
-**The no-gain weighting charges every density draw to the planet**, and `reports/nogain.md`'s wells
-are the planet and time with no star at all. **Under this bullet a draw from an orbit deposit is the
-star's**, so the arithmetic can say which well it came from instead of assuming one.
-
-**`S-219`'s verdict is not at stake either way.** A weighting that holds with everything coming out
-of one endless well holds with it coming out of two - so this makes the ledger truthful rather than
-making the proof work.
-
-## What it does not say, and is the code lane's to notice
-
-**Nothing here changes a rule.** `gather` already reads a deposit's density wherever the ark is, so
-no clause moves - **what moves is `nogain`'s account of which source a draw is charged to**, and
-that is theirs once this lands.
 ### P-587 - `bearing` becomes load-bearing: `breed` puts the parent back spent, the way `toil` does
 
 **to** sean · **status** open · **raised** 2026-09-28 · **answered** 2026-09-28, spend it · **asks** approval · **kind** recovered · **shape** an instruction · **into** `spec/data/rules.4x`
