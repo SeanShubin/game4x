@@ -28,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-219** - `spec/invariants.md` says the no-gain property is decided mechanically, and nothing decides it · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`

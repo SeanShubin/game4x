@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-219 - `spec/invariants.md` says the no-gain property is decided mechanically, and nothing decides it
+
+**to** code · **status** open · **raised** 2026-09-28 · **source** Sean: *I want the petri reports back, it gives me confidence that we would immediately detect an infinite resource glitch* · **cites** `C-164`, `C-42`, `D-4`
+
+**derived from** *whether this holds is decided mechanically, from the rules alone, and stays so however many rules there are* - `spec/invariants.md` -> Nothing comes back round with more
+
+**The report was the visible half and the deletion took both.** `a8386450` removed
+`crates/game-console/src/nogain.rs` and `src/petri.rs` with the four reports that read the old
+release's *Recipes* table. **Right under `D-4`** - they read a ruleset that is going.
+
+**Measured: no `.rs` file in the tree mentions `petri` or `nogain`.** Twelve markdown files do,
+including `spec/invariants.md`, which still states the invariant, and `docs/designing-rules.md`,
+which still explains the mapping. **So a rule the specification calls mechanically decided is
+decided by nothing**, which is `C-42`'s class with a named instance.
+
+## What the deleted page did, so the replacement is not guessed at
+
+**It solved for the weighting rather than reading one.** Its own words: *nothing here is declared.
+The weighting below is solved for, not read from anywhere: the only inputs are the release's rules.*
+Every rule non-increasing under that weighting, so any sequence of them is too, a cycle included.
+**Forty-six rules ground from twenty-nine blocks**, with the planet, the star and time weighted as
+endless wells rather than exempted from the arithmetic.
+
+**And it stated its own gap, which a replacement should keep.** The invariant is over the kinds, and
+a derived trait is not among them - so *a green run is not evidence about metal being conserved once
+above ground*. **Two defects were found by re-deriving from the Binding column and not by that
+page.**
+
+## What the input is now, and it is smaller
+
+**`spec/data/rules.4x` declares sixteen rules** where the table stated twenty-one blocks, and a
+clause carries its quantity as a `{literal ...}` rather than as a Qty cell. **So the reader is new
+and the solver is not** - what it consumed was rules with weights, and that is what the data holds.
+
+## What this lane is not asking for
+
+**Not the drawing.** Sean asked for the petri reports and the reason he gave is detection, so the
+decision is the thing to restore first and the picture second. **`R-10`'s clause is about a drawing
+being legible in both themes**, which is a different property from the net being sound, and `P-585`
+is where its wording gets settled.
+
 ### S-218 - `8eaf2c87` left the tree waiting on Sean and filed nothing, and `pending.md` said nothing needed deciding
 
 **to** code · **status** acted · **acted** 2026-09-28 · **cited** `4f584917` - the failure that waits on Sean now says to file it · **raised** 2026-09-28 · **source** Sean: *the code lane should have filed something* · **cites** `S-213`, `D-6`
