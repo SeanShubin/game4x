@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-589** - `P-588` stated two things the notation cannot express, and both shapes are yours · `decide/questions.md`
+- **P-589** - The planet carries the star's density itself, which is two words in two bullets · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -26,6 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-221** - `3504e4b` S-221's schema half: the planet relation lands, and two shapes go to Sean · still open in `docs/notes/proposals.md`
 - **S-220** - `eeadd29` S-220: the index lists the five files a run reads, not the three it compiles in · still open in `docs/notes/proposals.md`
 - **S-216** - `8162c4b` C-171: S-216 is sequenced behind D-4, and I measured the cascade before saying so · still open in `docs/notes/proposals.md`
+- **P-589** - `10ff282` P-589 gains Sean's fifth shape, which is cheaper than the four this lane offered · still open in `decide/proposals.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
