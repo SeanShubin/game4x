@@ -61,7 +61,64 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-171 - `S-216`'s second half is done and its first is sequenced behind `D-4`, because doing it now spends a reading on a file `D-4` deletes
+
+**to** spec · **status** open · **raised** 2026-09-29 · **source** `S-216` · **cites** `S-216`, `D-4`, `S-218`
+
+**derived from** *we can keep set-biome and set-resource for now* - Sean, 2026-09-27, in `S-216`
+
+## The half that needed nothing
+
+**`S-216` says to put the two back if the drop already happened. It had not.** All three commands
+are in `crates/game-console/src/grammar.rs` today, and `set-biome` and `set-resource` are the two
+`spec/console.md` names under *Available only before `start`*. **Nothing was dropped, so nothing
+goes back.**
+
+## The half I did, measured, and undid
+
+**`set-force` does go, and it was removed** - the `form::SET_FORCE` constant, its `Form`, its
+`binding.rs` arm and its entry in `handled()`. **`force` is not a relation in `spec/data/schema.4x`
+at all**, so the console has been accepting a command about a thing the data no longer has.
+
+**Then the rest of it arrived.** `scenario/commands/forces.4x` is nothing but seven `set-force`
+lines, and `scenario/commands/world.4x` runs it, so the command cannot leave the grammar while
+that file is played. Removing both left `cargo test -p game-console` with **two failures out of
+eighty-five**:
+
+```
+every_territorys_own_numbers_survive_the_round_trip   force of nature: 1 against 0
+the_reviewed_expectation_holds                        11 entries of scenario/expected/play.4x
+```
+
+**The second is the one that decides this.** `scenario/expected/play.4x` is a reviewed
+expectation, and its own failure says so: *`P-225` says changing your mind is deleting the file.*
+Deleting it makes the test reseed and panic - *seeded from the program, which nobody has
+reviewed* - so the gate stays red until a person reads it.
+
+## Why that reading is one not to ask for
+
+**`D-4` deletes the file the reading would be of.** Its *vetted when*: *the hand-written ruleset,
+the rendering of it in `spec/data/`, **the scenario that exercised it** and the tables it was
+generated from are deleted rather than moved.* `scenario/commands/` and `scenario/expected/play.4x`
+are that scenario.
+
+**So doing `S-216` first asks Sean to read a diff of a file that is about to stop existing**, and
+doing `D-4` first makes `S-216` cost nothing - the command's only remaining user goes with the
+deletion. **The console itself survives**, which is `D-1` to `D-3` porting it onto the new engine,
+so removing `set-force` from the grammar is a lasting change rather than one that rides along.
+
+**Reverted rather than left half-done**, and `cargo test -p game-console` is 85 of 85 again.
+
+## What this lane is not claiming
+
+**Not that `S-216` is finished.** It is open to this lane and will be done in the same sitting as
+`D-4`. **What is recorded here is why it is not done today**, because `S-218` is this lane leaving
+a state behind and filing nothing - and a sequencing decision nobody can see is the same failure
+with a better reason.
+---
+
 ### C-170 - `S-221`'s ledger question is answered, and two of its four lines are in your column rather than mine
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `d88a095f` · **source** `S-221` · **cites** `S-221`, `P-588`, `C-166`, `S-219`
 
