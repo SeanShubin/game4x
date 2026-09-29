@@ -50,11 +50,47 @@ dated failure and it is three days old.**
 is:planet-1}` - which states it once per territory without touching the territory rows. **`P-578` is
 the precedent and it was yours.**
 
-## What this lane would say
+## Your fifth shape, and it is cheaper than all four
 
-**The join for the second**, because `P-578` already chose that shape for the same problem and
-nothing argues the two should differ. **No lean on the first**: it is a change to what the data model
-can express, and every one of the four costs something in a different currency.
+**Sean, 2026-09-29**: *could a planet have an energy density, the way a territory has an energy
+deposit with an energy density.* **Yes, and it needs nothing the notation cannot already do.**
+
+```
+{planet id:1 energy:3}          a column on planet, no deposit row at all
+gather                          requires a planet and reads its density, instead of a deposit
+```
+
+**Nothing above has to change**: no column gains a second reference, no family widens, no place
+admits a planet. **The problem was `deposit.where`, and this does not use it.**
+
+## It degrades loudly rather than silently, which is the part worth knowing
+
+**A `require planet` binds nothing**, so it matches whatever planet rows exist. **With one it matches
+one and the reading works. With two it refuses** - `NotOne`, *a reading from a clause that matched
+several rows*, and your own reason for it: *we should never have non-determinism from what row
+happens to be encountered first.*
+
+**So the second planet is a refusal and never a wrong answer**, which is the failure mode `game`
+would not have given you. **And the territory-to-planet join stops being needed today** - `gather`
+has no planet to choose between - so the second half below is deferred rather than answered.
+
+## Two things it costs, said plainly
+
+**One binding rule has no precedent.** Every clause in `spec/data/rules.4x` binds something, counted
+over all of them - a `require planet` with no binding would be the first. **Nothing forbids it** and
+the engine matches on the pattern it is given; it is simply untried, so it is the thing to build
+first and find out.
+
+**And it reads against one word you approved.** `spec/planet.md` now says *the star is a deposit on
+the planet*, and under this it is the planet's own density rather than a deposit. **A one-word
+edit** - and this lane will not make it silently, so it is part of what you are deciding.
+
+## What this lane would say now
+
+**Your fifth**, and not for its cost: it is the only one where a second planet is a refusal rather
+than a silent choice. **The join for the second half if it is ever needed**, and it is not needed
+under the fifth.
 
 **Nothing is blocked on the answer.** The `planet` relation exists, `S-219`'s verdict does not depend
 on where the sun's row sits, and the scenario's two orbits are wrong today whichever shape lands.
+
