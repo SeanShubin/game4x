@@ -64,7 +64,7 @@ fn title_of(at: &PathBuf) -> String {
         .unwrap_or_else(|| "-".to_string())
 }
 
-fn named(under: &str) -> Vec<String> {
+fn named_files(under: &str) -> Vec<String> {
     let at = root().join(under);
     let Ok(entries) = std::fs::read_dir(&at) else {
         return Vec::new();
@@ -294,37 +294,96 @@ impl Page {
     }
 }
 
-/// Every rule, with how many reviewed tests fire it.
-fn rules_with_cover() -> Vec<(String, usize)> {
-    let rules = std::fs::read_to_string(root().join("spec/data/rules.4x")).unwrap_or_default();
-    let mut out = Vec::new();
-    for line in rules.lines() {
-        let trimmed = line.trim();
-        if !trimmed.starts_with("{rule ") {
-            continue;
-        }
-        let Some(name) = trimmed
-            .split_whitespace()
-            .find_map(|it| it.strip_prefix("name:"))
+/// Every rule, with how many reviewed tests reach it - by command, and through a `{part}`.
+///
+/// # One number said `perish` was fired by nothing, and it is fired by two
+///
+/// **Counting the tests whose `when` names the rule is a true count of a narrower population.**
+/// `the-hungry-perish-after-upkeep-and-not-before` fires `{end-turn}`, and `end-turn` runs
+/// `perish` as one of its ten parts - so the rule is exercised by a test that never names it.
+///
+/// **Sean asked whether this page is where an unused rule shows**, naming `perish` as his
+/// example. It was, and it was wrong: the page said nothing fires it. **Both numbers are
+/// reported now**, because the difference is real - a rule nothing commands is not the same as a
+/// rule nothing reaches, and only the second is unused.
+///
+/// **Expanded to a fixed point**, since a part may name a rule that has parts of its own.
+fn rules_with_cover() -> Vec<(String, usize, usize)> {
+    let rules_text = std::fs::read_to_string(root().join("spec/data/rules.4x")).unwrap_or_default();
+    let named = |line: &str, key: &str| -> Option<String> {
+        line.split_whitespace()
+            .find_map(|it| it.strip_prefix(key))
             .map(|it| it.trim_end_matches('}').to_string())
-        else {
-            continue;
-        };
-        // **Counted over the tests Sean has read**, because the question the index answers beside
-        // a rule is how much of what he approved depends on it.
-        let mut fires = 0;
-        for test in named("reviewed") {
-            let text =
-                std::fs::read_to_string(root().join("reviewed").join(&test)).unwrap_or_default();
-            if text.lines().any(|it| {
-                it.trim().starts_with(&format!("{{{name} ")) || it.trim() == format!("{{{name}}}")
-            }) {
-                fires += 1;
+    };
+
+    let mut rules = Vec::new();
+    let mut parts: Vec<(String, String)> = Vec::new();
+    for line in rules_text.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("{rule ")
+            && let Some(name) = named(trimmed, "name:")
+        {
+            rules.push(name);
+        }
+        if trimmed.starts_with("{part ")
+            && let (Some(of), Some(is)) = (named(trimmed, "of:"), named(trimmed, "is:"))
+        {
+            parts.push((of, is));
+        }
+    }
+
+    let reaches = |from: &BTreeMap<String, ()>| -> BTreeMap<String, ()> {
+        let mut all = from.clone();
+        loop {
+            let before = all.len();
+            for (of, is) in &parts {
+                if all.contains_key(of) {
+                    all.insert(is.clone(), ());
+                }
+            }
+            if all.len() == before {
+                return all;
             }
         }
-        out.push((name, fires));
+    };
+
+    // **What each test commands**, read from the rows under its `{when}`.
+    let mut commanded: Vec<BTreeMap<String, ()>> = Vec::new();
+    for test in named_files("reviewed") {
+        let text = std::fs::read_to_string(root().join("reviewed").join(&test)).unwrap_or_default();
+        let mut inside = false;
+        let mut mine = BTreeMap::new();
+        for line in text.lines() {
+            let trimmed = line.trim();
+            match trimmed {
+                "{when}" => inside = true,
+                "{then}" | "{refused}" | "{given}" => inside = false,
+                _ => {
+                    if inside && let Some(rest) = trimmed.strip_prefix('{') {
+                        let relation = rest
+                            .split([' ', '}'])
+                            .next()
+                            .unwrap_or_default()
+                            .to_string();
+                        mine.insert(relation, ());
+                    }
+                }
+            }
+        }
+        commanded.push(mine);
     }
-    out
+
+    rules
+        .into_iter()
+        .map(|name| {
+            let direct = commanded.iter().filter(|it| it.contains_key(&name)).count();
+            let through = commanded
+                .iter()
+                .filter(|it| !it.contains_key(&name) && reaches(it).contains_key(&name))
+                .count();
+            (name, direct, through)
+        })
+        .collect()
 }
 
 fn up(from: &str, to: &str) -> String {
@@ -346,7 +405,7 @@ pub fn write_all() -> (usize, usize) {
 
     // -- The tests Sean has read ------------------------------------------------------------
     let mut tests = Vec::new();
-    for name in named("spec/tests") {
+    for name in named_files("spec/tests") {
         let stem = name.trim_end_matches(".4x");
         let record = root().join("reviewed").join(&name);
         let mut beside = vec![
@@ -395,10 +454,19 @@ pub fn write_all() -> (usize, usize) {
 
     // -- The ruleset ------------------------------------------------------------------------
     let mut ruleset = Vec::new();
-    for (name, fires) in rules_with_cover() {
+    for (name, direct, through) in rules_with_cover() {
         ruleset.push(Entry {
             at: rendered(&format!("regression/rules/{name}.4x")),
-            said: format!("the rule `{name}` - {fires} reviewed test(s) fire it"),
+            said: match (direct, through) {
+                (0, 0) => format!("the rule `{name}` - NO reviewed test reaches it"),
+                (0, n) => {
+                    format!("the rule `{name}` - no test commands it; {n} reach it through a part")
+                }
+                (n, 0) => format!("the rule `{name}` - {n} reviewed test(s) command it"),
+                (n, m) => format!(
+                    "the rule `{name}` - {n} test(s) command it, {m} more reach it through a part"
+                ),
+            },
             beside: vec![
                 (
                     "as text".to_string(),
@@ -457,7 +525,7 @@ pub fn write_all() -> (usize, usize) {
                 .and_then(|it| it.to_str())
                 .unwrap_or_default()
                 .to_string();
-            for case in named(&format!("regression/scenario/{which}")) {
+            for case in named_files(&format!("regression/scenario/{which}")) {
                 turns
                     .entry(format!("Turn {which}"))
                     .or_default()
@@ -513,7 +581,7 @@ pub fn write_all() -> (usize, usize) {
              in data without writing Rust.",
         ),
     ] {
-        let entries = named(under)
+        let entries = named_files(under)
             .into_iter()
             .map(|name| Entry {
                 at: rendered(&format!("{under}/{name}")),
