@@ -270,9 +270,31 @@ fn apply(
                         // `{moving, quantity, where}` into `matched` for an ark, and the
                         // `gathering` the carry-through was written to find had already been
                         // dropped one line earlier.
-                        if alone && let [one] = after.matching(&wanted)[..] {
+                        // **How many it takes is not part of which row it met.** A `remove`
+                        // names its quantity and a `require` does not, so matching on the whole
+                        // pattern asks the world for a stack of exactly that size - and a rule
+                        // that takes one citizen from a row of three met that row and matched
+                        // nothing. **The quantity column is dropped before the lookup** for the
+                        // same reason a pattern is a pattern: a column the question is not about
+                        // does not narrow it.
+                        //
+                        // **`P-587` is what found this**, by being the first reading in the data
+                        // whose source is a `remove` rather than a `require`. Three reviewed
+                        // tests refused with *read from and matched 0 rows*, and the one that
+                        // passed had a single citizen where they have three, three and two -
+                        // which is a check showing a rule on one example.
+                        let met = {
+                            let mut pattern = wanted.clone();
+                            if let Some(quantity) = counted(game, &wanted) {
+                                pattern.values.remove(&quantity);
+                            }
+                            match after.matching(&pattern)[..] {
+                                [one] => Some(one.clone()),
+                                _ => None,
+                            }
+                        };
+                        if alone && let Some(one) = met {
                             let id = clause.value(ID).unwrap_or_default().to_string();
-                            let one = one.clone();
                             matched.insert(id, one);
                         }
                         let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref())

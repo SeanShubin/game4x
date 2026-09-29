@@ -61,7 +61,94 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-173 - `breeding-does-not-reach-the-citizens-it-just-made` is red for a real behaviour difference, and the reading is Sean's
+
+**to** spec · **status** open · **raised** 2026-09-29 · **source** running the regeneration `S-222` says nothing runs · **cites** `P-587`, `C-172`, `S-222`
+
+**derived from** *the suite runs the copies in it, so a test nobody has read constrains nothing and a test he has read is red until the code obeys it* - `CLAUDE.md` -> Perspectives
+
+**Left red on purpose, and this lane has not touched `reviewed/`.** Sean is signing off and this
+needs a reading he cannot give tonight.
+
+## What the test says and what the game now does
+
+```
+expected  {citizen where:1 hungry:0 bearing:1 laboring:1 quantity:4}
+actual    {citizen where:1 hungry:0 bearing:0 laboring:1 quantity:2}
+actual    {citizen where:1 hungry:0 bearing:1 laboring:1 quantity:2}
+```
+
+**Two citizens breed and there are four afterwards, which is what the test is named for.** The
+count is unchanged and the arithmetic it was written to pin still holds. **What changed is that
+the four are no longer alike**: the two parents are spent and the two newborns are not.
+
+## Why that is `P-587` working rather than failing
+
+`spec/data/schema.4x` says *`breed` consumes the parent and returns it as one of two, with its
+bearing spent*, and until `f96c5a38` the data did not do it - which is `C-169`. **`P-587` made the
+data do it**, and this expectation records the state from before it did.
+
+**So the game is right and the file is old.** `P-225` says changing your mind is deleting the
+file, and whether this is a change of mind is exactly the judgement this lane may not make: the
+recorded state is more detailed than the test's own subject, and only Sean can say the detail is
+what he meant to approve.
+
+## What it cost to find, which is the argument for `S-222`
+
+**The red was invisible for as long as the generated form was stale.** `spec/data/rules.4x`
+changed at `f96c5a38` and `data/foundation/rules.4x` did not, so the engine went on playing the
+old `breed` and every test passed. **Running `cargo run -p game-model --example render` is what
+made the promotion bite**, and nothing runs it - which is `S-222`'s second half, in a second
+instance and one day later.
+
+## What this lane did do, and it is not this
+
+**Three tests were red and two of them were mine.** `C-172` is an engine defect `P-587` exposed,
+fixed at the same sitting; this is the one that is left, and it is the only one that is a
+difference in what the game does rather than in whether the engine could express it.
+
+---
+
+### C-172 - A `remove` that takes one from a stack of three met no row, so nothing a later clause reads from it resolves
+
+**to** spec · **status** open · **raised** 2026-09-29 · **source** `P-587` adding the first reading whose source is a `remove` · **cites** `P-587`, `C-173`
+
+**derived from** *a rule carries through the columns it does not name... what it does not name it leaves as it found it* - `spec/invariants.md`
+
+**Reported rather than asked**, because it is fixed. It is here because it says something about
+the checks rather than about the code.
+
+## The defect
+
+**`engine.rs` recorded which row a `remove` met by matching the clause's whole pattern**, and a
+`remove` names its quantity where a `require` does not. So a clause taking one citizen from a row
+of three asked the world for *a stack of exactly one*, found nothing, and recorded nothing -
+while the take itself succeeded against the row of three.
+
+**Nothing read from a `remove` until `P-587`**, so the recording had never been asked for. Every
+other `{reading ...}` in `spec/data/rules.4x` names a `require` clause as its source. **The
+quantity column is dropped before the lookup now**, for the reason a pattern is a pattern: a
+column the question is not about does not narrow it.
+
+## The shape of it, which is the part worth keeping
+
+**The test that passed is the one that proves nothing.**
+`a-citizen-breeds-once-and-its-bearing-is-spent` was written for `P-587` and it passes, because it
+has **one** citizen. The three that broke have **three, three and two**.
+
+**So the new rule was covered by an example rather than over its cases** - `CLAUDE.md`'s own
+sentence, met on the day: *a test that shows a rule on one example stops showing anything the
+moment that example is edited away.* Here it never showed anything, and it was green.
+
+**This lane is not proposing the test be changed** - it is Sean's, it is correct, and one citizen
+is the clearest way to say what it says. **What is worth noticing is that nothing asked for a
+second quantity**, and that the three cases which would have caught it were already in `reviewed/`
+and could not run, because the generated form was stale. **The coverage existed and the plumbing
+hid it**, which is `S-222`.
+---
+
 ### C-171 - `S-216`'s second half is done and its first is sequenced behind `D-4`, because doing it now spends a reading on a file `D-4` deletes
+
 
 **to** spec · **status** open · **raised** 2026-09-29 · **source** `S-216` · **cites** `S-216`, `D-4`, `S-218`
 

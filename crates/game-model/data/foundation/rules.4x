@@ -418,19 +418,26 @@
 {clause id:25 rule:10 seq:1 role:2 relation:47}
 {clause id:26 rule:10 seq:2 role:2 relation:31}
 {clause id:27 rule:10 seq:3 role:3 relation:47}
+{clause id:59 rule:10 seq:4 role:3 relation:47}
 
 {binding id:38 clause:25 column:130 input:17}
 {binding id:39 clause:26 column:82 input:17}
 {binding id:40 clause:27 column:130 input:17}
+{binding id:66 clause:59 column:130 input:17}
 
 {literal id:29 clause:25 column:131 value:0}
 {literal id:30 clause:25 column:133 value:1}
 {literal id:31 clause:25 column:132 value:1}
 {literal id:32 clause:26 column:83 value:1}
 {literal id:33 clause:27 column:131 value:0}
-{literal id:34 clause:27 column:133 value:1}
-{literal id:48 clause:27 column:137 value:1}
-{literal id:35 clause:27 column:132 value:2}
+{literal id:34 clause:27 column:133 value:0}
+{literal id:35 clause:27 column:132 value:1}
+{literal id:84 clause:59 column:131 value:0}
+{literal id:85 clause:59 column:133 value:1}
+{literal id:86 clause:59 column:137 value:1}
+{literal id:87 clause:59 column:132 value:1}
+
+{reading id:17 clause:27 column:137 of:25 takes:137}
 
 # **`toil` is a citizen spending its `laboring` to make a labour**, and it is `upkeep`'s mirror:
 # one takes a food and gives back a citizen that has eaten, this takes nothing and gives back a

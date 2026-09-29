@@ -1,0 +1,40 @@
+# A citizen that breeds comes back unable to breed again, and the child can.
+#
+# **Sean, 2026-09-28**: *that is a limiter so that one citizen can't have multiple children, its
+# like labor running an extractor with citizen as the output, so I would expect it to be load
+# bearing.* **Until `P-587` it was not**: `breed` added two citizens in one clause at `bearing:1`,
+# so the parent came back able to breed again and the only bound was food.
+#
+# **`toil` is the pattern and `breed` now matches it.** A citizen is required with its trait, the
+# row is taken, and it is put back spent - so the turn's end is what restores it and
+# `{refresh what:citizen trait:bearing}` has work to do.
+#
+# **Two food and one citizen with a bearing.** If the parent could breed again the second food would
+# be eaten and there would be three citizens; there are two, and one food is left over. **The
+# leftover food is what makes this a test of the limiter rather than of arithmetic** - the rule was
+# able to fire again and the world refused it.
+#
+# **`repeats` is still on `breed` and is not what caps this.** It means *fire for every citizen that
+# can*, and after the first firing this citizen cannot.
+
+{test name:a-citizen-breeds-once-and-its-bearing-is-spent}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{provides kind:48 what:1 quantity:6}
+{consumes kind:47 what:1 quantity:1}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:1}
+{food where:1 quantity:2}
+
+{when}
+{breed where:1}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{provides kind:48 what:1 quantity:6}
+{consumes kind:47 what:1 quantity:1}
+{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:1}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:1}
+{food where:1 quantity:1}
