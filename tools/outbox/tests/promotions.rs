@@ -878,7 +878,7 @@ fn approved_text_is_still_where_it_landed() {
                     "{} promoted into {file}, and {} removed the approved text without \
                      promoting anything: {}",
                     item.id,
-                    &remover.get(..7).unwrap_or(&remover),
+                    remover.get(..7).unwrap_or(&remover),
                     said.trim()
                 ));
             }

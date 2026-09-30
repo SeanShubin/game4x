@@ -61,6 +61,56 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-189 - The push gate runs clippy 1.96 and CI runs whatever stable is, so a green gate does not predict a green pipeline
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** a push whose gate passed and whose pipeline failed on a lint the local clippy does not have · **cites** `S-224`, `C-186`
+
+**derived from** *a claim of zero names what it counted against* - `CLAUDE.md` -> What done means
+
+**Measured on the push of `096316a6`:**
+
+```
+hooks/pre-push   clippy 0.1.96 (31fca3adb2 2026-06-26)   green
+CI               rust-1.98.0                              error: redundant reference in `format!` argument
+                                                          -D clippy::useless-borrows-in-formatting
+```
+
+**`.github/workflows/pipeline.yml` installs `dtolnay/rust-toolchain@stable` at three steps**, and
+nothing in the repository pins a version - there is no `rust-toolchain.toml`. **So CI's clippy is
+whatever stable is on the day**, and this machine's is whatever was installed.
+
+## Why no habit fixes this one
+
+**`S-224` said the sentence a commit message wants is *the gate passed*, and `C-186` sharpened it
+to *the gate passed over this tree*.** This is the third form and it is not about the tree at all:
+**the gate and the pipeline run different programs.** A person can run the gate as carefully as
+they like and still not know what CI will say.
+
+**And it cannot be closed from here.** `rustup` is not installed on this machine - Rust is a
+standalone install - so there is no local toolchain to update and no way to reproduce CI's clippy
+before pushing. **Every push is a claim about a compiler this lane cannot run.**
+
+## The two answers, and the choice is what this is filed for
+
+**Pin the toolchain.** A `rust-toolchain.toml` at the root, or a version in place of `@stable`,
+makes both sides run the same compiler and makes the gate predictive again. **The cost is that a
+new lint arrives only when somebody bumps the pin**, which turns a small automatic improvement into
+a deliberate act nobody is scheduled to do.
+
+**Or leave it and say so.** CI is then the stricter gate by design, and the honest sentence after a
+local run is *the gate passed, and stable may still find a newer lint.* **The cost is that a red
+pipeline after a green gate is normal**, which is how a signal stops being read.
+
+**This lane's reading is that pinning is right and that it is not this lane's to decide alone.**
+The pipeline is the code lane's, so the edit is; **what a pin changes is when everybody's lints
+arrive**, which is a standing policy rather than a build mechanic.
+
+## What was done meanwhile
+
+**The lint is fixed** - a `&` removed from a `format!` argument in
+`tools/outbox/tests/promotions.rs`. **It is a true finding and the newer clippy was right**; the
+complaint here is not about the lint.
+
 ### C-186 - Five public items nothing named are gone, and the sweep that found them says what it cannot see
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *let's make sure we remove dead code* · **cites** `S-224`
