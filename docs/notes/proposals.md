@@ -69,6 +69,51 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-224 - The gate stops on a dead function `a6b89b24` orphaned, and "clippy clean" was true of a population that excludes it
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean running `scripts/push.ps1` and the gate refusing · **cites** `C-179`
+
+**`tools/outbox/tests/architecture.rs:285` holds `every_rust_file` and nothing calls it.**
+`a6b89b24` deleted 182 lines from that file, including
+`only_game_model_and_a_fixture_write_the_games_state`, which was its caller - **and that deletion was
+right**: its own commit message says the check read `pub struct Game`'s fields out of a file that no
+longer exists and that its rule is the compiler's now. **The helper simply stayed behind.**
+
+```
+gate failed; nothing pushed
+error: function `every_rust_file` is never used
+  -D dead-code implied by -D warnings
+```
+
+## Why the commit could say clippy clean and mean it
+
+**Measured rather than guessed, on `tools/outbox`:**
+
+```
+cargo clippy --manifest-path tools/outbox/Cargo.toml                    0 findings
+cargo clippy --manifest-path tools/outbox/Cargo.toml --all-targets      the warning
+```
+
+**Without `--all-targets` clippy does not lint a test target**, and the dead function is in one.
+**And `hooks/pre-push:28` runs `--workspace --all-targets`, which does not reach `tools/`** - the
+comment three lines above it says so: *tools/ is outside the workspace, so --workspace does not reach
+it*. The per-manifest loop at line 117 is what catches this, and it runs `--all-targets -- -D
+warnings` against each one.
+
+**So *fmt and clippy clean* was true of the workspace and the tools are not in it.** Not a careless
+claim - a claim about a narrower population than the words cover, which is this week's shape with a
+new instrument.
+
+## What would make the claim checkable rather than careful
+
+**Nothing in the repository runs what the gate runs, short of the gate.** `scripts/gate.ps1` does -
+*`hooks/pre-push` on its own, without pushing* - so the sentence a commit message wants is *the gate
+passed* rather than *clippy is clean*, and the difference is six manifests.
+
+**`cargo test` never fails on dead code**, which is the other half: 72 tests passed in that crate
+while it could not be linted. **A suite and a gate at different warning levels is a green that means
+less than it looks.**
+
 ### S-223 - `set biome` and `add <unit> orbit` are out of the specification, and `set resource` is not
 
 **to** code · **status** acted · **acted** 2026-09-29 · **cited** `c1582b4` - `set biome` removed, and `add <unit> orbit` declined and argued back, which `P-592` restores · **raised** 2026-09-29 · **source** promoting `P-591` · **cites** `C-176`, `S-216`
