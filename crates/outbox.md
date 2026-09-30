@@ -130,6 +130,25 @@ what you are handed, and the cheapest moment is while acting on it. **A range as
 not check the range is balanced is the instrument answering a narrower question than the one
 asked**, and it returned a plausible one: *one definition, no tests*, which was true.
 
+## And `9c2768fe`'s *the gate passed* was a claim about a tree that had already changed
+
+**Twice in one day, and the second time is the one that makes it a habit rather than a slip.**
+`1fa687a7` said the gate passed and it had - before the commit, when `decide/attention.md` was
+still untracked. `9c2768fe` said the gate passed and it had - before three outbox items were
+written into the tree it ran over. **`hooks/pre-push` refused the push on one of them**, and it
+was right to: `C-187`'s first wording named a file inside the bold span that opens a sentence,
+which the quotation checker reads as introducing text quoted from that file.
+
+**`S-224` said *the sentence a commit message wants is the gate passed*, and this is the sharper
+form of it**: *the gate passed* is a claim about a tree, and editing after the run makes it false
+without anybody editing the sentence. **The repair is ordering, not wording** - run it last, after
+staging, or do not claim it.
+
+**Nothing mechanises this**, which is why it is here. The gate cannot know what a commit message
+will say, and the message is written after the run by construction. **What caught both was the
+gate itself running again later** - once at the next commit, once at the push - so the cost is a
+false sentence in a message that cannot be amended, and the correction lives here instead.
+
 ### C-187 - `crates/planet-model` holds a second rules engine, and nothing the player runs reaches it
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *clean isolation of implementations via composition roots*, and a dead-code sweep finding a spec rule in a function nobody calls · **cites** `D-1`, `C-186`
@@ -188,9 +207,16 @@ crate.**
 
 ## The half that was not a judgement, and is already done
 
-**`Biome::is_claimable` was `spec/planet.md`'s ocean rule stated in Rust**, in a function nothing
-called - so the rule was neither enforced nor removed. It is gone with `C-186`. **An unenforced
+`Biome::is_claimable` was the ocean rule of `spec/planet.md` stated in Rust, in a function nothing
+called - **so the rule was neither enforced nor removed.** It is gone with `C-186`. **An unenforced
 rule in code reads exactly like an enforced one**, which is what made it worth finding.
+
+**The first wording of that sentence failed the gate and the failure was correct to raise.** It
+put the file name inside the bold span that opens the sentence, and the quotation checker reads
+the `**` closing such a span as the start of text quoted from the file named in it - so the prose
+after it was reported as wording `spec/planet.md` does not have. **`CLAUDE.md` documents exactly
+this and says the repair is the sentence rather than the parser**, because a parser guessing at
+nesting in prose has more ways to be wrong than this has.
 
 ## What this lane would like said
 
