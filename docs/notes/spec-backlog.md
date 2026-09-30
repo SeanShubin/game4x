@@ -8,6 +8,39 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-30 - one file for everything awaiting his review
+
+**Sean**, asked whether everything he reviews would be discoverable from public GitHub after a push:
+*I may want remote reviewing in the future, but for now I just want everything awaiting my review to
+be discoverable in one place, perhaps a file at `decide/attention.md`, or something like that.*
+
+**What is discoverable today, and it is not one place.** `pending.md` -> *What must be decided* lists
+six capabilities and nothing else, because `tools/outbox` can only see an item with a `to` field.
+**Two of the four things that wait on him are not items at all:**
+
+```
+open proposals            decide/proposals.md          an item - pending.md sees it
+open questions            decide/questions.md          an item - pending.md sees it
+a capability to vet        releases/*.md                an item - pending.md sees it
+a test awaiting a reading  spec/tests/ against reviewed/   not an item - invisible
+a stale regression case    regression/                     not an item - invisible
+```
+
+**Three of the five are cheap to derive and one is not.** A test awaiting a reading is a file
+comparison - present in `spec/tests/` and absent from `reviewed/`, or present in both and different.
+**A stale regression case is only knowable by generating**, so nothing that runs in a commit hook can
+say it; the suite says it and goes red.
+
+**And `decide/README.md` already promises the thing he is asking for**: *everything in this directory
+is waiting on Sean, and nothing else is. Open it and there is nothing to scroll past.* **What it does
+instead is point at `pending.md`**, which is at the root, is about every lane, and misses two of the
+five.
+
+**Whose it would be.** `tools/outbox` writes `pending.md` and is production support, so a second
+generated file is the code lane's to build. **The rule about what waits on him is this lane's to
+write**, and `decide/README.md` is where the promise already lives.
+
+
 ## 2026-09-29 - the entirety of game state as a tree, and why the notation needs to normalize one
 
 **Sean**, answering `P-591` by choosing the sequencing rather than the deletion: *build the
