@@ -65,6 +65,8 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** answering *is there any work besides my review* and finding two capabilities `open` that nothing is waiting on · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-179`, `S-218`
 
+**`C-165` closed on 2026-09-30 and this still holds.** Its rule is `CLAUDE.md`'s *the code lane sets `built`; only Sean sets `vetted`*, which is in that file rather than in any item, and nothing moved it. **What closed `C-165` was the specification lane recording `R-9` and `R-11`** - the arrangement this item is asking for again, on two different capabilities.
+
 **derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
 
 **`C-179` reported `D-1` and `D-4`. `D-2` and `D-3` were built by the same work and went
@@ -259,6 +261,8 @@ it, which would have made `scenario/commands/` unable to describe the world it e
 
 
 **to** spec · **status** open · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `5367098e` · **source** finishing the port · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-175`, `S-216`, `S-208`
+
+**`C-175` closed on 2026-09-30 and this still holds.** That item's rule is the same one - *the measure is that it stops holding rules, not that it holds fewer* - and what closed it is the port finishing, which is what makes the count below zero rather than smaller. **Re-derived rather than asserted**: `BEING_REPLACED` is `[&str; 0]` in `crates/game-model/tests/common/mod.rs` and `ENGINE_MODULES` is 8.
 
 **Its two documents are answered and one of them was never wrong.** `S-208` rewrote
 `docs/designing-rules.md` over the data and took *two models* out of `docs/architecture.md` rule 4,
