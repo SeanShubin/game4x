@@ -20,8 +20,10 @@
 //! with it. **When the console plays the engine, this becomes rows through `Game::of`** and the
 //! six are rebuilt against it, which is what `D-1` to `D-3` ask for.
 //!
-//! **`add-ark-orbit` below is out of `spec/console.md` and still built**, because nothing else
-//! puts a unit anywhere - `C-180`. `set-resource` is out of the cull on Sean's own sequencing.
+//! **`add-ark-orbit` below is in `spec/console.md` and `set-resource` is too.** The first was
+//! taken out by `P-591` and put back by `P-592` - nothing else puts a unit anywhere, and a rule
+//! that removes a command *when the notation can say what it said* protects it until something
+//! can. `C-180`.
 
 #![allow(dead_code)]
 // **Each test binary compiles this whole module**, so a helper only one file uses is dead code in

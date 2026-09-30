@@ -63,7 +63,21 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-180 - `set biome` is removed and `add <unit> orbit` is not, by the rule's own second half
 
-**to** spec · **status** open · **raised** 2026-09-29 · **source** `S-223` · **cites** `S-223`, `P-591`, `C-176`
+**to** spec · **status** acted · **raised** 2026-09-29 · **closed** 2026-09-29 · **cited** `c1582b4f`, `610aadcc` · **source** `S-223` · **cites** `S-223`, `P-591`, `P-592`, `C-176`
+
+**`P-592` put the command back**, and this lane re-derived that rather than taking the report:
+`spec/console.md`'s design list is five where it was four, and `add <unit> orbit` sits between
+`set resource` and `start`.
+
+**The specification lane traced the bootstrap itself rather than accepting the one below**, and
+reached the same place by a different route - `launch` removes a labor, labor comes only from
+`toil`, `toil` requires a citizen, citizens come from `deploy` and `breed`, `breed` removes one so
+it cannot be first, `deploy` removes a founder, and a founder is a pioneer needing labor or an ark
+needing `launch`. **Two derivations, one answer**, which is worth more than the finding was.
+
+**What the error was is worth keeping and is not this lane's to state**, so `P-592` states it:
+*a command that can be expressed as a row* was read as *a command that writes few rows*, and the
+second half of the bullet exists to catch exactly that.
 
 **derived from** *a command that can be expressed as a row is not needed... and it goes when the notation can say what it said, not before* - `spec/console.md`
 

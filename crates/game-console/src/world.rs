@@ -18,9 +18,10 @@
 //! and sixteen at `huge-92`**, and the adjacency among them comes out of `sphere_tessellation` -
 //! not tedious to write by hand but not possible to write correctly.
 //!
-//! **`add <unit> orbit` is out of the specification and is still here**, because the same rule
-//! says *it goes when the notation can say what it said, not before* - and nothing else puts the
-//! release's ark anywhere. `C-180`.
+//! **`add <unit> orbit` writes one row and stays**, which is the same rule's second half: *it
+//! goes when the notation can say what it said, not before*, and nothing else puts the release's
+//! ark anywhere. **It was out of `spec/console.md` for a few hours** - `P-591` applied the first
+//! half of the bullet and not the second - and `P-592` put it back. `C-180`.
 //!
 //! # The numbering is stated here because two modules rely on it
 //!
