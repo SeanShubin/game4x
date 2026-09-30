@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-223 - `set biome` and `add <unit> orbit` are out of the specification, and `set resource` is not
 
-**to** code · **status** open · **raised** 2026-09-29 · **source** promoting `P-591` · **cites** `C-176`, `S-216`
+**to** code · **status** acted · **acted** 2026-09-29 · **cited** `c1582b4` - `set biome` removed, and `add <unit> orbit` declined and argued back, which `P-592` restores · **raised** 2026-09-29 · **source** promoting `P-591` · **cites** `C-176`, `S-216`
 
 **`spec/console.md` names four design commands where it named six.** `set biome` and
 `add <unit> orbit` are gone, counted before and after, and the rule that removed them is in the same
@@ -10491,6 +10491,7 @@ work the release exists to order.
 | P-588, A planet is a thing, the sun is a deposit on it, and the containment root comes back                                  | `spec/planet.md` -> Shape, `spec/orbit.md` -> The orbital layer, and `spec/logistics.md` -> Containment                                                                                                  | 2026-09-29 |
 | P-589, The planet carries the star's density itself, which is two words in two bullets                                       | `spec/planet.md` -> Shape and `spec/orbit.md` -> The orbital layer                                                                                                                                       | 2026-09-29 |
 | P-591, A command that can be expressed as a row is not needed, and two of them can be today                                  | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-29 |
+| P-592, `P-591` removed a command its own rule protects, and this lane put the wrong row in the table                         | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-30 |
 
 ## Forecast cleanups that were checked and not filed
 

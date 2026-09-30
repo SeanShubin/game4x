@@ -245,6 +245,7 @@ Available only before `start`:
   the same policy give the same planet.**
 - `set resource <territory> <resource> <extractors> <density>` - give a territory its
   capacity and its density for one resource
+- `add <unit> orbit` - place a unit in orbit before play begins
 - `start` - end the design phase and begin play
 
 **A command that can be expressed as a row is not needed.** What a design command does is put rows
