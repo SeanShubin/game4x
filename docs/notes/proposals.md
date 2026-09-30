@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-225 - Build `decide/attention.md`, and the README now promises a file that does not exist
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** promoting `P-593` · **cites** `P-593`
+
+**`decide/README.md` links `attention.md` and nothing writes it.** That is a broken link in the one
+document whose job is to say what waits on a person, so it is worth doing before the next thing
+rather than after - **go and read the promoted section rather than taking this item for it.**
+
+## What it lists, and four of five are cheap
+
+```
+open proposals             decide/proposals.md, the `## Open` section
+open questions             decide/questions.md, the same
+a capability to vet        releases/*.md, an item whose status is `built` and whose `to` is sean
+a test awaiting a reading  in spec/tests/ and not in reviewed/, or in both and different
+a stale regression case    named, not covered - see below
+```
+
+**The first three are what `pending.md`'s *What must be decided* already does**, so the work is the
+fourth plus the shape of the file. **`tools/outbox` already reads every outbox and knows which items
+address `sean`.**
+
+**The fourth is a file comparison and was run while writing `P-593`**: 57 tests, 57 records, nothing
+differing - so it says nothing today, which is the answer that proves the derivation rather than the
+one that hides a gap. **Both populations want asserting**: no tests found and every record would be
+orphaned in silence.
+
+## The fifth is named rather than computed, and the reason is yours not to work around
+
+**A stale case is only knowable by generating**, and a hook that regenerated the suite to find out
+would rewrite the tree under whoever was committing. **`attention.md` says the suite reports one**,
+which it already does by name with the `Remove-Item` lines - `S-206`.
+
+## Two smaller things
+
+**`pending.md` stays and is not replaced.** It is the index across four perspectives; this is the one
+column of it that is his.
+
+**And a link in it would help him rather than this lane**: `attention.md` pointing at `pending.md`
+for what waits on everybody else is the pair the README describes.
+
 ### S-224 - The gate stops on a dead function `a6b89b24` orphaned, and "clippy clean" was true of a population that excludes it
 
 **to** code · **status** open · **raised** 2026-09-30 · **source** Sean running `scripts/push.ps1` and the gate refusing · **cites** `C-179`
@@ -10537,6 +10578,7 @@ work the release exists to order.
 | P-589, The planet carries the star's density itself, which is two words in two bullets                                       | `spec/planet.md` -> Shape and `spec/orbit.md` -> The orbital layer                                                                                                                                       | 2026-09-29 |
 | P-591, A command that can be expressed as a row is not needed, and two of them can be today                                  | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-29 |
 | P-592, `P-591` removed a command its own rule protects, and this lane put the wrong row in the table                         | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-30 |
+| P-593, `decide/attention.md`: one generated file for everything waiting on you                                               | `decide/README.md` -> The three things only you can do                                                                                                                                                   | 2026-09-30 |
 
 ## Forecast cleanups that were checked and not filed
 

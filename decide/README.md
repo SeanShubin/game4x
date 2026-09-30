@@ -16,12 +16,22 @@ already settled.
 
 **Empty means nothing is waiting.** A file here that says nothing is open is the whole report.
 
-## Why the release is a link rather than a file here
+## `attention.md` is the one file, and it is generated
 
-**A capability is part of the document that specifies it**, and the code lane builds from that same
-document. Moving the five that wait on you would separate a capability from the release it belongs
-to, and give the code lane two places to read. **So it stays where it is and this points at it** -
-`pending.md` lists which ones by name.
+**Everything waiting on you is listed in [`attention.md`](attention.md)**, so that nothing has to
+be remembered or looked for. It is generated and rewritten on every commit, which is what makes it
+trustworthy rather than tidy: a thing that waits on me and is not in it is a defect in whatever
+writes it.
+
+**Four of the five kinds are derivable and one is not.** An open proposal, an open question and a
+capability marked `built` are items with an addressee, and a test awaiting a reading is a file
+comparison - present in `spec/tests/` and absent from `reviewed/`, or present in both and
+different. **A stale regression case is only knowable by generating**, so `attention.md` says the
+suite is what reports one rather than pretending to.
+
+**A capability stays in the release that specifies it** and is listed here by name. Moving it would
+separate a capability from the document the code lane builds from, and give that lane two places to
+read.
 
 ## What is not here, on purpose
 
