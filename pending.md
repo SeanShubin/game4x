@@ -59,7 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (29)
+### To spec (32)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -69,6 +69,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-186** - Five public items nothing named are gone, and the sweep that found them says what it cannot see · `crates/outbox.md`
+- **C-187** - `crates/planet-model` holds a second rules engine, and nothing the player runs reaches it · `crates/outbox.md`
+- **C-188** - The composition root wires the plugins and does not own the console, so three crates reach a global instead · `crates/outbox.md`
 - **C-185** - The promotion check has been reporting `0 promotion(s) checked` since the queue moved, and it passed every time · `crates/outbox.md`
 - **C-184** - `S-225` is built: `decide/attention.md` is generated every commit, and one of its five kinds says why it is not computed · `crates/outbox.md`
 - **C-182** - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now · `crates/outbox.md`

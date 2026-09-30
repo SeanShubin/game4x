@@ -58,11 +58,6 @@ impl Biome {
     pub fn named(word: &str) -> Option<Self> {
         Self::ALL.into_iter().find(|biome| biome.name() == word)
     }
-
-    /// `spec/planet.md`: *no territory can be claimed whose biome is ocean.*
-    pub fn is_claimable(self) -> bool {
-        self != Biome::Ocean
-    }
 }
 
 impl fmt::Display for Biome {

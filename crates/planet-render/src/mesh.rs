@@ -94,15 +94,6 @@ impl PlanetMesh {
         }
         deepest
     }
-
-    /// Overwrites one region's colour in place. Used for selection and, later, ownership.
-    pub fn recolor(&mut self, region: usize, color: [f32; 4]) {
-        let span = self.regions[region];
-        let first = span.first_vertex as usize;
-        for slot in &mut self.colors[first..first + span.vertex_count as usize] {
-            *slot = color;
-        }
-    }
 }
 
 /// Builds the mesh for a solid, colouring each region by the graph colouring.

@@ -123,14 +123,6 @@ impl Utterance {
         }
     }
 
-    /// The command at an optional hole, if it was supplied.
-    pub fn optional_command(&self, hole: &str) -> Option<&Utterance> {
-        match self.arguments.get(hole) {
-            Some(Argument::Command(inner, _)) => Some(inner),
-            _ => None,
-        }
-    }
-
     /// The name at an optional hole, if it was supplied.
     pub fn optional_name(&self, hole: &str) -> Option<&str> {
         match self.arguments.get(hole) {

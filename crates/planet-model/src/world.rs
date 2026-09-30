@@ -50,11 +50,6 @@ impl World {
         &self.owners
     }
 
-    pub fn owned_by(&self, player: PlayerId) -> impl Iterator<Item = RegionId> + '_ {
-        self.regions()
-            .filter(move |&region| self.owner(region) == Some(player))
-    }
-
     pub fn holds_anything(&self, player: PlayerId) -> bool {
         self.owners.contains(&Some(player))
     }

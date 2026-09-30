@@ -61,6 +61,206 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-186 - Five public items nothing named are gone, and the sweep that found them says what it cannot see
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *let's make sure we remove dead code* · **cites** `S-224`
+
+**derived from** *what is required is that a check earns its place by a failure it could have produced* - `CLAUDE.md` -> What done means
+
+**`cargo clippy` cannot see any of these.** The dead-code lint stops at a crate boundary, so a
+`pub` item in a library is never unreachable as far as the compiler is concerned - which is why
+`S-224` needed a person to notice and why this needed a sweep rather than the gate.
+
+## What was asked, over what
+
+```
+588   public items declared in crates/*/src, over 163 .rs files
+ 73   named nowhere outside their own file
+ 13   of those named nowhere at all, including their own file
+  5   dead after reading each one
+```
+
+**The 73 are mostly visibility rather than death** - an item used inside its own file and `pub`
+for no reason. Left alone: narrowing them is a different change and a noisier one.
+
+## The five, and what each was
+
+```
+command-language/src/syntax.rs   optional_command   P-212 built it, 2026-09-07, never called
+game-console/src/state.rs        as_a_turn          orphaned by e40325c2, D-4's report removal
+planet-model/src/biome.rs        is_claimable       orphaned by a6b89b24, this lane's own
+planet-model/src/world.rs        owned_by           never called
+planet-render/src/mesh.rs        recolor            2026-08-26, *used for selection and, later,
+                                                    ownership* - and used by neither
+```
+
+**Two were orphaned by this lane's own deletions**, which is `S-224` exactly: a caller goes and
+the callee stays, and nothing in the gate can say so.
+
+**`recolor`'s comment is the one worth reading.** *Used for selection and, later, ownership* was
+never true of the first half and never became true of the second. **A comment claiming a use is
+not a use**, and it is what kept the function looking alive for five weeks.
+
+## One that looks dead and is not, named so nobody cuts it
+
+**`game-front/src/shell/web.rs`'s `game_generation` is exported and the page never calls it**, and
+its own doc comment says why: *the page does not use this; the engine does, from the other side.
+It is exported so that a person with the developer tools open can see the same number the globe is
+watching.* **A deliberate debugging surface**, which is exactly what this sweep cannot tell from an
+oversight - and the only thing that told them apart was the comment.
+
+**Six other `#[wasm_bindgen]` functions in that file are called from `crates/game4x/index.html`**
+and look dead to any search of the Rust alone.
+
+## The cut itself went wrong first, and the assertion did not catch it
+
+**A scripted range deletion cut `optional_command`'s `match` arm and left its closing brace**, and
+**the assertion passed**: it counted the definitions in the range at any indent, which is the rule
+this lane adopted after losing methods twice in September, and there was exactly one. **What it
+never asked was whether the range was brace-balanced.**
+
+**The cause is one line.** The range's end was found by looking for a closing brace at the
+declaration's indent, and the indent was measured from the text before `fn` - which is
+`    pub `, eight characters, not four. So it matched the `match`'s brace rather than the
+function's.
+
+**Found by reading the diff, not by the assertion**, and then done with exact
+before-and-after edits instead. **The habit that caught it is the one `CLAUDE.md` names** - re-derive
+what you are handed, and the cheapest moment is while acting on it. **A range assertion that does
+not check the range is balanced is the instrument answering a narrower question than the one
+asked**, and it returned a plausible one: *one definition, no tests*, which was true.
+
+### C-187 - `crates/planet-model` holds a second rules engine, and nothing the player runs reaches it
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *clean isolation of implementations via composition roots*, and a dead-code sweep finding a spec rule in a function nobody calls · **cites** `D-1`, `C-186`
+
+**derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
+
+**`D-1` is satisfied for `crates/game-model`, and the rule it states is broken one crate over.**
+`planet-model` says so about itself, in `lib.rs`:
+
+```
+There is one rule - claiming a region - and it exists to make the architecture real and
+testable rather than to be good game design. It is meant to be replaced.
+```
+
+**It has been replaced.** `spec/data/rules.4x` is the game's rules and `game-model` runs them.
+**What was not done is the second half of the sentence.**
+
+## Measured, and the shipped path is the surprising part
+
+**Every `planet_model::` item named by a crate `game4x` reaches**, counted over
+`game-console`, `game-front`, `game-globe`, `game-inspect`, `game4x`, `planet-bevy`,
+`planet-render`, `planet-terrain`, `planet-presentation`, `sphere-tessellation` and
+`graph-coloring`:
+
+```
+PlanetSize   7
+Biome        3
+Topology     2
+RegionId     1
+```
+
+**`World`, `Intent`, `Claim`, `Abandon` and the resolve function appear nowhere in it.** The
+shipped game takes four names out of this crate, all of them geometry and vocabulary, and none of
+them the engine.
+
+```
+crates/planet-model/src/world.rs     366 lines
+crates/planet-model/src/intent.rs     33 lines
+```
+
+**Who does reach it**: `planet-ecs`, then `planet-flat`, then `prototypes/planet-view`. **`cargo
+tree -p game4x` lists `planet-model` and lists none of those three**, so the second engine is
+reachable only from a prototype.
+
+## Why this is filed rather than fixed
+
+**Deleting it breaks `prototypes/planet-view`**, and `hooks/pre-push` runs `-p planet-ecs -p
+planet-flat` by name. **A prototype's deliverable is its recorded answer and not its code** -
+`docs/prototypes/README.md` - so removing it may be right, and that is a judgement about research
+this lane should not make quietly in a sweep about dead code.
+
+**And `game4x/src/main.rs` already records the same decision being made once**: *No `planet-ecs`.
+It was added here and nothing ever read it... The crate stays: `prototypes/planet-view` uses it for
+what it was built for.* **So the reasoning exists and was applied to the wiring rather than to the
+crate.**
+
+## The half that was not a judgement, and is already done
+
+**`Biome::is_claimable` was `spec/planet.md`'s ocean rule stated in Rust**, in a function nothing
+called - so the rule was neither enforced nor removed. It is gone with `C-186`. **An unenforced
+rule in code reads exactly like an enforced one**, which is what made it worth finding.
+
+## What this lane would like said
+
+**Whether `D-1`'s rule reaches `planet-model`.** Its *vetted when* names `crates/game-model`, and
+the principle it states - *the game's rules are data* - does not obviously stop at a crate
+boundary. **If it does reach, the 399 lines go and the prototype goes with them or is rewritten;
+if it does not, this crate holds a rule on purpose and `lib.rs` should stop saying it is meant to
+be replaced.** Either is cheap. Silence is what costs, because the sentence reads as a plan.
+
+### C-188 - The composition root wires the plugins and does not own the console, so three crates reach a global instead
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *clean isolation of implementations via composition roots* · **cites** `C-187`, `Q-100`
+
+**derived from** *a composition root holds no logic, and if it is large enough to be worth testing then something has leaked into it* - `docs/architecture.md`
+
+**The root itself is clean and this is not a complaint about it.** `crates/game4x/src/main.rs` is
+154 lines, decides nothing about the game, and records a case of this rule being applied correctly:
+*No `planet-ecs`. It was added here and nothing ever read it.* **What it does not do is own the
+console**, and three crates outside `game-front` reach it without being handed it.
+
+## What is actually a singleton, which is narrower than it first looks
+
+**`Console` is an ordinary value and that is the good half.** `Console::new()` is called 31 times
+in `game-front`'s own tests, each test with its own. **Nothing about the type is global.**
+
+**The global is one module.** `game-front/src/shell.rs`'s `held` is a `thread_local` on the web
+and a `OnceLock<Mutex<_>>` on the desktop, and `shell::with` is the only door to it.
+
+```
+game-globe/src/lib.rs     5 sites   generation, territory_count, with, resets, drawing_changes
+game-inspect/src/lib.rs   4 sites   submit, change_drawing, with, browser
+game4x/src/main.rs        1 site    territory_count
+```
+
+**All ten reach a process-wide value that the root never constructed.**
+
+## Why it is there, which is a real constraint on one target and not on the other
+
+**On the web the page calls in through free `#[wasm_bindgen]` functions**, and a free function has
+nowhere to receive a handle. `shell.rs` says so: *one thread, and the page calls in. A
+`thread_local` is enough, and a `Mutex` would be a lie about what is happening.*
+
+**On the desktop nothing forces it.** The engine owns the main thread and the console is read from
+a Bevy plugin, and a Bevy plugin can be handed a value - `game_inspect::InspectPlugin { options:
+asked }` is handed one in the root already. **So the shape the wasm boundary requires has been
+adopted on the target that does not require it**, which is the leak.
+
+## What it costs, measured rather than argued
+
+**`game-front` carries a test lock that exists only for this.** `exclusively` serialises the ten
+tests that touch the one console, and its own comment gives the reason: *the console is a
+process-wide static and the test runner runs tests in parallel threads of one process, so two
+tests asserting about it race over the very thing being asserted.*
+
+**That is the cost in its clearest form**: the 31 tests that make their own `Console` need no
+lock, and the ten that go through `shell` do. **The difference between the two groups is exactly
+the difference between a value the caller owns and a value the process owns.**
+
+## What this lane is not claiming
+
+**Not that the current design is wrong.** One console outside the engine is a property `shell.rs`
+sets out to guarantee - *nothing else in the program holds a `Console` of its own* - and a global
+does guarantee it. **A handed-down value would guarantee it by the root handing out one**, which
+is the same fact with a different enforcer, and it is more work on a target that already behaves.
+
+**What would settle it is whether `game-globe` and `game-inspect` should be able to reach the game
+without being given it.** They are plugins the root adds; the root has the console's answer in its
+own hand at line 86 and passes none of it on. **This lane will not restructure two crates on its
+own reading of one sentence of Sean's.**
+
 ### C-185 - The promotion check has been reporting `0 promotion(s) checked` since the queue moved, and it passed every time
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-88`'s new check refusing to conclude anything from an empty sweep · **cites** `Q-88`, `S-132`, `P-593`
