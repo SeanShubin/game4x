@@ -61,6 +61,73 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-184 - `S-225` is built: `decide/attention.md` is generated every commit, and one of its five kinds says why it is not computed
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-225` · **cites** `S-225`, `P-593`, `S-206`
+
+**derived from** *a thing that waits on me and is not in it is a defect in whatever writes it* - `decide/README.md`
+
+**Filed rather than said in a commit, which is `S-218`.** The README's link is no longer broken.
+
+## What is there now
+
+```
+tools/outbox/src/lib.rs        attention(), reading(), Reading, Unread, Unreading
+tools/outbox/src/main.rs       --attention [PATH], default decide/attention.md
+hooks/pre-commit:277           written and staged beside pending.md, under the same guard
+tools/outbox/tests/attention.rs  seven checks
+```
+
+**Four kinds derived, one named, and the file says which it is doing.** Approve words, answer a
+question, vet a capability - each from an item open and addressed to `sean`, split by the file it
+lives in rather than by anything the item says, because **where it lives is what decides the
+gesture**. Read a test is the file comparison. The fifth says the suite reports it.
+
+## The guard it inherited needed a second reason, and it has one
+
+**`pending.md` is refused while any outbox has unstaged changes**, because regenerating over a
+half-written finding publishes another lane's draft. **This reads `spec/tests/` and `reviewed/` as
+well**, which that reason does not cover - and the guard covers it anyway, because an unread test
+only becomes visible once somebody commits the test.
+
+## `decide/attention.md` has no column, and the line had to go above `decide/*`
+
+**The case below it gives that directory to the specification lane**, so without this the hook
+would have made every lane's commit span two columns the moment it rewrote the file. **Same rule
+as `pending.md`, one directory over**, and it is a generated file whose sources - the outboxes,
+`spec/tests/`, `reviewed/` - belong to three different owners between them.
+
+## The checks, and what each would have caught
+
+**`every_item_waiting_on_sean_is_in_the_file` is the promise and it is over every item.**
+Demonstrated rather than asserted: narrowing the capability filter from `releases/` to
+`releases/first` made it red naming `D-1` through `D-6`, and green again when restored. **The
+count is asserted beside it**, because with nothing open to him the loop would report the rule
+holding in exactly the same words.
+
+**`nothing_addressed_to_an_instance_is_in_the_file` is the other half**, over the 50-odd items
+addressed elsewhere, with that population asserted too.
+
+**`an_empty_directory_is_blind_rather_than_nothing_waiting` is `CLAUDE.md`'s sign-flipped
+count, in both directions.** An empty `spec/tests/` would report no reading owed while orphaning
+every record; an empty `reviewed/` would report every test unread. **And a missing directory is
+blind rather than empty**, which is the state a wrong path produces.
+
+**`the_file_tells_nothing_waiting_apart_from_could_not_be_derived` is the one worth keeping.**
+A derivation that could not run and a derivation that found nothing are the same good news unless
+the words differ, so the rendering asserts they do.
+
+**A note on what it does not check.** The three filters have a fourth bucket for an item to
+`sean` from anywhere else, shown rather than dropped - and nothing exercises it today, because no
+such item exists. **It is there because the coverage check is what would fail if it were missing**,
+which is the honest version of a branch with no test.
+
+## One thing that is yours
+
+**`decide/README.md` says the three gestures and this file now shows five headings.** The two it
+does not name are the two `pending.md` could never see, which is `P-593`'s own argument - so the
+README is not wrong, and whether it should name all five is yours. **This lane will not touch it.**
+
 ### C-182 - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** answering *is there any work besides my review* and finding two capabilities `open` that nothing is waiting on · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-179`, `S-218`

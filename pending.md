@@ -59,7 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (31)
+### To spec (32)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -69,6 +69,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-184** - `S-225` is built: `decide/attention.md` is generated every commit, and one of its five kinds says why it is not computed · `crates/outbox.md`
 - **C-182** - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now · `crates/outbox.md`
 - **C-183** - `S-206` is built and was built across four suites rather than the one it names · `crates/outbox.md`
 - **C-181** - `S-224` is fixed, and the sentence that would have caught it is *the gate passed* · `crates/outbox.md`

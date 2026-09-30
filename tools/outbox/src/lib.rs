@@ -1263,6 +1263,297 @@ pub fn duplicate_ids(items: &[Item]) -> BTreeMap<String, Vec<String>> {
     seen
 }
 
+/// A test in `spec/tests/` that Sean has not read, and why it counts as unread.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Unread {
+    /// The file's name, the same in both directories.
+    pub name: String,
+    pub why: Unreading,
+}
+
+/// The two ways a test can be waiting on a reading.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Unreading {
+    /// In `spec/tests/` and not in `reviewed/`: nobody has read it at all.
+    NoRecord,
+    /// In both and different: he read something else under this name.
+    RecordDiffers,
+}
+
+/// What comparing `spec/tests/` against `reviewed/` established.
+///
+/// **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. An empty
+/// `spec/tests/` compares nothing and reports *no test is waiting*, in exactly the words it uses
+/// when he is up to date; an empty `reviewed/` would orphan every record and is the state this
+/// derivation exists to catch. **So both populations are asserted and a failure of either is
+/// [`Reading::Blind`]**, which `attention.md` prints as a defect rather than as good news.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Reading {
+    /// Both directories were read and held something.
+    Compared {
+        tests: usize,
+        records: usize,
+        waiting: Vec<Unread>,
+    },
+    /// Neither the good answer nor the bad one - the question could not be asked.
+    Blind(String),
+}
+
+/// Which tests are waiting on a reading, by comparing the two directories.
+///
+/// **`spec/README.md` rule 3**: a test is the specification, and `reviewed/` is the record that
+/// Sean has read it. So a test present in the first and absent from the second constrains nothing
+/// he has approved, and one present in both and different is worse - **the record says he read a
+/// file that is not the file there now**.
+///
+/// **A byte comparison, because the two directories are copies.** The suite compares them as rows
+/// in `crates/game-model/tests/reviewed.rs`, which is the stronger question and the slower one;
+/// this is asked on every commit and only has to say whether a reading is owed. **Where the two
+/// disagree the suite is right**, and both are in the gate.
+pub fn reading(root: &Path) -> Reading {
+    let tests_at = root.join("spec/tests");
+    let records_at = root.join("reviewed");
+    let tests = match stems(&tests_at) {
+        Ok(found) => found,
+        Err(why) => return Reading::Blind(format!("cannot read `spec/tests/`: {why}")),
+    };
+    let records = match stems(&records_at) {
+        Ok(found) => found,
+        Err(why) => return Reading::Blind(format!("cannot read `reviewed/`: {why}")),
+    };
+    // **Both populations, before any conclusion is drawn from the comparison.** Either being
+    // empty makes every answer below meaningless while leaving it perfectly readable.
+    if tests.is_empty() {
+        return Reading::Blind(
+            "`spec/tests/` holds no `.4x` file, so every record in `reviewed/` answers to \
+             nothing and this comparison would report no reading owed"
+                .to_string(),
+        );
+    }
+    if records.is_empty() {
+        return Reading::Blind(
+            "`reviewed/` holds no `.4x` file, so nothing here has been read and the list below \
+             would be every test rather than the ones waiting"
+                .to_string(),
+        );
+    }
+
+    let mut waiting = Vec::new();
+    for name in &tests {
+        let mine = tests_at.join(name);
+        let theirs = records_at.join(name);
+        let Ok(said) = std::fs::read_to_string(&mine) else {
+            continue;
+        };
+        match std::fs::read_to_string(&theirs) {
+            Err(_) => waiting.push(Unread {
+                name: name.clone(),
+                why: Unreading::NoRecord,
+            }),
+            Ok(read) if read != said => waiting.push(Unread {
+                name: name.clone(),
+                why: Unreading::RecordDiffers,
+            }),
+            Ok(_) => {}
+        }
+    }
+    Reading::Compared {
+        tests: tests.len(),
+        records: records.len(),
+        waiting,
+    }
+}
+
+/// Every `.4x` file name in a directory, sorted.
+fn stems(at: &Path) -> Result<Vec<String>, String> {
+    let mut found: Vec<String> = std::fs::read_dir(at)
+        .map_err(|why| why.to_string())?
+        .flatten()
+        .map(|entry| entry.file_name().to_string_lossy().to_string())
+        .filter(|name| name.ends_with(".4x"))
+        .collect();
+    found.sort();
+    Ok(found)
+}
+
+/// Everything waiting on Sean, as markdown, for `decide/attention.md`.
+///
+/// Sean, through `P-593`: *everything waiting on you is listed in `attention.md`, so that nothing
+/// has to be remembered or looked for.* **`decide/README.md` is what this has to keep true**:
+/// *a thing that waits on me and is not in it is a defect in whatever writes it.*
+///
+/// # Why this is not `pending.md` with three sections removed
+///
+/// **`pending.md` is the index across four perspectives and stays.** It can only see an item with
+/// a `**to**` field, which is why it missed two of the five kinds: **a test awaiting a reading and
+/// a stale regression case are not items at all**, and no amount of reading outboxes finds them.
+///
+/// # The fifth kind is named rather than computed, and that is the design
+///
+/// **A stale regression case is only knowable by generating the suite.** Doing that here would
+/// rewrite the tree under whoever was committing, which is `git add -A` wearing a different name.
+/// So this says the suite reports them - it already prints the deletion for each grain, `S-206` -
+/// rather than pretending to a list it cannot honestly have.
+pub fn attention(all: &Outboxes, reading: &Reading) -> String {
+    let mut out = String::new();
+    out.push_str("# Waiting on you\n\n");
+    out.push_str(
+        "**Generated.** Written by `tools/outbox` from the outboxes, `spec/tests/` and \
+`reviewed/`,\nand rewritten by `hooks/pre-commit`. **Do not edit this file** - it is derived, \
+so an edit\nhere is a claim that disagrees with its source and loses at the next commit.\n\n",
+    );
+    out.push_str(
+        "[What waits on everybody else](../pending.md) · [How to read this](README.md)\n\n",
+    );
+
+    let empty = Vec::new();
+    let grouped = open_by_addressee(&all.items);
+    let sean = grouped.get("sean").unwrap_or(&empty);
+
+    // **Split by where it lives rather than by anything the item says**, because that is what
+    // decides the gesture: a proposal is promoted, a question is answered, a capability is
+    // looked at. `decide/README.md` names the three and this keeps its order.
+    let proposals: Vec<&&Item> = sean
+        .iter()
+        .filter(|item| item.outbox.ends_with("proposals.md"))
+        .collect();
+    let questions: Vec<&&Item> = sean
+        .iter()
+        .filter(|item| item.outbox.ends_with("questions.md"))
+        .collect();
+    let capabilities: Vec<&&Item> = sean
+        .iter()
+        .filter(|item| item.outbox.starts_with("releases/"))
+        .collect();
+    // **Anything the three filters missed is shown rather than dropped.** An outbox this lane
+    // has not thought of can address him, and a kind that falls out of every bucket is exactly
+    // the defect `decide/README.md` says this file must not have.
+    let elsewhere: Vec<&&Item> = sean
+        .iter()
+        .filter(|item| {
+            !item.outbox.ends_with("proposals.md")
+                && !item.outbox.ends_with("questions.md")
+                && !item.outbox.starts_with("releases/")
+        })
+        .collect();
+
+    section(
+        &mut out,
+        "Approve words",
+        "Say *promote P-n*, or say what to change.",
+        &proposals,
+    );
+    section(
+        &mut out,
+        "Answer a question",
+        "No wording can be final until you do.",
+        &questions,
+    );
+    section(
+        &mut out,
+        "Vet a capability",
+        "Look at the running game and say whether it held. It stays in the release that \
+specifies it, so the code lane has one place to read.",
+        &capabilities,
+    );
+    if !elsewhere.is_empty() {
+        section(
+            &mut out,
+            "Addressed to you from somewhere else",
+            "Not one of the three kinds above. **That is worth a look at whatever filed it** - \
+this lane knows of three gestures and this is a fourth.",
+            &elsewhere,
+        );
+    }
+
+    out.push_str("## Read a test\n\n");
+    match reading {
+        Reading::Blind(why) => {
+            out.push_str(&format!(
+                "**This could not be derived, which is not the same as nothing waiting.** {why}\n\n"
+            ));
+        }
+        Reading::Compared {
+            tests,
+            records,
+            waiting,
+        } if waiting.is_empty() => {
+            out.push_str(&format!(
+                "Nothing. All {tests} test(s) in `spec/tests/` have a record in `reviewed/` that \
+matches,\nover {records} record(s).\n\n"
+            ));
+        }
+        Reading::Compared {
+            tests,
+            records,
+            waiting,
+        } => {
+            out.push_str(&format!(
+                "Of {tests} test(s) in `spec/tests/` and {records} record(s) in `reviewed/`, \
+these are\nwaiting. **Read it in the review application**, which writes the record.\n\n"
+            ));
+            for one in waiting {
+                out.push_str(&format!(
+                    "- `{}` - {}\n",
+                    one.name,
+                    match one.why {
+                        Unreading::NoRecord => "no record; nobody has read it",
+                        Unreading::RecordDiffers =>
+                            "the record differs from the test, so what you read is not what is there",
+                    }
+                ));
+            }
+            out.push('\n');
+        }
+    }
+
+    out.push_str("## Accept a regression case\n\n");
+    out.push_str(
+        "**Not listed here, and the reason is that finding out would edit your tree.** A stale \
+case\nis only knowable by regenerating the suite, and doing that from a commit hook would \
+rewrite\nfiles under whoever was committing.\n\n**The suite is what reports one.** When a case \
+no longer says what the game does, the failure\nnames it and prints the deletion for each \
+grain - one case, one turn, the whole suite - so it\nis pasted rather than composed. **Deleting \
+it is the approval**, and it is yours alone.\n\n",
+    );
+
+    out.push_str("## What is in this file\n\n");
+    out.push_str(&format!(
+        "Outboxes read: {}\n\n",
+        all.files
+            .iter()
+            .map(|at| format!("`{at}`"))
+            .collect::<Vec<_>>()
+            .join(", ")
+    ));
+    out.push_str(
+        "Five kinds of thing can wait on you, and four of them are above. **If a thing waits on \
+you\nand is not here, that is a defect in `tools/outbox` rather than something to \
+remember** -\n`decide/README.md`.\n",
+    );
+    out
+}
+
+/// One section of [`attention`], with the gesture it asks for.
+///
+/// **Empty says so rather than being left out**, because a heading that vanishes when it has
+/// nothing reads as a file that forgot it. `decide/README.md`: *empty means nothing is waiting*.
+fn section(out: &mut String, heading: &str, gesture: &str, items: &[&&Item]) {
+    out.push_str(&format!("## {heading}\n\n"));
+    if items.is_empty() {
+        out.push_str("Nothing.\n\n");
+        return;
+    }
+    out.push_str(&format!("{gesture}\n\n"));
+    for item in items {
+        out.push_str(&format!(
+            "- **{}** - {} · `{}`\n",
+            item.id, item.title, item.outbox
+        ));
+    }
+    out.push('\n');
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

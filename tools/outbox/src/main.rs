@@ -8,6 +8,7 @@
 //! outbox --closing        what closed since HEAD, and open items deriving from its rule
 //! outbox --orphans        closed items whose closing line names a withdrawn proposal
 //! outbox --places         the outboxes it reads, one per line, for a caller that guards them
+//! outbox --attention      write decide/attention.md, everything waiting on Sean
 //! outbox --count          the aggregate, against the limit
 //! ```
 //!
@@ -21,8 +22,8 @@ use std::path::{Path, PathBuf};
 const DEPTH: usize = 400;
 
 use outbox::{
-    Item, LIMIT, Outboxes, duplicate_ids, history, misfiled_by_asks, open_by_addressee, pending,
-    read, same_section, unclosed,
+    Item, LIMIT, Outboxes, attention, duplicate_ids, history, misfiled_by_asks, open_by_addressee,
+    pending, read, reading, same_section, unclosed,
 };
 
 fn main() {
@@ -277,6 +278,32 @@ fn main() {
                 }
             }
         }
+        // **The one file that is his, beside the one that is everybody's.** `P-593`: *everything
+        // waiting on you is listed in `attention.md`, so that nothing has to be remembered or
+        // looked for.* `pending.md` stays and is the index across four perspectives.
+        //
+        // **Two arms rather than one writing both**, because the hook guards them differently:
+        // `pending.md` is refused while any outbox is uncommitted, and that guard is about
+        // publishing another lane's draft. This reads two directories as well, and a caller may
+        // want one without the other.
+        Some("--attention") => {
+            let path = arguments
+                .get(1)
+                .cloned()
+                .unwrap_or_else(|| "decide/attention.md".to_string());
+            let at = root.join(&path);
+            let read_tests = reading(&root);
+            match std::fs::write(&at, attention(&all, &read_tests)) {
+                Ok(()) => {
+                    println!("wrote {path}");
+                    0
+                }
+                Err(why) => {
+                    eprintln!("cannot write {path}: {why}");
+                    2
+                }
+            }
+        }
         Some("--sections") => {
             show_same_section(&all);
             0
@@ -362,6 +389,7 @@ outbox - what is open, and addressed to whom
     outbox --sections       sections that have taken more than one proposal
     outbox --item ID        one item's fields, exit 1 if the id is nowhere
     outbox --write [PATH]   write the pending document, default pending.md
+    outbox --attention [P]  write what waits on Sean, default decide/attention.md
     outbox --help           this"
 }
 
