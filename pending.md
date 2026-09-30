@@ -58,7 +58,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (32)
+### To spec (29)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -68,6 +68,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-185** - The promotion check has been reporting `0 promotion(s) checked` since the queue moved, and it passed every time · `crates/outbox.md`
 - **C-184** - `S-225` is built: `decide/attention.md` is generated every commit, and one of its five kinds says why it is not computed · `crates/outbox.md`
 - **C-182** - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now · `crates/outbox.md`
 - **C-183** - `S-206` is built and was built across four suites rather than the one it names · `crates/outbox.md`
@@ -76,14 +77,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-163** - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule · `crates/outbox.md`
 - **C-162** - A territory of each biome would pin all six, and it is Sean's own suggestion · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
-- **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
-- **C-120** - One quantity in `line.4x` is a sentence, and a key takes one token · `crates/outbox.md`
-- **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
-- **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **Q-102** - D-4 is vetted by a search, and the search as written cannot go green · `lenses/quality/outbox.md`
 - **Q-94** - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice · `lenses/quality/outbox.md`

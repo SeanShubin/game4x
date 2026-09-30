@@ -667,6 +667,275 @@ const KNOWN: &[(&str, &str)] = &[
 ];
 
 /// Every promotion since the `shape` field existed put its block where it said.
+/// The two files an open proposal can sit in, newest home first.
+///
+/// **`S-132` moved the queue and this check did not follow.** Sean asked for what waits on him to
+/// sit apart from what is settled, so on 2026-09-14 `be65e55b` put the open proposals in
+/// `decide/proposals.md` and left the ledger - the Accepted table - in `docs/notes/proposals.md`.
+/// **A promotion is detected by a proposal leaving the queue, and after that day no proposal ever
+/// left the file this looked in.**
+///
+/// **It reported `0 promotion(s) checked` and passed**, for sixteen days and 55 promotions.
+/// Nothing was wrong with the predicate; its population had moved out from under it. Found by
+/// `approved_text_is_still_where_it_landed`, whose *both populations* assertion refused to draw a
+/// conclusion from an empty sweep - the check next door failing loudly is what made the silent one
+/// visible, `Q-88`.
+///
+/// **Both are read rather than the new one alone**, because the window reaches back past the move
+/// and a promotion from before it left the old file.
+const QUEUES: [&str; 2] = ["decide/proposals.md", "docs/notes/proposals.md"];
+
+/// Where the Accepted table lives, which is not where the queue lives any more.
+const LEDGER: &str = "docs/notes/proposals.md";
+
+/// Every open proposal at a commit, from whichever file held it.
+fn queue_at(root: &Path, commit: &str) -> Option<Vec<outbox::Item>> {
+    let mut found = Vec::new();
+    let mut any = false;
+    for file in QUEUES {
+        if let Some(text) = git(root, &["show", &format!("{commit}:{file}")]) {
+            any = true;
+            found.extend(outbox::parse(&text, file));
+        }
+    }
+    any.then_some(found)
+}
+
+/// The ids in the Accepted table at a commit.
+fn ledger_at(root: &Path, commit: &str) -> std::collections::BTreeSet<String> {
+    git(root, &["show", &format!("{commit}:{LEDGER}")])
+        .map(|text| {
+            outbox::accepted(&text)
+                .into_iter()
+                .map(|row| row.id)
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// The commits to walk: those that touched either queue file, newest first.
+///
+/// **Counted over both, so the window does not shrink when the queue moves.** `docs/notes/
+/// proposals.md` is the specification lane's outbox as well as the ledger, so it is touched far
+/// more often than proposals land - which is why 80 commits of it reached back only five days.
+fn queue_log(root: &Path, how_many: usize) -> String {
+    let mut args = vec!["log".to_string(), "--format=%H".to_string()];
+    args.push("-n".to_string());
+    args.push(how_many.to_string());
+    args.push("--".to_string());
+    for file in QUEUES {
+        args.push(file.to_string());
+    }
+    let borrowed: Vec<&str> = args.iter().map(String::as_str).collect();
+    git(root, &borrowed).unwrap_or_default()
+}
+
+/// **Approved text is still in the destination, or a later promotion is what changed it.**
+///
+/// `CLAUDE.md` states the guarantee in the present tense - *approved text is byte-identical to
+/// shipped text* - and [`a_promotion_lands_what_was_approved`] answers *did it land*, against the
+/// destination as it stood in the promoting commit. **That is the right question at that commit
+/// and it is not this one.** `P-66` was promoted, lost to a reword on 2026-09-01, and found twelve
+/// days later because a number in a recipe could not be explained - by somebody puzzled, not by
+/// anything looking.
+///
+/// # The obvious check would be noise at forty per cent, and that is measured rather than feared
+///
+/// **78 of 192 checkable promotions no longer match at `HEAD`**, and that is mostly the
+/// specification working: `P-468` promoted *total capacity* and `506ff08` promoted `P-478`, which
+/// renamed the term. **A sentence a later promotion edited is supposed to have changed.**
+///
+/// **So the question is what changed it**: the newest version of the destination that still held
+/// the text, and whether the very next commit to touch that file promoted anything. **78 becomes
+/// 4**, and in the quality lens's sweep all four were addressing lines or a supersession in Sean's
+/// own words - `Q-88`, and the measurement is taken from that report rather than re-derived, which
+/// is what the item asked for.
+///
+/// **Three of that four were one mistake and this check cannot repeat it.** The lens treated an
+/// outbox addressing line as approved text; [`sentences`] drops it from both sides, because
+/// `CLAUDE.md` says a promotion writes that line rather than landing it.
+///
+/// # What a zero here does not cover, because a claim of zero names what it counted against
+///
+/// **The window is the same 80 commits to the queue** that the landing check uses, so this says
+/// nothing about a promotion older than it. **And it cannot see a repaired loss at all** - it asks
+/// whether the text is missing now, and `P-66` matches today. What it can see is a loss that is
+/// still a loss, which is the state that costs twelve days.
+#[test]
+fn approved_text_is_still_where_it_landed() {
+    let root = root();
+    if git(&root, &["rev-parse", "--is-inside-work-tree"]).is_none() {
+        return;
+    }
+    if git(&root, &["rev-parse", "--is-shallow-repository"])
+        .map(|out| out.trim() == "true")
+        .unwrap_or(false)
+    {
+        return;
+    }
+
+    let log = queue_log(&root, 120);
+
+    let mut held = 0usize;
+    let mut changed_by_a_promotion: Vec<String> = Vec::new();
+    let mut skipped: Vec<String> = Vec::new();
+    let mut lost: Vec<String> = Vec::new();
+    let mut seen = std::collections::BTreeMap::new();
+
+    for commit in log.lines() {
+        let Some(before) = queue_at(&root, &format!("{commit}^")) else {
+            continue;
+        };
+        let Some(after) = queue_at(&root, commit) else {
+            continue;
+        };
+        // **A promotion is a proposal leaving the queue and gaining an Accepted row**, which is
+        // the discriminator the landing check established and the one thing that tells a
+        // promotion from a withdrawal. Borrowed rather than re-invented.
+        let gained = ledger_at(&root, commit);
+        let had = ledger_at(&root, &format!("{commit}^"));
+        for item in before {
+            if after.iter().any(|still| still.id == item.id) {
+                continue;
+            }
+            if !gained.difference(&had).any(|id| *id == item.id) {
+                continue;
+            }
+            let Some(into) = field(&item.body, "into") else {
+                continue;
+            };
+            let Some(shape) = field(&item.body, "shape") else {
+                continue;
+            };
+            let Some(shapes) = shapes_of(&shape) else {
+                continue;
+            };
+            // **One destination and one shape**, because the *what changed it* walk is over one
+            // file's history and a compound promotion has no one file to walk. **Named and
+            // counted rather than dropped** - a population this narrows in silence is the
+            // failure this repository keeps finding in its own instruments.
+            let files = destinations(&into);
+            if files.len() != 1 || shapes.len() != 1 || shapes[0] == "instruction" {
+                skipped.push(item.id.clone());
+                continue;
+            }
+            let file = files[0].clone();
+            let mut quoted = blocks(&item.body);
+            if shapes[0] == "rows" && quoted.is_empty() {
+                quoted = tables(&item.body);
+            }
+            if quoted.len() != 1 {
+                skipped.push(item.id.clone());
+                continue;
+            }
+            let block = quoted[0].clone();
+
+            let Some(now) = at(&root, &mut seen, "HEAD", &file) else {
+                skipped.push(item.id.clone());
+                continue;
+            };
+            if matches!(check(shapes[0], &block, &now), Verdict::Landed) {
+                held += 1;
+                continue;
+            }
+            // **What changed it.** Walk that file's commits from newest to oldest, find the
+            // newest one that still held the text, and the commit after it is what removed it.
+            let history = git(
+                &root,
+                &[
+                    "log",
+                    "--format=%H",
+                    &format!("{commit}..HEAD"),
+                    "--",
+                    &file,
+                ],
+            )
+            .unwrap_or_default();
+            let touched: Vec<&str> = history.lines().collect();
+            let mut newer = "HEAD";
+            let mut remover: Option<String> = None;
+            for older in &touched {
+                match at(&root, &mut seen, older, &file) {
+                    Some(text) if matches!(check(shapes[0], &block, &text), Verdict::Landed) => {
+                        remover = Some(newer.to_string());
+                        break;
+                    }
+                    _ => newer = older,
+                }
+            }
+            let Some(remover) = remover else {
+                // **The text is in no version of the file this window reaches**, which is not a
+                // loss this check can attribute. The landing check already judged whether it
+                // arrived; saying more here would be guessing at a commit nobody read.
+                skipped.push(format!("{} (never held in reach)", item.id));
+                continue;
+            };
+            if promoted_something(&root, &remover) {
+                changed_by_a_promotion.push(item.id.clone());
+            } else {
+                let said = git(&root, &["log", "-1", "--format=%s", &remover]).unwrap_or_default();
+                lost.push(format!(
+                    "{} promoted into {file}, and {} removed the approved text without \
+                     promoting anything: {}",
+                    item.id,
+                    &remover.get(..7).unwrap_or(&remover),
+                    said.trim()
+                ));
+            }
+        }
+    }
+
+    println!(
+        "{held} approved text(s) still present, {} changed by a later promotion {changed_by_a_promotion:?}, \n         {} not checkable this way {skipped:?}",
+        changed_by_a_promotion.len(),
+        skipped.len()
+    );
+    // **Both populations, because a green over nothing reads exactly like a green over
+    // everything.** `CLAUDE.md`: *a count over nothing is the same failure with the sign
+    // flipped.* With no promotion in the window the loop above would report no loss in these
+    // same words.
+    assert!(
+        held + changed_by_a_promotion.len() > 0,
+        "no promotion in the window was checkable, so the assertion below ran over nothing \
+         ({} skipped)",
+        skipped.len()
+    );
+    assert!(
+        lost.is_empty(),
+        "approved text is gone and no promotion took it:\n  {}",
+        lost.join("\n  ")
+    );
+}
+
+/// One version of one file, read once.
+///
+/// The walk asks the same file at the same commit repeatedly - once per promotion into it - and
+/// each ask is a process. **Measured before it was cached**: without this the check ran the
+/// `git show` for `spec/logistics.md` twenty-seven times.
+fn at(
+    root: &Path,
+    seen: &mut std::collections::BTreeMap<String, Option<String>>,
+    commit: &str,
+    file: &str,
+) -> Option<String> {
+    let key = format!("{commit}:{file}");
+    seen.entry(key.clone())
+        .or_insert_with(|| git(root, &["show", &key]))
+        .clone()
+}
+
+/// Whether a commit promoted anything, by the same discriminator the landing check uses.
+///
+/// **A proposal left the queue and the ledger gained a row for it.** Not the commit message,
+/// which is prose and can say anything, and not *touched the queue*, which a correction to a
+/// proposal does too.
+fn promoted_something(root: &Path, commit: &str) -> bool {
+    let had = ledger_at(root, &format!("{commit}^"));
+    ledger_at(root, commit)
+        .into_iter()
+        .any(|id| !had.contains(&id))
+}
+
 #[test]
 fn a_promotion_lands_what_was_approved() {
     let root = root();
@@ -681,18 +950,10 @@ fn a_promotion_lands_what_was_approved() {
         return;
     }
 
-    let log = git(
-        &root,
-        &[
-            "log",
-            "--format=%H",
-            "-n",
-            "80",
-            "--",
-            "docs/notes/proposals.md",
-        ],
-    )
-    .unwrap_or_default();
+    // **Both queue files, since `S-132` moved the open proposals to `decide/`** - see [`QUEUES`].
+    // This read `docs/notes/proposals.md` alone and reported `0 promotion(s) checked` for sixteen
+    // days while 55 proposals landed.
+    let log = queue_log(&root, 120);
 
     // **The ledger as it stands now, because a row can arrive late.** Promotion is detected
     // per commit - a proposal left the queue *and* gained an Accepted row in the same one -
@@ -704,15 +965,7 @@ fn a_promotion_lands_what_was_approved() {
     // row arrived late, and is checked against its destination at the commit it left. A
     // withdrawal is still excluded, because a withdrawal never gets an Accepted row at all -
     // which is the discriminator the misfiling had temporarily destroyed.
-    let landed_at_head: std::collections::BTreeSet<String> =
-        git(&root, &["show", "HEAD:docs/notes/proposals.md"])
-            .map(|text| {
-                outbox::accepted(&text)
-                    .into_iter()
-                    .map(|row| row.id)
-                    .collect()
-            })
-            .unwrap_or_default();
+    let landed_at_head = ledger_at(&root, "HEAD");
     let mut late_rows: Vec<String> = Vec::new();
     let mut exercised: Vec<&str> = Vec::new();
     let mut checked = 0usize;
@@ -721,19 +974,14 @@ fn a_promotion_lands_what_was_approved() {
     let mut repaired = 0usize;
     let mut ambiguous: Vec<String> = Vec::new();
     let mut left_without_landing: Vec<String> = Vec::new();
+    let mut acted_on_its_destination: Vec<String> = Vec::new();
     let mut wrong = Vec::new();
 
     for commit in log.lines() {
-        let Some(before) = git(
-            &root,
-            &["show", &format!("{commit}^:docs/notes/proposals.md")],
-        ) else {
+        let Some(before_items) = queue_at(&root, &format!("{commit}^")) else {
             continue;
         };
-        let Some(after) = git(
-            &root,
-            &["show", &format!("{commit}:docs/notes/proposals.md")],
-        ) else {
+        let Some(after_items) = queue_at(&root, commit) else {
             continue;
         };
         // **A promotion is located by the proposal disappearing, never by the ledger row
@@ -745,14 +993,8 @@ fn a_promotion_lands_what_was_approved() {
         // **But a disappearance is not a promotion on its own** - a withdrawal removes an
         // item too, and would be checked here as though its text should have landed
         // somewhere. So the ledger has to have gained a row for it in the same commit.
-        let landed_now: std::collections::BTreeSet<String> = outbox::accepted(&after)
-            .into_iter()
-            .map(|row| row.id)
-            .collect();
-        let landed_before: std::collections::BTreeSet<String> = outbox::accepted(&before)
-            .into_iter()
-            .map(|row| row.id)
-            .collect();
+        let landed_now = ledger_at(&root, commit);
+        let landed_before = ledger_at(&root, &format!("{commit}^"));
 
         // **An item can leave this queue without landing anywhere, and one has.** `P-344`
         // stopped asking approval and started asking a decision, so `4b9264d` moved it to
@@ -769,16 +1011,23 @@ fn a_promotion_lands_what_was_approved() {
         // exception matched by id, and the real promotion tripped *is excepted and now
         // passes*. A guard that will not let a wrong diagnosis in is worth more here than
         // the diagnosis was.
-        let moved_away = git(
-            &root,
-            &["show", &format!("{commit}:docs/notes/decisions.md")],
-        )
-        .unwrap_or_default();
+        // **Both files a proposal can move *to*, and `decide/questions.md` is the live one.**
+        // `S-132` split what waits on Sean into a queue and a questions file, so the move this
+        // guard exists to ignore now lands in `decide/`. **`P-588` is the case**: `850b4df6` is
+        // *P-588 goes back to a decision* - out of the queue, no ledger row, and a row at `HEAD`
+        // because `d222a479` promoted it for real a day later. Read with the old path alone, that
+        // is the *promoted, row arrived late* signature exactly, and this reported a correct
+        // promotion as wrong. **Which is `P-344` again with the filename moved**, and the comment
+        // above is the one that describes it.
+        let moved_away: String = ["decide/questions.md", "docs/notes/decisions.md"]
+            .iter()
+            .filter_map(|file| git(&root, &["show", &format!("{commit}:{file}")]))
+            .collect();
 
-        let gone: Vec<outbox::Item> = outbox::parse(&before, "docs/notes/proposals.md")
+        let gone: Vec<outbox::Item> = before_items
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
-            .filter(|item| !after.contains(&format!("### {} ", item.id)))
+            .filter(|item| !after_items.iter().any(|still| still.id == item.id))
             .filter(|item| !moved_away.contains(&format!("### {} ", item.id)))
             .filter(|item| {
                 let promoted = landed_now.contains(&item.id) && !landed_before.contains(&item.id);
@@ -859,7 +1108,26 @@ fn a_promotion_lands_what_was_approved() {
             }
             let quoted: Vec<String> = forms.iter().map(|(_, block)| block.clone()).collect();
             let Some(destination) = git(&root, &["show", &format!("{commit}:{into}")]) else {
-                wrong.push(format!("{}: {into} is not in {}", item.id, &commit[..7]));
+                // **A promotion whose own act was to move or delete the file it names is not a
+                // promotion that failed to land.** `P-561` promoted into `spec/combat.md` and
+                // `045234be` moved it to `spec/future/combat.md`; `P-557` promoted into
+                // `spec/data/above.4x` and `5b83ba55` deleted it, which is what the proposal
+                // asked for. **Asking *is the text in that file* of a commit that removed the
+                // file is the instrument answering a narrower question than the one posed.**
+                //
+                // **Named and counted rather than passed over**, and the two cases are told
+                // apart by the parent: a file the promotion removed was there before it, and a
+                // file in neither is a proposal naming a destination that never existed, which
+                // stays a failure.
+                if git(&root, &["show", &format!("{commit}^:{into}")]).is_some() {
+                    acted_on_its_destination.push(format!("{} ({into})", item.id));
+                } else {
+                    wrong.push(format!(
+                        "{}: {into} is in neither {} nor its parent",
+                        item.id,
+                        &commit[..7]
+                    ));
+                }
                 continue;
             };
             checked += 1;
@@ -968,8 +1236,9 @@ fn a_promotion_lands_what_was_approved() {
     // Said rather than asserted: zero checked and all correct are the same green, and an
     // empty queue is the good state, so a count cannot be required.
     println!(
-        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {older} older than the shape field, {} left the queue without a ledger row {left_without_landing:?}; \n         {} whose ledger row arrived in a later commit {late_rows:?}",
+        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {} moved or deleted the destination they name {acted_on_its_destination:?}; \n         {older} older than the shape field, {} left the queue without a ledger row {left_without_landing:?}; \n         {} whose ledger row arrived in a later commit {late_rows:?}",
         ambiguous.len(),
+        acted_on_its_destination.len(),
         left_without_landing.len(),
         late_rows.len()
     );

@@ -12,7 +12,7 @@ use hooks::{column_of, column_of_act, root, tracked};
 /// would agree with any mapping at all.
 #[test]
 fn every_kind_of_path_lands_in_the_column_that_owns_it() {
-    let cases: [(&str, Option<&str>); 15] = [
+    let cases: [(&str, Option<&str>); 17] = [
         // The specification lane's column.
         ("spec/console.md", Some("spec")),
         ("releases/first-release.md", Some("spec")),
@@ -36,8 +36,14 @@ fn every_kind_of_path_lands_in_the_column_that_owns_it() {
         ("lenses/quality/outbox.md", Some("lens:quality")),
         // Generated, owned by nobody, so a commit carrying it spans nothing.
         ("pending.md", None),
+        // **The same, and it has to be asked**, because `decide/*` is the specification lane's
+        // and this file sits inside it - `S-225`. A spelling that read the directory alone
+        // would give every lane's commit a second column the moment the hook rewrote it.
+        ("decide/attention.md", None),
+        // And the rest of the directory is still that lane's.
+        ("decide/proposals.md", Some("spec")),
     ];
-    assert_eq!(cases.len(), 15, "the table lost a row");
+    assert_eq!(cases.len(), 17, "the table lost a row");
 
     for (path, want) in cases {
         assert_eq!(
@@ -93,12 +99,17 @@ fn a_lens_owns_its_own_tools_directory() {
 /// where nothing spans two columns. **A file nobody has placed cannot make a commit refuse**,
 /// so the guard quietly stops covering whatever arrives next.
 ///
-/// `pending.md` is the one deliberate exception: it is generated from every outbox and belongs
-/// to no perspective. It is named here so that its absence from a column is a decision on the
-/// record rather than a gap that looks like one.
+/// **Two deliberate exceptions, both generated and both belonging to no perspective.**
+/// `pending.md` is written from every outbox; `decide/attention.md` from the outboxes,
+/// `spec/tests/` and `reviewed/`. They are named here so that their absence from a column is a
+/// decision on the record rather than a gap that looks like one.
+///
+/// **This is the check that caught `decide/attention.md` arriving** - the hook's exemption was
+/// written and this list was not, and the file becomes tracked in the commit that adds it, which
+/// is after any gate run made before it.
 #[test]
 fn every_tracked_path_is_owned_by_somebody() {
-    const OWNED_BY_NOBODY: [&str; 1] = ["pending.md"];
+    const OWNED_BY_NOBODY: [&str; 2] = ["pending.md", "decide/attention.md"];
 
     /// Directories whose files have no column while they are arriving, with what makes that so.
     ///

@@ -61,6 +61,75 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-185 - The promotion check has been reporting `0 promotion(s) checked` since the queue moved, and it passed every time
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-88`'s new check refusing to conclude anything from an empty sweep · **cites** `Q-88`, `S-132`, `P-593`
+
+**derived from** *a count over nothing is the same failure with the sign flipped* - `CLAUDE.md` -> What done means
+
+**`a_promotion_lands_what_was_approved` detects a promotion by a proposal leaving the queue.**
+`S-132` moved the open proposals to `decide/proposals.md` on 2026-09-14 and left the ledger in
+`docs/notes/proposals.md`. **The check kept reading the ledger for departures**, and after that day
+no proposal ever left it.
+
+```
+2026-09-14   be65e55b   the queue moves to decide/
+since then   55 promotions
+checked      0, and the gate was green for all of them
+```
+
+**Nothing was wrong with the predicate. Its population moved out from under it** - which is the
+same shape as the coverage check satisfied by the line that founds, and as `C-183`'s grep over
+`tests/` and `src/` while the reporter sat in `examples/`. **The third instance this week and the
+first that was green rather than merely narrow.**
+
+## What found it, and it was not a person
+
+**`Q-88`'s new check asserts both populations before drawing any conclusion**, and that assertion
+is what fired: *no promotion in the window was checkable, so the assertion below ran over nothing*.
+**The check next door failing loudly is what made the silent one visible**, which is worth more
+than either check - a green that means nothing cannot report itself, and a neighbour that refuses
+to conclude can.
+
+## Fixed, and the same root cause was under two more reports
+
+**Both checks read both queue files now** - `QUEUES`, with the ledger read separately. Turning it
+on produced three reports, and **all three were the same move said three ways**:
+
+```
+P-588   850b4df6 is `P-588 goes back to a decision`, a move to decide/questions.md
+        the guard for that knew only docs/notes/decisions.md, so a move read as a promotion
+P-561   promoted into spec/combat.md, and 045234be moved that file to spec/future/
+P-557   promoted into spec/data/above.4x, and 5b83ba55 deleted it, which is what it asked for
+```
+
+**`P-588` is `P-344` with the filename moved**, and the comment that describes `P-344` is three
+lines above the guard that missed it. **`P-561` and `P-557` are a promotion whose own act was to
+move or delete the file it names** - asking *is the text in that file* of a commit that removed the
+file. They are a named category now, told apart from a real failure by the parent: a file the
+promotion removed was there before it, and a file in neither is a proposal naming a destination
+that never existed.
+
+## Where it stands now, and the numbers are the point
+
+```
+a_promotion_lands_what_was_approved      30 checked, 0 wrong, 2 unreadable, 2 acted on their destination
+approved_text_is_still_where_it_landed   11 still present, 0 changed by a later promotion, 0 lost
+```
+
+**`Q-88` is built and it found nothing, which is the honest answer and a narrow one.** The window
+is 120 commits to either queue and reaches back to 2026-09-25, because `docs/notes/proposals.md` is
+the specification lane's outbox as well as the ledger and is touched far more often than proposals
+land. **A claim of zero names what it counted against**: five days, not the fortnight `Q-88`
+measured and not the fortnight `P-66` was lost in.
+
+**And a second thing this lane got wrong in the same hour, reported against itself.**
+`1fa687a7`'s message says *the gate passed*, and the gate had passed **before** the commit - at
+which point `decide/attention.md` was untracked, so `every_tracked_path_is_owned_by_somebody` could
+not see it. It went red the instant the file was committed. **That is `S-224`'s own lesson biting
+the commit that was written after reading it**: the gate is a claim about a tree, and adding a file
+changes the tree after the run. Named in `columns.rs` now, beside `pending.md`.
+
 ### C-184 - `S-225` is built: `decide/attention.md` is generated every commit, and one of its five kinds says why it is not computed
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `S-225` · **cites** `S-225`, `P-593`, `S-206`
@@ -3683,7 +3752,11 @@ that is unmeasured rather than established.
 ### C-131 - Two kinds carry an `id` and nothing else can say it is one of a kind
 
 
-**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump: *That
+**to** spec · **status** withdrawn · **cited** `5e0b610f` · **raised** 2026-09-15 · **source** Sean, on a whole-state dump: *That · **closed** 2026-09-30
+
+**There is no `id` trait any more.** `schema.4x` declares six traits - `moving`, `working`, `hungry`, `bearing`, `laboring`, `gathering` - and `carries` names none of them `id`, so `territory` and `orbit` carry nothing this item can count. `carries.4x` is gone and `scenario/expected/play.4x`, the dump it measured, was deleted by Sean.
+
+**And the question it asked is answered by the encoding rather than left open.** Sean's line was that a `-> 1` which could be `-> 2` under other data has to be written and one that can never be anything else is noise, so **the notation needs to know which entries are structurally one**. `schema.4x` says it in its own header: *sixteen relations are keyed by such an id and one is not* - `residency`, which carries a quantity and is keyed by its description. **Structural identity moved from a trait a kind carries to the relation's own key**, which states it about every relation rather than about two kinds.
 a territory has capacity of 1 for those things is not structurally true like something with an id
 is. It just happens to be true based on the data.*
 
@@ -4463,7 +4536,9 @@ numbers**, and the check that would catch a wrong claim there is not a string co
 
 ### C-120 - One quantity in `line.4x` is a sentence, and a key takes one token
 
-**to** spec · **status** open · **raised** 2026-09-14 · **corrected** 2026-09-24, from three to one · **source** sweeping every file in
+**to** spec · **status** withdrawn · **cited** `5e0b610f` · **raised** 2026-09-14 · **corrected** 2026-09-24, from three to one · **source** sweeping every file in · **closed** 2026-09-30
+
+**Its row is gone and so is the file.** `spec/data/` holds `rules.4x` and `schema.4x`; `line.4x` is not there. **Measured rather than inferred**: `rules.4x` carries zero `qty:` fields and **not one value anywhere in it contains a space**, so the thing this item reported - a key taking a phrase where the notation gives it one token - cannot be written in the encoding that replaced it. **The sweep's own conclusion arrived by construction**: `rules.4x` says a made quantity is `quantity:1` on the clause that makes it.
 `spec/data/` for the rule that was only ever asked of one of them
 
 **derived from** `{line block:work seq:4 role:produce qty:$where's density for that resource kind:...}` - `spec/data/line.4x`, promoted by `P-497`
@@ -4538,7 +4613,11 @@ expression, or something else is the specification lane's to decide.
 
 ### C-119 - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** building `P-498`, and an
+**to** spec · **status** withdrawn · **cited** `5e0b610f`, `dd3f0a4f` · **raised** 2026-09-14 · **source** building `P-498`, and an · **closed** 2026-09-30
+
+**The ordering that made it a defect is reversed, and five tests Sean has read hold the seam.** This item's reading was that `perish` runs after `breed`, so every citizen bred in an ending is eaten in that same ending. `rules.4x` now has `{part id:6 of:end-turn is:perish seq:2}` and `{part id:7 of:end-turn is:breed seq:3}` - **`breed` runs after `perish`** - and the trait is `hungry` rather than `paid`.
+
+**Five records in `reviewed/` are what close it rather than the ordering alone**: `the-hungry-perish-after-upkeep-and-not-before`, `breeding-does-not-reach-the-citizens-it-just-made`, `a-citizen-breeds-once-and-its-bearing-is-spent`, `breeding-does-not-give-a-citizen-its-labor-back` and `breeding-stops-when-the-food-does`. **What the rows left open is now stated by a test he has approved**, which is the stronger form and is `spec/README.md`'s rule 3 rather than this lane's judgement.
 assertion written to check the seam reporting that it did not hold
 
 **derived from** `{line block:breed seq:3 role:produce qty:1 kind:citizen}` and
@@ -8872,7 +8951,11 @@ predecessor both.
 
 ### C-47 - The two relations subsume nine of the dump's ten tables, and the tenth needs one number
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** `S-54` asking to be told
+**to** spec · **status** withdrawn · **cited** `a6b89b24` · **raised** 2026-09-06 · **source** `S-54` asking to be told · **closed** 2026-09-30
+
+**The ten tables are gone with the module that produced them.** `dump::tables` survives only in three comments - `containment.rs:21`, `state.rs:21` and `tests/expected_state.rs:35` - and `crates/game-console/src/dump.rs` does not exist. **So the count this item made, six tables wholly the containment tree and three more once a count is read off it, is a count over a population of nothing.**
+
+**`S-54`'s instruction was honoured and is what makes withdrawing right.** It said the redundancy was Sean's to decide and must not be folded in, and nothing was folded in. **What settled it was the old encoding leaving rather than a decision**, so there is nothing here for him to have missed.
 rather than have this folded in
 
 **derived from** what a thing contains is a map from a description to a quantity -
