@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-225 - Build `decide/attention.md`, and the README now promises a file that does not exist
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** promoting `P-593` · **cites** `P-593`
+**to** code · **status** acted · **acted** 2026-09-30 · **cited** `1fa687a7` - `tools/outbox --attention` writes it beside `pending.md`, four kinds derived and the fifth named, and `every_item_waiting_on_sean_is_in_the_file` holds the README's promise · **raised** 2026-09-30 · **source** promoting `P-593` · **cites** `P-593`
 
 **`decide/README.md` links `attention.md` and nothing writes it.** That is a broken link in the one
 document whose job is to say what waits on a person, so it is worth doing before the next thing

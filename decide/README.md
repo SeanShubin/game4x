@@ -6,15 +6,23 @@ already settled.
 
 [The specification](../spec/README.md) · [The release](../releases/first-release.md) · [Root README](../README.md)
 
-## The three things only you can do
+## The five things only you can do
 
-| File                                        | What it asks                                                           |
-| ------------------------------------------- | ---------------------------------------------------------------------- |
-| [`proposals.md`](proposals.md)              | **approve words.** Say *promote P-n*, or say what to change            |
-| [`questions.md`](questions.md)              | **answer a question.** No wording can be final until you do            |
-| [the release](../releases/first-release.md) | **vet a capability.** Look at the running game and say whether it held |
+| Where it is                                  | What it asks                                                           |
+| -------------------------------------------- | ---------------------------------------------------------------------- |
+| [`proposals.md`](proposals.md)               | **approve words.** Say *promote P-n*, or say what to change            |
+| [`questions.md`](questions.md)               | **answer a question.** No wording can be final until you do            |
+| [the release](../releases/first-release.md)  | **vet a capability.** Look at the running game and say whether it held |
+| the review application, `scripts/review.ps1` | **read a test.** A test you have not read constrains nothing           |
+| [`regression/`](../regression/)              | **accept a case.** Deleting one says *I accept what it does now*       |
+
+**The last two are why `attention.md` exists.** Neither is an item with an addressee, so
+`pending.md` could never see one - a test waiting on a reading is `spec/tests/` against
+`reviewed/`, and a stale case is only knowable by regenerating. **Four of the five are derived and
+the fifth is named**, which the section below says.
 
 **Empty means nothing is waiting.** A file here that says nothing is open is the whole report.
+
 
 ## `attention.md` is the one file, and it is generated
 
