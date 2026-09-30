@@ -20,7 +20,7 @@ across or is written again is the code lane's to choose, and no capability here 
 
 ### D-1 - A rule changes when I edit data, and not before
 
-**to** code · **status** open · **raised** 2026-09-25 · **from** `P-560`
+**to** sean · **status** **built** 2026-09-30 · **from** `P-560` · **cited** `a6b89b24`, `5e0b610f`, `6c78792a` · **evidence reported by the code lane as `C-179` and re-derived here.** `tests/common`'s `BEING_REPLACED` is `[&str; 0]` and the eight modules that held the old model are deleted - 6,704 lines - so **the crate holds no rule at all**, which is the clause's own measure. The console reads what a player may fire out of `spec/data/rules.4x` rather than from `grammar.rs`, so a rule added to the data is a command with no Rust edited.
 
 - **In** - `spec/invariants.md` -> The game is data, *every kind of thing, and every recipe that
   turns some things into others, is data rather than code*
@@ -30,17 +30,17 @@ across or is written again is the code lane's to choose, and no capability here 
 
 ### D-2 - The game plays by the tests I have read
 
-**to** code · **status** open · **raised** 2026-09-25 · **from** `P-560`
+**to** sean · **status** **built** 2026-09-30 · **from** `P-560` · **cited** `5e0b610f`, `c39c20db` · **evidence reported by the code lane as `C-182`, which says nobody had said so** - `C-179` reported `D-1` and `D-4` and missed this one. **Counted here**: 57 tests in `spec/tests/`, 57 records in `reviewed/`, none differing, run by `crates/game-model/tests/first_test.rs` over the crate the console now plays. **And the second half was demonstrated rather than argued**: two of those tests went red on `c39c20db`'s `remove` defect, which is *one of them goes red when that model disobeys it* happening to a real defect.
 
 - **In** - `spec/README.md` rule 3, *what the game does is decided by a test that runs, read and
   approved one at a time*
 - **Vetted when** - the tests in `reviewed/` run against the model the game itself plays on, and
-  one of them goes red when that model disobeys it. Today they run against `crates/thin-engine`
-  and against nothing else
+  one of them goes red when that model disobeys it. Until the port they ran against the engine alone
+  and against nothing a player could run
 
 ### D-3 - The game's data is stated once
 
-**to** code · **status** open · **raised** 2026-09-25 · **from** `P-560`
+**to** sean · **status** **built** 2026-09-30 · **from** `P-560` · **cited** `5e0b610f` · **evidence reported by the code lane as `C-182` and re-derived here.** *No transcription survives*: `mutation.rs` deletes every row and changes every value in turn, `foundation.rs` holds the only `include_str!` in the crate, and a check refuses one reaching outside `data/foundation/`. **One word of the clause does not match the mechanism and it is yours at vetting**: it says the game reads its data *at run time*, and `include_str!` carries the file at build time - so deleting a row changes the game after a build rather than on the next run. **The code lane's reason for that is sound and is not a workaround**: a browser has no filesystem and the game ships to one, so a path would fail in the published build. **What the clause asks and what is true differ by a rebuild**, and whether that satisfies it is not this lane's to say.
 
 - **In** - `spec/invariants.md` -> The game is data, *nothing states by hand what a data file
   says; every other form of it is derived*
@@ -49,7 +49,7 @@ across or is written again is the code lane's to choose, and no capability here 
 
 ### D-4 - The old ruleset is gone, not archived
 
-**to** code · **status** open · **raised** 2026-09-26 · **from** `P-564`
+**to** sean · **status** **built** 2026-09-30 · **from** `P-564` · **cited** `e40325c2`, `a8386450`, `5367098e`, `64c344bf` · **evidence reported by the code lane as `C-179`, with the last two documents this lane's.** The old scenario, its reports and the hand-written ruleset are deleted rather than moved. **`docs/architecture.md` no longer says the crate holds two models and `docs/designing-rules.md` counts `spec/data/rules.4x` rather than a table that was deleted** - `S-208`. **The clause allows history and that was measured rather than assumed**: every surviving mention of a dropped recipe sits beside a date, an item, or the heading *And this is no longer what the game does*.
 
 - **In** - `spec/README.md` rule 4, *what is built and asserted by a test is the specification*,
   and Sean, 2026-09-26: *I am confident i can re-create any old rules*

@@ -12,6 +12,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
+- **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
+- **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
+- **D-3** - The game's data is stated once · `releases/rules-become-data.md`
+- **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **D-6** - I can accept one type of thing at a time · `releases/rules-become-data.md`
 
@@ -21,11 +25,9 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-224** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `docs/notes/proposals.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
-- **D-1** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-2** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
@@ -33,19 +35,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (7)
 
 - **S-225** - Build `decide/attention.md`, and the README now promises a file that does not exist · `docs/notes/proposals.md`
-- **S-224** - The gate stops on a dead function `a6b89b24` orphaned, and "clippy clean" was true of a population that excludes it · `docs/notes/proposals.md`
-- **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
-- **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
-- **D-3** - The game's data is stated once · `releases/rules-become-data.md`
-- **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 

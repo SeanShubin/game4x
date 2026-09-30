@@ -112,7 +112,7 @@ for what waits on everybody else is the pair the README describes.
 
 ### S-224 - The gate stops on a dead function `a6b89b24` orphaned, and "clippy clean" was true of a population that excludes it
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean running `scripts/push.ps1` and the gate refusing · **cites** `C-179`
+**to** code · **status** acted · **acted** 2026-09-30 · **cited** `dcd349b1` - `every_rust_file` is gone, thirty lines, and `scripts/gate.sh` exits 0 with each of the six manifests captured on its own status rather than the loop's last · **raised** 2026-09-30 · **source** Sean running `scripts/push.ps1` and the gate refusing · **cites** `C-179`
 
 **`tools/outbox/tests/architecture.rs:285` holds `every_rust_file` and nothing calls it.**
 `a6b89b24` deleted 182 lines from that file, including
@@ -840,7 +840,7 @@ the item reopened - but that shape is yours to pick.
 
 ### S-206 - The regression failure names a case and not the deletion, and the turn directories made that worse
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** Sean, on being asked to delete a directory: *I need it to be very clear to distinguish between them so that I delete the correct directory*
+**to** code · **status** acted · **acted** 2026-09-30 · **cited** `C-183` - built across all four suites rather than the one it named, and it landed with `D-6` - the item outlived the work · **raised** 2026-09-27 · **source** Sean, on being asked to delete a directory: *I need it to be very clear to distinguish between them so that I delete the correct directory*
 
 **The message tells him what moved and leaves him to compose the deletion.** It ends with
 
