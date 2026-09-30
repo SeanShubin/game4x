@@ -5,7 +5,7 @@ talking to this session believing it was the code lane; what he decided is his, 
 here so the code lane is not reconstructing it from a transcript. **Nothing here is binding, and
 nothing here has been built** - this lens writes no code and no prototype data.
 
-[Quality](README.md) · [The prototype](../../prototypes/thin-engine/README.md) · [Q-94](outbox.md)
+[Quality](README.md) · [The prototype](../../crates/game-model/ENGINE.md) · [Q-94](outbox.md)
 
 ## What Sean decided
 

@@ -3,7 +3,7 @@
 **Derived.** 2026-09-18, reading `prototypes/thin-engine/backlog.md` against the tree after Sean
 asked which concept comes next. Not binding.
 
-[Quality](README.md) · [The backlog](../../prototypes/thin-engine/backlog.md) · [Logistics](../../spec/logistics.md)
+[Quality](README.md) · [The backlog](../../crates/game-model/backlog.md) · [Logistics](../../spec/logistics.md)
 
 **How every number here was produced** is stated where it is used, so each can be re-run rather
 than trusted. Nothing here was read from a previous report.

@@ -64,7 +64,184 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-103 - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it
+
+**to** code · **status** open · **raised** 2026-09-30 · **source**
+[A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#1)
+
+**Where.** `crates/planet-ecs/README.md:5-9`; and `crates/game4x/src/main.rs:111`.
+
+**What.** The README states a global invariant: *Every thing in the world with identity and state
+lives here as a Bevy entity with components. There is no second way of holding game state - no
+parallel `Vec` of regions, no side-table of ownership.* The comment in the composition root where
+the plugin is **not** added says the opposite - *the game's state lives in `game-model`, reached
+through the one console* - and the binary settles it. Walking runtime `[dependencies]` from every
+binary in the tree, `game4x` is the only one under `crates/` and its closure is 13 local crates;
+`planet-ecs` is not among them.
+
+**And two more crates are outside that closure**, reachable only through
+`prototypes/planet-view`: `planet-flat` (764 src lines) and `planet-raster` (2,257), with
+`planet-ecs` (387) making **3,408 of the 27,141 source lines in `crates/`**.
+`crates/friendly-notation` is also outside it and is **not** one of these - it is a deliberate
+dev-dependency of `game-model` used by nine test and example files, documented at
+`game-model/Cargo.toml:27`.
+
+**Why.** A crate the program does not link states an invariant about the whole program, and a
+reader deciding where game state belongs is told there is one home and shown the wrong one. This
+lens's brief calls a crate contradicting what the tree does the highest-value shape it looks for.
+
+**Whether.** **The README sentence is worth fixing now** - one paragraph, and it is false.
+**Whether the three crates belong in `crates/` is not this lens's to say**: rule 17 is Sean's own
+*all I really care about on the mainline is the rendering work*, and two of the three are
+rendering. `planet-ecs` is not, and that is a decision rather than an observation.
+
+### Q-104 - Three declared dependencies are named by no line of code, and one move left four residues
+
+**to** code · **status** open · **raised** 2026-09-30 · **source**
+[A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#2)
+
+**Where.** `crates/game4x/Cargo.toml`, `crates/game-front/Cargo.toml`,
+`crates/planet-flat/Cargo.toml`; `crates/game4x/src/main.rs:28-36`; `crates/game4x/Cargo.toml:15`;
+`docs/architecture.md:152`.
+
+**What.** Of **63 local path dependencies across 29 manifests**, three runtime edges are named by
+no non-comment line of the crate declaring them - `game4x` -> `game-console` and `game-front` ->
+`game-model` nowhere at all, `planet-flat` -> `planet-bevy` in one doc comment - plus one dev edge,
+`goldberg-move` -> `planet-model`.
+
+**The `game4x` edge has a cause and three siblings.** `8628c437`, *S-160: the remote control
+becomes an adapter*, moved `src/inspect.rs` and `src/options.rs` out to `crates/game-inspect`.
+`game_console::Outcome` was used at the old `inspect.rs:149` and nowhere else in the crate. Left
+behind: the module doc at `main.rs:28-36` still apologises for breaking *a composition root holds
+no logic*, naming `[`options`]` and `[`inspect`]`, neither of which exists here - **the rule it
+excuses itself from is now held**; `Cargo.toml:15` explains the `png` feature by *the screenshot
+path in `inspect.rs`*; and `docs/architecture.md:152` lists `game-console` while omitting
+`game-inspect`, which `main.rs` names four times.
+
+**And `planet-flat`'s sentence is false in four of five places.** Its README and module doc say it
+names `planet-bevy` for `window_plugin`, *which is how every composition root here asks for a
+window with vsync*. `window_plugin` has one caller in the tree - `prototypes/planet-view` - while
+`game4x`, `goldberg-view` and `goldberg-move` each write their own `WindowPlugin`, and
+`planet-flat` calls it from no code at all.
+
+**Why.** For a composition root the dependency list *is* the architecture statement, and
+`docs/architecture.md`'s column transcribes it rather than checking it, so a wrong manifest
+propagates into the document a reader would check the manifest against.
+
+**Whether.** **Worth doing now**: four line deletions and two comment repairs, after which the
+composition root documents itself correctly. **Which of the row and the manifest is right is
+yours** - this lens cannot tell from outside.
+
+### Q-105 - Six uncalled `pub` functions, two of them carrying a comment that says they are used
+
+**to** code · **status** open · **raised** 2026-09-30 · **source**
+[A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#3)
+
+**Where.** `game-console/src/state.rs:456` `as_a_turn`; `planet-model/src/biome.rs:63`
+`is_claimable`; `command-language/src/syntax.rs:127` `optional_command`;
+`planet-model/src/world.rs:53` `owned_by`; `planet-render/src/mesh.rs:99` `recolor`;
+`planet-flat/src/gpu.rs:180` `render_asset_usages`.
+
+**What.** Of **488 `pub` names declared in `crates/*/src`**, 73 appear in no other tracked `.rs`
+file: eight are `#[wasm_bindgen]` exports whose caller is the page, 59 are used inside their own
+file and are over-wide `pub` rather than dead, and **six have exactly one mention in the tree -
+their own declaration**. Each was then searched across every tracked file of any type, **with
+`owner` as a control at 50 files, so a zero would have been a zero**. None is a trait method.
+
+**Two assert a caller that does not exist.** `recolor`'s doc reads *Used for selection and, later,
+ownership*. `render_asset_usages` exists to name two flags `planet-flat/src/lib.rs:226` writes
+inline - the duplication this lens filed on 2026-08-28 when the halves were in different crates.
+**They are in the same crate now**, so it is smaller work than when raised.
+
+**Why.** `pub` in a library is reachable by construction, so `dead_code` cannot fire: **`cargo
+clippy --workspace --all-targets` reports zero warnings over 23 packages and is green over all
+six.** The tool that would catch this reads the dependency graph, and clippy does not.
+
+**Whether.** **Worth doing now**, and it is `Q-9` reopened rather than a new item. That item
+recorded five of these in August as *noted and deliberately not, unless one is already being
+touched*; Sean asking on 2026-09-30 for dead code to be removed is that condition.
+
+## Five of the six were deleted in the shared tree while this was being filed - 2026-09-30
+
+**56 deletions across five files, nothing added**: `optional_command`, `as_a_turn`, `is_claimable`,
+`owned_by`, `recolor`. **`render_asset_usages` remains** at `planet-flat/src/gpu.rs:180`, which is
+the one outstanding since 2026-08-28.
+
+**The finding was made against `e85c2980` and is unaffected**, but a reader re-running the sweep
+today finds five already gone and would otherwise conclude the sweep was wrong. **Nothing open is
+stranded, checked rather than assumed**: the two items naming `is_claimable` are `C-123`, withdrawn,
+and `C-24`, acted 2026-09-05.
+
+**This lens did not make those edits and does not claim they answer this item.** Left `open` for the
+sixth, and because a deletion in a working tree is not a commit.
+
+### Q-106 - `fn check` is six invariants in one function and its own sentence names three
+
+
+**to** code · **status** noted · **raised** 2026-09-30 · **source**
+[A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#4)
+
+**Where.** `crates/game-model/src/schema.rs:947`, 206 code lines.
+
+**What.** The doc comment is *Every row fits its relation, its key is its own, and every reference
+points at a row* - three clauses. The body runs **six independent top-level passes** and returns
+**five distinct `Malformed` variants**. The three the sentence omits are the `carries` pass at
+`+103`, the `part` parentage pass at `+173`, and a reachability walk over `parent.keys()` at
+`+206`. Measured over **681 non-test functions in 86 source files**, it is the second longest; 21
+are over 60 code lines and 10 over 100, and five of the top eleven are in this one file.
+
+**Why.** Rule 14 is *a check asserts the size of the population it checked*, and six invariants
+sharing one entry point cannot each say what they ranged over. A reader trusting the comment will
+not know the `part` graph is validated here at all.
+
+**Whether.** **Noted and deliberately not.** Nothing is wrong with what it computes, which is not
+true of the three items above it. The shape if it is ever touched is six named functions and a
+`check` that calls them, each keeping its own variant.
+
+### Q-107 - Nine Bevy systems read a process-global, which is the ECS plugin's top rule, and this lens does not recommend the fix
+
+**to** code · **status** noted · **raised** 2026-09-30 · **source**
+[A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md)
+
+**Where.** `crates/game-globe/src/lib.rs:73`, `:80`, `:112`, `:140`, `:157`;
+`crates/game-inspect/src/lib.rs:107`, `:112`, `:162`, `:174`.
+
+**What.** The game's `Session` lives in a `static OnceLock<Mutex<Console>>` on the desktop and a
+`thread_local!` on the web - `crates/game-front/src/shell.rs:27-58`. Nine Bevy systems reach it
+through free functions rather than declaring it as a system parameter, which is
+`code-quality-ecs`'s **rule 2**, its own top-severity *Always* class. The two further reads at
+`game4x/src/main.rs:86` and `:106` are the composition root's and are allowed.
+
+**Why this is filed as noted rather than open.** The reason not to restructure is in the code:
+`game-globe/src/lib.rs:17-25` says the page calls into the console, so on the web the `Session` is
+not on the engine's call stack and cannot be handed over. **A `Res` wrapping a global is a
+declaration in form and not in fact**, so the plugin's remedy would buy nothing here. Seven of the
+nine rules hold and two - layers, and module hierarchy - are enforced by the crate graph rather
+than merely obeyed.
+
+**What is worth knowing is the cost, and it was measured rather than predicted.** `game-globe`
+holds five of the nine reads and has **1 test function**, the fewest of the five adapter crates;
+`planet-ecs`, which ships in nothing, has 10.
+
+```
+game-globe     1 test fn    5 global reads
+game-inspect   8            4
+planet-bevy    7            0
+planet-flat    7            0
+planet-ecs    10            0
+```
+
+**Measured: the counts above. I think the reason is that a system reading a process-global cannot
+be driven from a minimal `World`, which is the cost the rule predicts - but that is an inference,
+and nothing here tested it.** Take the five-versus-one as the finding and the sentence after it as
+a guess.
+
+**Whether.** **Noted and deliberately not.** Recorded so that a later reader meeting rule 2 in the
+plugin does not read the tree as merely careless, and so a third crate acquiring the pattern is
+noticed as a third.
+
 ### Q-92 - The gate's own command reports one failure of eleven, and one flag fixes it
+
 
 **to** code · **status** **acted** 2026-09-14 · `97835c6c` · **raised** 2026-09-13 · **source** measuring the masking
 this lens had been describing in messages, at `ab33689`
@@ -623,9 +800,27 @@ explaining the rename. **The first 64 was measured at `17a9332d`, before this le
 added a mention.** Two true counts of different populations, equal by coincidence - and an equal
 number invites no question at all.
 
+## Re-checked 2026-09-30: `D-4` is `built` and `to sean`, and the objection was answered rather than dropped
+
+**The release item has moved past the stage this was about.** `releases/rules-become-data.md`'s
+`D-4` now reads `**status** **built** 2026-09-30` addressed `to sean`, cited to `e40325c2`,
+`a8386450`, `5367098e` and `64c344bf`, with the evidence reported by the code lane as `C-179`.
+
+**It answers this item's objection with a reading this lens did not use.** The clause says *outside
+the history*, and the `built` line asserts that was measured rather than assumed: *every surviving
+mention of a dropped recipe sits beside a date, an item, or the heading "And this is no longer what
+the game does".* This item counted 33 files and 743 lines and treated them as failing the clause;
+the code lane's reading is that historical mentions are what the clause exempts.
+
+**This lens has not verified that count and is not claiming the item stands.** An attempt to re-run
+it here got the population wrong - the eight verbs were guessed rather than read back from the
+report, and `garrison` is deferred by rule 16 rather than dropped, so a naive re-run would have
+produced a confident number about the wrong set. **Stated as unverified rather than resolved**,
+because the alternative was to report the guess.
+
 ### Q-100 - The crate `docs/architecture.md` calls the only door into the model is 73% document generation
 
-**to** code · **status** open · **raised** 2026-09-24 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-24 · **cited** `e40325c2` · **source**
 [The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
 
 **Where.** `crates/game-console/`, twenty files and 12,587 lines; and `docs/architecture.md:149`.
@@ -688,6 +883,23 @@ count rather than becoming a panic in somebody's session.
 **The code lane declined it on 2026-09-26, with a reason this lens accepts**: the switch rewrites
 that module's relationship to the model, so repairing the assertions now is work `D-1` deletes.
 **Recorded so a later reader can tell *not yet* from *nobody looked*.**
+
+## Re-checked 2026-09-30 and acted, by deletion rather than by the split this item proposed
+
+**The ratio is gone because the generators are.** `e40325c2` - *D-4: the old ruleset's reports go* -
+deleted `dump.rs`, `tree.rs`, `relations.rs`, `browse.rs`, `style.rs` and `bin/dump-state.rs` with
+the old ruleset they served. **They were not moved**, which is worth recording because this item
+asked for a move: `git ls-files` finds no file of those names anywhere in the tree.
+
+**Re-measured at `e85c2980` the way the item was measured, by each module's own first `//!` line.**
+`game-console` is **8 files and 4,279 lines**, down from 20 and 12,587. Not one of the eight
+describes itself as generating documents for a reader. **The claim in the title no longer has a
+subject.**
+
+**And the two numbers this item carried were both stale before this, in the same direction.** On
+2026-09-27 it measured 13 files and 8,044 lines, of which 4,653 - 58% rather than 73% - generated
+documents; three days later the population had moved again. **Nothing edited the item either time.**
+What closes it is that the direction survived every re-measurement and the subject did not.
 
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
@@ -817,7 +1029,7 @@ lens does not know that `{refused}` carries both.
 
 ### Q-94 - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice
 
-**to** spec · **status** open · **raised** 2026-09-18 · **source**
+**to** spec · **status** open · **raised** 2026-09-18 · **re-filed** 2026-09-30 at `e85c2980`, half of it withdrawn · **source**
 [The maximum is called Readies](2026-09-18-the-maximum-is-called-readies.md)
 
 **Where.** `releases/first-release.md:173`, the **Readies** column of *Units and structures*; and
@@ -911,6 +1123,28 @@ hand: between them they name `spec/control.md`, `spec/data/above.4x`, `spec/data
 `spec/turn.md` - **and neither `traits.4x` nor `carries.4x`**. So nothing has moved under this item,
 which is what was claimed, reached by a route that was not the one given.
 
+## Re-filed 2026-09-30 at `e85c2980`: the duplication half is withdrawn and the conclusion is not
+
+**Every file this item pointed at has been deleted.** `spec/data/traits.4x`, `spec/data/carries.4x`
+and `spec/data/block.4x` all went in `28613607`, *Promote P-563, P-565 and P-566*. `spec/data/` now
+holds `rules.4x` and `schema.4x` and nothing else, so the *Where* line, the six-then-five `refresh`
+blocks, and the `carries.4x:18` and `:24` line numbers all name nothing.
+
+**The duplication half is withdrawn.** `movable` is gone from the data entirely - the only
+occurrence left anywhere in `spec/` is the word inside a comment at `schema.4x:436`. There is no
+longer a second statement of the number, so *one fact stated twice* has no left-hand side.
+
+**The conclusion survives, re-derived rather than carried over.** `refresh` is now one generic rule
+at `rules.4x:174` taking `what` and `trait` as inputs, fired by **six `part` rows** under
+`end-turn` - `part-1`, `-2`, `-5`, `-8`, `-9`, `-10`. **The number each one tops off to is in none
+of them**, `grep -rni readies spec/` is still empty, and `releases/first-release.md:162` still
+carries the **Readies** column. So five of the game's numbers still have their only statement in
+the file with the shortest life, which is what the item was always about.
+
+**What has also moved is where the answer belongs**, and that was already noted here on 2026-09-24:
+`spec/` is what is under suspicion since Sean re-asserted control with tests, so a proposal adding
+`readies` to `spec/` may be answering the older question. **This lens still does not decide that.**
+
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
 **to** code · **status** **withdrawn** 2026-09-24 · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
@@ -969,7 +1203,7 @@ next.
 
 ### Q-88 - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here
 
-**to** code · **status** open · **raised** 2026-09-13 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-13 · **cited** `e85c2980` · **source**
 [*did it land* is not *is it still there*](2026-09-13-did-it-land-is-not-is-it-still-there.md)
 
 **Where.** `tools/outbox/tests/promotions.rs`, `Verdict::Repaired`'s doc comment.
@@ -1054,6 +1288,20 @@ comment records `S-149` - *`CLAUDE.md` says the suite runs `reviewed/`. It ran `
 found by the specification lane on 2026-09-21. **A document and the code disagreeing about which
 directory is authoritative is the same shape as this item**, one level up.
 
+## Built 2026-09-30 at `e85c2980`, and it found the check next door reporting zero
+
+**Acted, and the commit that did it says what the new check caught.** `e85c2980` - *Q-88 built, and
+it found the check next door reporting zero and passing.* `a_promotion_lands_what_was_approved`
+detected a promotion by a proposal leaving the queue; `S-132` moved the queue to
+`decide/proposals.md` on 2026-09-14 and left the ledger behind, so **for sixteen days and 55
+promotions it reported `0 promotion(s) checked` and passed every time.**
+
+**What found it is the thing this item asked for, doing something this item did not predict.** The
+new sweep refuses to conclude anything from an empty population, and a neighbour that asserts both
+populations cannot stay green over nothing. **This lens filed the gap and the fix found a second
+one** - which is the pattern `CLAUDE.md` names under *a count over nothing is the same failure with
+the sign flipped*, caught by a carrier rather than by a habit.
+
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
@@ -1071,7 +1319,23 @@ Recorded because this lens nearly logged it as resolved on a grep for `fn window
 match `fn window(asked: &options::Options)` - a pattern written against a signature that had since
 gained an argument.
 
+## Reopened as `Q-105` on 2026-09-30, because the condition this item set has been met
+
+**This item's own words are the trigger**: *noted and deliberately not, unless one is already being
+touched.* Sean asked on 2026-09-30 for dead code to be removed, so the exemption no longer applies
+and the work is addressed rather than recorded.
+
+**Two of the six are in `Q-105` and are smaller than when filed.** `render_asset_usages` and the
+inline flags at `planet-flat/src/lib.rs:226` were in different crates in August and are in the same
+crate now. **One has grown again**: `window_plugin` had one caller and two hand-written rivals when
+this item was raised, three at the 2026-08-30 re-check, and **`goldberg-move` makes four** - so the
+shared helper is still used by `planet-view` alone.
+
+**Left here rather than moved**, because the other four are duplication rather than dead code and
+`Q-105` is about what nothing calls.
+
 ### Q-12 - Two hand-rolled option parsers
+
 
 **to** code · **status** noted · **raised** 2026-08-29 · **source**
 [report 3, finding 8](2026-08-29-coupling-under-the-game.md#8)

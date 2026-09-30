@@ -35,14 +35,15 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
-- **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
+- **Q-103** - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it · `lenses/quality/outbox.md`
+- **Q-104** - Three declared dependencies are named by no line of code, and one move left four residues · `lenses/quality/outbox.md`
+- **Q-105** - Six uncalled `pub` functions, two of them carrying a comment that says they are used · `lenses/quality/outbox.md`
 
 ### To quality (2)
 

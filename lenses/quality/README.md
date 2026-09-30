@@ -571,6 +571,14 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md)
+  - 2026-09-30. The review Sean asked for: dead code, simplicity, composition roots, and the
+    `code-quality-ecs` plugin's nine rules. Clippy is clean over 23 packages while 3,408 lines of
+    `crates/` reach no binary, three declared dependencies are named by no code, and six `pub`
+    functions have one mention each - their own declaration. `planet-ecs/README.md` claims to be
+    the one home of game state and the shipped binary does not link it. Seven of the nine ECS
+    rules hold and two are enforced by the crate graph; the one that is broken is broken for a
+    reason in the code, and the measured cost is one test function where its neighbours have seven.
 - [The invariant was already held upstream](2026-09-26-the-invariant-was-already-held-upstream.md)
   - 2026-09-26. The code lane's review of the D-4 night. `no_rendered_table_has_an_empty_cell`
     cannot fail while `game-model` loads, because `Schema::fits` demands exactly the declared

@@ -3,7 +3,7 @@
 **Derived.** 2026-09-18, on Sean calling
 `a-transport-takes-two-berths-where-a-scout-takes-one` questionable. Not binding.
 
-[Quality](README.md) · [The prototype](../../prototypes/thin-engine/README.md)
+[Quality](README.md) · [The prototype](../../crates/game-model/ENGINE.md)
 
 Sean, 2026-09-18: *It is certainly valid to test that different berth sizes work properly, but we
 don't specifically care what those sizes are for what units.*
