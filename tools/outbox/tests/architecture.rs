@@ -277,36 +277,6 @@ fn every_row_links_to_a_readme_that_exists() {
     );
 }
 
-/// Every `.rs` file under a directory, so a walk covers what is there rather than a list.
-///
-/// **Coverage by default**, which is this file's own argument: a crate that lands and is not
-/// written down fails `every_crate_has_a_row_and_every_row_has_a_crate` because that test
-/// iterates the workspace. Same instinct, same reason.
-fn every_rust_file(under: &Path) -> Vec<PathBuf> {
-    let mut found = Vec::new();
-    let mut stack = vec![under.to_path_buf()];
-    while let Some(at) = stack.pop() {
-        let Ok(entries) = std::fs::read_dir(&at) else {
-            continue;
-        };
-        for entry in entries.flatten() {
-            let path = entry.path();
-            let name = entry.file_name().to_string_lossy().to_string();
-            if path.is_dir() {
-                if !matches!(name.as_str(), "target" | ".git" | "node_modules") {
-                    stack.push(path);
-                }
-                continue;
-            }
-            if path.extension().and_then(|e| e.to_str()) == Some("rs") {
-                found.push(path);
-            }
-        }
-    }
-    found.sort();
-    found
-}
-
 #[test]
 fn every_script_has_a_row_and_every_row_has_a_script() {
     let scripts = root().join("scripts");

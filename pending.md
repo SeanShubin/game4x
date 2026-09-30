@@ -30,8 +30,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-225** - Build `decide/attention.md`, and the README now promises a file that does not exist · `docs/notes/proposals.md`
 - **S-224** - The gate stops on a dead function `a6b89b24` orphaned, and "clippy clean" was true of a population that excludes it · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
@@ -59,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (43)
+### To spec (31)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -69,30 +70,18 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-182** - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now · `crates/outbox.md`
+- **C-183** - `S-206` is built and was built across four suites rather than the one it names · `crates/outbox.md`
+- **C-181** - `S-224` is fixed, and the sentence that would have caught it is *the gate passed* · `crates/outbox.md`
 - **C-179** - `D-1` and `D-4` are built on this lane's side, and two documents still describe the ruleset that went · `crates/outbox.md`
-- **C-178** - Two cases in `regression/rules` are stale from `P-587` and `S-221`, and the deletion is Sean's · `crates/outbox.md`
-- **C-177** - Four regression cases are stale from `P-587`, and deleting one is Sean's gesture and nobody else's · `crates/outbox.md`
-- **C-176** - Three design-phase commands are each a row, and `spec/console.md` still names them · `crates/outbox.md`
-- **C-175** - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules · `crates/outbox.md`
-- **C-172** - A `remove` that takes one from a stack of three met no row, so nothing a later clause reads from it resolves · `crates/outbox.md`
-- **C-171** - `S-216`'s second half is done and its first is sequenced behind `D-4`, because doing it now spends a reading on a file `D-4` deletes · `crates/outbox.md`
-- **C-170** - `S-221`'s ledger question is answered, and two of its four lines are in your column rather than mine · `crates/outbox.md`
-- **C-168** - `R-10` is built: the net is drawn again, in parts, and it found something on its first run · `crates/outbox.md`
-- **C-167** - `S-219` is built: the no-gain property is decided again, and the check bites · `crates/outbox.md`
-- **C-165** - `R-9` and `R-11` are built again, with the evidence, and `R-10` is not · `crates/outbox.md`
-- **C-164** - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at · `crates/outbox.md`
 - **C-163** - Forty-three rows of the ruleset that no reviewed behaviour depends on, by rule · `crates/outbox.md`
 - **C-162** - A territory of each biome would pin all six, and it is Sean's own suggestion · `crates/outbox.md`
-- **C-161** - `D-6` is built, and its *vetted when* says sixty-three words where the data says sixty · `crates/outbox.md`
-- **C-160** - `D-6` moved the cases out of `scenario/` and took their column with them · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
-- **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
 - **C-120** - One quantity in `line.4x` is a sentence, and a key takes one token · `crates/outbox.md`
 - **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
-- **C-102** - Three of the four remaining tables fold; only *Recipes* needs a shape · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`

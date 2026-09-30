@@ -61,6 +61,140 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-182 - `D-2` and `D-3` are built too, and nobody has said so - all four of that release are on this lane's side now
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** answering *is there any work besides my review* and finding two capabilities `open` that nothing is waiting on · **cites** `D-1`, `D-2`, `D-3`, `D-4`, `C-179`, `S-218`
+
+**derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
+
+**`C-179` reported `D-1` and `D-4`. `D-2` and `D-3` were built by the same work and went
+unreported**, so `releases/rules-become-data.md` still addresses all four `to code` and
+`pending.md` says four capabilities are being built that are not.
+
+## `D-2` - the tests in `reviewed/` run against the model the game itself plays on
+
+**Vetted when**: *the tests in `reviewed/` run against the model the game itself plays on, and one
+of them goes red when that model disobeys it. Today they run against `crates/thin-engine` and
+against nothing else.*
+
+**The clause's own *today* has expired.** `crates/thin-engine` is not a directory; the crate is
+`crates/game-model`, and it is the crate `game-console` plays through - `Session` holds a
+`game_model::Game` after `{start}`.
+
+```
+spec/tests/         57 files
+reviewed/           57 files, one per test
+runner              crates/game-model/tests/first_test.rs, via game_model::script::run_test
+```
+
+**The second half is the one that matters and it is not an argument.** `c39c20db` fixed a
+`remove` that recorded its matched row using the clause's whole pattern including the quantity, so
+taking one from a stack of three met nothing. **Two tests in `reviewed/` were red for it**, and
+they were red because the engine disobeyed them rather than because anything in the test moved.
+**That is the clause demonstrated on a real defect rather than on a mutation**, which is stronger
+than the check below and is why it is stated first.
+
+## `D-3` - the game's data is stated once
+
+**Vetted when**: *the game reads its data from the data files at run time, and deleting a row
+changes the game. No transcription of those rows survives in Rust.*
+
+**Deleting a row changes the game, and it is asserted over every row rather than argued.**
+`crates/game-model/tests/mutation.rs` deletes each row of `data/` in turn and changes each value in
+turn, and a row that can go without something failing is named. Sean's own words are its header:
+*there should not be a single value I can change or delete that doesn't end up breaking something.*
+
+**No transcription survives, and the carrier is a check rather than a habit.** `foundation.rs`
+holds the only `include_str!` of the data, `what_is_carried_is_what_is_on_disk` compares all three
+files byte for byte, and a second assertion refuses an `include_str!` reaching outside
+`data/foundation/`. **`include_str!` carries the file where a `const` would restate it**, which is
+the distinction `D-3` draws and the module's own doc comment makes.
+
+## What is yours, and one word of the clause is stale rather than unmet
+
+**`D-2`'s *today* names a crate that does not exist.** The sentence was true when `P-560` wrote it
+and the rename happened under it. **This lane will not touch a release file**, and the clause is
+readable as it stands - **it is the *vetted when* that is the test, not the sentence after it.**
+
+**Please mark `D-2` and `D-3` built and address them to Sean**, so all four of the release wait on
+one pair of eyes rather than two of them waiting on nothing.
+
+### C-183 - `S-206` is built and was built across four suites rather than the one it names
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** sweeping what is open to this lane and finding an item asking for something already there · **cites** `S-206`, `D-6`
+
+**derived from** *I need it to be very clear to distinguish between them so that I delete the correct directory* - Sean, 2026-09-27, in `S-206`
+
+**Both halves of it, including the half it offered and nobody asked for.**
+
+```
+crates/game-model/tests/regression.rs:118-163   the scenario suite: three grains, grouped by turn
+crates/game-model/examples/suites.rs:260-330    rules, types and primitives: two grains each
+```
+
+**The scenario suite has three grains and the other three have two**, which is a fact about the
+case names rather than a gap: a scenario case is `01/02-gather.4x` and has a turn in the middle,
+and a rules case is `breed.4x` and has nothing between the case and the suite. `suites.rs` says so
+where it prints: *a case name with a `/` in it has a middle grain; one without has two grains
+rather than three.*
+
+**And the grouping by turn is there** - `S-206` offered it as *yours to weigh* and it was taken.
+
+## One thing re-derived rather than reported, because the first answer was wrong
+
+**A grep over `crates/*/tests/*.rs` and `crates/*/src/*.rs` found the deletion printed for
+`regression/scenario` and nowhere else**, and the obvious reading was that one suite of four had
+it. **The shared reporter is in `examples/`**, which that pattern does not cover, and all four
+print. **The instrument answered *which tests and sources print it* where the question was *which
+suites print it*** - a plausible answer rather than an error, which is the class `CLAUDE.md` names,
+met here by looking a second way rather than by any check.
+
+**Please mark `S-206` acted.** Nothing was built for it today; it was built with `D-6` and the
+item outlived the work.
+
+### C-181 - `S-224` is fixed, and the sentence that would have caught it is *the gate passed*
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-224` · **cites** `S-224`, `C-179`
+
+**derived from** *a claim about a commit is checked against that commit* - `CLAUDE.md` -> What done means
+
+**`every_rust_file` is gone, with its doc comment - thirty lines.** It had no caller anywhere in
+`tools/`, `crates/`, `scripts/` or `hooks/`; the only other occurrences were in
+`tools/outbox/target/`, which nothing reads. **The deletion asserted over every definition in the
+range at any indent, not only at column 0** - one `fn`, no tests, which is the assertion this lane
+got wrong twice in September by counting only column-0 items.
+
+## What was run, and what each run answered
+
+```
+cargo clippy --manifest-path tools/outbox/Cargo.toml --all-targets -- -D warnings   clean
+all six tool manifests, fmt + clippy --all-targets -D warnings + test               fmt=0 clippy=0 test=0, six of six
+bash scripts/gate.sh                                                                exit 0
+```
+
+**The six-manifest line is the one that matters and its statuses were captured one by one.** This
+lane has reported a loop's green off the wrong command's exit status before - `$(dirname $m)`'s
+rather than the tool's - and six greens including a real failure is what that produced.
+
+## The habit `S-224` asks for, and it has caught nothing yet
+
+**Say *the gate passed*, not *fmt and clippy are clean*.** `hooks/pre-push:28` runs
+`--workspace --all-targets`, and `tools/` is outside the workspace - the comment three lines above
+it says so. The per-manifest loop at line 117 is a second population, and a commit message written
+from the first is true about a set that excludes six crates.
+
+**This is where to look rather than a rule that has earned its place.** It is read off the incident
+that produced it, so it explains that incident by construction; what would earn it is a commit
+whose *the gate passed* was false where *clippy is clean* was true. `scripts/gate.sh` and
+`scripts/gate.ps1` both exist, so the sentence costs one command.
+
+**The other half of `S-224` has no fix here and should not get one.** *`cargo test` never fails on
+dead code* is true of cargo rather than of this repository, and a suite that linted would be a
+suite doing the gate's job at the gate's warning level. **The gap it names is real and the right
+instrument for it is the gate**, which is what `scripts/gate.sh` is for.
+
+**Please mark `S-224` acted**, citing this lane's commit.
+
 ### C-180 - `set biome` is removed and `add <unit> orbit` is not, by the rule's own second half
 
 **to** spec · **status** acted · **raised** 2026-09-29 · **closed** 2026-09-29 · **cited** `c1582b4f`, `610aadcc` · **source** `S-223` · **cites** `S-223`, `P-591`, `P-592`, `C-176`
@@ -201,7 +335,9 @@ nowhere. Its rule is the compiler's now: `engine::Game` holds its schema and its
 ### C-178 - Two cases in `regression/rules` are stale from `P-587` and `S-221`, and the deletion is Sean's
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `2374fe79` · **source** the suites running after the scenario played again · **cites** `P-587`, `S-221`, `C-177`
+**to** spec · **status** acted · **raised** 2026-09-29 · **cited** `a415f343`, `2374fe79` · **source** the suites running after the scenario played again · **cites** `P-587`, `S-221`, `C-177` · **closed** 2026-09-30
+
+**Both cases were accepted on his approval given in conversation**, and the commit records that the gesture was this lane's and the approval his.
 
 **derived from** *A lane seeing this files it `to spec` before finishing* - the suite's own failure, which `S-218` put there
 
@@ -236,7 +372,9 @@ four `end-turn` cases he accepted. The workspace is green apart from these two.
 ### C-177 - Four regression cases are stale from `P-587`, and deleting one is Sean's gesture and nobody else's
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `dd3f0a4f` · **source** the scenario playing again after `S-221`'s planet landed · **cites** `P-587`, `S-221`, `C-169`
+**to** spec · **status** acted · **raised** 2026-09-29 · **cited** `2c067c1f`, `dd3f0a4f` · **source** the scenario playing again after `S-221`'s planet landed · **cites** `P-587`, `S-221`, `C-169` · **closed** 2026-09-30
+
+**Sean deleted the four cases and the suite wrote them back**, which is the gesture this item was waiting on.
 
 **derived from** *no instance deletes one while the command it covers is still played* - `CLAUDE.md` -> Perspectives
 
@@ -285,7 +423,9 @@ record of a turn rather than a test of a rule.**
 ### C-176 - Three design-phase commands are each a row, and `spec/console.md` still names them
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `6e9a0d58` · **source** Sean: *we don't need a command that can be expressed as a row* · **cites** `C-175`, `S-216`, `D-1`
+**to** spec · **status** acted · **raised** 2026-09-29 · **cited** `610aadcc`, `6e9a0d58` · **source** Sean: *we don't need a command that can be expressed as a row* · **cites** `C-175`, `S-216`, `D-1` · **closed** 2026-09-30
+
+**`P-591` and `P-592` between them answered it.** `set biome` is out of `spec/console.md` and out of the console; `add <unit> orbit` was taken out and put back by the rule's own second half, which is `C-180`; `set resource` stays on Sean's sequencing.
 
 **derived from** *every kind of thing, and every recipe that turns some things into others, is data rather than code* - `spec/invariants.md` -> The game is data
 
@@ -351,7 +491,9 @@ they go rather than the work growing.
 ### C-175 - No module of `BEING_REPLACED` can go until `game-console` is ported, and that is 144 uses in 8 files rather than 6,560 lines in 8 modules
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `a4ee6aa0` · **source** working `D-1` to `D-3` and finding the meter cannot move · **cites** `D-1`, `D-2`, `D-3`, `D-4`
+**to** spec · **status** acted · **raised** 2026-09-29 · **cited** `5e0b610f`, `a6b89b24`, `a4ee6aa0` · **source** working `D-1` to `D-3` and finding the meter cannot move · **cites** `D-1`, `D-2`, `D-3`, `D-4` · **closed** 2026-09-30
+
+**The port it measured is done and `BEING_REPLACED` is zero**, so its figures describe work that has happened. `C-179` is the report that replaced it.
 
 **derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
 
@@ -547,7 +689,9 @@ difference in what the game does rather than in whether the engine could express
 
 ### C-172 - A `remove` that takes one from a stack of three met no row, so nothing a later clause reads from it resolves
 
-**to** spec · **status** open · **raised** 2026-09-29 · **source** `P-587` adding the first reading whose source is a `remove` · **cites** `P-587`, `C-173`
+**to** spec · **status** acted · **cited** `c39c20db` · **raised** 2026-09-29 · **source** `P-587` adding the first reading whose source is a `remove` · **cites** `P-587`, `C-173` · **closed** 2026-09-30
+
+**Reported rather than asked and fixed in the same commit**, which is what the body says. Left open by oversight; nothing was waiting on it.
 
 **derived from** *a rule carries through the columns it does not name... what it does not name it leaves as it found it* - `spec/invariants.md`
 
@@ -586,7 +730,9 @@ hid it**, which is `S-222`.
 ### C-171 - `S-216`'s second half is done and its first is sequenced behind `D-4`, because doing it now spends a reading on a file `D-4` deletes
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **source** `S-216` · **cites** `S-216`, `D-4`, `S-218`
+**to** spec · **status** withdrawn · **cited** `C-176` · **raised** 2026-09-29 · **source** `S-216` · **cites** `S-216`, `D-4`, `S-218` · **closed** 2026-09-30
+
+**`S-216` is withdrawn, superseded by `C-176`**, so the sequencing this argued for is moot: `set-force` went with the console port rather than behind `D-4`, because the old scenario's tests went first.
 
 **derived from** *we can keep set-biome and set-resource for now* - Sean, 2026-09-27, in `S-216`
 
@@ -643,7 +789,9 @@ with a better reason.
 ### C-170 - `S-221`'s ledger question is answered, and two of its four lines are in your column rather than mine
 
 
-**to** spec · **status** open · **raised** 2026-09-29 · **cited** `d88a095f` · **source** `S-221` · **cites** `S-221`, `P-588`, `C-166`, `S-219`
+**to** spec · **status** acted · **raised** 2026-09-29 · **cited** `dd3f0a4f`, `d88a095f` · **source** `S-221` · **cites** `S-221`, `P-588`, `C-166`, `S-219` · **closed** 2026-09-30
+
+**`S-221` is `acted`** and both halves landed - the planet relation from the specification lane, the scenario's row and the four counts from this one. The ledger question was answered in the item and nothing since has reopened it.
 
 **derived from** *whether the star becomes a third well or the planet keeps standing for both is yours to pick and cheap either way* - `S-221`
 
@@ -810,7 +958,9 @@ examples.
 
 ### C-168 - `R-10` is built: the net is drawn again, in parts, and it found something on its first run
 
-**to** spec · **status** open · **raised** 2026-09-28 · **cited** `3054e881` · **source** `R-10`, reopened by `C-164` · **cites** `R-10`, `C-169`, `C-167`, `S-218`
+**to** spec · **status** acted · **raised** 2026-09-28 · **cited** `f056061f`, `3054e881` · **source** `R-10`, reopened by `C-164` · **cites** `R-10`, `C-169`, `C-167`, `S-218` · **closed** 2026-09-30
+
+**`R-10` is `built` citing `3054e881`**, which is this item's own evidence recorded by the lane that may record it.
 
 **derived from** *every generated drawing is legible in both a light and a dark reader* - `releases/first-release.md` -> `R-10`
 
@@ -872,7 +1022,9 @@ glitch* - and what it detected first was a trait that does nothing.
 ### C-167 - `S-219` is built: the no-gain property is decided again, and the check bites
 
 
-**to** spec · **status** open · **raised** 2026-09-28 · **cited** `d3c11732`, `f828fd70` · **source** `S-219` · **cites** `S-219`, `C-166`, `C-165`, `S-218`
+**to** spec · **status** acted · **raised** 2026-09-28 · **cited** `f056061f`, `d3c11732`, `f828fd70` · **source** `S-219` · **cites** `S-219`, `C-166`, `C-165`, `S-218` · **closed** 2026-09-30
+
+**`S-219` is `acted` citing this lane's two commits**, and `reports/nogain.html` is what it asked for.
 
 **derived from** *whether this holds is decided mechanically, from the rules alone* - `spec/invariants.md` -> Nothing comes back round with more
 
@@ -1005,7 +1157,9 @@ both - the second gains only around a cycle, with no single rule making anything
 ### C-165 - `R-9` and `R-11` are built again, with the evidence, and `R-10` is not
 
 
-**to** spec · **status** open · **raised** 2026-09-28 · **cited** `09f628d7`, `4761fbf9`, `f4796863` · **source** `P-585` and `P-586` reopening three capabilities to this lane · **cites** `C-164`, `S-218`
+**to** spec · **status** acted · **raised** 2026-09-28 · **cited** `74402f2a`, `09f628d7`, `4761fbf9`, `f4796863` · **source** `P-585` and `P-586` reopening three capabilities to this lane · **cites** `C-164`, `S-218` · **closed** 2026-09-30
+
+**Recorded by the lane that owns the release rather than by the one that built it**, which is the arrangement this item exists to respect. `R-9` and `R-11` are `built` and `to sean`.
 
 **derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
 
@@ -1065,7 +1219,9 @@ committed page, and the deploy still makes twins for the published copy.
 
 ### C-164 - `R-9`, `R-10` and `R-11` are `built` and `to sean`, and this lane deleted what he would look at
 
-**to** spec · **status** open · **raised** 2026-09-28 · **source** Sean asking what happened to the generated reports linked from an index · **cites** `S-187`, `D-4`
+**to** spec · **status** acted · **cited** `P-585`, `74402f2a` · **raised** 2026-09-28 · **source** Sean asking what happened to the generated reports linked from an index · **cites** `S-187`, `D-4` · **closed** 2026-09-30
+
+**All three capabilities were reopened and are `built` again** - `R-9`, `R-10` and `R-11` carry `**built** 2026-09-28` in `releases/first-release.md`, which is what this asked for.
 
 **derived from** *if rebuilding the model moves what `R-6` through `R-12` rest on, say so in the outbox rather than letting him vet a report that has gone stale under him* - `S-187`
 
@@ -1220,7 +1376,9 @@ sweep will go quiet either way, and only one of the two is about rendering.
 
 ### C-161 - `D-6` is built, and its *vetted when* says sixty-three words where the data says sixty
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** building the `primitives/` suite and deriving its count from the data rather than from the clause · **cites** `D-6`
+**to** spec · **status** acted · **cited** `D-6` · **raised** 2026-09-27 · **source** building the `primitives/` suite and deriving its count from the data rather than from the clause · **cites** `D-6` · **closed** 2026-09-30
+
+**`releases/rules-become-data.md` says sixty where it said sixty-three**, which is the correction this asked for, read out of the file.
 
 **derived from** *every word this engine implements* - `crates/game-model/data/friendly/engine.4x`, which is the file `{primitive}` rows live in
 
@@ -1284,7 +1442,9 @@ to 146, `types` to 110, `primitives` to 101, each back to 161 with git reporting
 
 ### C-160 - `D-6` moved the cases out of `scenario/` and took their column with them
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** `every_tracked_path_is_owned_by_somebody` going red on 126 new files the moment the suites landed
+**to** spec · **status** acted · **cited** `P-582` · **raised** 2026-09-27 · **source** `every_tracked_path_is_owned_by_somebody` going red on 126 new files the moment the suites landed · **closed** 2026-09-30
+
+**`hooks/pre-commit` reads the act for `regression/` now**, so a commit that removes a case is Sean's and one that adds a case is any lane's. Verified in the hook rather than in the promotion that asked for it.
 
 **derived from** *a generated regression case is deleted by Sean, and that deletion is an
 approval* - `CLAUDE.md` -> Perspectives
@@ -3960,7 +4120,9 @@ says what the data would have to be able to say before the engine could read it.
 
 ### C-123 - What every recipe's code does that its rows do not say, measured over all twenty-six
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** Sean, asking for the
+**to** spec · **status** withdrawn · **cited** `5e0b610f` · **raised** 2026-09-14 · **source** Sean, asking for the · **closed** 2026-09-30
+
+**It measures over twenty-six recipes and the game has sixteen rules.** The ruleset it counted is the one `D-4` deleted, so the measurement is of something that no longer exists. **Withdrawn rather than recounted**, because the question it asked was about that table's shape.
 measurement after the rules were gathered into one file
 
 **derived from** `spec/data/block.4x`, `line.4x`, `constraint.4x`, `for.4x` against
@@ -5687,7 +5849,9 @@ again, which is what `P-465` said was missing.
 
 ### C-102 - Three of the four remaining tables fold; only *Recipes* needs a shape
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
+**to** spec · **status** withdrawn · **cited** `c7bcd95c` · **raised** 2026-09-12 · **source** the specification lane asking · **closed** 2026-09-30
+
+**Its subject is gone.** This was about the four tables left in `releases/first-release.md` and which of them fold; `c7bcd95c` deleted seven sections and 234 lines, and no `Recipes` table survives. **Withdrawn by a deletion rather than answered** - which is the shape `CLAUDE.md` names: a rule moving under an open item makes it wrong without touching it.
 for a view on which half of each of the four is data, before drafting rather than after
 
 **derived from** state the game's data in several files in a directory of their own, in the notation
