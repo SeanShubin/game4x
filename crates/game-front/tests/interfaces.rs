@@ -166,3 +166,40 @@ fn neither_surface_has_grown() {
         watches.len() + drives.len()
     );
 }
+
+/// **`says` names every outcome, so a new one is a compiler error rather than a dump line.**
+///
+/// `Q-111`: *a `Debug` rendering is not a stable interface - a new variant or a renamed field
+/// changes that line with no compiler error and no test.* **The repair is not the wording of the
+/// message, it is that the wildcard is gone**: `says` matches `Changed`, `Said` and `Nothing` by
+/// name, so a fourth `Outcome` does not compile until somebody decides what it means.
+///
+/// **That property has no test of its own and cannot have one** - it is the compiler's. What can
+/// be checked is that nothing puts the wildcard back, which is the only way to lose it.
+#[test]
+fn says_names_every_outcome_rather_than_falling_back() {
+    let source = include_str!("../src/game_state.rs");
+    let at = source
+        .find("fn says(&self, command: &str) -> Result<String, String> {")
+        .expect("the implementation, not the declaration");
+    let body = &source[at..];
+    let body = &body[..body.find("\n    }").expect("the end of the method")];
+
+    for variant in ["Outcome::Changed", "Outcome::Said", "Outcome::Nothing"] {
+        assert!(body.contains(variant), "`says` does not name `{variant}`");
+    }
+    // **A wildcard is what made two outcomes into content.** `other =>` rendered the variant with
+    // `Debug` into a line under *the game, as the console reports it*.
+    for wildcard in ["other =>", "_ =>", "{other:?}"] {
+        assert!(
+            !body.contains(wildcard),
+            "`says` has a `{wildcard}` arm again, so a new outcome becomes a dump line - `Q-111`"
+        );
+    }
+    // **Exactly one outcome is an answer**, which is the thing the signature exists to say.
+    assert_eq!(
+        body.matches("=> Ok(").count(),
+        1,
+        "more than one outcome is being returned as an answer"
+    );
+}

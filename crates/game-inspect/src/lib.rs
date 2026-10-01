@@ -170,7 +170,13 @@ fn describe(drawn: planet_bevy::globe::Drawn, game: &dyn Drives) -> String {
         format!("drawing: {}", drawn.drawing.name()),
         String::new(),
         "-- the game, as the console reports it --".to_string(),
-        game.says("{show-planet}"),
+        // **A non-answer is written as one** - `Q-111`. `says` hands back the reason rather
+        // than a variant name, so this line cannot read as the planet when there was no planet
+        // to report. The marker is what a reader of a dump scans for.
+        match game.says("{show-planet}") {
+            Ok(said) => said,
+            Err(why) => format!("!! the console did not answer {{show-planet}}: {why}"),
+        },
         String::new(),
         "-- every entity --".to_string(),
         game.browser(),

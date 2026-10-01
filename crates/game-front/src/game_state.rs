@@ -63,11 +63,26 @@ pub trait Drives: Send + Sync + 'static {
     fn change_drawing(&self);
     /// Every entity, as the data browser renders it.
     fn browser(&self) -> String;
-    /// Run one command and give back only what it said.
+    /// Run one command and give back only what it said, or why it said nothing.
     ///
     /// **Not `submit`**, which returns the whole transcript. The harness wants the answer to
     /// one question, which is what it writes into a dump beside the photograph.
-    fn says(&self, command: &str) -> String;
+    ///
+    /// # Why this is a `Result` and not a `String`
+    ///
+    /// **It returned `format!("{other:?}")` for the two outcomes that are not an answer** -
+    /// `Q-111`. `Outcome` is `Changed`, `Said(String)` or `Nothing`, and its one caller puts the
+    /// result into a dump line under *the game, as the console reports it* - so the dump could
+    /// read `Changed` or `Nothing` **as content rather than as an error**, and both are plausible
+    /// English.
+    ///
+    /// **A `Debug` rendering is not an interface.** A new variant or a renamed field changes that
+    /// line with no compiler error and no test. `{show-planet}` is a question and answers `Said`,
+    /// so the branch never fires today, **which is also why nothing covered it.**
+    ///
+    /// **So a non-answer cannot be mistaken for one**: the caller is handed the reason and has to
+    /// decide what to write, rather than being handed a word that looks like a reading.
+    fn says(&self, command: &str) -> Result<String, String>;
 }
 
 /// The implementation over the one console, which is what a root hands down.
@@ -109,16 +124,21 @@ impl Drives for TheOneConsole {
     fn browser(&self) -> String {
         crate::shell::browser()
     }
-    fn says(&self, command: &str) -> String {
+    fn says(&self, command: &str) -> Result<String, String> {
         crate::shell::with(|console| {
-            console
-                .session
-                .run(command, &crate::library())
-                .map(|outcome| match outcome {
-                    game_console::Outcome::Said(said) => said,
-                    other => format!("{other:?}"),
-                })
-                .unwrap_or_else(|problem| problem.to_string())
+            match console.session.run(command, &crate::library()) {
+                Ok(game_console::Outcome::Said(said)) => Ok(said),
+                // **Named rather than rendered.** `Changed` and `Nothing` are not answers, and
+                // saying which one it was is useful; saying it in a sentence that cannot be read
+                // as a planet is the point.
+                Ok(game_console::Outcome::Changed) => {
+                    Err("the command changed the game and answered nothing".to_string())
+                }
+                Ok(game_console::Outcome::Nothing) => {
+                    Err("the command did nothing and answered nothing".to_string())
+                }
+                Err(problem) => Err(problem.to_string()),
+            }
         })
     }
 }

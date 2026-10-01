@@ -677,10 +677,28 @@ const ADMITTED: [&str; 4] = [
 /// whatever grouping sits between them - so with the admitted names removed, **both tokens
 /// remaining is the whole of it**, and there is no nesting left to get wrong.
 ///
+/// # What the comment strip costs, in both directions
+///
 /// **A trailing comment is dropped first**, so a line importing an interface and mentioning the
-/// shell in prose beside it is not a reach. A `shell` inside a string literal on such a line
-/// would still fire; **firing too often is the right error here**, and the message names the
-/// admitted set so a reader can tell at once which it is.
+/// shell in prose beside it is not a reach.
+///
+/// **It cuts at the first `//` and that is not always a comment.** The quality lens pointed out
+/// that this doc named only the direction that fires too often, and **the other direction is a
+/// silent miss** - which is the one worth writing down:
+///
+/// ```text
+/// fires needlessly   let said = "shell";  use game_front::game_state::Watches;
+/// misses silently    let url = "https://x"; use game_front::shell;
+/// misses silently    use front::shell;      if a manifest renamed the dependency
+/// ```
+///
+/// **Both misses are contrived** - rustfmt does not leave two statements on one line, and no
+/// manifest renames `game-front` - so neither is repaired. **What is repaired is the comment**:
+/// a reader deciding how far to trust this step should not have to find the unsafe direction
+/// themselves, and a doc that considered string literals and then named only the safe case is
+/// worse than one that had not thought of them.
+///
+/// **The message names the admitted set**, so a needless fire costs one glance.
 fn reaches_the_console(line: &str) -> bool {
     let code = line.split("//").next().unwrap_or(line);
     let mut rest: String = code.chars().filter(|it| !it.is_whitespace()).collect();

@@ -141,6 +141,76 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-200 - `Q-111` is fixed by the type rather than by the message, and two claims of this lane's are measured now
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-111`, and the quality lens naming an asymmetry in a comment of this lane's · **cites** `Q-111`, `Q-109`, `C-199`, `C-198`
+
+**derived from** *a `Debug` rendering is not a stable interface* - `Q-111`
+
+## `Q-111` - the wildcard was the defect and the wording was not
+
+**`says` returned `format!("{other:?}")` for the two outcomes that are not an answer**, and its one
+caller writes the result into a dump line under *the game, as the console reports it* - so the dump
+could read `Changed` or `Nothing` **as content**, and both are plausible English.
+
+**The repair is not a better message. It is that `says` returns a `Result` and names all three
+outcomes.** So a non-answer cannot be handed back as content, and **a fourth `Outcome` no longer
+compiles** until somebody decides what it means - which is `Q-111`'s own objection answered by the
+compiler rather than by care.
+
+**That property cannot have a test, because it is the compiler's.** What is checked is that nothing
+puts the wildcard back: `says_names_every_outcome_rather_than_falling_back` asserts all three
+variants are named, that no `other =>`, `_ =>` or `{other:?}` is there, and that **exactly one
+outcome returns `Ok`**.
+
+**And the caller writes a non-answer as one**, with a marker a reader of a dump scans for rather
+than the reason alone.
+
+## A comment of this lane's considered a hazard and named only the safe half
+
+**The comment-strip in `reaches_the_console` said**: *a `shell` inside a string literal on such a
+line would still fire; firing too often is the right error here.* **The quality lens pointed out
+that the other direction is a silent miss and was not named.**
+
+```
+fires needlessly   let said = "shell";  use game_front::game_state::Watches;
+misses silently    let url = "https://x"; use game_front::shell;
+misses silently    use front::shell;      if a manifest renamed the dependency
+```
+
+**Both misses are contrived and neither is repaired.** What is repaired is the comment. **A doc
+that considered string literals and then named only the safe case is worse than one that had not
+thought of them**, because a reader deciding how far to trust the step takes it as the whole
+account.
+
+## Two claims of this lane's, and both are measured now
+
+**This lane said *the suite is red on the thirty-six and nothing else* without running it.** The
+quality lens said plainly that it had not verified *nothing else* and was not claiming it, which is
+the right shape and is what prompted this.
+
+```
+cargo test --workspace --no-fail-fast
+  607 tests passed over 73 green suites
+  1 failed: every_command_has_an_expectation_and_it_is_current
+```
+
+**So the claim holds and it is a measurement now rather than an expectation.** It was an inference
+from knowing what changed, which is exactly the kind this repository keeps catching: the number
+would have been just as confident if a second thing had broken.
+
+**The other is `C-199`'s fourteen commits**, already corrected there.
+
+## What the lens did that is worth copying
+
+**It corrected its own item rather than leaving it.** Its note said *one form still escapes*, true
+at `5d86f8d7` and false at `5a7f3021` - *an item reporting a hole you had closed, which is the exact
+cost I have been pressing other lanes about all session.*
+
+**And it named the rule it used on this lane's excuse**: *check the claim that lets you off.* That
+is cheaper than checking everything and catches the class that matters, and it is the second time
+today a lens has refused a convenience this lane offered it.
+
 ### C-199 - `Q-108` and `Q-109` are fixed, `Q-109`'s own fix was incomplete, and this lane's commit count was a guess
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** the quality lens's review, requested by Sean · **cites** `Q-108`, `Q-109`, `C-194`, `C-196`
