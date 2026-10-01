@@ -8,14 +8,13 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-603** - The application is one function over normalized state, and the interface is not an exception · `decide/proposals.md`
 
 ## Answer a question
 
-No wording can be final until you do.
-
-- **P-603** - Rule 3 now says an interface test is in the friendly form, and nobody has decided that · `decide/questions.md`
-- **P-599** - Three words decide where a file lands and they are held in Rust, not in data · `decide/questions.md`
+Nothing.
 
 ## Vet a capability
 

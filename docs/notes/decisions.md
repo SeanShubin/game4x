@@ -26,6 +26,79 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+### P-599 - Three words decide where a file lands and they are held in Rust, not in data
+
+**to** sean · **status** **withdrawn** 2026-10-01, its premise false · **raised** 2026-09-30 · **asks** nothing · **kind** recovered · **shape** text · **into** `releases/rules-become-data.md` -> `D-1` · **source** the code lane stopping on `P-598` rather than guessing a row
+
+**`D-1` is built on the measure that `crates/game-model` holds no rule.** It does not. **But the test
+script's own vocabulary is held in Rust**, and `crates/game-model/src/script.rs` says so about itself:
+the words it knows *are not declared in `data/`*, and this is *the one part of this prototype that is
+not yet self-describing.*
+
+```
+script   where a test script is loaded
+game     where the schema, the engine and the rules are loaded
+expected where a `{then}` goes, for `{compare}` to read
+```
+
+**Three words, and they decide where a file lands.** Adding a fourth store means editing Rust, which
+is the thing `D-1` says is over.
+
+## Why it surfaced now, and why it is not urgent
+
+**It stopped a generator rather than a game.** `P-598` needs a row naming the store a scenario's
+invariant rows load into, the code lane declined to guess one, and the answer turned out derivable -
+the set is closed at three and two are excluded by what they are for, so **`into:game` is the only
+reading left** and `S-234` says so. **Nothing is blocked.**
+
+**What is open is only whether this counts.** `D-1`'s clause is about rules; these are not rules, they
+are the vocabulary of the harness that runs the tests. **A reasonable person could say `D-1` is
+satisfied and this is a separate want**, or that *the game's rules are data* was never meant to stop
+at the game.
+
+## The choice
+
+**Say `D-1` does not reach it**, and the three words stay in Rust until something else wants them in
+data. `script.rs`'s own sentence should then stop calling itself *not yet* self-describing, because
+nothing is coming.
+
+**Or say it does**, and a fourth file joins `schema.4x`, `engine.4x` and `rules.4x` - the stores
+declared as rows, the way the primitives already are at `{primitive id:12 word:load}`. **That is the
+shape that already exists for the neighbouring vocabulary**, which is the strongest argument for it
+and is not an argument this lane should make for you.
+
+**No wording is offered** because neither answer has any until the choice is made, and `D-1` is a
+capability you have not yet vetted - so this may be a sentence in its clause rather than a new
+capability at all.
+
+## Withdrawn 2026-10-01 - the stores are in the data and the engine reads them
+
+**`crates/game-model/data/friendly/script.4x:58`**:
+
+```
+{store id:1 name:script}
+{store id:2 name:game}
+```
+
+**And `store_named()` looks the row up by id.** `script.rs`'s own comment nine lines above it says
+what this item claimed was missing: *`into:2` means nothing until the row is looked up. The script
+declares its stores as rows like everything else, so the engine branches on `game` or `expected` and
+the data references the row that says so.* **So `into:2` resolves through the data rather than around
+it**, and the Rust constants implement a name the way the engine implements `{primitive id:12
+word:load}`.
+
+**Where the item came from, which is the part worth keeping.** `script.rs` does carry a sentence
+calling its vocabulary *not yet self-describing*, and this lane read that as covering the stores.
+**A file's self-description was quoted instead of reading what the file does** - the same failure as
+reading its doc comment for the store count a day earlier, in the same file, after being corrected
+for it once.
+
+**One genuine residue, and it is not worth his attention.** The comment at `script.rs:472` says the
+step that fetches the declarations runs before they exist - *the one place the data cannot describe
+itself*. That is one bootstrapping step rather than a vocabulary, and nobody has claimed `D-1` reaches
+it.
+
+
 ### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
 
 **to** sean · **status** **answered** 2026-09-30 · **raised** 2026-09-30 · **answered by him**: *keep the prototypes as is for now. If it irritates me later I will deal with it then.*
