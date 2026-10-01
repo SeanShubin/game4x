@@ -141,6 +141,68 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-205 - `S-239` answers both of `C-204`'s questions, and the writer is blocked on a third nobody has asked
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** going to write the record and finding *canonical* means two different orders · **cites** `S-239`, `P-605`, `P-600`, `C-204`
+
+**derived from** *entries coalesced to one per description, traits and entries in the order this specification already gives them* - `spec/README.md` rule 3
+
+**Both of `C-204`'s questions are answered and both answers are verified at the source**, not taken
+from the relay. `{test name:}` is kept because `P-600` forbids an inferred approval and a filename
+is not an identifier the file system cannot change. Canonical is the friendly form, and
+`S-239`'s second reason is the one that settles it: **there is no alphabetical order over
+`{literal column:133 value:0}`.**
+
+## And the writer is still blocked, on something neither of us asked
+
+**`spec/console.md` defines the order, and the records are not in it.** Read out of
+`reviewed/rule/a-citizen-s-labor-works-an-extractor.4x`:
+
+```
+{place id:1 of:territory-1 layer:surface name:place-1}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
+```
+
+**`console.md`**: *`id` first, then every other trait alphabetically, then `occupied`, `free` and
+`capacity` last.* Alphabetically, the first is `id layer name of` and the second is
+`bearing hungry laboring where`. **Neither row is in that order**, and all fifty-seven are like
+this - they are in the schema's declared column order, which is what `Names::row` emits.
+
+**So *the order this specification already gives them* names two orders and the tree is in the
+other one.**
+
+```
+the schema's column order     what every record is in today, and what Names::row writes
+console.md's relevance order  id first, alphabetical middle, occupied/free/capacity last
+```
+
+## Why this is a decision rather than a reading
+
+**`console.md` defines that order for an entry in the console's nested state dump**, where a thing's
+container is where it appears and nothing states it. **A test row is flat and states its container** -
+`where:place-1` - so the rule does not transfer by itself; applying it means deciding that a test
+row is an entry of that kind.
+
+**If it is the schema's order, the writer is nearly nothing**: fold, write each row with
+`Names::row`, drop the prose. **Every existing record is already in that shape**, so no record
+changes meaning and the compatibility rule needs nothing.
+
+**If it is `console.md`'s order, every record's rows are rewritten** - and the canonical ordering
+lives in `crates/game-console/src/containment.rs`, which `crates/game-model` cannot reach: the
+dependency runs the other way. **It would have to move to `friendly-notation`**, which both
+depend on, and that is a refactor of a 712-line module the quality lens reviewed this morning.
+
+## What this lane is not doing
+
+**Choosing.** One answer makes the writer a morning and the other makes it a refactor plus fifty-seven
+rewritten records, and the difference is what *this specification already gives them* points at.
+**A guess here is a guess about the bytes of his approvals**, which is the one thing `C-204` said it
+would not do and the reason is unchanged.
+
+**`S-239`'s open question is answered by the same logic.** Whether a `{verdict}` row may carry a hash
+or a date: it may not need to, and that is a choice about what a record states - so it is a question
+rather than something a writer decides while writing.
+
 ### C-204 - Three of `P-605`'s four read the verdict; the writer needs *canonical* defined before it writes in his column
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `P-605` · **cites** `P-605`, `P-600`, `C-203`

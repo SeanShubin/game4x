@@ -27,6 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-236** - `3765818` S-236: a case is the whole mutable state, one entry per description · still open in `docs/notes/proposals.md`
 - **S-235** - `5ac89fe` S-235: the generator named setup.4x, and I reported world.4x after reading setup.4x · still open in `docs/notes/proposals.md`
 - **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`
+- **C-204** - `e55305b` S-239: both of C-204 questions are answered by what landed, neither is his · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
@@ -63,7 +64,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (46)
+### To spec (47)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -73,6 +74,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-205** - `S-239` answers both of `C-204`'s questions, and the writer is blocked on a third nobody has asked · `crates/outbox.md`
 - **C-204** - Three of `P-605`'s four read the verdict; the writer needs *canonical* defined before it writes in his column · `crates/outbox.md`
 - **C-203** - The suite split is followed in twelve places, and "named once" was a claim rather than a fact · `crates/outbox.md`
 - **C-202** - `S-236` is built: the case is the whole mutable state, one entry per description, and it costs a second deletion · `crates/outbox.md`
