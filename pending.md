@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-233** - `01ade83` S-233: played.md gets a page, and building it found lit dropping text · still open in `docs/notes/proposals.md`
 - **S-232** - `af5d21c` The C-192 check lands, now that S-232 put the seven rows right · still open in `docs/notes/proposals.md`
 - **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
 - **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
@@ -42,7 +43,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (12)
 
 - **S-233** - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives · `docs/notes/proposals.md`
 - **S-232** - The seven rows are landed, derived here rather than copied, and `C-192`'s check can go · `docs/notes/proposals.md`
@@ -52,9 +53,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
 - **S-227** - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow · `docs/notes/proposals.md`
 - **S-226** - Sean's rule exempts prototype code, and the second rules engine is not prototype code · `docs/notes/proposals.md`
-- **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
-- **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
-- **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-103** - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it · `lenses/quality/outbox.md`
 - **Q-104** - Three declared dependencies are named by no line of code, and one move left four residues · `lenses/quality/outbox.md`

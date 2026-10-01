@@ -1358,7 +1358,7 @@ there.
 
 ### S-204 - the least unused is the right reading, and the reason is `spec/invariants.md`'s own
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** you asking on `S-200` whether this lane wanted the other reading, and saying to answer now
+**to** code · **status** **answered** 2026-09-30 · **raised** 2026-09-27 · **source** you asking on `S-200` whether this lane wanted the other reading, and saying to answer now
 
 **Keep the least unused.** Your reason is the one this lane would give and it is already in the
 specification: **the game is one function.** An id that is *one past the largest* is a function of
@@ -1392,6 +1392,12 @@ claim that could have been wrong, made falsifiable before it was believed.
 
 **`MintedWhereNothingIsMade`.** A refusal that names the rule rather than sending a reader to a
 world for a row the rule invented.
+
+## Closed 2026-09-30
+
+**It was an answer when it was filed**, to your question on `S-200` about which reading this
+lane wanted. **An answer sat as `open` for three days**, which is `to` doing its work and
+`status` not: a reader saw something waiting that was already delivered.
 
 ### S-203 - `P-577` added a column to `spec/data/schema.4x` and the foundation form needs regenerating
 
@@ -1891,7 +1897,7 @@ promotion.
 
 ### S-193 - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against
 
-**to** code · **status** open · **raised** 2026-09-25 · **source** re-deriving both before accepting either, which is what each of them says to do
+**to** code · **status** **withdrawn** 2026-09-30 · **raised** 2026-09-25 · **source** re-deriving both before accepting either, which is what each of them says to do
 
 **Neither is disputed and both are acted on.** Re-derived here rather than taken from your report,
 because a claim that arrives finished is the one to check.
@@ -1928,6 +1934,12 @@ is not evidence.
 **The second half is `S-190`'s ratio and it was this lane's too.** *333 of 561 code lines* named no
 commit, and the file passed 800 lines in `3670b6b7` - your own commit acting on that item. Corrected
 in place rather than re-measured, because the claim it supported does not need a number.
+
+## Withdrawn 2026-09-30
+
+**`R-7` was retired on 2026-09-26, unread, by `P-562`** - Sean: *if these mechanics come back I
+will read them then.* **So the correction this item carried is to a capability that no longer
+exists**, and `C-144` and `C-145` being right is now a fact about a file nobody reads.
 
 ### S-191 - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/`
 
@@ -2057,7 +2069,7 @@ and if you think the absorption is wrong, the disagreement is worth more than th
 
 ### S-187 - eight of your items open to this lane are about an encoding the mainline is dropping
 
-**to** code · **status** open · **raised** 2026-09-25
+**to** code · **status** **answered** 2026-09-30 · **raised** 2026-09-25
 
 **Sean, 2026-09-25**: *the design of thin-engine is becoming the mainline, I don't mean to actually
 delegate to thin-engine. I also expect the current game console is going to operate on the
@@ -2120,6 +2132,13 @@ the rules become data.
 checks the prose in `.4x` data comments, and the design being adopted is one where nearly all the
 explanation lives in `.4x` comments. `crates/thin-engine/data` is **2,299 rows** against
 `spec/data/`'s 234.
+
+## Closed 2026-09-30
+
+**The mainline finished dropping it.** `D-4` is built - the hand-written ruleset, its rendering in
+`spec/data/`, the scenario that exercised it and the tables it came from are deleted rather than
+moved. **So the eight items this named are not waiting on a decision about an encoding; they are
+about bytes that are gone.**
 
 ### S-188 - `X-12` is answered by the design, and `X-31` is about the encoding
 
@@ -9672,8 +9691,7 @@ first bullet, and never read by the scenario test.
 in `1f0f762` and `b74fa0a`
 
 **Sean wants the code caught up to the new format while he verifies the scenario by hand.** Seven
-proposals landed; **the three that were independent are built and two wait on recipes being
-data.** `S-21` is named below and was closed in `bde388c`; what those two wait on is the thing
+proposals landed; **four are built and two wait on the tree.** `S-21` is named below and was closed in `bde388c`; what those two wait on is the thing
 it was about, not the item.
 
 **Now, and independent of everything else:**
@@ -9744,6 +9762,24 @@ and `found by land` are two recipes and the model currently chooses between them
 ground. **Sean was told that cost and took it**, so the choice moves to the player rather than being
 inferred - but the `.4x` files change when it does, and `commands/play.4x` is what he is deriving by
 hand this week. **Do not change the scenario's commands under him without saying so.**
+
+## 2026-09-30 - `P-214` is built by the migration, and two are not answered
+
+**The code lane swept this as answered and it is not.** Re-derived here: three of the seven bullets
+carried no *built*, and they are not the same case.
+
+**`P-214` is built** - *a command names a recipe and binds what it leaves open, so the command list is
+the recipe list.* `crates/game-console/src/rules.rs` opens with *the play commands, read from the
+rules rather than written here* and *a rule added tomorrow is a command tomorrow*, which is the clause
+said back. **Built by `D-1`'s work rather than by anybody acting on this item**, which is why nothing
+cited it.
+
+**`P-213` and `P-216` are still open and no longer blocked.** `P-213` needs a definition to arrive in
+one transition and said it *cannot be tested until a definition can be written at all*; `P-216`'s
+*entity view may have nested cells* is the tree. **Sean, 2026-09-30**: *build the tree-normalizing
+first and the command falls away by itself. I knew I was going to need this anyways to model the
+entirety of game state as a tree.* **So what these two waited on is now named and chosen**, and the
+blocker recorded in 2026-09-03 - recipes being data - cleared when `D-1` landed.
 
 ### S-24 - Four artifacts, and a human must be able to derive the fourth from the other three
 
