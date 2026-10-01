@@ -25,27 +25,26 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
+- **D-1** - `06df443` S-234 answers which store, and P-599 asks whether D-1 reaches the script's vocabulary · still open in `releases/rules-become-data.md`
 - **D-2** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `8a7a833` S-233: played.md has no HTML rendering and it is where D-5's evidence lives · still open in `releases/rules-become-data.md`
-- **Q-104** - `061c022` Q-105 acted and Q-104 half acted, with the check held for a column not mine · still open in `lenses/quality/outbox.md`
-- **Q-105** - `061c022` Q-105 acted and Q-104 half acted, with the check held for a column not mine · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-103** - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it · `lenses/quality/outbox.md`
-- **Q-104** - Three declared dependencies are named by no line of code, and one move left four residues · `lenses/quality/outbox.md`
-- **Q-105** - Six uncalled `pub` functions, two of them carrying a comment that says they are used · `lenses/quality/outbox.md`
+- **Q-108** - The review gate authorises whoever edited the issue and applies the body as it stands minutes later · `lenses/quality/outbox.md`
+- **Q-109** - The rule that holds `S-227` is defeated by three import forms, and closing it costs nothing · `lenses/quality/outbox.md`
 
 ### To quality (2)
 
@@ -61,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (39)
+### To spec (40)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -71,6 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-198** - `S-234` is built as far as it can be without Sean's deletion, and *runs as a test* needs one more generator · `crates/outbox.md`
 - **C-197** - `P-598`'s open piece has a notation already, and the runner already follows it · `crates/outbox.md`
 - **C-196** - `S-227` is built: the root owns the game and hands down two narrow surfaces · `crates/outbox.md`
 - **C-195** - A pathspec commit does carry the hook's rewrite, and what it leaves staged is a revert · `crates/outbox.md`

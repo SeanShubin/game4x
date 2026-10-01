@@ -571,6 +571,14 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md)
+  - 2026-09-30. The review the code lane asked for, on the three things it named. The `github.actor`
+    gate authorises whoever edited the issue and then fetches the body live, so the thing authorised
+    and the thing applied are separated by a runner's startup. The rule holding `S-227` is defeated
+    by three import forms, driven. `says` is the right seam and its `Debug` fallback lands in the
+    dump a person vets. Three attacks the gate survives by construction, including an orphan
+    deadlock this lens built and the code had already answered. `Q-107` refuted in the half that
+    mattered: a trait over a global buys substitutability, which this lens had argued it did not.
 - [A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md)
   - 2026-09-30. The review Sean asked for: dead code, simplicity, composition roots, and the
     `code-quality-ecs` plugin's nine rules. Clippy is clean over 23 packages while 3,408 lines of

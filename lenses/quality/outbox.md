@@ -66,7 +66,7 @@ was wrong, and being refuted is the lens working.
 
 ### Q-103 - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it
 
-**to** code · **status** open · **raised** 2026-09-30 · **source**
+**to** code · **status** **answered** 2026-09-30 · **raised** 2026-09-30 · **cited** `C-191`, `P-595` · **source**
 [A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#1)
 
 **Where.** `crates/planet-ecs/README.md:5-9`; and `crates/game4x/src/main.rs:111`.
@@ -97,7 +97,7 @@ rendering. `planet-ecs` is not, and that is a decision rather than an observatio
 
 ### Q-104 - Three declared dependencies are named by no line of code, and one move left four residues
 
-**to** code · **status** open · **raised** 2026-09-30 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `061c0226`, `af5d21cb` · **source**
 [A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#2)
 
 **Where.** `crates/game4x/Cargo.toml`, `crates/game-front/Cargo.toml`,
@@ -134,7 +134,7 @@ yours** - this lens cannot tell from outside.
 
 ### Q-105 - Six uncalled `pub` functions, two of them carrying a comment that says they are used
 
-**to** code · **status** open · **raised** 2026-09-30 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `061c0226` · **source**
 [A clean clippy over what nothing ships](2026-09-30-a-clean-clippy-over-what-nothing-ships.md#3)
 
 **Where.** `game-console/src/state.rs:456` `as_a_turn`; `planet-model/src/biome.rs:63`
@@ -174,6 +174,18 @@ and `C-24`, acted 2026-09-05.
 
 **This lens did not make those edits and does not claim they answer this item.** Left `open` for the
 sixth, and because a deletion in a working tree is not a commit.
+
+## Answered by `C-191` on the larger question, and the README half is not what moved - 2026-09-30
+
+**`P-595`'s rule 18 decided it before this was filed.** `C-191` records that the rule binds all five
+prototypes rather than the one `S-226` named, and that it subsumes this item: a prototype replicates
+what it needs and links none of it, so a mainline crate reachable only through a prototype is the
+state rule 18 is about.
+
+**What this item got right was the README, and that is the half worth checking back on.**
+`planet-ecs/README.md` claimed to be the one home of game state while the shipped binary does not
+link it. **Marked answered rather than acted** because the reachability question was decided
+elsewhere and this lens has not re-read the README since; whoever acts on rule 18 will meet it.
 
 ### Q-106 - `fn check` is six invariants in one function and its own sentence names three
 
@@ -240,7 +252,170 @@ a guess.
 plugin does not read the tree as merely careless, and so a third crate acquiring the pattern is
 noticed as a third.
 
+## Refuted in the half that mattered by `S-227`, and this lens drew the wrong inference - 2026-09-30
+
+**The premise is true and `S-227` does not contradict it.** `TheOneConsole` holds nothing, every
+method reaches `crate::shell::with`, and the `static OnceLock<Mutex<Console>>` is still there and
+still process-wide. A `Res` over it is a name for a global, which is what this item said.
+
+**The conclusion drawn from it was wrong.** What a trait over a global buys is not the global's
+removal - it is substitutability at the call site. `crates/game-front/tests/interfaces.rs:24`
+demonstrates it: `APretendGame` implements `Watches`, and
+`a_caller_against_the_interface_can_be_handed_a_different_game` hands it to a caller that cannot
+tell the difference. **This lens collapsed *the global survives* into *nothing is gained*, and those
+are different claims** - the second does not follow from the first, and the item asserted it as
+though it did.
+
+**The measured half stands and is now the useful half**, re-filed as `Q-110`: the five systems are
+substitutable and one test function covers them, which is the number this item measured before the
+change.
+
+**Recorded rather than quietly edited**, because the item advised against work that was worth doing.
+
+### Q-108 - The review gate authorises whoever edited the issue and applies the body as it stands minutes later
+
+**to** code · **status** open · **raised** 2026-09-30 · **source**
+[The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#1)
+
+**Where.** `.github/workflows/review.yml:83` and `:93`.
+
+**What.** The `apply` job is gated on `github.actor == github.repository_owner`, which authorises
+**the person who made that edit**. The body it then acts on is fetched live:
+`gh issue view ... --json body > body.md`. Between the event firing and that line there is a queued
+runner, a provision and a Rust toolchain install - and anything reaching the issue body inside that
+window is applied under his authorisation and committed with `user.name` set to `github.actor`.
+
+**The step's own comment says *the body as he left it*.** It is the body as it stands, which is a
+different sentence and the one the code implements.
+
+**Both gestures are in range.** `carry_out` copies `spec/tests/<name>` into `reviewed/` or deletes
+`reviewed/<name>`. The delete is sharper: `CLAUDE.md` says *the suite runs the copies in it*, so
+removing a record stops a test constraining anything, under a commit carrying his name.
+
+**The mitigation above it created this.** Refusing to interpolate the payload through `${{ }}` in a
+`run:` is right. **Refusing to interpolate it and refusing to read it are different decisions**, and
+the second was taken as though it followed. `github.event.issue.body` is the authorised bytes and
+reaches a file through `env:` without passing through `${{ }}`.
+
+**Whether.** **Worth fixing now**, and it is small: read the body from the event payload.
+**This lens did not verify who may tick a checkbox here** - the file says *anyone may tick a box on
+a public repository* and that was not checked. The finding does not rest on it: if only
+collaborators can, the hole is that a collaborator or a lane with a token writes `reviewed/` as him,
+which is what the gate exists to stop.
+
+### Q-109 - The rule that holds `S-227` is defeated by three import forms, and closing it costs nothing
+
+**to** code · **status** open · **raised** 2026-09-30 · **source**
+[The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#2)
+
+**Where.** `tools/outbox/tests/architecture.rs:617`.
+
+**What.** The predicate is `said.contains("game_front::shell::")`. Driven directly, the predicate
+being pure, rather than by editing the tree:
+
+```
+flagged  line
+   True  use game_front::shell::generation;
+   True  game_front::shell::generation()
+  False  use game_front::shell;
+  False  use game_front::shell as console;
+  False  use game_front::{shell, library};
+  False      shell::generation()            (after any of the three above)
+```
+
+**Three import forms pass and every call site after them passes too**, because
+`shell::generation()` does not contain the crate name. The check asks *does a line spell this exact
+path* where the rule is *does a crate outside `game-front` reach the one console*.
+
+**And `ALLOWED` is a substring test over the whole line**, so a line naming
+`game_front::shell::terminal::serve` anywhere in it - a trailing comment included - exempts every
+other reach on that line.
+
+**Why.** There is no live violation, measured: nothing under `crates/` or `prototypes/` outside
+`game-front` contains `use game_front::shell` in any form. **So the check is right about the present
+state and blind to the drift it exists to catch**, which is the one property a rule-holding check
+has to have.
+
+**Whether.** **Worth fixing now and it costs nothing today.** Dropping the two trailing colons
+closes all three forms; the only lines in the tree that `game_front::shell` matches without the
+colons are a `Cargo.toml` comment and a line of `crates/outbox.md`, **neither of which this check
+reads** - it walks `every_rust_file`. Measured rather than assumed.
+
+### Q-110 - `S-227` made five systems substitutable and none of them is driven by a fake
+
+**to** code · **status** noted · **raised** 2026-09-30 · **source**
+[The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md)
+
+**Where.** `crates/game-globe/src/lib.rs`, and `crates/game-front/tests/interfaces.rs:24`.
+
+**What.** This is `Q-107` with its wrong half removed - see the refutation recorded on that item.
+`Q-107` measured `game-globe` at **one test function against five systems reading a
+process-global**. At `8fbb892f` the five take `Arc<dyn Watches>`, the trait is demonstrably
+substitutable - `APretendGame` and
+`a_caller_against_the_interface_can_be_handed_a_different_game` - and **`game-globe` still has one
+test function.**
+
+```
+                 Q-107, e85c2980     now, 8fbb892f
+game-globe       1 test fn           1 test fn
+game-front       -                   47 test fns, including the fake
+```
+
+**The fake lives in the crate that defines the trait, not in the crate whose systems were the reason
+for it.** So what is proven is that the interface can be stood in for, not that any of
+`follow_the_game`, `keys_to_choose_size`, `a_control_asks_for_a_reset` or
+`a_control_asks_to_change_the_drawing` behaves correctly when it is.
+
+**Whether.** **Noted and deliberately not.** It is not a criticism of `S-227` - it is what `S-227`
+made possible and what has not been done. Recorded so that *the systems are testable now* is not
+read as *the systems are tested*, and so the one test function is a number somebody chose rather
+than a number nobody looked at.
+
+### Q-111 - `says` writes a `Debug` rendering into the dump a person vets
+
+**to** code · **status** noted · **raised** 2026-09-30 · **source**
+[The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#3)
+
+**Where.** `crates/game-front/src/game_state.rs:112-123`; its one caller
+`crates/game-inspect/src/lib.rs:173`.
+
+**What.** The seam is in the right place and the code lane's doubt about that can be put down -
+being the one method that is not a thin wrapper is what a seam looks like, and the cross-crate reach
+into `console.session` is gone. **What is wrong is the fallback.** `Outcome` is `Changed`,
+`Said(String)` or `Nothing`; `says` returns the string for one and `format!("{other:?}")` for the
+other two, and its only caller puts the result into a dump line under *-- the game, as the console
+reports it --*. So the dump can read `Changed` or `Nothing` where a reader expects the planet, **as
+content rather than as an error**.
+
+**Why.** The dump is evidence a person vets - `D-5` is *I have watched the new game play through*.
+A `Debug` rendering is not a stable interface: a new variant or a renamed field changes that line
+with no compiler error and no test, and both strings it can produce are plausible English.
+
+**Whether.** **Worth fixing eventually.** `{show-planet}` is a question and returns `Said`, so the
+branch does not fire today - which is also why nothing covers it. The honest form is for `says` to
+be unable to answer quietly.
+
+### Q-112 - `scripts/review.sh` says it is the only thing that writes `reviewed/`, and it is not any more
+
+**to** code · **status** noted · **raised** 2026-09-30 · **source**
+[The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md)
+
+**Where.** `scripts/review.sh:9`.
+
+**What.** *This is the only thing that writes `reviewed/`.* `b3f0dfbe` added
+`.github/workflows/review.yml`, whose `apply` job runs `--review-apply` and then
+`git add -- reviewed` at `:117`. **Two things write it now**, and the sentence was true when it was
+written.
+
+**Why.** It is the sentence a later reader would use to decide where a record came from, and both
+writers are gated differently - one by being on his machine, one by `github.actor`. A reader told
+there is one door will not look for the second gate.
+
+**Whether.** **Noted and deliberately not**, as one sentence, unless `Q-108` sends somebody into
+that file anyway.
+
 ### Q-92 - The gate's own command reports one failure of eleven, and one flag fixes it
+
 
 
 **to** code · **status** **acted** 2026-09-14 · `97835c6c` · **raised** 2026-09-13 · **source** measuring the masking
