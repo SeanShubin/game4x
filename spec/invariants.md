@@ -136,6 +136,17 @@ attention is a row - so an interface test is given rows, one command, then rows,
 `{when}` is a command as a row, `{then}` is new state as normalized rows. **The shape is not a
 convention of the test format; it is the shape of the thing being tested.**
 
+**There are two runs of that function and they share no state.** The game's run holds the game's
+relations; the interface's run holds the interface's. **Neither can name the other's relations**, so
+a rule of the game reading a menu item is not something that is refused - it is not something that
+can be written.
+
+**The interface affects the game by issuing a command, and that is the only crossing there is.** It
+never writes a game relation.
+
+**And it holds its own rows for whatever game state it shows.** A menu naming a territory has a row
+of its own saying so; the game does not know the menu exists.
+
 ## The game is data
 
 - Every kind of thing, and every recipe that turns some things into others, is data rather than

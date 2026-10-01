@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-604** - Two runs of the one function, and a command is the only crossing · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -28,7 +27,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-236** - `3765818` S-236: a case is the whole mutable state, one entry per description · still open in `docs/notes/proposals.md`
 - **S-235** - `5ac89fe` S-235: the generator named setup.4x, and I reported world.4x after reading setup.4x · still open in `docs/notes/proposals.md`
 - **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`
-- **P-604** - `3abcf0c` P-604 rewritten: three forms shown as rows, because the abstract version was not legible · still open in `decide/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
@@ -137,6 +135,7 @@ it exists to ask.
 - `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594, P-598
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
+- `spec/invariants.md` -> The game is one function - P-75, P-115, P-363, P-603, P-604
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
@@ -146,7 +145,6 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
 - `spec/README.md` -> Rules for this directory - P-440, P-530, P-539, P-546
-- `spec/invariants.md` -> The game is one function - P-75, P-115, P-363, P-603
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
