@@ -11,6 +11,64 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-597 - A generated case writes one row per firing and an authored test writes a map, and nothing says which `{given}` is
+
+**to** sean · **status** open · **raised** 2026-09-30 · **asks** a decision · **kind** recovered · **shape** text · **into** `spec/console.md` -> the state · **source** Sean reading `regression/scenario/01/04-toil.4x`
+
+**The same notation means two things and `spec/` does not say so.** Found by him asking why a
+generated case writes two rows of one rather than one row of two.
+
+```
+regression/scenario/01/04-toil.4x    {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  generated                          {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+                                     {labor where:place-1} -> 1
+                                     {labor where:place-1} -> 1
+
+reviewed/breeding-does-not-reach-    {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  the-citizens-it-just-made          {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  authored                           {food where:place-1} -> 3
+```
+
+**`toil` matched two citizens, so it fired twice, and the generated case records each firing.** The
+authored test records a world. **Both use `{given}` and `{then}`.**
+
+## What `spec/` says, and what it is about
+
+**`spec/console.md`**: *What a thing contains is a map from a description to a quantity.* And: *Each
+distinct description is its own entry, and an entry is never zero.* **A map has one entry per key**,
+so the generated block is not a legal state - and may not be meant as one. Its own header says
+*`{given}` is what the command took and `{then}` is what it made, which is the engine's own account
+of it*, which is a log rather than a world.
+
+**So this may be no contradiction at all, and that is the problem.** Nothing in `spec/` says what a
+test's `{given}` is. The authored tests answer one way and the generator answers the other, and both
+are reasonable readings of a sentence that was written about the console's display.
+
+## Measured
+
+```
+36 scenario cases use {given}/{when}/{then}   108 blocks
+13 of the 36 repeat a row                      26 blocks
+the commands                                   toil 8, end-turn 5 - the rules that match many rows
+the other 129 generated files                  types, primitives and rules use no {given} at all
+```
+
+**That population statement is corrected from a first pass that said zero of 165.** The instrument's
+lookahead stopped at the first row of a block, so it read one row per block and found no duplicate
+anywhere - a plausible zero, in a measurement of whether something was systematic.
+
+## The choice, and both answers cost something
+
+**Coalesce**, and a generated case is a legal state: the same notation means one thing everywhere, and
+a reader diffing a case against a reviewed test is comparing like with like. **The cost is that `-> 2`
+hides how many times the rule fired**, which is real information in a change detector.
+
+**Keep it per firing**, and the case says `toil` fired twice rather than that two citizens ended up
+alike. **The cost is that `{given}` means two things** and a reader has to know which file they are in.
+
+**This lane is not choosing.** A regression case exists to be read by you and deleted by you, so what
+it should show is yours - and either answer wants a sentence in `spec/console.md`, which is why it is
+here rather than filed to the code lane as a defect.
 ### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
 
 **to** sean · **status** open · **raised** 2026-09-30 · **deferred** 2026-09-30, by him: *I will come back to it after I am happy with the first release* - so it waits on the first release rather than on him reading it, and no lane is blocked: nothing is deleted, `S-226` stays held · **asks** a decision · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules · **source** `C-191`, against the rule you promoted the same day
