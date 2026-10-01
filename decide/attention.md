@@ -10,7 +10,6 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 Say *promote P-n*, or say what to change.
 
-- **P-595** - A prototype replicates what it needs and links none of it, and the current one links seven crates · `decide/proposals.md`
 - **P-594** - Upgrade early, and no pin, because a test that names no technology cannot be broken by one · `decide/proposals.md`
 
 ## Answer a question

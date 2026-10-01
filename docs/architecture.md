@@ -272,6 +272,21 @@ hand-written so that results are identical on every platform, which is what make
    this rule is that `crates/game-model` stops holding rules, not that it holds fewer. Relayed
    through no one; said in his own message.
 
+18. **A prototype must not influence the main code, even indirectly, and the way that is kept is
+   that it links none of it.** A prototype that depends on main code puts pressure not to refactor
+   main code in ways that break the prototype; main code that depends on prototype code has stopped
+   being prototype code by definition. **Both directions are forbidden, and the second is forbidden
+   by saying so rather than by anything mechanical.**
+
+   **So a dependency a prototype needs is replicated rather than linked**, and what it replicates is
+   a snapshot of that code as it was when the prototype was made. **It is almost always a smaller
+   and modified version** - a prototype asks one question, and the code that answers it is rarely
+   the code the game needs.
+
+   **A prototype left linking main code is a defect in the arrangement rather than in the
+   prototype.** Nothing a prototype does is wrong because the main code moved; what is wrong is that
+   the main code could not move freely.
+
 ## Open questions
 
 - Does rendering depend on the game logic crate directly, or on a trait-defined view of

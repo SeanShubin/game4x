@@ -10781,6 +10781,7 @@ work the release exists to order.
 | P-591, A command that can be expressed as a row is not needed, and two of them can be today                                  | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-29 |
 | P-592, `P-591` removed a command its own rule protects, and this lane put the wrong row in the table                         | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-30 |
 | P-593, `decide/attention.md`: one generated file for everything waiting on you                                               | `decide/README.md` -> The three things only you can do                                                                                                                                                   | 2026-09-30 |
+| P-595, A prototype replicates what it needs and links none of it, and the current one links seven crates                     | `docs/architecture.md` -> Rules                                                                                                                                                                          | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 
