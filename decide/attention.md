@@ -8,7 +8,11 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-602** - A squad groups units, and two global limits replace the berth · `decide/proposals.md`
+- **P-601** - Two sets of unit tests, and only one of them decides what the game does · `decide/proposals.md`
+- **P-600** - What an approval is about, when it survives, and when it is cleared · `decide/proposals.md`
 
 ## Answer a question
 
@@ -32,7 +36,8 @@ Look at the running game and say whether it held. It stays in the release that s
 
 ## Read a test
 
-**This could not be derived, which is not the same as nothing waiting.** `spec/tests/` holds no `.4x` file, so every record in `reviewed/` answers to nothing and this comparison would report no reading owed
+Nothing. All 57 test(s) in `spec/tests/` have a record in `reviewed/` that matches,
+over 57 record(s).
 
 ## Accept a regression case
 
