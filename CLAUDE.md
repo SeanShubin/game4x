@@ -97,6 +97,15 @@ directory is addressed to nobody, and this one is what every lane is measured ag
 **The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
 has read is red until the code obeys it.
 
+**Moving a record is not creating or deleting one.** The bytes do not change and neither does the
+reading they record, so a lane may move a record as part of a rename it is already making. Sean,
+2026-10-01, waiving fifty-seven re-approvals that the mechanics would otherwise have cost: *moving
+tests does not conceptually change my approval of them, don't let mechanics supersede intent in this
+case*, and **it was always the case that my approval was about what the tests said, not where the
+tests were.** So the rule above is about a reading being created or withdrawn, and a path is not a
+reading.
+
+
 **A record is created and deleted only by the review application, acting as Sean.** Committing
 records the application has already written is publishing rather than approving, and any lane
 may do it. **No lane creates a record, deletes one, or changes what one says** - the bytes are

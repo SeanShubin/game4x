@@ -32,8 +32,7 @@ Look at the running game and say whether it held. It stays in the release that s
 
 ## Read a test
 
-Nothing. All 57 test(s) in `spec/tests/` have a record in `reviewed/` that matches,
-over 57 record(s).
+**This could not be derived, which is not the same as nothing waiting.** `spec/tests/` holds no `.4x` file, so every record in `reviewed/` answers to nothing and this comparison would report no reading owed
 
 ## Accept a regression case
 

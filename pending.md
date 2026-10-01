@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-236** - `3765818` S-236: a case is the whole mutable state, one entry per description · still open in `docs/notes/proposals.md`
 - **S-235** - `5ac89fe` S-235: the generator named setup.4x, and I reported world.4x after reading setup.4x · still open in `docs/notes/proposals.md`
 - **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
