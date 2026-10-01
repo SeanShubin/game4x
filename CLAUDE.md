@@ -204,11 +204,20 @@ Four things the perspectives make necessary, all of which have teeth:
   changes - so a file you stage is committed by whoever commits next, under a message about
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
-  it: the window runs from your `git add` to the moment git builds the commit, and most of it is
-  `hooks/pre-commit`'s own run. **The hook checks the columns twice for that reason**, before its
-  tools and after them, and `hooks/post-commit` reports the instant after it returns, which is
-  the only part nothing can refuse. It has happened three times - twenty-six lines, then twenty-one,
-  then twenty - and every time the work survived and the commit message was what was lost.
+    it: the window runs from your `git add` to the moment git builds the commit. **What bounds what
+  you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
+  working tree and leaves the rest of the index alone. **The rule had no carrier until this
+  sentence**, which is `tools/anchor` again: a hazard described, a remedy not named, and four
+  instances. **The hook checks the columns twice as well**, before its tools and after them, and
+  `hooks/post-commit` reports the instant after it returns, which is the only part nothing can
+  refuse. It has happened four times - twenty-six lines, then twenty-one, then twenty, then **six
+  hundred and twenty-one** - and every time the work survived and the commit message was what was
+  lost. **The window is not only the hook's run.** The fourth was a plain `git commit -m` after a
+  `git add` of two files, which commits the whole index however carefully it was staged; and the
+  lane whose work it took had been running the full gate on purpose before committing, a habit
+  adopted that same day after claiming a gate had passed over a tree that had changed. **A gate run
+  is minutes and all of it is window**, so the fix for one failure widened this one.
+
   **That check serves two purposes**: it is the shape of the race, and the shape of writing
   outside your own column.
 - **Never amend a commit here.** `git commit --amend` replaces a hash, and another perspective may
