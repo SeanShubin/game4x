@@ -34,10 +34,36 @@ with.
 a test disagree, the test is right and the prose is a defect.* **The authority was always in the
 rows**; the comparison just never knew that.
 
-**What is unstated.** Which lines are the behaviour - the rows alone, or the rows plus `{test name:}`
-and `{load}`. Whether a `{load}` naming a different file is a change of behaviour, which it is in
-effect. And whether the comparison normalises whitespace within the behaviour, since a padded row and
-an unpadded one say the same thing.
+## The worry is misattribution, not duplication, and that fixes the direction
+
+**Sean**: *`{test name:}` is not part of the behavior, it is an identifier. But I am not actually
+worried about duplicate tests, I am worried about something I say about one test being applied to
+another.*
+
+**So the two jobs are opposite and conflating them is the failure.** **Logical equivalence is what
+lets a verdict survive** a reword, a reorder or a repad. **The identifier is what stops a verdict
+travelling** to a test he did not say it about. One permits; the other forbids.
+
+**A verdict therefore binds to both**: the identifier and the canonical behaviour. **Either one
+differing means the verdict does not apply** - behaviour changed under the same name, which is his
+*the verdict has to be cleared*; or the same behaviour under a different name, which is a different
+test because the name is the identity.
+
+**And the direction is the requirement.** A verdict must fail to *no verdict* and never to *the wrong
+verdict*. That is what makes a cleared verdict cheap - he reads a test again - and a transferred one
+expensive, because nothing would announce it.
+
+**The existing mechanism already fails the safe way and the app must not improve on it.** A rename
+leaves an orphaned record and an unread test, which `CLAUDE.md` says is *two things he can see and act
+on*. **A page clever enough to match by content would re-attach the verdict across that rename**,
+which is exactly the thing he is worried about - so the danger is not an oversight anybody would
+make, it is a feature somebody would add on purpose.
+
+**What is unstated.** Which lines are the behaviour - the rows alone, or the rows plus `{load}`.
+Whether a `{load}` naming a different file is a change of behaviour, which it is in effect. And
+whether the comparison normalises whitespace within the behaviour, since a padded row and an unpadded
+one say the same thing.
+
 
 ## 2026-10-01 - a denial is a fact about what the code is bound to, and not an item
 
