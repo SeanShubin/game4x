@@ -6,6 +6,12 @@ description = "The command language bound to the game: the only file that knows 
 
 [dependencies]
 command-language.workspace = true
+# **The canonical column order, which `crates/game-model` also needs** - `P-606`: *one function
+# does that normalizing and everything that compares delegates to it.* It lived here, and
+# `game-model` cannot reach this crate because the dependency runs the other way - so it moved to
+# `friendly-notation`, where both can reach it and where it belongs: the order is stated over
+# trait names, and only the friendly form has those.
+friendly-notation.workspace = true
 game-model.workspace = true
 planet-model.workspace = true
 planet-terrain.workspace = true

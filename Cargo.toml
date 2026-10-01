@@ -49,6 +49,7 @@ edition = "2024"
 
 [workspace.dependencies]
 command-language = { path = "crates/command-language" }
+friendly-notation = { path = "crates/friendly-notation" }
 game-model = { path = "crates/game-model" }
 game-console = { path = "crates/game-console" }
 game-front = { path = "crates/game-front" }

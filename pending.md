@@ -29,6 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
+- **E-1** - `95e72cf` E-1: records take spec/console.md's order, and converting is a button he presses · still open in `releases/marking-state.md`
 - **E-2** - `a25a5a4` E-2: he can deny a test, and the promotion check called a correct promotion missing · still open in `releases/marking-state.md`
 - **E-3** - `db4717c` E-3: a case takes a verdict, and an authorization is spent by the run it asks for · still open in `releases/marking-state.md`
 - **D-1** - `06df443` S-234 answers which store, and P-599 asks whether D-1 reaches the script's vocabulary · still open in `releases/rules-become-data.md`

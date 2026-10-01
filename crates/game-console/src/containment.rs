@@ -87,17 +87,17 @@ pub struct Description {
 /// **These are not traits and are never declared as any** - `P-481`. So they cannot collide
 /// with the trait order below, and `no_notation_word_is_a_declared_trait` asserts that rather
 /// than leaving it to be true by luck.
-pub const NOTATION_WORDS: [&str; 5] = ["name", "of", "family", "admits", "kept"];
+pub use friendly_notation::NOTATION_WORDS;
 
 /// The traits the order names before the alphabetical middle, in order.
 ///
 /// **Named here rather than written into the comparison**, so that
 /// `every_trait_the_ordering_names_is_declared` can read them instead of carrying its own copy
 /// of the list - a check against a second copy is checking the copy.
-pub const ORDERED_FIRST: [&str; 1] = ["id"];
+pub use friendly_notation::ORDERED_FIRST;
 
 /// The traits the order names after the alphabetical middle, in order.
-pub const ORDERED_LAST: [&str; 3] = ["occupied", "free", "capacity"];
+pub use friendly_notation::ORDERED_LAST;
 
 impl Description {
     /// **A kind is a relation's name, read from the data rather than chosen from a list.**
