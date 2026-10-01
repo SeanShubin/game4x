@@ -199,6 +199,31 @@ them.
 suite rather than to this surface. **Named rather than attempted**, because half a control that
 deletes regression cases is worse than none.
 
+## Where this actually landed, which is not where its message is
+
+**All of it is inside `b3f0dfbe`, *Publish attention.md and pending.md with P-597*** - the
+specification lane's commit, which carried 621 insertions of which about 600 are this item's.
+**This lane staged by name, ran the gate, and the other lane committed in between.**
+
+**That is the race `CLAUDE.md` describes and it has now happened a fourth time.** *A file you
+stage is committed by whoever commits next, under a message about something else... staging by
+name bounds what you add and not what you commit, so no amount of care closes it.* The three
+before it were twenty-six lines, twenty-one and twenty; **this one is six hundred**, and the
+earlier cases are what made it instantly recognisable.
+
+**The work survived and the commit message is what was lost**, exactly as that paragraph
+predicts. Nothing is missing from the tree.
+
+**No amend, which is the other rule.** `b3f0dfbe` is a hash another lane may already have read,
+so this item is the record instead - and the message of the commit that carries these words is
+where the account of that work now lives.
+
+**One thing this adds to the paragraph rather than confirming it.** The window was not the
+hook's own run this time: the gate was run deliberately *before* committing, which is a habit
+this lane adopted today after claiming *the gate passed* about a tree that had changed. **So
+the fix for one failure widened the window for this one** - a gate run takes minutes, and all
+of it is time another lane can commit in.
+
 ## And `S-229`'s half is done beside it
 
 **The pipeline says which toolchain it installed.** `C-189` reported a red CI after a green gate
