@@ -39,11 +39,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (3)
+### To code (2)
 
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-111** - `says` writes a `Debug` rendering into the dump a person vets · `lenses/quality/outbox.md`
 
 ### To quality (2)
 

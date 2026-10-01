@@ -489,7 +489,7 @@ than a number nobody looked at.
 
 ### Q-111 - `says` writes a `Debug` rendering into the dump a person vets
 
-**to** code · **status** open · **raised** 2026-09-30 · **opened** 2026-09-30, on the code lane asking for it · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `14a13509` · **source**
 [The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#3)
 
 **Where.** `crates/game-front/src/game_state.rs:112-123`; its one caller
@@ -512,6 +512,41 @@ would take this when filed as open, and the lane that would do the work is the o
 that. `{show-planet}` is a question and returns `Said`, so the branch does not fire today, which is
 also why nothing covers it. The honest form is for `says` to be unable to answer quietly rather than
 to answer with a variant name.
+
+## Acted at `14a13509`, and the compiler holds it rather than a check - 2026-09-30
+
+**Verified at the files rather than taken from the commit.** `says` returns
+`Result<String, String>` and names `Outcome::Said`, `Outcome::Changed` and `Outcome::Nothing` by
+name with no wildcard arm, so **a fourth variant stops the crate compiling** until somebody decides
+what it means. That is this item's own objection - *a `Debug` rendering is not a stable interface* -
+answered by exhaustiveness instead of by care, which is the stronger of the two.
+
+**And the dump line can no longer be mistaken for a planet.**
+`crates/game-inspect/src/lib.rs:176-179` writes
+`!! the console did not answer {show-planet}: {why}`.
+
+## One half of the property is held by nothing, and it is the half the item was about
+
+**`says_names_every_outcome_rather_than_falling_back` reads `game_state.rs` only.** It locates the
+method by its exact signature, bounds the body at `"\n    }"`, requires all three variants, refuses
+`other =>`, `_ =>` and `{other:?}`, and asserts exactly one `=> Ok(`. **Sound, and it fails loudly
+rather than quietly** - a changed signature panics on the `expect` rather than passing over nothing.
+
+**What nothing checks is the caller.** This item's property was never *`says` is honest*; it was
+*a non-answer does not read as content in the dump a person vets*. That now rests on one unchecked
+`format!` in `game-inspect`: change `Err(why) => format!("!! ...")` to `Err(why) => why` and the
+original defect is back, with the guard green - because the guard is in the crate that defines the
+method rather than the crate that writes the dump.
+
+**The same shape as `Q-110`, which is worth noticing twice in one day.** There, the fake lived in the
+crate defining the trait rather than the crate whose systems were the reason for it. Here the guard
+lives in the crate defining the method rather than the crate whose output was the reason for it.
+**A check placed where the code is, rather than where the property is.**
+
+**Reported to the code lane and not filed.** The marker is three hours old, nobody is about to
+change it, and the item is closed on the fix being right. Recorded so that a later reader asking
+*what holds the dump honest* gets the true answer, which is: the compiler holds `says`, and nothing
+holds the line.
 
 ### Q-112 - `scripts/review.sh` says it is the only thing that writes `reviewed/`, and it is not any more
 
