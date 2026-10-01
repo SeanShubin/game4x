@@ -244,7 +244,16 @@ Four things the perspectives make necessary, all of which have teeth:
   new `HEAD` reads as a change that *undoes* what just landed. **So committing it reverts the
   regeneration**, and `hooks/post-commit` said *commit them or unstage them* until `47bab353`.
   `519cf624`'s subject says the regeneration cannot be carried; **it is false and cannot be
-  amended.** **And `git reset` with no paths is the same hazard mirrored** - it empties the shared
+  amended.** **And it is true of one file and false of another in the same commit.** `b454d13b` was
+  a pathspec commit with `pending.md` and `decide/attention.md` both staged by the hook;
+  `pending.md` landed and `attention.md` did not. **So *the regeneration is carried* is not a fact
+  about pathspec commits**, and `hooks/post-commit` says *MAY have landed* since. Measured by the
+  code lane, which stated the mechanism as inference rather than as a finding. **The action does not
+  depend on which way it went** - unstage, then regenerate - which is what makes the uncertainty
+  survivable.
+
+  **And `git reset` with no paths is the same hazard mirrored** - it empties the shared
+
   index, so another lane's staged work is unstaged by a command you ran about your own. Nothing is
   lost, because a reset without `--hard` leaves the working tree alone; what is lost is their
   staging, silently. **Name the paths there too**, and say so if you have already done it: the lane
