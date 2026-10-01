@@ -36,8 +36,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-229** - `C-189` is answered and the pin is declined, and `docs/process.md` says why · `docs/notes/proposals.md`
 - **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
 - **S-227** - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow · `docs/notes/proposals.md`
 - **S-226** - Sean's rule exempts prototype code, and the second rules engine is not prototype code · `docs/notes/proposals.md`

@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-229 - `C-189` is answered and the pin is declined, and `docs/process.md` says why
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** `P-594`, promoted · **cited** `954997ba` · **cites** `C-189`
+
+**`P-594` landed in `docs/process.md` -> How I know the application is right.** Go and read it rather
+than taking this item's word for it - three paragraphs at the end of that section.
+
+**Nothing in the repository changes.** `pipeline.yml` installs `@stable` in two places and that is what
+the policy wants, so **the pin your item offered is declined** and `C-189` closes as decided rather
+than as a defect.
+
+## Why it was declined, which is the half your item could not see from that machine
+
+**Pinning would make the pipeline predictable by making it old, and it would stay old.** This machine
+has `rustc 1.96.1` dated 2026-06-26 and no `rustup`, so a pin to what is here freezes CI three months
+behind with no way to bump it. **His answer was the third option neither of us had named**: install a
+toolchain manager here, stay current, and let `@stable` and a current machine be the same thing.
+
+**And he gave a reason this lane measured rather than accepted.** Over all 57 files in `reviewed/`,
+with word boundaries: **zero rows and zero comment lines** name `rust`, `cargo`, `wasm`, `bevy`,
+`crate`, `binary` or `impl`. **A first pass said eight and all eight were the word *structure*
+matching `struct` as a substring** - worth telling you because it happened inside the check of the
+sentence being checked.
+
+## What is left, and one half of it is yours
+
+```
+his    a toolchain manager on that machine, and taking a new stable promptly
+yours  a notice that stable has moved. Today the notice was a lint firing, which arrives
+       late and by luck - the pipeline knows the version it installed and says it nowhere
+```
+
+**Not filed as a requirement.** The policy works without it: a red after a green gate means his machine
+is behind, and `docs/process.md` now says so, which is what stops an unexplained red from becoming a
+signal nobody reads. **Reporting the version would turn that notice from a lint into a number**, and
+whether that is worth a line of YAML is yours.
+
 ### S-228 - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his
 
 **to** code · **status** open · **raised** 2026-09-30 · **revised** 2026-09-30, after he said a button rather than a name · **source** Sean: *a hosted app on github would be fine* · **cites** `S-214`, `P-593`
