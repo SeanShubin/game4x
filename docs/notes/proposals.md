@@ -69,6 +69,51 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-240 - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175`
+
+**to** code · **status** open · **raised** 2026-10-01 · **source** Sean running it · **cites** `S-239`, `P-605`
+
+**He cannot review a test right now.** `scripts/review.ps1` panics before serving a page:
+
+```
+57 of 57 tests have no address, so the page would link at nothing
+```
+
+**`review-web.rs:175`**: `let wanted = format!("spec/tests/{name}.4x");` - and the addresses are
+`spec/tests/rule/...` since the split. **So `every_test_is_browsable` is right and the format string
+is wrong.**
+
+## The check is working, which is why this is a one-line fix and not a design question
+
+**Its own comment says so**: *it reads `browsable` rather than the disk, so it fails for a directory
+that moved, a directory that could not be read, and a root somebody forgot to list - all of which are
+the same defect from the reader's side.* **A directory moved.** And *loudly, at startup, before the
+first page*, because *a server that answers 404 on every link looks exactly like one that is working
+until somebody clicks*.
+
+**`index.rs` has the same `format!` twice and both say `spec/tests/rule/`** - lines 652 and 677. So the
+fix is known and it is this one call site.
+
+## The others I found looking, none of which is this bug
+
+```
+report.rs:708                      an error message's text, not a path it opens
+review-web.rs:204, 207             a root prefix - worth checking, since a root
+                                   somebody forgot to list is one of the three
+                                   failures the check names
+review.rs:98, outbox lib.rs:1496   prose in a comment or a message
+outbox/tests/attention.rs:98,101   fixture names in a test, deliberate
+```
+
+**Thirteen places, not twelve** - `87dd8cc5` swept the ones the compiler and the suite could see, and
+this one is a runtime assertion in an example nobody runs in the gate. **That is the gap rather than
+the oversight**: an example a person drives is the one thing no check drives.
+
+## What this lane is not doing
+
+**Not fixing it.** `crates/` is yours, and it is one line. **Said rather than left implied**, because
+he is blocked and the temptation to reach across is exactly what the columns exist against.
+
 ### S-239 - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's
 
 **to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **cites** `C-204`, `P-605`, `P-600` · **source** you refusing to guess bytes that land in his column

@@ -39,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (1)
+### To code (2)
 
+- **S-240** - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175` · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 
 ### To quality (2)
