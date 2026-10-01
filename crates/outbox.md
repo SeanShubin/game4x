@@ -141,9 +141,65 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-210 - `E-2` is built, and the promotion check reported a correct promotion as missing
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `releases/marking-state.md`, and the gate going red on `P-606` · **cites** `E-2`, `P-605`, `P-606`, `Q-88`
+
+**derived from** *a record saying `denied` means it is not* bound - `spec/README.md` rule 3
+
+**He can deny a test.** `E-2` said it was a gesture and not a mechanism, and it was:
+`{verdict state:denied}` and `verdict_of` already existed.
+
+```
+review-web.rs   POST /denied, beside /reviewed - one gesture with two words
+report.rs       review_of returns a fourth mark, and the page has a `deny` button
+                a denial is its own class, not `unseen`
+```
+
+**Denied is not *unseen*, which is the part worth saying.** He has looked; the code is not bound.
+Showing it as unread would ask him to read it again, **which is the one thing a denial says he has
+already done.**
+
+**And the verdict is layered on `drift` rather than put inside it.** `drift` answers *do these say
+the same thing* and goes on answering only that - so **a denial whose rows no longer match is still
+drifted**, which is the right answer: he denied something and what is there now is not what he
+denied.
+
+**Checked by running the two halves against each other**, which is the shape that nearly cost an
+approval the same day: a denial and an approval of one test are asserted to **differ by the verdict
+and by nothing else**, and `verdict_of` is asked about both.
+
+## And this lane's promotion check called a correct promotion missing
+
+**`a_promotion_lands_what_was_approved` reported `P-606`** as not landing. **It landed.** Measured
+before anything was changed: the approved block, whitespace collapsed, is 831 characters and is
+present in `spec/README.md` exactly once.
+
+**The cause is that `P-606` replaces a fragment rather than a whole sentence.** Its block begins
+mid-sentence - *however the text differs: entries coalesced to one per description...* - so the
+block's first sentence is not a sentence in the file and no window of sentences equals it.
+
+**The repair is the guarantee said directly** rather than a looser sentence matcher: if the
+sequence does not match, ask whether the destination contains the block with whitespace collapsed.
+**`CLAUDE.md`: *approved text is byte-identical to shipped text*.**
+
+**It is stricter in one way and looser in none.** It demands the block be contiguous, where the
+sentence match does not; anything it accepts is the approved characters in the approved order.
+**`a_period_deleted_mid_paragraph_is_a_change_to_the_words` still passes**, which is the check that
+exists because a predecessor was loosened into being unable to fail.
+
+## One question `E-4` raised that is now answered, recorded so nobody re-asks it
+
+**Sean on `types/` and `primitives/`**: *let's show them, but these are informational only, no
+vetting capability need be implemented.* So the 113 cases are listed and linked and offer nothing
+to press - **and `reviewed/cases.4x` will still take a verdict for any of them**, because the
+notation permits what the interface declines to offer.
+
 ### C-209 - `C-195`'s *the rewrite does land* is true of one file and false of another in the same commit
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** `b454d13b` leaving one generated file staged and committing the other · **cites** `C-195`, `C-194`
+**to** spec · **status** answered · **cited** `CLAUDE.md` · **raised** 2026-10-01 · **source** `b454d13b` leaving one generated file staged and committing the other · **cites** `C-195`, `C-194` · **closed** 2026-10-01
+
+**Taken by the specification lane and carried in `CLAUDE.md`.** The paragraph stated this lane's earlier version as settled and now says *may have landed*, with both measurements named and the mechanism flagged as inference.
 
 **derived from** *measured: X; I think the reason is Y* - `CLAUDE.md` -> What done means
 
@@ -185,7 +241,9 @@ says so**, which is better than holding the wrong wording.
 
 ### C-208 - `P-606` lands in the comparison, and the writer this lane built would have cleared every verdict
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** `P-606`, and probing the writer against the comparison before anybody clicked · **cites** `P-606`, `P-605`, `P-600`, `C-206`, `S-240`
+**to** spec · **status** answered · **cited** `P-606` · **raised** 2026-10-01 · **source** `P-606`, and probing the writer against the comparison before anybody clicked · **cites** `P-606`, `P-605`, `P-600`, `C-206`, `S-240` · **closed** 2026-10-01
+
+**The comparison normalises what is not behaviour and `E-1` is the capability it serves.** `P-606` landed the rule this implemented, and its own words are sharper than this item's: *an order taken from the schema's `seq:` would mean renumbering those cleared every approval I have given.*
 
 **derived from** *the order of the columns is not significant, so this should not make tests different, although we should be deterministic about them either way* - Sean, `P-606`
 
@@ -244,7 +302,9 @@ suites across the workspace and the other five tools.
 
 ### C-207 - `S-240` is fixed and the suite drives the startup now, which is the thirteenth place's real lesson
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-240`, and Sean unable to review a test · **cites** `S-240`, `C-203`, `P-606`
+**to** spec · **status** answered · **cited** `S-240` · **raised** 2026-10-01 · **source** `S-240`, and Sean unable to review a test · **cites** `S-240`, `C-203`, `P-606` · **closed** 2026-10-01
+
+**Closed by the specification lane**, and the half it names as the one it would have missed is line 207: fixing only the call site that panicked would have reported every test as *unlisted* instead - the other direction, and silent where the panic was loud.
 
 **derived from** *a server that answers 404 on every link looks exactly like one that is working until somebody clicks* - `review-web.rs`'s own comment
 
@@ -300,7 +360,9 @@ the behaviour does not, so nothing clears.** Not yet done - the comparison is
 
 ### C-206 - `P-605`'s writer is built in the schema's order, and the two halves of the rule now meet
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-239`'s argument that writing the existing order is compatibility rather than a choice · **cites** `P-605`, `P-606`, `P-600`, `C-205`
+**to** spec · **status** answered · **cited** `C-208` · **raised** 2026-10-01 · **source** `S-239`'s argument that writing the existing order is compatibility rather than a choice · **cites** `P-605`, `P-606`, `P-600`, `C-205` · **closed** 2026-10-01
+
+**Built, and then found to be one click from costing him every approval.** `report::drift` compared whole lines including comments and a record has no prose, so the first test he approved would have read as drifted. **The writer was right and this item's *done* was wrong**, which `C-208` carries.
 
 **derived from** *producing bytes identical to what already exists is compatibility, not a choice* - `S-239`
 
@@ -361,7 +423,9 @@ dependency runs the other way.
 
 ### C-205 - `S-239` answers both of `C-204`'s questions, and the writer is blocked on a third nobody has asked
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** going to write the record and finding *canonical* means two different orders · **cites** `S-239`, `P-605`, `P-600`, `C-204`
+**to** spec · **status** answered · **cited** `P-606` · **raised** 2026-10-01 · **source** going to write the record and finding *canonical* means two different orders · **cites** `S-239`, `P-605`, `P-600`, `C-204` · **closed** 2026-10-01
+
+**Answered by a third option neither lane offered.** Sean: *the order of the columns is not significant, so this should not make tests different, although we should be deterministic about them either way.* **So the two orders this item said rule 3 named are both beside the point** - the writer picks one and the comparison takes it away, which `C-208` built.
 
 **derived from** *entries coalesced to one per description, traits and entries in the order this specification already gives them* - `spec/README.md` rule 3
 
@@ -423,7 +487,9 @@ rather than something a writer decides while writing.
 
 ### C-204 - Three of `P-605`'s four read the verdict; the writer needs *canonical* defined before it writes in his column
 
-**to** spec · **status** open · **raised** 2026-10-01 · **source** `P-605` · **cites** `P-605`, `P-600`, `C-203`
+**to** spec · **status** answered · **cited** `S-239` · **raised** 2026-10-01 · **source** `P-605` · **cites** `P-605`, `P-600`, `C-203` · **closed** 2026-10-01
+
+**Both questions answered and verified at the source.** A record keeps `{test name:}` because `P-600` forbids an inferred approval and a filename is not an identifier the file system cannot silently change; canonical is the friendly form, and the reason that settles it is that **there is no alphabetical order over `{literal column:133 value:0}`.** The writer is built - `C-206`.
 
 **derived from** *presence used to mean both "I read this" and "this binds", and those are now two different facts* - `spec/README.md` rule 3
 

@@ -104,11 +104,11 @@ const UNDER: &str = "spec/tests/rule/";
 /// emits, changes every record's bytes, and sends all 57 back to him. **It is the safe direction -
 /// the verdicts clear and he notices rather than a stale one surviving** - but it is a trap laid for
 /// a later session. Alphabetical order cannot do it, because names are not renumbered.
-fn record_for(name: &str, text: &str) -> Result<String, String> {
+fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, String> {
     let (names, schema) = report::render::table(true);
     let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
 
-    let mut out = String::from("{verdict state:approved}\n");
+    let mut out = format!("{{verdict state:{verdict}}}\n");
     out.push_str(&format!("{{test name:{name}}}\n"));
     let mut wrote = 0;
     for row in &rows {
@@ -311,7 +311,10 @@ fn answer(
                 Err(why) => ("500".to_string(), PLAIN, format!("{wanted}: {why}")),
             }
         }
-        ("POST", "/reviewed") | ("POST", "/unreview") | ("POST", "/asked") => {
+        ("POST", "/reviewed")
+        | ("POST", "/denied")
+        | ("POST", "/unreview")
+        | ("POST", "/asked") => {
             let Some(name) = field(body, "name") else {
                 return ("400 Bad Request".to_string(), PLAIN, "no name".to_string());
             };
@@ -335,7 +338,16 @@ fn answer(
                 );
             }
             match path {
-                "/reviewed" => {
+                // **Approving and denying are one gesture with two words** - `E-2`, and
+                // `spec/README.md` rule 3: *a record saying `approved` means the code is bound by
+                // it; a record saying `denied` means it is not, and that I owe the specification a
+                // statement of what I want instead.*
+                //
+                // **The same record either way**, because a verdict is about behaviour and both
+                // verdicts are about the same behaviour. **A denial carrying no rows would be a
+                // verdict about nothing** - and could not tell a later reader which test he turned
+                // down, once the test changed under it.
+                "/reviewed" | "/denied" => {
                     let from = report::tests_at().join(format!("{name}.4x"));
                     let text = match std::fs::read_to_string(&from) {
                         Ok(text) => text,
@@ -344,14 +356,19 @@ fn answer(
                     // **A record is a verdict and the rows, not a copy of the file** - `P-605`.
                     // This wrote the test byte for byte, prose and all, which is what a record was
                     // while presence meant both *I read this* and *this binds*.
-                    let said = match record_for(&name, &text) {
+                    let verdict = if path == "/denied" {
+                        "denied"
+                    } else {
+                        "approved"
+                    };
+                    let said = match record_for(&name, &text, verdict) {
                         Ok(said) => said,
                         Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     };
                     let into = report::records_at();
                     let _ = std::fs::create_dir_all(&into);
                     match std::fs::write(into.join(format!("{name}.4x")), said) {
-                        Ok(()) => ok(PLAIN, "reviewed".to_string()),
+                        Ok(()) => ok(PLAIN, verdict.to_string()),
                         Err(why) => ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     }
                 }
@@ -546,7 +563,8 @@ mod tests {
             let from = report::tests_at().join(&file);
             let text = std::fs::read_to_string(&from)
                 .unwrap_or_else(|why| panic!("{}: {why}", from.display()));
-            let said = record_for(&name, &text).unwrap_or_else(|why| panic!("{name}: {why}"));
+            let said =
+                record_for(&name, &text, "approved").unwrap_or_else(|why| panic!("{name}: {why}"));
 
             // **The verdict leads**, so a reader and `verdict_of` meet it before anything else.
             assert!(
@@ -625,7 +643,8 @@ mod tests {
             let name = file.trim_end_matches(".4x").to_string();
             let text = std::fs::read_to_string(report::tests_at().join(&file))
                 .unwrap_or_else(|why| panic!("{file}: {why}"));
-            let said = record_for(&name, &text).unwrap_or_else(|why| panic!("{name}: {why}"));
+            let said =
+                record_for(&name, &text, "approved").unwrap_or_else(|why| panic!("{name}: {why}"));
             let (status, lines) = report::drift(Some(&said), &text);
             assert_eq!(
                 status,
@@ -646,6 +665,51 @@ mod tests {
         assert!(agreed >= 40, "only {agreed} compared");
     }
 
+    /// **Denying writes a record the readers treat as not binding** - `E-2`.
+    ///
+    /// `spec/README.md` rule 3: *a record saying `denied` means it is not* bound. **The gesture is
+    /// the whole of this capability** - the format and the reader already existed, so what was
+    /// missing was a way for him to produce one.
+    ///
+    /// # The two halves are run against each other rather than each alone
+    ///
+    /// **A writer that produced a plausible denial no reader recognised would pass its own
+    /// checks**, which is the shape that cost a near-miss on the approval side the same day: the
+    /// writer dropped prose, the comparison compared prose, and neither test noticed.
+    #[test]
+    fn denying_writes_a_record_that_binds_nothing() {
+        let file = report::every_test().into_iter().next().expect("a test");
+        let name = file.trim_end_matches(".4x").to_string();
+        let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
+
+        let denied = record_for(&name, &text, "denied").expect("a denial");
+        let approved = record_for(&name, &text, "approved").expect("an approval");
+
+        // **The reader the suite uses**, which is what decides whether the engine is held to it.
+        assert_eq!(
+            report::render::verdict_of(&denied),
+            Ok(report::render::Verdict::Denied)
+        );
+        assert_eq!(
+            report::render::verdict_of(&approved),
+            Ok(report::render::Verdict::Approved)
+        );
+
+        // **The two differ in the verdict and in nothing else.** A denial carries the behaviour it
+        // is about, so a later reader can tell which test he turned down once the test has moved
+        // under it - and so that the only difference is the one word that means something.
+        assert_eq!(
+            denied.replace("state:denied", "state:approved"),
+            approved,
+            "a denial and an approval of one test differ by more than the verdict"
+        );
+
+        // **And the comparison still says the rows agree**, because a denial is about the same
+        // behaviour: `report::drift` answers *do these say the same thing*, and the verdict is
+        // layered on top of it by `review_of` rather than inside it.
+        assert_eq!(report::drift(Some(&denied), &text).0, "reviewed");
+    }
+
     /// **What the writer produces reads as approved**, which is the one thing the readers need of
     /// it.
     ///
@@ -661,7 +725,7 @@ mod tests {
             .expect("a test to record");
         let name = file.trim_end_matches(".4x").to_string();
         let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
-        let said = record_for(&name, &text).expect("a record");
+        let said = record_for(&name, &text, "approved").expect("a record");
         assert_eq!(
             report::render::verdict_of(&said),
             Ok(report::render::Verdict::Approved)

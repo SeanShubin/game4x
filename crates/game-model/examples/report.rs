@@ -316,7 +316,22 @@ fn orphaned() -> Vec<String> {
 pub fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
     let now = std::fs::read_to_string(tests_at().join(format!("{stem}.4x"))).unwrap_or_default();
     let read = std::fs::read_to_string(records_at().join(format!("{stem}.4x"))).ok();
-    drift(read.as_deref(), &now)
+    let (mark, lines) = drift(read.as_deref(), &now);
+    // **A fourth status, because `P-605` made presence two facts** - `spec/README.md` rule 3: *no
+    // record means I have not looked; a record saying `approved` means the code is bound by it; a
+    // record saying `denied` means it is not.*
+    //
+    // **Layered here rather than inside `drift`**, which answers *do these say the same thing* and
+    // should go on answering only that. A denial whose rows no longer match the test is still
+    // drifted, and that is the right answer: he denied something, and what is there now is not
+    // what he denied.
+    if mark == "reviewed"
+        && let Some(record) = read.as_deref()
+        && render::verdict_of(record) == Ok(render::Verdict::Denied)
+    {
+        return ("denied", lines);
+    }
+    (mark, lines)
 }
 
 /// The same comparison over the text rather than over the disk.
@@ -943,10 +958,17 @@ not as expected
         } else {
             " open"
         };
-        let seen_class = if mark == "reviewed" { "seen" } else { "unseen" };
+        // **Denied is its own class and not *unseen*.** He has looked; the code is not bound.
+        // Showing it as unread would ask him to read it again, which is the one thing a denial
+        // says he has already done.
+        let seen_class = match mark {
+            "reviewed" => "seen",
+            "denied" => "denied",
+            _ => "unseen",
+        };
         // **The controls exist only when something is listening**, which is why `build` is told.
         let acts = if live {
-            "<span class=\"acts\"><button data-do=\"reviewed\">reviewed</button><button data-do=\"asked\">needs changing</button><button data-do=\"unreview\">unreview</button></span>"
+            "<span class=\"acts\"><button data-do=\"reviewed\">reviewed</button><button data-do=\"denied\">deny</button><button data-do=\"asked\">needs changing</button><button data-do=\"unreview\">unreview</button></span>"
         } else {
             ""
         };

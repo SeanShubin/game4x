@@ -565,11 +565,28 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
                 };
             }
             if there.windows(want.len()).any(|run| run == want.as_slice()) {
-                Verdict::Landed
-            } else {
-                Verdict::Missing {
-                    what: want[0].chars().take(70).collect(),
-                }
+                return Verdict::Landed;
+            }
+            // **A promotion may replace a fragment rather than a whole sentence, and then the
+            // sequence above cannot see it.** `P-606` replaced a phrase inside an existing
+            // sentence - *however the text differs: entries coalesced to one per description...* -
+            // so the approved block's first sentence begins mid-sentence in the file and no window
+            // of sentences equals it. **It landed verbatim and this reported it missing.**
+            //
+            // **So the fallback is the guarantee said directly**: `CLAUDE.md`'s *approved text is
+            // byte-identical to shipped text*, with whitespace collapsed because wrapping is
+            // structure. **It is stricter than the sentence match in one way** - it demands the
+            // block be contiguous - **and looser in none**: anything it accepts is the approved
+            // characters in the approved order, which is what the sentence match is an
+            // indirection for.
+            //
+            // **Measured before it was written**: `P-606`'s block, whitespace collapsed, is 831
+            // characters and is present in `spec/README.md` exactly once.
+            if flat(destination).contains(&flat(block)) {
+                return Verdict::Landed;
+            }
+            Verdict::Missing {
+                what: want[0].chars().take(70).collect(),
             }
         }
         "rows" => {
