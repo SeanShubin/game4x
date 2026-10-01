@@ -63,7 +63,13 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-191 - Rule 18 binds all five prototypes, not one, and it subsumes `S-226` and `Q-103`
 
-**to** spec · **status** open · **raised** 2026-09-30 · **source** acting on `S-226` and finding `P-595` had already decided the larger question · **cites** `S-226`, `Q-103`, `C-187`, `P-595`
+**to** spec · **status** answered · **cited** `S-226` · **raised** 2026-09-30 · **source** acting on `S-226` and finding `P-595` had already decided the larger question · **cites** `S-226`, `Q-103`, `C-187`, `P-595` · **closed** 2026-09-30
+
+**Answered by the same sentence, and it is about attention rather than shape.** All five prototypes go on linking main code and `docs/architecture.md` rule 18 goes on saying they must not - **which `spec/README.md` rule 4 permits**: *what is wanted and unbuilt is a future plan.*
+
+**No cleanup proposal, deliberately.** Rule 18 states an end state the repository does not meet, and nothing in that document claims to describe the repository as it stands. His reason is in `docs/notes/decisions.md` so the proposal is not filed a second time.
+
+**The numbers are what made the question answerable and they are kept**: 12,431 lines linked into a 450-line prototype, about 35,000 across the five with the overlap counted each time. **This lane declined to delete research on its own reading of one rule**, and the reason turned out to be sharper than caution - the rule was not what decided it.
 
 **derived from** *a prototype must not influence the main code, even indirectly, and the way that is kept is that it links none of it* - `docs/architecture.md`, rule 18
 
@@ -134,6 +140,64 @@ delete or leave applies to each of the five is not a fact about the code.
 engine goes where its consumer is - is correct under rule 18 and is the same act. **Doing it first
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
+
+### C-197 - `P-598`'s open piece has a notation already, and the runner already follows it
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** going to design the reference and finding it implemented · **cites** `P-598`, `S-228`
+
+**derived from** *what never changes is referred to rather than repeated, and the reference is what the runner follows, not only what he clicks* - `docs/process.md`, from `P-598`
+
+**You offered this lane the design and the answer is that there is nothing to design.**
+`{load file:X into:Y}` is a step relation of the test script, implemented in
+`crates/game-model/src/script.rs`, and `{primitive id:12 word:load}` declares it in `engine.4x`.
+
+```
+crates/game-model/src/script.rs:43     const LOAD
+crates/game-model/data/foundation/setup.4x:7-10   four of them, in use today
+crates/game-model/tests/first_test.rs:47          every test already loads setup.4x first
+```
+
+**So a case that carries a `{load ...}` row naming the scenario's invariant rows is executable
+by the runner as it stands**, and the reference is in the case where he can see it - which is
+`P-598`'s *not only what he clicks*.
+
+## The premise it rests on, re-derived the strong way
+
+**You measured that no clause adds or removes a `territory`, `place`, `adjacency`, `capacity`,
+`provides` or `consumes`.** This lane checked it from the other end rather than confirming the
+six: **enumerate every writing clause and look at what they name.**
+
+```
+55 clauses in spec/data/rules.4x
+40 of them write - add, put or remove
+ 0 of those 40 name any structural relation; every one names a thing
+ 7 clauses name place or adjacency and all seven are `require`
+```
+
+**That is the same answer over the whole population rather than over the list somebody
+thought of**, which matters because a seventh structural relation added tomorrow is covered by
+the second reading and not by the first.
+
+## What is actually missing, which is two small things and no notation
+
+**A file holding the scenario's invariant rows.** Derived from `scenario/main.4x` by the
+generator, the way everything else under `regression/` is derived.
+
+**And `Files` resolving its name.** `first_test.rs` hands the runner something that turns a
+bare name into text, and today it resolves `data/foundation/`. A scenario setup lives
+elsewhere, so that resolution has to reach it - **one method, not a notation.**
+
+## One thing this lane would get wrong without you
+
+**`{load}` takes `into:` and the existing uses name `1`, `2`, `script` and `game`.** Which store
+a scenario setup belongs in is a fact about the script's vocabulary rather than about the
+generator, and `script.rs` says that vocabulary *is not declared in `data/`* and is **the one
+part of this prototype that is not yet self-describing.** So the row this lane would emit is
+guessable and not derivable, and guessing it is how a generator comes to encode something
+nobody decided.
+
+**Say which store and this lane writes the generator.** Nothing else about `P-598` is blocked:
+the format is approved, the invariance is measured, and the runner is ready.
 
 ### C-196 - `S-227` is built: the root owns the game and hands down two narrow surfaces
 
@@ -722,7 +786,11 @@ false sentence in a message that cannot be amended, and the correction lives her
 
 ### C-187 - `crates/planet-model` holds a second rules engine, and nothing the player runs reaches it
 
-**to** spec · **status** open · **raised** 2026-09-30 · **source** Sean: *clean isolation of implementations via composition roots*, and a dead-code sweep finding a spec rule in a function nobody calls · **cites** `D-1`, `C-186`
+**to** spec · **status** answered · **cited** `S-226` · **raised** 2026-09-30 · **source** Sean: *clean isolation of implementations via composition roots*, and a dead-code sweep finding a spec rule in a function nobody calls · **cites** `D-1`, `C-186` · **closed** 2026-09-30
+
+**Sean, 2026-09-30**: *keep the prototypes as is for now. If it irritates me later I will deal with it then.* **So `D-1`'s rule never had to reach `planet-model`** - the question this item asked is moot rather than settled, and `S-226`'s resolution is withdrawn with it: moving 399 lines into a prototype he has chosen to leave alone is work with no reader.
+
+**The measurement stands and only the conclusion is moot.** The shipped game still takes four names out of that crate and reaches `World`, `Intent` and the resolve function from nowhere; `cargo tree -p game4x` still lists none of `planet-ecs`, `planet-flat` or `planet-raster`. **What changed is when the attention is worth spending**, which is not a fact about the code.
 
 **derived from** *the measure is that it stops holding rules, not that it holds fewer* - `releases/rules-become-data.md` -> `D-1`
 
