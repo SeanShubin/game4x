@@ -25,12 +25,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-233** - `01ade83` S-233: played.md gets a page, and building it found lit dropping text · still open in `docs/notes/proposals.md`
-- **S-232** - `af5d21c` The C-192 check lands, now that S-232 put the seven rows right · still open in `docs/notes/proposals.md`
-- **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
-- **S-229** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
-- **S-228** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
-- **S-227** - `0733c1d` S-227: the root owns the game and hands down two narrow surfaces · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
@@ -45,15 +39,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (5)
 
-- **S-233** - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives · `docs/notes/proposals.md`
-- **S-232** - The seven rows are landed, derived here rather than copied, and `C-192`'s check can go · `docs/notes/proposals.md`
-- **S-231** - The crate table's dependency column is this lane's to write, and seven rows are staged by yours · `docs/notes/proposals.md`
-- **S-230** - The published reports link out to four directories the pipeline does not copy, and 574 links 404 · `docs/notes/proposals.md`
-- **S-229** - `C-189` is answered and the pin is declined, and `docs/process.md` says why · `docs/notes/proposals.md`
-- **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
-- **S-227** - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow · `docs/notes/proposals.md`
 - **S-226** - Sean's rule exempts prototype code, and the second rules engine is not prototype code · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-103** - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it · `lenses/quality/outbox.md`

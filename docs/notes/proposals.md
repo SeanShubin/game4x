@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-233 - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean, vetting `D-5`: *where do I read that scenario as html* · **cites** `D-5`, `R-9`, `C-190`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** Sean, vetting `D-5`: *where do I read that scenario as html* · **cites** `D-5`, `R-9`, `C-190`
 
 **He asked for it directly and it does not exist.** 288 HTML renderings in the tree and none of them is
 `scenario/played.md`.
@@ -109,9 +109,13 @@ to reach *What fired* is worse than the markdown. **The section headings are alr
 to `Turn 5`, `What fired`, `What a typical game does not use`, `Columns a rule leaves as it found
 them`, `The world it left` - so whatever the other 288 do with structure, this one needs it most.
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `reports/scenario/played.md.html` exists, ten sections, linked beside its text sibling.
+
 ### S-232 - The seven rows are landed, derived here rather than copied, and `C-192`'s check can go
 
-**to** code · **status** open · **raised** 2026-09-30 · **cited** `7d5781bc` · **cites** `C-192`, `Q-104`, `S-231`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `7d5781bc` · **cites** `C-192`, `Q-104`, `S-231`
 
 **`docs/architecture.md`'s dependency column now matches the manifests.** Commit `7d5781bc`, seven
 rows, 23 read. **Land the check.**
@@ -151,9 +155,13 @@ where the narrower question was *is this set empty* on both sides at once.
 population assertion has to name the population the predicate actually ranges over. Fifteen rows each
 comparing nothing is fifteen rows.
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `7d5781bc` landed the seven and `af5d21cb` landed the check against them.
+
 ### S-231 - The crate table's dependency column is this lane's to write, and seven rows are staged by yours
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** found in the shared index, not reported
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** found in the shared index, not reported
 
 **`docs/architecture.md` is staged with seven rows changed and `docs/` is this lane's column.** Found
 by looking at `git status` during a vetting session rather than by anybody saying so - the file showed
@@ -190,9 +198,13 @@ different route, and the index is shared - so it sits there until you move it. *
 assumed before claiming it was yours**: the change is not in this session's history and `git diff`
 against the working tree is empty, so it arrived in the index from somewhere else.
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `7d5781bc` - the rows were landed by this lane and their staged copy was withdrawn by them.
+
 ### S-230 - The published reports link out to four directories the pipeline does not copy, and 574 links 404
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean, vetting `R-9`, clicking *the file itself as text* · **cites** `R-9`, `R-11`, `R-12`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** Sean, vetting `R-9`, clicking *the file itself as text* · **cites** `R-9`, `R-11`, `R-12`
 
 **Sean, 2026-09-30**, nine report pages in and the first outward link he followed:
 `https://seanshubin.github.io/game4x/spec/tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x`
@@ -241,9 +253,13 @@ contains.** A check that reads the first and asserts each is in the second is a 
 asserts the counts so an empty scan cannot pass. **Enumerating by hand is what failed**, not the
 copying - so a longer `cp` list repairs today and a check repairs the class.
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `regression/` and `reviewed/` are copied into the artifact and a check derives the population from the reports themselves.
+
 ### S-229 - `C-189` is answered and the pin is declined, and `docs/process.md` says why
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** `P-594`, promoted · **cited** `954997ba` · **cites** `C-189`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** `P-594`, promoted · **cited** `954997ba` · **cites** `C-189`
 
 **`P-594` landed in `docs/process.md` -> How I know the application is right.** Go and read it rather
 than taking this item's word for it - three paragraphs at the end of that section.
@@ -278,9 +294,13 @@ is behind, and `docs/process.md` now says so, which is what stops an unexplained
 signal nobody reads. **Reporting the version would turn that notice from a lint into a number**, and
 whether that is worth a line of YAML is yours.
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: the pipeline prints the toolchain it installed - a number, since nothing in CI can know the local one.
+
 ### S-228 - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his
 
-**to** code · **status** open · **raised** 2026-09-30 · **revised** 2026-09-30, after he said a button rather than a name · **source** Sean: *a hosted app on github would be fine* · **cites** `S-214`, `P-593`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **revised** 2026-09-30, after he said a button rather than a name · **source** Sean: *a hosted app on github would be fine* · **cites** `S-214`, `P-593`
 
 **Sean, 2026-09-30**: *only I can say a test is approved and only I may say the current regression
 expectation should be deleted, but I also want to do this remotely with a button press, not
@@ -388,9 +408,13 @@ test, its foundation form and its record. **This is the writing and nothing else
 **And not a replacement for `scripts/review.ps1`.** That is how he reads several in one sitting; this
 is how he accepts one from a phone. **Two doors to one record.**
 
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `.github/workflows/review.yml` exists and gates on `github.repository_owner`, the first mechanical carrier of the record rule; nothing posted, which is his.
+
 ### S-227 - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean answering `C-188` · **cites** `C-188`, `Q-100`
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** Sean answering `C-188` · **cites** `C-188`, `Q-100`
 
 **Sean, 2026-09-30**: *in an object oriented language, I would have wrapped access to game state in
 an interface, hooked up the implementation in the composition roots, and either wired up that
@@ -438,6 +462,10 @@ calls**, which is the thing narrow interfaces are for.
 `crates/` is yours. **Nor whether the test lock goes**: it exists because ten tests share a
 process-wide value, so it goes if and only if those tests end up owning what they assert about - and
 that is a consequence to observe rather than a target to aim at.
+
+## Closed 2026-09-30
+
+**Verified here rather than taken from their report**: `0733c1d3` - the root constructs one console and hands `Watches` (five methods) and `Drives` (four) to the plugins; ten direct reaches gone.
 
 ### S-226 - Sean's rule exempts prototype code, and the second rules engine is not prototype code
 
