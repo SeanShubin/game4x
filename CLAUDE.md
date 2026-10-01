@@ -205,7 +205,7 @@ Four things the perspectives make necessary, all of which have teeth:
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
   it: the window runs from your `git add` to the moment git builds the commit. **What bounds what
-    you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
+  you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
   working tree and leaves the rest of the index alone. **The rule had no carrier until this
   sentence**, which is `tools/anchor` again: a hazard described, a remedy not named, and four
   instances. **Then unstage what the hook staged, and never commit it.** A pathspec commit does
@@ -216,7 +216,7 @@ Four things the perspectives make necessary, all of which have teeth:
   regeneration**, and `hooks/post-commit` said *commit them or unstage them* until `47bab353`.
   `519cf624`'s subject says the regeneration cannot be carried; **it is false and cannot be
   amended.**
- **The hook checks the columns twice as well**, before its tools and after them, and
+  **The hook checks the columns twice as well**, before its tools and after them, and
   `hooks/post-commit` reports the instant after it returns, which is the only part nothing can
   refuse. It has happened four times - twenty-six lines, then twenty-one, then twenty, then **six
   hundred and twenty-one** - and every time the work survived and the commit message was what was
