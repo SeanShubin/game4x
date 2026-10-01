@@ -119,19 +119,57 @@ a hosted app         Pages is static and cannot write, so this needs a GitHub Ap
 **The first is the recommendation and the reason is that it needs nothing built to host it.** It is a
 tap in an app he already has, and the thing he taps is the same thing that tells him what is waiting.
 
-## What the writer must and must not do
+## Four gestures, not two, and the application already has three of them
+
+**`review-web.rs` says so in its own header**: `r` copies a test into `reviewed/`, `u` deletes that
+record and takes the reading back, and `x` files a bullet in `reviewed/asked.md` saying what needs
+changing. **The first draft of this item ported `r` and nothing else.**
 
 ```
-a test     copy spec/tests/<name>.4x to reviewed/<name>.4x byte for byte, and commit.
-           Nothing reformats it: reviewed/ records that he read those bytes
-a case     delete the case, run the generator, commit. The diff is the review, which is what
-           the gesture means locally
+approve         tick     copy spec/tests/<name>.4x to reviewed/ byte for byte
+withdraw        untick   delete the record - which is how an obsolete or renamed test stops
+                         constraining anything, and is the answer to *will obsolete tests be
+                         easy to remove*
+ask for a change comment a bullet in reviewed/asked.md - how he says *change this* without
+                         writing the test, which is the thing he said he does not want to do
+accept a case   tick     delete the regression case, regenerate, commit
 ```
 
-**And a lane may not reach it.** A lane asking for a run is a lane writing the record through one more
-hop, which is what `reviewed/` exists to prevent - the record is the one artifact nothing judged by it
-may touch, and both producers are judged by it. **`github.actor` is what enforces that**, so the rule
-and its carrier arrive together rather than the rule arriving alone.
+**Dropping `x` would have been the worse omission.** Without it a test he dislikes has no remote path
+at all except messaging a lane, and *I don't want to be writing tests* is exactly what that gesture
+exists to honour.
+
+## The surface fits because ticking and unticking are already the two halves
+
+**One issue lists every test as a checkbox, and a tick means a record exists.** So the issue is a
+rendering of `reviewed/` rather than a second copy of it - **regenerated from the records, so it
+cannot drift**: ticked if and only if a record is there. Tick is `r`, untick is `u`, and a comment on
+the issue is `x`.
+
+**A second issue lists the cases whose behaviour has changed**, and there tick is the only gesture,
+because regenerating a deleted case happens by itself.
+
+**An orphaned record renders as a ticked row whose test is gone**, which is the application's own
+rule - a rename is two things he can see rather than one thing nobody may touch.
+
+## What plugging into GitHub's interface costs, stated plainly
+
+**It is GitHub's UI and nothing is built.** No hosting, no auth, no app to keep alive, and the edit
+history of the issue is an audit trail of who ticked what and when, for free.
+
+**What it is not is a reading surface.** A checkbox list is not the application - he taps through a
+link to read a test, where `scripts/review.ps1` shows it whole with what the run said about it. **So
+this is the accepting and not the reading**, and the two doors stay two doors.
+
+## And a lane may not reach it
+
+**A lane asking for a run is a lane writing the record through one more hop**, which is what
+`reviewed/` exists to prevent - the record is the one artifact nothing judged by it may touch, and
+both producers are judged by it. **`github.actor` is what enforces that**, so the rule and its carrier
+arrive together rather than the rule arriving alone.
+
+**And nothing reformats a copy.** `reviewed/` records that he read *those bytes*, so a writer that
+tidied whitespace would be recording a reading of something else.
 
 ## What this is not
 
