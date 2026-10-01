@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-30 - a prototype is not dead code, and the test is the dependency graph
+
+**Sean**, answering `C-187`: *I don't count prototypes as dead code as long as there is no dependency
+relationship between main code and prototype code.*
+
+**The condition holds today and does not cover what `C-187` found.** Measured: neither `game4x` nor
+`prototypes/planet-view` depends on the other, so there is no main-to-prototype relationship in
+either direction. **What there is is a shared crate** - both reach `crates/planet-model` - and the
+second rules engine sits in the half of it the game links and never calls.
+
+**So the exemption is about where code lives rather than who calls it.** Prototype code in
+`prototypes/` is exempt; main code whose only consumer is a prototype is not, because it is main
+code. **`S-226` says the resolution is a move rather than a deletion**, which keeps the research and
+satisfies the rule.
+
+**Not yet a proposal.** The rule is worth stating in `spec/README.md` or `docs/architecture.md` and
+nothing has been said about where - and `docs/prototypes/README.md` already says a prototype's
+deliverable is its recorded answer rather than its code, which is the same thought from the other
+side.
+
 ## 2026-09-30 - upgrade early, and the reason is that the tests do not know what the game is built on
 
 **Sean**, choosing among three answers to `C-189`: *Option 3 is what I want to go with, perhaps even

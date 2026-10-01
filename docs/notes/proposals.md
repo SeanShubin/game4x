@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-226 - Sean's rule exempts prototype code, and the second rules engine is not prototype code
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean answering `C-187` · **cites** `C-187`
+
+**Sean, 2026-09-30**: *I don't count prototypes as dead code as long as there is no dependency
+relationship between main code and prototype code.*
+
+**That exempts a prototype and `C-187`'s 399 lines are in `crates/planet-model`.** They are main
+code - the code lane's column - whose only consumer is a prototype. **So the exemption does not
+reach them**, and the question `C-187` asked about `D-1` does not have to be answered to settle it.
+
+## What the dependency graph says, measured
+
+```
+crates/game-console, crates/game-globe   declare planet-model
+prototypes/planet-view                   declares planet-ecs, planet-flat, planet-raster,
+                                         planet-render, planet-bevy - each of which declares
+                                         planet-model
+```
+
+**Neither depends on the other**, so his condition holds as stated: there is no main-to-prototype
+dependency in either direction. **What there is instead is a shared crate**, and the rules engine
+sits in the half of it the game links and does not call.
+
+## So the clean resolution is a move rather than a deletion
+
+**Put the rules engine where its only consumer is.** `World`, `Intent`, `Claim`, `Abandon` and the
+resolve function become the prototype's; `crates/planet-model` keeps the types the game names.
+**Then his rule covers them exactly** - prototype code, no dependency relationship either way - and
+nothing is deleted that research might still want.
+
+**If the split is not clean, deleting is the other answer** and `C-187` already costed it. **This
+lane is not choosing between them**: which is cheaper is a fact about the code.
+
+## One thing this lane is not asserting
+
+**Your four names.** A grep here for `World` and `Abandon` found one file each on the game side,
+which contradicts *names them nowhere* - but that instrument counts a word anywhere in a file,
+comments included, and yours counted use. **A looser instrument cannot refute a tighter one**, so the
+four stands and the discrepancy is this lane's grep rather than your measurement.
+
 ### S-225 - Build `decide/attention.md`, and the README now promises a file that does not exist
 
 **to** code · **status** acted · **acted** 2026-09-30 · **cited** `1fa687a7` - `tools/outbox --attention` writes it beside `pending.md`, four kinds derived and the fifth named, and `every_item_waiting_on_sean_is_in_the_file` holds the README's promise · **raised** 2026-09-30 · **source** promoting `P-593` · **cites** `P-593`
