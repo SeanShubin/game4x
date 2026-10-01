@@ -58,6 +58,17 @@ Add a file when a topic firms up. Add its row here first.
    read it.** The review application makes that copy and removes it, acting as me; nothing else
    puts a file there. **So the two directories hold the same tests only while I have read every
    one**, and a test nobody has read is in the first and not the second - which is what makes
+
+   **There are two sets of unit tests and they state different kinds of thing.**
+   [`spec/tests/rule/`](tests/rule/) states what the game does - rows in, one command, rows out.
+   [`spec/tests/interface/`](tests/interface/) states what the interface shows: which items are
+   displayed, whether each is active, and which one has my attention.
+
+   **Only the first decides what the game does.** The second decides what a player sees, which is a
+   separate concern and is why it is a separate directory rather than more files in the same one.
+
+   **What has my attention is a property of the interface and names at most one item.** It is not a
+   flag on an item, because two items could then hold it.
    generating from `reviewed/` mean something.
 
    **My approval is about what a test says, not where it is or how it is written.** The behaviour is
