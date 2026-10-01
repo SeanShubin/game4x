@@ -671,7 +671,19 @@ pub fn regression_cases() -> Vec<Case> {
              #\n\
              # `scenario/played.md` is where the whole world at each turn's end is.\n\n",
         );
-        text.push_str(&format!("{{test name:{test}}}\n\n"));
+        text.push_str(&format!("{{test name:{test}}}\n"));
+        // **The reference, which is what makes the case executable** - `P-598`: *what never
+        // changes is referred to rather than repeated, and the reference is what the runner
+        // follows, not only what he clicks.*
+        //
+        // **`S-234` derived the store over a closed set of three rather than choosing it**:
+        // `script` is the test script and `expected` is the comparison target, so `game` is
+        // the only reading left, and `Failed::NoSuchStore` refuses a fourth.
+        //
+        // **The runner already follows it and nothing was invented here.** `{load}` is
+        // `{primitive id:12 word:load}`, `crates/game-model/src/script.rs` implements it, and
+        // `data/foundation/setup.4x` uses it four times today.
+        text.push_str("{load file:setup.4x into:game}\n\n");
         text.push_str("{given}\n");
         for line in &before {
             text.push_str(&format!("{line}\n"));
@@ -695,6 +707,136 @@ pub fn regression_cases() -> Vec<Case> {
         out.len()
     );
     out
+}
+
+/// The relations no rule ever writes, derived from the ruleset rather than listed.
+///
+/// **`P-598`**: *what never changes is referred to rather than repeated.* **What never changes
+/// is derivable**, and deriving it is the difference between a premise that survives a seventh
+/// structural relation being added and one that does not.
+///
+/// **Measured over `spec/data/rules.4x` as it stands**: 55 clauses, 41 of which write - `add`
+/// 18, `remove` 22, `put` 1 - and the thirteen relations they name between them are all things.
+/// So `territory`, `place`, `adjacency`, `capacity`, `provides` and `consumes` fall out as
+/// invariant **because no clause names them**, not because anybody wrote the six down.
+///
+/// `S-234` found the arithmetic in this lane's first pass - 40 - and the conclusion did not
+/// move, because it is a zero over the whole set rather than a proportion of it.
+fn relations_a_rule_writes() -> BTreeSet<String> {
+    // **The friendly source, because the foundation form names nothing twice.** A clause row in
+    // `data/foundation/rules.4x` carries `relation:72`, an id, and comparing an id against a
+    // rendered relation name drops nothing - **which is what happened**: `relations_a_rule_writes`
+    // read the foundation and returned a set of numbers, so every row looked invariant.
+    //
+    // **Caught by this function's own `dropped > 0`** rather than by reading it. A set of numbers
+    // that intersects nothing is the quietest possible failure here: the file would have been
+    // written with the whole world in it and every case would still have run.
+    let at = root().join("spec/data/rules.4x");
+    let text = std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+    let rules =
+        game_model::notation::read(&text).unwrap_or_else(|why| panic!("{}: {why:?}", at.display()));
+    let mut written = BTreeSet::new();
+    for row in rules {
+        if row.relation != "clause" {
+            continue;
+        }
+        let role = row.values.get("role").map(String::as_str).unwrap_or("");
+        if !matches!(role, "add" | "put" | "remove") {
+            continue;
+        }
+        if let Some(relation) = row.values.get("relation") {
+            written.insert(relation.clone());
+        }
+    }
+    written
+}
+
+/// The scenario's invariant rows: its world, less everything a rule can touch.
+///
+/// **This is the file a case refers to instead of repeating.** `S-234` names the store:
+/// `{load file:... into:game}`, derived over a closed set of three rather than chosen -
+/// `script` is the test script and `expected` is the comparison target, so `game` is the only
+/// reading left and `Failed::NoSuchStore` refuses a fourth.
+///
+/// **One entry per description**, which is what the rows already are: this writes them as the
+/// renderer writes any row, so a diff here is a diff in the scenario.
+pub fn invariant_rows() -> String {
+    let written = relations_a_rule_writes();
+    let (game, _, _) = played();
+
+    // **The scenario's own rows, not the engine's.** The game's store holds the foundation as
+    // well - schema, engine and ruleset - because that is what `{load}` put there, and
+    // `first_test.rs` already loads all three before any test runs. **Writing them here would
+    // publish 700 lines of the engine as though they were the scenario's world**, which is what
+    // the first version of this did: 709 lines, 60 of them `{primitive}`.
+    //
+    // **Subtracted as rows rather than as text**, because the two sides render differently -
+    // the foundation names relations by id and a rendering names them by word.
+    let foundation: BTreeSet<String> = foundation::rows().iter().map(write).collect();
+    let mine: Vec<Row> = game
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| !foundation.contains(&write(row)))
+        .cloned()
+        .collect();
+    assert!(
+        !mine.is_empty(),
+        "the scenario's world is entirely the foundation's, which cannot be"
+    );
+
+    let names = Names::of(game.rows().rows());
+    let mut lines: Vec<String> = mine.iter().map(|it| names.row(it)).collect();
+    lines.sort();
+
+    let mut kept: Vec<String> = Vec::new();
+    let mut dropped = 0;
+    for line in &lines {
+        let relation = line
+            .trim()
+            .trim_start_matches('{')
+            .split([' ', '}'])
+            .next()
+            .unwrap_or_default()
+            .to_string();
+        if written.contains(&relation) {
+            dropped += 1;
+            continue;
+        }
+        kept.push(line.clone());
+    }
+
+    // **Both populations, because an empty file would read as a world with no structure in it**
+    // and every case referring to it would then fail for the wrong reason.
+    assert!(
+        !kept.is_empty(),
+        "no invariant rows: every relation in the scenario's world is written by some rule"
+    );
+    assert!(
+        dropped > 0,
+        "nothing was dropped, so either the ruleset writes nothing or this read it wrong"
+    );
+
+    let mut text = String::new();
+    text.push_str(
+        "# The scenario's world, less everything a rule can change.\n\
+         #\n\
+         # **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.\n\
+         #\n\
+         # **Every case under `regression/scenario/` refers to this rather than repeating it** -\n\
+         # `docs/process.md`, from `P-598`: *what never changes is referred to rather than\n\
+         # repeated, and the reference is what the runner follows, not only what he clicks.*\n\
+         # A case opens `{load file:setup.4x into:game}` and the runner follows it, which is\n\
+         # what makes a case executable as a test.\n\
+         #\n\
+         # **Which rows are here is derived rather than listed.** A relation is invariant when\n\
+         # no clause of `spec/data/rules.4x` adds, puts or removes it - so a structural\n\
+         # relation added tomorrow arrives here without anybody editing a list.\n\n",
+    );
+    for line in &kept {
+        text.push_str(&format!("{line}\n"));
+    }
+    text
 }
 
 /// Every column a rule leaves as it found it, because no clause of it names one.

@@ -141,6 +141,80 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-198 - `S-234` is built as far as it can be without Sean's deletion, and *runs as a test* needs one more generator
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-234` · **cites** `S-234`, `P-598`, `C-197`
+
+**derived from** *what never changes is referred to rather than repeated, and the reference is what the runner follows* - `docs/process.md`, from `P-598`
+
+**`regression/scenario/world.4x` exists, every case refers to it, and the suite is red by design
+until he deletes the thirty-six.**
+
+## What is there
+
+```
+regression/scenario/world.4x   39 lines, 25 rows
+   territory 2  place 4  adjacency 2  capacity 9  deposit 5  provides 1  consumes 1  planet 1
+each case, line 16             {load file:world.4x into:game}
+```
+
+**`into:game` is right and `S-234` derived it; this lane confirmed it from the data.**
+`script.4x` declares `{store id:1 name:script}` and `{store id:2 name:game}`, and the friendly
+`setup.4x` already writes `into:game` three times. **Two stores, not three** - `expected` is not
+one of them, which does not change the answer and is worth recording.
+
+## Which rows are in it is derived twice over, and the first pass was wrong both times
+
+**A relation is invariant when no clause of `spec/data/rules.4x` adds, puts or removes it.** So
+a structural relation added tomorrow arrives in this file without anybody editing a list.
+
+**The first pass read `foundation::rows()` and found nothing to drop.** The foundation form names
+nothing twice, so a clause there carries `relation:72` - an id - and comparing ids against
+rendered relation names intersects nothing. **Every row looked invariant and the file would have
+been the whole world.** Caught by this function's own `dropped > 0`, not by reading it.
+
+**The second pass wrote 709 lines**, because the game's store holds the foundation too - 60
+`{primitive}` rows among them. **The foundation is subtracted as rows rather than as text**, since
+the two sides render differently, and the file is 39 lines.
+
+**Two population assertions, and each caught one of those.** A file with nothing dropped and a
+file with nothing kept are both the question answered wrongly in a way that still produces a file.
+
+## The suite is red and the thirty-six are his
+
+**One line per case, identical in all thirty-six: line 16.** Every command they cover is still
+played, so none is housekeeping and **this lane may not delete one** - `CLAUDE.md`: *no instance
+deletes one while the command it covers is still played.*
+
+```
+Remove-Item -Recurse regression/scenario
+```
+
+**The gate is red until that runs**, which stops every lane and not only this one, so it is said
+here rather than left to be met. `world.4x` is written always rather than delete-to-accept,
+because it is an input and not a claim about behaviour.
+
+## *Runs directly as a test* is not done, and the reason is a conversion rather than a notation
+
+**The runner reads `data/foundation/tests/`, not the friendly form.** A case is friendly - `{scout
+where:place-1 moving:1} -> 1` - and `first_test.rs` runs foundation copies generated from
+`reviewed/`. **So a case needs a foundation rendering before it can run**, which is
+`examples/foundation.rs`'s pipeline rather than a step in this one.
+
+**Driven rather than inferred.** A check that folded each case and ran it got as far as
+`` `load`.`into` is `game`, and no `store` has that key `` - past the `Files` resolution, which
+works, and stopped on the fold needing a schema built over the game's rows where this lane handed
+it one built over the foundation's. **`foundation.rs` already explains why that is two schemas and
+not one**: folding uses the game's, writing uses a second over every shared row, *and a relation
+it cannot find falls back to alphabetical order without saying so.*
+
+**The check is removed rather than left red**, because it asserted something not yet true and a
+red nobody can clear is not a finding. **What it measured is above**, which is the part worth
+keeping.
+
+**`Files` resolving `world.4x` is done and is three lines** - two roots and one method, which is
+what `C-197` said was missing.
+
 ### C-197 - `P-598`'s open piece has a notation already, and the runner already follows it
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** going to design the reference and finding it implemented · **cites** `P-598`, `S-228`
@@ -169,10 +243,14 @@ six: **enumerate every writing clause and look at what they name.**
 
 ```
 55 clauses in spec/data/rules.4x
-40 of them write - add, put or remove
- 0 of those 40 name any structural relation; every one names a thing
+41 of them write - add 18, remove 22, put 1
+ 0 of those 41 names any structural relation; every one names a thing
  7 clauses name place or adjacency and all seven are `require`
 ```
+
+**`40` above was this lane's arithmetic and `41` is right** - `S-234` found it; `put` writes and
+was dropped from the sum. **The conclusion is untouched**, because it is a zero over the whole
+set rather than a proportion of it.
 
 **That is the same answer over the whole population rather than over the list somebody
 thought of**, which matters because a seventh structural relation added tomorrow is covered by

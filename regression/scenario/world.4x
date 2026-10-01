@@ -1,0 +1,39 @@
+# The scenario's world, less everything a rule can change.
+#
+# **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.
+#
+# **Every case under `regression/scenario/` refers to this rather than repeating it** -
+# `docs/process.md`, from `P-598`: *what never changes is referred to rather than
+# repeated, and the reference is what the runner follows, not only what he clicks.*
+# A case opens `{load file:setup.4x into:game}` and the runner follows it, which is
+# what makes a case executable as a test.
+#
+# **Which rows are here is derived rather than listed.** A relation is invariant when
+# no clause of `spec/data/rules.4x` adds, puts or removes it - so a structural
+# relation added tomorrow arrives here without anybody editing a list.
+
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-1}
+{capacity of:bin for:energy what:energy per:place} -> 10
+{capacity of:bin for:food what:food per:place} -> 10
+{capacity of:bin for:metal what:metal per:place} -> 10
+{capacity of:deposit for:extractor what:energy per:place} -> 1
+{capacity of:deposit for:extractor what:food per:place} -> 1
+{capacity of:deposit for:extractor what:metal per:place} -> 1
+{capacity of:place for:bin what:energy per:place} -> 2
+{capacity of:place for:bin what:food per:place} -> 2
+{capacity of:place for:bin what:metal per:place} -> 2
+{consumes kind:pioneer what:berth} -> 1
+{deposit where:place-1 what:food density:6} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-3 what:energy density:6} -> 1
+{deposit where:place-3 what:food density:6} -> 1
+{deposit where:place-3 what:metal density:6} -> 1
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{place id:3 of:territory-2 layer:surface name:place-3}
+{place id:4 of:territory-2 layer:orbit name:place-4}
+{planet id:1 energy:3}
+{provides kind:place what:berth} -> 6
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}

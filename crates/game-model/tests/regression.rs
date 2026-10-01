@@ -58,6 +58,20 @@ fn every_command_has_an_expectation_and_it_is_current() {
     let at = scenario::regression_at();
     std::fs::create_dir_all(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
 
+    // **The rows every case refers to, written always rather than delete-to-accept** - `P-598`
+    // and `S-234`. **It is an input and not an expectation**: a case says what the command did,
+    // and this says what the world was made of before anything ran. Nothing here is a claim
+    // about behaviour, so there is nothing for Sean to accept - the diff in version control is
+    // the whole of the review, the way `scenario/played.md` is.
+    //
+    // **Which rows are in it is derived from the ruleset**, not listed: a relation is invariant
+    // when no clause of `spec/data/rules.4x` adds, puts or removes it.
+    let setup = at.join("world.4x");
+    let said = scenario::invariant_rows();
+    if std::fs::read_to_string(&setup).unwrap_or_default() != said {
+        std::fs::write(&setup, &said).unwrap_or_else(|why| panic!("{}: {why}", setup.display()));
+    }
+
     let (mut written, mut compared) = (Vec::new(), 0);
     // **The name travels beside the diff**, because the message below prints the deletion for
     // each grain and a deletion is composed from the path. Formatting it into one string first
@@ -203,15 +217,23 @@ fn every_command_has_an_expectation_and_it_is_current() {
         cases.len(),
         "every case was asked how deep it sits, and the count is what says so"
     );
+    // **`setup.4x` is the one loose file and it is not a case** - `S-234`. Every case belongs
+    // to a turn; the rows they all refer to belong to none of them, which is the whole reason
+    // they are referred to rather than repeated.
     let loose: Vec<String> = std::fs::read_dir(&at)
         .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
         .filter_map(|it| it.ok())
         .filter(|it| !it.path().is_dir())
         .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .filter(|name| name != "world.4x")
         .collect();
     assert!(
         loose.is_empty(),
         "`regression/scenario/` holds {loose:?} outside any turn, and every case belongs to a turn"
+    );
+    assert!(
+        at.join("world.4x").is_file(),
+        "the rows every case refers to are not there, so no case can run"
     );
 
     // **A file is left behind when its command is gone, and that is asked of the command rather
