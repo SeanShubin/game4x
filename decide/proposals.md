@@ -11,6 +11,55 @@ of it needs you.
 
 ## Open
 
+### P-595 - A prototype replicates what it needs and links none of it, and the current one links seven crates
+
+**to** sean · **status** open · **raised** 2026-09-30 · **asks** approval · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules
+
+**Your three sentences, and the measurement that says the arrangement today breaks all of them.**
+
+**Offered as a new rule at the end of that list:**
+
+> **A prototype must not influence the main code, even indirectly, and the way that is kept is that
+> it links none of it.** A prototype that depends on main code puts pressure not to refactor main
+> code in ways that break the prototype; main code that depends on prototype code has stopped being
+> prototype code by definition. **Both directions are forbidden, and the second is forbidden by
+> saying so rather than by anything mechanical.**
+>
+> **So a dependency a prototype needs is replicated rather than linked**, and what it replicates is
+> a snapshot of that code as it was when the prototype was made. **It is almost always a smaller and
+> modified version** - a prototype asks one question, and the code that answers it is rarely the code
+> the game needs.
+>
+> **A prototype left linking main code is a defect in the arrangement rather than in the prototype.**
+> Nothing a prototype does is wrong because the main code moved; what is wrong is that the main code
+> could not move freely.
+
+## What the dependency graph says today, measured with `cargo tree`
+
+```
+the game links        graph-coloring  planet-bevy  planet-model  planet-presentation
+                     planet-render   planet-terrain  sphere-tessellation
+the prototype links   all seven of those, and three more
+prototype only        planet-ecs  planet-flat  planet-raster
+```
+
+**So `prototypes/planet-view` links seven crates the game also links**, which is the pressure your
+first sentence names - and `C-187` felt it from the other side, declining to delete 399 lines because
+*deleting a prototype's dependency decides something about research*.
+
+**And three crates in `crates/` are linked by nothing the player runs.** `planet-ecs` is one of them,
+which the quality lens reached independently as `Q-103`: it *says it is the one home of game state,
+and the shipped binary does not link it*.
+
+## What follows, and it is the code lane's
+
+**The prototype takes a copy of what it needs and the three prototype-only crates go with it.** Then
+no `crates/` file is held in place by research, and the 399 lines `C-187` found become prototype code
+your rule exempts rather than main code it does not.
+
+**Not costed here.** Whether the copy is small and modified, as your third sentence expects, is a fact
+about the code and theirs to find. **`S-226` said a move was the resolution and this is the same move
+seen whole** - seven links rather than one crate.
 ### P-594 - Upgrade early, and no pin, because a test that names no technology cannot be broken by one
 
 **to** sean · **status** open · **raised** 2026-09-30 · **answered** 2026-09-30, option three and more aggressively · **asks** approval · **kind** recovered · **shape** text · **into** `docs/process.md` -> How I know the application is right
