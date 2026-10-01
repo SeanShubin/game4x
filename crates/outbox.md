@@ -180,7 +180,32 @@ use game_front::{library, shell};     NOT
 use game_front::{ shell , library };  NOT
 ```
 
-**So the braced group is split and each name compared**, and all five are flagged now.
+**The braced group was then split and each name compared, and a fourth form escaped that too.**
+The lens drove `names_the_shell` and found it: `split_once('}')` takes the first closing brace
+rather than the matching one, so a **nested** group before `shell` truncates the outer group
+before `shell` is reached - `use game_front::{library::{browse, page}, shell};`.
+
+**Three patches, three escapes, so the fourth version matches no shape.** Every form that
+compiles names the crate and names the module, whatever grouping sits between them - so with the
+admitted names removed, both tokens remaining is the whole of it, and there is no nesting left to
+get wrong. **The admitted set is four names measured over the tree**, and the refusal says them,
+which is the closed-set form `spec/README.md` asks for anyway.
+
+**Driven, eight forms:**
+
+```
+use game_front::shell;                                      flagged
+use game_front::shell as console;                           flagged
+use game_front::{shell, library};                           flagged
+use game_front::{library::{browse, page}, shell};           flagged
+use game_front::{shell::{generation, resets}};              flagged
+use game_front::game_state::Watches;                        clean
+use game_front::game_state::Watches; // not the shell       clean
+use game_front::{game_state::Watches, game_state::Drives};  clean
+```
+
+**A trailing comment is dropped before judging**, which is the only false positive either lane
+thought of. One inside a string literal would still fire, and firing too often is the right error.
 
 **And a bare `shell::generation()` needs no clause of its own, which is the better argument.** A
 call cannot name a module nothing brought in - `game-globe` declares no `mod shell` - so **blocking
@@ -207,6 +232,22 @@ lens's own word: the longest signature there is 47 characters.
 one more - `b3f0dfbe` - carries this lane's work under another lane's. **Fourteen was neither
 reading.** It was a figure produced while writing a sentence rather than measured, which is the
 thing `CLAUDE.md` names about comments and is no different in a message.
+
+## And this lane handed the lens an excuse that was false
+
+**`Q-107` was filed ten hours before `S-227` landed, not after.** This lane told the lens its
+report predated the fix and was therefore a shared-tree artifact. **The lens checked it rather
+than taking it**, which is the right way round and the generous direction is the one to check:
+
+```
+38c6d42b  2026-09-30 11:04  Q-107 published
+0733c1d3  2026-09-30 21:48  S-227 landed
+```
+
+**So it was a reasoning error of theirs and not a timing artifact** - which is the worse kind, as
+they say, and the one worth keeping on the item. **The fault here is this lane's**: an explanation
+offered as a fact, with one `git log` between it and the truth. `CLAUDE.md` asks for *measured: X;
+I think the reason is Y* and this was all Y.
 
 ## One the lens refuted and recorded rather than edited away
 

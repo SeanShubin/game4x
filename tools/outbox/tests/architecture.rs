@@ -586,11 +586,6 @@ fn paths_in(line: &str, tops: &BTreeSet<String>) -> Vec<String> {
 /// and the interface would quietly stop being the only door.
 #[test]
 fn only_the_composition_root_reaches_the_one_console() {
-    // **The terminal shell is platform wiring and not game state**, which is why it is named
-    // rather than covered. `game4x` spawns a thread that reads stdin; that is a surface the
-    // root attaches to the platform, like the window it describes two functions later.
-    const ALLOWED: [&str; 1] = ["game_front::shell::terminal::serve"];
-
     let mut reached: Vec<String> = Vec::new();
     let mut scanned = 0;
     for base in ["crates", "prototypes"] {
@@ -629,11 +624,7 @@ fn only_the_composition_root_reaches_the_one_console() {
                 // the allowed path anywhere in it - a trailing comment included - exempted every
                 // other reach on that line. Removing the allowed text first leaves the rest of
                 // the line to be judged on its own.
-                let mut rest = said.to_string();
-                for one in ALLOWED {
-                    rest = rest.replace(one, "");
-                }
-                if names_the_shell(&rest) {
+                if reaches_the_console(said) {
                     reached.push(format!("{shown}:{}  {said}", at + 1));
                 }
             }
@@ -648,44 +639,55 @@ fn only_the_composition_root_reaches_the_one_console() {
     );
     assert!(
         reached.is_empty(),
-        "these reach the one console rather than being handed an interface - `S-227`:\n  {}",
+        "these reach the one console rather than being handed an interface - `S-227`:\n  {}\n\n\
+         Outside `game-front` the admitted names are {ADMITTED:?}; anything else naming both the \
+         crate and its shell is a reach, whatever the import grouping.",
         reached.join("\n  ")
     );
 }
 
-/// Whether a line reaches `game-front`'s shell module, in any form that compiles.
+/// Every `game_front::` reference a crate outside that one may make.
 ///
-/// **Dropping the trailing colons closes two of the three forms and not the third**, which
-/// `Q-109` expected it to and this lane measured by driving all of them:
+/// **Measured over the tree rather than listed from memory**: the two interfaces, the
+/// implementation the composition root constructs, and the terminal thread - which is platform
+/// wiring rather than game state, like the window the root describes two functions later.
+const ADMITTED: [&str; 4] = [
+    "game_front::game_state::Watches",
+    "game_front::game_state::Drives",
+    "game_front::game_state::TheOneConsole",
+    "game_front::shell::terminal::serve",
+];
+
+/// Whether a line reaches `game-front`'s shell, in any form that compiles.
 ///
-/// ```text
-/// use game_front::shell;                flagged
-/// use game_front::shell as console;     flagged
-/// use game_front::{shell, library};     NOT flagged - the crate and the module are not adjacent
-/// ```
+/// # Three patches, a fourth escape, and why this one matches no shape
 ///
-/// **So the braced form is read as a braced form.** The group after `game_front::{` is split and
-/// each name compared, which is what makes `shell` reachable through it visible.
+/// **Every version before this matched a shape and a shape escaped it.**
+/// `game_front::shell::` missed three import forms. `game_front::shell` missed the braced group,
+/// because the crate and the module are not adjacent in `use game_front::{shell, library};`.
+/// Splitting the braced group missed a *nested* group before `shell`, because `split_once('}')`
+/// takes the first closing brace rather than the matching one -
+/// `use game_front::{library::{browse, page}, shell};`.
 ///
-/// # Why the import is the whole of it, and a bare `shell::generation()` needs no clause
+/// **The quality lens found all three, and the third by driving this function rather than reading
+/// it.** `Q-109`, and its own proposed repair closed two of the first three - which is the lesson
+/// twice over: a pattern has one more form than whoever wrote it thought of.
 ///
-/// **A call cannot name a module that was not brought in.** `shell::generation()` in `game-globe`
-/// compiles only after one of the forms above, because that crate declares no `mod shell` of its
-/// own - so blocking every import blocks every call site by construction. **That is a stronger
-/// statement than matching call sites**, which is what the first version tried and what
-/// `shell::generation()` walked past.
-fn names_the_shell(line: &str) -> bool {
-    let tight: String = line.chars().filter(|it| !it.is_whitespace()).collect();
-    if tight.contains("game_front::shell") {
-        return true;
+/// **So this matches no shape.** Every form that compiles names the crate and names the module,
+/// whatever grouping sits between them - so with the admitted names removed, **both tokens
+/// remaining is the whole of it**, and there is no nesting left to get wrong.
+///
+/// **A trailing comment is dropped first**, so a line importing an interface and mentioning the
+/// shell in prose beside it is not a reach. A `shell` inside a string literal on such a line
+/// would still fire; **firing too often is the right error here**, and the message names the
+/// admitted set so a reader can tell at once which it is.
+fn reaches_the_console(line: &str) -> bool {
+    let code = line.split("//").next().unwrap_or(line);
+    let mut rest: String = code.chars().filter(|it| !it.is_whitespace()).collect();
+    for one in ADMITTED {
+        rest = rest.replace(one, "");
     }
-    let Some(after) = tight.split_once("game_front::{") else {
-        return false;
-    };
-    let group = after.1.split_once('}').map(|it| it.0).unwrap_or(after.1);
-    group
-        .split(',')
-        .any(|name| name == "shell" || name.starts_with("shell::") || name.starts_with("shellas"))
+    rest.contains("game_front") && rest.contains("shell")
 }
 
 /// Every `.rs` file under a directory.
