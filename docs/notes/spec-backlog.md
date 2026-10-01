@@ -8,6 +8,69 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-01 - a verdict is on the behaviour, so prose may change and approval survives
+
+**Sean**, asked whether a verdict on a test that then changes is still a verdict: *the verdict is on
+the portion of the test that defines behavior, so different test means the verdict does not apply.
+If the test changes the verdict has to be cleared. Perhaps a verdict is associated with a hash? That
+is an implementation detail, the point is that if the test specifies different behavior, the verdict
+must be cleared.*
+
+**This changes something that already exists.** `tools/outbox`'s comparison is `read != said` - a
+whole-file byte comparison. **So today editing a comment unapproves a test**, and his ruling says it
+must not.
+
+```
+57 tests   790 comment line(s), 960 row(s)
+           45% of their meaningful lines are prose
+worst      breeding-does-not-reach-the-citizens-it-just-made - 27 comment lines to 14 rows
+```
+
+**So nearly half of what is compared is not what is approved.** A test whose header is reworded is
+unapproved today and has to be read again, which is attention spent on words he has already agreed
+with.
+
+**And the loosening is consistent with `spec/README.md` rule 3**, which already says *where prose and
+a test disagree, the test is right and the prose is a defect.* **The authority was always in the
+rows**; the comparison just never knew that.
+
+**What is unstated.** Which lines are the behaviour - the rows alone, or the rows plus `{test name:}`
+and `{load}`. Whether a `{load}` naming a different file is a change of behaviour, which it is in
+effect. And whether the comparison normalises whitespace within the behaviour, since a padded row and
+an unpadded one say the same thing.
+
+## 2026-10-01 - a denial is a fact about what the code is bound to, and not an item
+
+**Sean**: *no it is just a fact about what the code is bound to, and I will be giving these reports my
+attention as my primary source of truth.*
+
+**So `attention.md` does not nag about a denial.** A denial releases the code lane and records that he
+wants something else; the obligation to say what else is his, carried by his reading the reports
+rather than by an item with a `to` field.
+
+**And it names a change in where his attention goes.** `decide/attention.md` is a generated file in
+the repository; **the hosted app's reports become his primary source of truth.** That does not make
+`attention.md` wrong, but it stops being the one surface - and whatever it says about *nothing open
+means nothing outstanding* has to stay true of a world where some of what waits on him is in a page
+rather than a file.
+
+## 2026-10-01 - a denied regression case is a reminder, and regeneration may be authorised from the app
+
+**Sean**: *the regression scenario is broken up into many turns with many parts, I deny parts I don't
+like as a reminder of what needs to be changed, and when those changes are done I regenerate the
+regression tests, it may even make sense to flag regression tests for regeneration from the hosted
+review app, and give my authorization that way.*
+
+**So a denial on a case is the opposite gesture to a deletion and both are his.** Deleting says *I
+accept what it does now*; denying says *this is wrong and here is my reminder*. **A case can
+therefore be in three states too**, and the third is new: today a case he dislikes has no mark at all
+and he has to remember.
+
+**And regeneration may move into the app.** That would replace the deletion gesture rather than
+annotate it - *give my authorization that way* - which matters because the deletion is currently the
+only authorisation there is, and `CLAUDE.md` is built around it.
+
+
 ## 2026-10-01 - a verdict is about a test; a record is a copy of one
 
 **Sean**: *the hosted app records facts about what I think of tests. Those facts need to be recorded
