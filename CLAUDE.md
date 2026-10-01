@@ -127,6 +127,26 @@ honoured, and it says *I accept what it does now*. **So no instance deletes one 
 command it covers is still played**, and a lane that thinks a case is wrong says so in an
 outbox rather than removing it.
 
+**Suspended from 2026-10-01 until the hosted review app and the new regression format are both
+done.** Sean, giving the reason rather than the permission alone: *at this point I am going to have
+to look at the entire thing anyways, so until we get to the end of the hosted review app and new
+regression test format it is fine for you to delete them as needed.* **So any lane may delete any
+case, for now.**
+
+**What the suspension rests on is that the gesture has temporarily stopped meaning anything.** His
+deletion is an approval of one case; an approval of one case is worth nothing while he is going to
+re-read all of them. **It is not that the rule was wrong** - it is that its subject is in flight.
+
+**It ends on a condition rather than a date, and the condition is the later of two things.** The
+format is nearly done; the app is not started. **So the suspension outlives what motivated it**,
+and whoever sees both land says so and this paragraph goes. **Nothing restores it automatically**,
+which is the risk the condition is written down to carry.
+
+**`reviewed/` is untouched by this.** A record is a reading and a case is an observation, and he
+suspended the one gesture rather than the principle behind both. **A lane still creates, deletes or
+changes no record.**
+
+
 **A case the scenario no longer plays is housekeeping and any lane may remove it.** The two are
 told apart by `scenario/main.4x`: a case whose command is still there is waiting on Sean, and a
 case whose command is gone is waiting on nobody. **That is the same line `reviewed/` draws** -
