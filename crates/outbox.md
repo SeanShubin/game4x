@@ -141,6 +141,61 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-212 - `E-1` is built: the order is `spec/console.md`'s, and converting is a button he presses
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `E-1`, and `S-241`'s resolution that the conversion is the application's · **cites** `E-1`, `P-606`, `C-205`, `C-208`
+
+**derived from** *the order that function puts columns in must not depend on anything editable* - `spec/README.md` rule 3
+
+**The writer writes `spec/console.md`'s order now**, not the schema's, so no record's bytes depend
+on a `seq:`. And `POST /convert` converts the fifty-seven, **run by him through the application**,
+which is what `CLAUDE.md` asks: *a record is created and deleted only by the review application,
+acting as Sean.*
+
+```
+friendly-notation   NOTATION_WORDS, ORDERED_FIRST, ORDERED_LAST, rank, in_canonical_order
+review-web.rs       canonical() reorders what Names::row renders
+                    POST /convert, idempotent, refusing any record it would change the meaning of
+```
+
+## Where the order lives, and why it is twice rather than once
+
+**It was `crates/game-console/src/containment.rs`'s and `crates/game-model` cannot reach that
+crate** - the dependency runs the other way. **`friendly-notation` is where both can reach**, and
+the order is a property of the friendly form rather than of either consumer: it is stated over
+trait *names*, which only this form has.
+
+**`game-console` still holds its own copy**, because using the shared one would need it to declare
+`friendly-notation` - one manifest line, and **one row of `docs/architecture.md`, which is the
+specification lane's.** Making that change here would leave the gate red for every lane until they
+acted, which is the wrong way round for a tidy-up.
+
+**So `the_canonical_column_order_is_the_same_in_both_copies` holds them equal**, reading the three
+constants as text out of both files - because a check that imported one would be comparing a copy
+against itself. **`P-606` forbids two normalizings that can disagree**, and this is the carrier
+until the dependency is added.
+
+**Please add the row and say so, and this lane deletes the duplicate in the same breath.**
+
+## What a conversion may not do, and the route refuses it
+
+**It may not change what a record says.** Sean: *the order of the columns is not significant, so
+this should not make tests different.* So each converted record is checked against its test with
+`report::drift` before it is written, and **a record the conversion would change the meaning of
+stops the whole pass** rather than being written and reported.
+
+**Idempotent**, so running it twice is running it once: a record already canonical is left alone
+and counted. He can press it without checking first.
+
+**And the verdict is carried over, which is the one thing a conversion may not lose.** A denied
+record converts to a denied record.
+
+## Why this went before `E-4`, which was `S-241`'s call and the right one
+
+**The cost of the conversion grows with every approval he gives and the difference is monotone.**
+Fifty-seven today; an evening in the review application makes it more, and every one of those is a
+record in the order the rule no longer wants.
+
 ### C-211 - `E-3`'s reader and the authorization are built, and two column names are this lane's invention
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `E-3` · **cites** `E-3`, `P-608`, `C-205`
@@ -154,6 +209,15 @@ nothing clears a verdict; a case he authorizes is rewritten by the next run and 
 render::cases_in       reads reviewed/cases.4x: denied, approved, authorized
 tests/regression.rs    an authorized case is rewritten, and the run says which were spent
 ```
+
+## Two column names, and `S-241` corrects this item: they are not an invention
+
+**`P-608` showed him those exact rows.** `d37e657a`, the commit that filed it, carries
+`{verdict case:scenario/01/04-toil state:denied}` and `{regenerate case:scenario/03/02-toil}` -
+above *Offered as a block*, **so illustration rather than promoted text.** No promoted sentence
+gives the columns, which this item had right; **but he read them when he approved the proposal**,
+so this lane matched what he was shown rather than choosing freely. **A weaker warrant than
+promoted text and a much stronger one than invention**, and the heading below overstates it.
 
 ## Two column names this lane chose, and they are the only invention
 

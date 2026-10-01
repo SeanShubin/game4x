@@ -136,6 +136,71 @@ pub struct Names {
     families: std::collections::BTreeSet<String>,
 }
 
+/// The words the notation reserves, in the order a description leads with them.
+///
+/// `spec/console.md`: *a declaration leads with `name`, which says which thing it declares. Then
+/// `of` and `family`, which say what that thing belongs to; then the notation's other words; then
+/// its traits, in the order above.*
+pub const NOTATION_WORDS: [&str; 5] = ["name", "of", "family", "admits", "kept"];
+
+/// The traits the order names before the alphabetical middle, in order.
+pub const ORDERED_FIRST: [&str; 1] = ["id"];
+
+/// The traits the order names after the alphabetical middle, in order.
+pub const ORDERED_LAST: [&str; 3] = ["occupied", "free", "capacity"];
+
+/// Where a column sorts, by its name alone.
+///
+/// `spec/console.md`: *the traits inside a description are in order of relevance: `id` first, then
+/// every other trait alphabetically, then `occupied`, `free` and `capacity` last. So the same
+/// state is always the same bytes and a description is one string however it was built. The middle
+/// is alphabetical because nothing has yet needed placing there.*
+///
+/// # Why this lives here and not where it was
+///
+/// **It was `crates/game-console/src/containment.rs`'s, and `crates/game-model` cannot reach that
+/// crate** - the dependency runs the other way. `P-606` made the order the one a record is written
+/// in, so the thing that writes records needs it too: *one function does that normalizing and
+/// everything that compares delegates to it.*
+///
+/// **`friendly-notation` is where both can reach**, and the order is a property of the friendly
+/// form rather than of either consumer - it is stated over trait **names**, which only this form
+/// has. **A second copy in `game-model` would have been the thing `P-606` forbids**: two
+/// normalizings that can disagree about whether two tests say the same thing.
+///
+/// **A rank rather than a list of every trait**, because the middle is everything the release
+/// declares and a list would go stale the moment a trait is added - silently, since an unlisted
+/// name would simply fall somewhere.
+///
+/// **It reads the name alone.** `P-481` established that `name` is not a trait and `P-483` put it
+/// first outright, so a valueless `id` does not displace `name:territory`.
+pub fn rank(name: &str) -> u8 {
+    if let Some(at) = NOTATION_WORDS.iter().position(|it| *it == name) {
+        return at as u8;
+    }
+    let traits = NOTATION_WORDS.len() as u8;
+    if let Some(at) = ORDERED_FIRST.iter().position(|it| *it == name) {
+        return traits + at as u8;
+    }
+    let middle = ORDERED_FIRST.len() as u8;
+    match ORDERED_LAST.iter().position(|it| *it == name) {
+        Some(at) => traits + middle + 1 + at as u8,
+        None => traits + middle,
+    }
+}
+
+/// Order a row's columns the way `spec/console.md` states, by name.
+///
+/// **A total order and a function of the names alone**, so the same row is always the same bytes
+/// however it was built - which is what `P-606` asks of the order a record is written in: *the
+/// order that function puts columns in must not depend on anything editable.*
+pub fn in_canonical_order<T>(mut columns: Vec<(String, T)>) -> Vec<(String, T)> {
+    columns.sort_by(|(left, _), (right, _)| {
+        rank(left).cmp(&rank(right)).then_with(|| left.cmp(right))
+    });
+    columns
+}
+
 /// Which rows of a test file are the game's: everything after a `{given}`, `{when}` or `{then}`.
 ///
 /// **A merged test file spans two stores.** Its prologue is script rows and its sections are game
