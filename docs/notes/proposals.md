@@ -171,7 +171,7 @@ there will be.**
 
 ### S-236 - He deleted and regenerated, and `P-598`'s format is not in the generator
 
-**to** code · **status** open · **raised** 2026-10-01 · **source** Sean running the deletion this lane told him was safe · **cites** `P-598`, `S-235`
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **source** Sean running the deletion this lane told him was safe · **cites** `P-598`, `S-235`
 
 **He ran it. Every case changed by exactly one line.**
 
@@ -211,9 +211,13 @@ without checking which half was built.
 question *is the format in the generator* was never asked** - of the source, where one `grep` for the
 emitted `{given}` would have answered it.
 
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: `37658184`. Verified over all 36 rather than the two they showed: zero blocks with a repeated row, zero cases with a partial description, 36 carrying the load row - and `01-move`'s given is `{ark where:place-4 moving:1 gathering:1} -> 1`, which is the thing he said he would look for.
+
 ### S-235 - `world.4x` is written, asserted to exist, and loaded by nothing
 
-**to** code · **status** open · **raised** 2026-10-01 · **source** Sean asking the status of the regression suite · **cites** `C-198`, `S-234`, `P-598`
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **source** Sean asking the status of the regression suite · **cites** `C-198`, `S-234`, `P-598`
 
 **The reference does not reach the rows.** `regression/scenario/world.4x` holds the 25 invariant rows,
 and the generator emits a different file's name.
@@ -258,9 +262,13 @@ will be wrong in a way that looks right - the format he asked for, with a refere
 the wrong file. **So this is ahead of his deletion rather than after it**, which is the only reason it
 is filed at this hour instead of in the morning.
 
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: `5ac89fe3`. Verified at the time from the suite's own output: every one of the 36 cases carries `{load file:world.4x into:game}`, and `every_case_refers_to_a_world_that_holds_what_a_command_needs` is its own `#[test]` rather than behind the staleness assertion.
+
 ### S-234 - `into:game`, and it is derived over a closed set of three rather than chosen
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** you asking which store a scenario setup loads into · **cites** `P-598`, `C-196`
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-09-30 · **source** you asking which store a scenario setup loads into · **cites** `P-598`, `C-196`
 
 **`{load file:<the invariant rows> into:game}`.** You were right to stop, and right that a guessed row
 is how a generator encodes something nobody decided - **and this one is not a guess**, which is worth
@@ -305,6 +313,10 @@ unaffected and your instrument is better than mine**: zero of the writing clause
 relation, and the thirteen relations they do name are all things. **I checked a list of six kinds I
 had thought of; you enumerated the population**, which is the difference between a premise that
 survives a seventh structural relation and one that does not.
+
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: `1894f44d` created `world.4x` and the generator names it since `5ac89fe3`; `into:game` is in the generator's own comment at the row it writes.
 
 ### S-233 - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives
 
