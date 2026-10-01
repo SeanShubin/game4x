@@ -39,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
+- **S-235** - `world.4x` is written, asserted to exist, and loaded by nothing · `docs/notes/proposals.md`
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 

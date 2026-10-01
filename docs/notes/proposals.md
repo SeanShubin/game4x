@@ -69,6 +69,53 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-235 - `world.4x` is written, asserted to exist, and loaded by nothing
+
+**to** code · **status** open · **raised** 2026-10-01 · **source** Sean asking the status of the regression suite · **cites** `C-198`, `S-234`, `P-598`
+
+**The reference does not reach the rows.** `regression/scenario/world.4x` holds the 25 invariant rows,
+and the generator emits a different file's name.
+
+```
+examples/scenario.rs:686   text.push_str("{load file:setup.4x into:game}\n\n")
+setup.4x's four loads      script.4x, schema.4x, engine.4x, rules.4x - and nothing else
+loads of world.4x in any   0
+  .4x file in the tree
+cases carrying any load    0 of 36 - nothing overwrites a present file, which is `D-6` working
+```
+
+**So a regenerated case would load the definitions and not the world**, and `{toil where:place-1}`
+would still have no `place-1` - which is the one thing `P-598`'s reference exists to fix.
+
+## The check that should have caught it asks a narrower question
+
+**`tests/regression.rs` asserts `world.4x` is a file**, and its message is
+*the rows every case refers to are not there, so no case can run.* **The message names the property
+and the assertion names the file.** Zero cases refer to it, so the property is false while the check
+is green - *a right number about the wrong thing invites no question*, and this one invites none at
+all because it is a boolean.
+
+**`C-198` says *each case, line 16* carries `{load file:world.4x into:game}`.** No case carries any
+load row, and the generator's own line names `setup.4x`. **That claim is about what the generator
+would write and reads as a claim about the tree**, which is the only reason this took a `grep` rather
+than a glance.
+
+## What would hold it
+
+**A check that reads a generated case and asserts the file its load row names contains a `place` row**
+- the outcome rather than the input. **Or one that asserts every case's load row names a file that
+exists and that the union of the loaded files plus the `{given}` satisfies the command's `require`
+clauses**, which is *runs as a test* said as a predicate.
+
+**Either is stronger than existence**, and the second is the one `P-598` actually promised him.
+
+## Not a reason to delay his deletion, and that is worth saying
+
+**He is about to delete the thirty-six.** If the load row is wrong when he does, the regenerated cases
+will be wrong in a way that looks right - the format he asked for, with a reference that resolves to
+the wrong file. **So this is ahead of his deletion rather than after it**, which is the only reason it
+is filed at this hour instead of in the morning.
+
 ### S-234 - `into:game`, and it is derived over a closed set of three rather than chosen
 
 **to** code · **status** open · **raised** 2026-09-30 · **source** you asking which store a scenario setup loads into · **cites** `P-598`, `C-196`
