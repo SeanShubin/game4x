@@ -608,6 +608,44 @@ mod tests {
         every_test_is_browsable(&known, &browsable);
     }
 
+    /// **A record the writer writes agrees with the test it was written from.**
+    ///
+    /// **This is the half that had no check and the one that would have cost him every approval.**
+    /// The writer drops the prose - `P-600`: *a comment explains and does not decide* - and
+    /// `report::drift` compared whole lines including comments. **Measured before the comparison
+    /// was changed: `status=drifted`, fifteen lines, on a record built from an unmodified test.**
+    /// So the first test he approved would have read as drifted at once.
+    ///
+    /// **Over every test rather than one**, because a writer and a comparison can agree about one
+    /// file's shape and disagree about a section only some tests have.
+    #[test]
+    fn a_record_the_writer_writes_agrees_with_its_test() {
+        let mut agreed = 0;
+        for file in report::every_test() {
+            let name = file.trim_end_matches(".4x").to_string();
+            let text = std::fs::read_to_string(report::tests_at().join(&file))
+                .unwrap_or_else(|why| panic!("{file}: {why}"));
+            let said = record_for(&name, &text).unwrap_or_else(|why| panic!("{name}: {why}"));
+            let (status, lines) = report::drift(Some(&said), &text);
+            assert_eq!(
+                status,
+                "reviewed",
+                "`{name}`: a record written from this test does not agree with it:
+  {}",
+                lines
+                    .iter()
+                    .map(|(_, it)| it.as_str())
+                    .collect::<Vec<_>>()
+                    .join(
+                        "
+  "
+                    )
+            );
+            agreed += 1;
+        }
+        assert!(agreed >= 40, "only {agreed} compared");
+    }
+
     /// **What the writer produces reads as approved**, which is the one thing the readers need of
     /// it.
     ///

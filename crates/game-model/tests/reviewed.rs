@@ -322,3 +322,73 @@ fn every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read() {
         "the readings and the suite are different sizes and neither difference named it"
     );
 }
+
+/// **Column order is not behaviour, so renumbering a `seq:` clears no verdict.**
+///
+/// `P-606`, Sean's answer and a third option neither lane offered: *the order of the columns is not
+/// significant, so this should not make tests different, although we should be deterministic about
+/// them either way.*
+///
+/// # The trap this closes, and which side had to close it
+///
+/// **The writer emits rows in the schema's declared order**, and a `seq:` is editable with no
+/// meaning beyond order - so renumbering one changes every record's bytes. **If the comparison read
+/// written bytes, that tidy-up would send all fifty-seven tests back to him.**
+///
+/// **It is loud rather than silent** - the verdicts clear and he notices - **which is why it was a
+/// trap for a later session rather than a defect now.** The specification lane named it; the
+/// requirement that followed is that the normalising has to be in the comparison, because the
+/// writer cannot normalise away an order it is choosing.
+///
+/// **Driven over text rather than over the schema**, because renumbering a real `seq:` would edit
+/// `spec/data/`, which is not this lane's column - and the property is about the comparison, not
+/// about any particular column order.
+#[test]
+fn a_reordered_row_is_the_same_row_and_a_changed_value_is_not() {
+    let read = "{test name:x}\n\n{given}\n{citizen where:place-1 hungry:1 bearing:1} -> 2\n";
+
+    // **The same row with its columns in another order.** This is what a `seq:` renumber produces.
+    let reordered = "{test name:x}\n\n{given}\n{citizen bearing:1 hungry:1 where:place-1} -> 2\n";
+    assert_eq!(report::drift(Some(read), reordered).0, "reviewed");
+
+    // **And alphabetical order, which is what `P-606` might have meant and now cannot matter.**
+    let alphabetical =
+        "{test name:x}\n\n{given}\n{citizen bearing:1 hungry:1 where:place-1} -> 2\n";
+    assert_eq!(report::drift(Some(read), alphabetical).0, "reviewed");
+
+    // **A reworded comment survives too** - `P-600`: *a comment explains and does not decide.*
+    let recommented = "# said another way\n{test name:x}\n\n{given}\n{citizen where:place-1 hungry:1 bearing:1} -> 2\n";
+    assert_eq!(report::drift(Some(read), recommented).0, "reviewed");
+
+    // **Two entries of one description are one quantified row**, which is rule 3's coalescing.
+    let split = "{test name:x}\n\n{given}\n{citizen where:place-1 hungry:1 bearing:1} -> 1\n{citizen where:place-1 hungry:1 bearing:1} -> 1\n";
+    assert_eq!(report::drift(Some(read), split).0, "reviewed");
+
+    // **And the comparison still bites.** A changed value, a changed quantity, a row moved to
+    // another section, and a row removed are each a different behaviour.
+    for (what, now) in [
+        (
+            "a changed value",
+            "{test name:x}\n\n{given}\n{citizen where:place-1 hungry:0 bearing:1} -> 2\n",
+        ),
+        (
+            "a changed quantity",
+            "{test name:x}\n\n{given}\n{citizen where:place-1 hungry:1 bearing:1} -> 3\n",
+        ),
+        (
+            "a row in another section",
+            "{test name:x}\n\n{then}\n{citizen where:place-1 hungry:1 bearing:1} -> 2\n",
+        ),
+        ("a row removed", "{test name:x}\n\n{given}\n"),
+        (
+            "a column added",
+            "{test name:x}\n\n{given}\n{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2\n",
+        ),
+    ] {
+        assert_eq!(
+            report::drift(Some(read), now).0,
+            "drifted",
+            "{what} is a different behaviour and this did not say so"
+        );
+    }
+}

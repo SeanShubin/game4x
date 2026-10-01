@@ -335,12 +335,50 @@ pub fn drift(read: Option<&str>, now: &str) -> (&'static str, Vec<(&'static str,
     let Some(read) = read else {
         return ("never reviewed", Vec::new());
     };
+    // **What a test says, with everything that is not behaviour taken off.**
+    //
+    // `P-600`: *my approval is about what a test says, not where it is or how it is written. The
+    // behaviour is every `{...}` row, including a `{load}`, and nothing else - a comment explains
+    // and does not decide, and `{test name:}` identifies rather than states. So two tests are the
+    // same test when their rows say the same thing, however the text differs: entries coalesced to
+    // one per description, traits and entries in the order this specification already gives them,
+    // whitespace not significant.*
+    //
+    // **And `P-606`, which is Sean's answer and neither order either lane offered**: *the order of
+    // the columns is not significant, so this should not make tests different, although we should
+    // be deterministic about them either way.* So the writer picks an order and **this takes it
+    // away**.
+    //
+    // # Four things dropped, and each is a verdict surviving something it should survive
+    //
+    // ```text
+    // a comment            P-600: a comment explains and does not decide
+    // {verdict state:...}  the record's own statement, about the test rather than behaviour
+    // column order         P-606: not significant
+    // a repeated entry     coalesced to one per description, quantities summed
+    // ```
+    //
+    // **This compared whole lines including comments**, so a reworded comment read as drift - which
+    // `P-600` names as a change an approval survives. It cost nothing while a record was a byte
+    // copy of its test; **under `P-605` a record has no prose at all, so every record the writer
+    // writes would have read as drifted.** Measured before this was changed: `status=drifted`,
+    // fifteen lines, on a record built from an unmodified test.
+    //
+    // # Why the `seq:` trap dies here rather than in the writer
+    //
+    // **The written order follows the schema's declared columns, and `seq:` values are editable
+    // with no meaning beyond order.** So renumbering one changes what the writer emits. **If this
+    // compared written bytes, that would clear every verdict**; because it compares a row's
+    // key-value set, the written form changes and the behaviour does not, and nothing clears.
     let bare = |text: &str| -> Vec<(String, String)> {
         let mut section = "note";
-        let mut out: Vec<(String, String)> = Vec::new();
+        let mut counted: BTreeMap<(String, String), i64> = BTreeMap::new();
+        let mut plain: Vec<(String, String)> = Vec::new();
         for line in text.lines() {
             let line = line.split_whitespace().collect::<Vec<_>>().join(" ");
-            if line.is_empty() {
+            // **Only a row is behaviour.** A comment, a blank and anything else are dropped rather
+            // than compared.
+            if !line.starts_with('{') {
                 continue;
             }
             if let Some(marker) = line.strip_prefix('{').and_then(|it| it.strip_suffix('}'))
@@ -352,9 +390,54 @@ pub fn drift(read: Option<&str>, now: &str) -> (&'static str, Vec<(&'static str,
                     "then" => "then",
                     _ => "refused",
                 };
+                continue;
             }
-            out.push((section.to_string(), line));
+            let (row, how_many) = match line.rsplit_once(" -> ") {
+                Some((row, count)) => (row.to_string(), count.trim().parse::<i64>().ok()),
+                None => (line.clone(), None),
+            };
+            let Some(inside) = row
+                .trim()
+                .strip_prefix('{')
+                .and_then(|it| it.strip_suffix('}'))
+            else {
+                plain.push((section.to_string(), line));
+                continue;
+            };
+            let mut words = inside.split(' ');
+            let relation = words.next().unwrap_or_default().to_string();
+            // **The record's own verdict is not the test's behaviour**, and the test it is about
+            // does not carry one - so comparing it would report every record as drifted.
+            if relation == "verdict" {
+                continue;
+            }
+            // **`{test name:}` identifies rather than states**, so it is dropped on both sides.
+            // The writer writes it from the file's name, which is what makes a rename detectable;
+            // that is a different question from whether two tests say the same thing.
+            if relation == "test" {
+                continue;
+            }
+            // **Sorted, which is what takes the column order away.**
+            let mut values: Vec<&str> = words.filter(|it| !it.is_empty()).collect();
+            values.sort_unstable();
+            let key = (
+                section.to_string(),
+                format!("{relation} {}", values.join(" ")),
+            );
+            match how_many {
+                Some(n) => *counted.entry(key).or_insert(0) += n,
+                // **A row with no quantity is one entry**, and two of them with one description
+                // would be a store holding one thing twice, which the key refuses.
+                None => *counted.entry(key).or_insert(0) += 1,
+            }
         }
+        let mut out = plain;
+        out.extend(
+            counted
+                .into_iter()
+                .map(|((section, row), n)| (section, format!("{{{row}}} -> {n}"))),
+        );
+        out.sort();
         out
     };
     let (was, is) = (bare(read), bare(now));

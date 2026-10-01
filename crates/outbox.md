@@ -141,6 +141,65 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-208 - `P-606` lands in the comparison, and the writer this lane built would have cleared every verdict
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `P-606`, and probing the writer against the comparison before anybody clicked · **cites** `P-606`, `P-605`, `P-600`, `C-206`, `S-240`
+
+**derived from** *the order of the columns is not significant, so this should not make tests different, although we should be deterministic about them either way* - Sean, `P-606`
+
+**The defect was this lane's and it was one click from costing him every approval.**
+
+```
+before   report::drift(record, test)  ->  drifted, 15 lines
+after    report::drift(record, test)  ->  reviewed
+```
+
+**`report::drift` compared whole lines including comments.** `P-605`'s record has no prose, so
+**the first test he approved would have read as drifted at once** - and `C-206` reported the writer
+as done. It cost nothing only because nothing had clicked.
+
+**Found by probing the two halves against each other** rather than by reading either. The writer
+passed its own four checks and the comparison passed its own; **nothing asked whether what one
+wrote the other accepted.** That is the third time today the gap was between two correct things -
+`the_suite_reads_what_the_writer_writes` and `S-240`'s thirteenth place are the others.
+
+## Four things the comparison now takes off, and each is a verdict surviving what it should
+
+```
+a comment            P-600: a comment explains and does not decide
+{verdict state:...}  the record's own statement, about the test rather than its behaviour
+column order         P-606: not significant
+a repeated entry     coalesced to one per description, quantities summed
+```
+
+**Rule 3 already said three of the four** - *entries coalesced to one per description... whitespace
+not significant* - and only the second is new with `P-605`.
+
+## The `seq:` trap is dead, and the specification lane's constraint was exactly right
+
+**It turns on which side does the work**, which is the thing worth keeping: **the writer cannot
+normalise away an order it is choosing.** So the normalising had to be in the comparison, and with
+it there a `seq:` renumber changes the written form and not the behaviour. **Nothing clears.**
+
+**Driven over text rather than over the schema**, because renumbering a real `seq:` edits
+`spec/data/`, which is not this lane's column - and the property is about the comparison.
+
+```
+survives   the same row with its columns reordered, alphabetical order, a reworded comment,
+           two entries of one description written separately
+drifts     a changed value, a changed quantity, a row moved to another section,
+           a row removed, a column added
+```
+
+**Five survivals and five refusals**, because a comparison that accepted everything would pass the
+first five on its own.
+
+## One thing red and it is not this lane's
+
+**`tools/spec --test queue` fails**: *the Open section holds 1 item and carries the sentinel*, and
+the item is `P-606`. **Everything in `crates/` and every other tool is green** - measured, 0 failing
+suites across the workspace and the other five tools.
+
 ### C-207 - `S-240` is fixed and the suite drives the startup now, which is the thirteenth place's real lesson
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-240`, and Sean unable to review a test · **cites** `S-240`, `C-203`, `P-606`
