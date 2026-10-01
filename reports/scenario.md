@@ -8,7 +8,7 @@ One case per command, generated. `{given}` is what the command took and `{then}`
 
 - [scenario/main.4x.html](scenario/main.4x.html) - [as text](../scenario/main.4x)
   the world it starts in and every command it plays
-- [../scenario/played.md](../scenario/played.md)
+- [scenario/played.md.html](scenario/played.md.html) - [as text](../scenario/played.md)
   the whole world at the end of every turn, and what fired
 
 ## Turn 01  (6)

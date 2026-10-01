@@ -85,6 +85,227 @@ fn escaped(raw: &str) -> String {
         .replace('>', "&gt;")
 }
 
+/// What one line of a generated markdown document is.
+///
+/// **A closed set, counted over `scenario/played.md` before this was written**: 47 headings,
+/// 548 indented lines, 105 blank and 18 of prose, over 718. **Nothing else is in the file** -
+/// no fenced block, no bullet, no table - which is what makes a renderer this small honest
+/// rather than lucky. [`every_line_of_the_playthrough_is_one_this_renderer_knows`] is what
+/// keeps it true.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Line {
+    Blank,
+    Heading(usize),
+    Preformatted,
+    Prose,
+}
+
+/// Which kind a line is, by the same rules the renderer uses.
+pub fn kind_of(line: &str) -> Line {
+    if line.trim().is_empty() {
+        Line::Blank
+    } else if let Some(hashes) = line.strip_prefix('#') {
+        Line::Heading(1 + hashes.len() - hashes.trim_start_matches('#').len())
+    } else if line.starts_with("  ") {
+        Line::Preformatted
+    } else {
+        Line::Prose
+    }
+}
+
+/// An anchor for a heading, from its words.
+fn slug(said: &str) -> String {
+    let mut out = String::new();
+    for ch in said.chars() {
+        if ch.is_ascii_alphanumeric() {
+            out.extend(ch.to_lowercase());
+        } else if !out.ends_with('-') {
+            out.push('-');
+        }
+    }
+    out.trim_matches('-').to_string()
+}
+
+/// Inline markdown, inside one line of prose.
+///
+/// **A code span is masked rather than cut out, and that is the whole of the difficulty.** A
+/// span may hold `*` - `place-1`, `{end-turn}` - so emphasis must not see inside one; and
+/// emphasis may span one, as `played.md`'s own second line does, where a bold run opens before
+/// a code span and closes after it. **Splitting on backticks first breaks that**, because the
+/// opening and closing marks land in different pieces and neither has a partner.
+///
+/// **So each span becomes a NUL-delimited index**, emphasis runs over the whole line, and the
+/// spans go back. A NUL cannot occur in the source, so the mask cannot collide with content.
+///
+/// **Found by reading the page rather than the function.** The first version emitted an empty
+/// `<em></em>` where that line wanted a `<strong>` around the rest of the sentence - a bug that
+/// renders as a stray tag and reads, in a browser, as nothing at all.
+fn inline(raw: &str) -> String {
+    let mut spans: Vec<String> = Vec::new();
+    let mut masked = String::new();
+    for (at, piece) in raw.split('`').enumerate() {
+        if at % 2 == 1 {
+            masked.push_str(&format!("\u{0}{}\u{0}", spans.len()));
+            spans.push(format!("<code>{}</code>", escaped(piece)));
+        } else {
+            masked.push_str(&escaped(piece));
+        }
+    }
+    let mut out = emphasis(&masked);
+    for (at, span) in spans.iter().enumerate() {
+        out = out.replace(&format!("\u{0}{at}\u{0}"), span);
+    }
+    out
+}
+
+/// `**strong**` and then `*emphasis*`, over text that holds no code span.
+fn emphasis(escaped_text: &str) -> String {
+    let strong = paired(escaped_text, "**", "strong");
+    paired(&strong, "*", "em")
+}
+
+/// Wrap each pair of `mark`s in a tag, leaving an unpaired one alone.
+fn paired(text: &str, mark: &str, tag: &str) -> String {
+    let pieces: Vec<&str> = text.split(mark).collect();
+    if pieces.len() < 3 {
+        return text.to_string();
+    }
+    let mut out = String::new();
+    // **An odd piece is inside a pair only when a closing mark follows it**, so a trailing
+    // unpaired mark re-emits its own text rather than opening a tag that never closes.
+    let last_pair = pieces.len() - 1 - (pieces.len() - 1) % 2;
+    for (at, piece) in pieces.iter().enumerate() {
+        if at % 2 == 1 && at <= last_pair {
+            out.push_str(&format!("<{tag}>{piece}</{tag}>"));
+            continue;
+        }
+        // **A mark that no tag consumed is written back out**, which is every separator
+        // before an odd piece past the last pair, and before an even piece past it. A piece
+        // inside a pair swallows the marks on both sides of it, so an even piece up to
+        // `last_pair` needs none.
+        if at > 0 && (at % 2 == 1 || at > last_pair) {
+            out.push_str(mark);
+        }
+        out.push_str(piece);
+    }
+    out
+}
+
+/// A generated markdown document, rendered as a page with its sections reachable from the top.
+///
+/// **`S-233`, and Sean asked for it by name while vetting `D-5`**: *where do I read that
+/// scenario as html.* `scenario/played.md` was the one document in the tree with no rendering -
+/// 288 of them and not this - and it is where `D-5`'s measured half lives: what fired, the one
+/// rule that did not, and the world at the end of every turn.
+///
+/// # The contents list is the point, not decoration
+///
+/// **`S-233`**: *a rendering that makes him scroll past four turns to reach `What fired` is
+/// worse than the markdown he has.* It is 718 lines with five per-turn world dumps, so every
+/// `##` is linked from the top and carries an anchor. **That is the whole reason this is not
+/// [`rendered`]**, which wraps a file in one `<pre>` and is right for a `.4x`.
+fn rendered_markdown(rel: &str) -> String {
+    let under = rel.strip_prefix("reports/").unwrap_or(rel);
+    let at = root().join("reports").join(format!("{under}.html"));
+    if let Some(dir) = at.parent() {
+        std::fs::create_dir_all(dir).unwrap_or_else(|why| panic!("{}: {why}", dir.display()));
+    }
+    let depth = under.matches('/').count();
+    let up = "../".repeat(depth);
+    let out_of_reports = "../".repeat(depth + 1);
+    let text = std::fs::read_to_string(root().join(rel)).unwrap_or_default();
+    let title = title_of(&root().join(rel));
+
+    let mut body = String::new();
+    let mut contents = String::new();
+    let mut in_pre = false;
+    let mut paragraph: Vec<String> = Vec::new();
+
+    let flush = |paragraph: &mut Vec<String>, body: &mut String| {
+        if !paragraph.is_empty() {
+            body.push_str(&format!("<p>{}</p>\n", paragraph.join(" ")));
+            paragraph.clear();
+        }
+    };
+
+    for line in text.lines() {
+        match kind_of(line) {
+            Line::Preformatted => {
+                flush(&mut paragraph, &mut body);
+                if !in_pre {
+                    body.push_str("<pre class=\"four-x\">");
+                    in_pre = true;
+                }
+                body.push_str(&lit(line));
+                body.push('\n');
+                continue;
+            }
+            _ if in_pre => {
+                body.push_str("</pre>\n");
+                in_pre = false;
+            }
+            _ => {}
+        }
+        match kind_of(line) {
+            Line::Blank => flush(&mut paragraph, &mut body),
+            Line::Heading(level) => {
+                flush(&mut paragraph, &mut body);
+                let said = line.trim_start_matches('#').trim();
+                let id = slug(said);
+                // **The first heading is the page's own title and is not a section.** It is
+                // emitted by the header below, so putting it in the list would offer him a
+                // link to the top of the page he is already at.
+                if level == 2 {
+                    contents.push_str(&format!(
+                        "<li><a href=\"#{id}\">{}</a></li>\n",
+                        inline(said)
+                    ));
+                }
+                if level > 1 {
+                    body.push_str(&format!(
+                        "<h{level} id=\"{id}\">{}</h{level}>\n",
+                        inline(said)
+                    ));
+                }
+            }
+            Line::Prose => paragraph.push(inline(line.trim())),
+            Line::Preformatted => unreachable!("handled above"),
+        }
+    }
+    flush(&mut paragraph, &mut body);
+    if in_pre {
+        body.push_str("</pre>\n");
+    }
+
+    let listed = if contents.is_empty() {
+        String::new()
+    } else {
+        format!("<nav class=\"contents\">\n<ul>\n{contents}</ul>\n</nav>\n")
+    };
+
+    let page = format!(
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n\
+         <title>{}</title>\n<link rel=\"stylesheet\" href=\"{up}report.css\">\n</head>\n<body>\n\
+         <h1>{}</h1>\n\
+         <p class=\"where\"><a href=\"{up}index.html\">The index</a> \u{b7} \
+         <a href=\"{out_of_reports}{}\">the file itself, as text</a></p>\n\
+         <p class=\"generated\">Generated from <code>{}</code> by \
+         <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from \
+         is, and this is a rendering of it.</p>\n{listed}{body}</body>\n</html>\n",
+        escaped(&title),
+        escaped(&title),
+        escaped(rel),
+        escaped(rel)
+    );
+
+    let before = std::fs::read_to_string(&at).unwrap_or_default();
+    if before != page {
+        std::fs::write(&at, &page).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+        RENDERED.fetch_add(1, Ordering::Relaxed);
+    }
+    format!("{under}.html")
+}
+
 /// A `.4x` line, marked up so the notation reads as what it is.
 ///
 /// **Sean, 2026-09-28**: *I like the html can be used to make text clean, readable, and sometimes
@@ -110,12 +331,24 @@ fn lit(line: &str) -> String {
     };
     let body = &trimmed[open + 1..close];
     let after = &trimmed[close + 1..];
+    // **What comes before the brace is kept, and it was not** - `S-233`. This emitted the text
+    // *after* the closing brace and dropped the text before the opening one, so a line reading
+    // `    took  {ark moving:1 ...}` arrived as the row alone: the indentation gone and the
+    // word `took` with it. **Harmless on a `.4x` row, which begins at the brace**, and not
+    // harmless on `scenario/played.md`, where every entry under *What every command took and
+    // made* is labelled that way.
+    //
+    // **Found by a check comparing the page's text against the markdown's**, not by looking at
+    // either - the page reads plausibly without the labels, and the lines it dropped are the
+    // ones that say which half of the pair you are reading.
+    let before = &trimmed[..open];
     let mut parts = body.split_whitespace();
     let Some(relation) = parts.next() else {
         return escaped(trimmed);
     };
     let mut out = format!(
-        "<span class=\"brace\">{{</span><span class=\"relation\">{}</span>",
+        "{}<span class=\"brace\">{{</span><span class=\"relation\">{}</span>",
+        escaped(before),
         escaped(relation)
     );
     for part in parts {
@@ -586,9 +819,9 @@ pub fn write_all() -> (usize, usize) {
                 beside: vec![("as text".to_string(), up("", "scenario/main.4x"))],
             },
             Entry {
-                at: up("", "scenario/played.md"),
+                at: rendered_markdown("scenario/played.md"),
                 said: "the whole world at the end of every turn, and what fired".to_string(),
-                beside: Vec::new(),
+                beside: vec![("as text".to_string(), up("", "scenario/played.md"))],
             },
         ],
     )];

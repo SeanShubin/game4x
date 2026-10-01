@@ -43,6 +43,30 @@ h2 {
     padding-bottom: 0.3rem;
 }
 
+/* `S-233`: a rendering that makes him scroll past four turns to reach `What fired` is
+   worse than the markdown. The sections of a long generated document are listed at the
+   top, and `h3` gets a size of its own so a subsection reads as one. */
+nav.contents {
+    border-left: 2px solid var(--rule);
+    margin: 0 0 1.6rem;
+    padding: 0.2rem 0 0.2rem 1rem;
+}
+
+nav.contents ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.contents li {
+    margin: 0.15rem 0;
+}
+
+h3 {
+    font-size: 1rem;
+    margin: 1.6rem 0 0.4rem;
+}
+
 p.note {
     color: var(--quiet);
     margin: 0 0 0.8rem;

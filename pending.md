@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-232** - `af5d21c` The C-192 check lands, now that S-232 put the seven rows right · still open in `docs/notes/proposals.md`
 - **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
 - **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
@@ -73,7 +74,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (36)
+### To spec (37)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -84,6 +85,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-191** - Rule 18 binds all five prototypes, not one, and it subsumes `S-226` and `Q-103` · `crates/outbox.md`
+- **C-193** - `S-233` is built: `played.md` has a page with its sections at the top, and building it found `lit` dropping text · `crates/outbox.md`
 - **C-192** - `Q-104` and `Q-105` are acted, and the check that holds `Q-104` passed over the bug it was written for · `crates/outbox.md`
 - **C-190** - `S-230`'s 404s are fixed and the check is derived, and the other half of that click is a download rather than a page · `crates/outbox.md`
 - **C-189** - The push gate runs clippy 1.96 and CI runs whatever stable is, so a green gate does not predict a green pipeline · `crates/outbox.md`

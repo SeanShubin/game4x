@@ -135,6 +135,69 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-193 - `S-233` is built: `played.md` has a page with its sections at the top, and building it found `lit` dropping text
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-233` · **cites** `S-233`, `D-5`, `R-9`, `C-190`
+
+**derived from** *a rendering that makes him scroll past four turns to reach `What fired` is worse than the markdown he has* - `S-233`
+
+**`reports/scenario/played.md.html` exists and `reports/scenario.md` links it**, with the
+markdown beside it as *as text*, which is `R-9`'s pair.
+
+## Why it is not the renderer the other 288 use
+
+**`rendered` wraps a file in one `<pre>`, which is right for a `.4x` and wrong for 718 lines
+with five world dumps in them.** So `rendered_markdown` handles the four kinds of line this
+document has and lists every `##` at the top with an anchor - nine entries, so *What fired* is
+one click rather than four turns of scrolling.
+
+```
+blank           105
+heading          47
+preformatted    548
+prose            18
+                718
+```
+
+**A closed set, and asserted rather than remembered.**
+`every_line_of_the_playthrough_is_one_this_renderer_knows` counts the four, asserts each is
+non-empty as well as the total, and **names the three constructs that would render wrong rather
+than fail**: a fenced block, a bullet and a table each become prose, which looks like text on
+the page instead of breaking.
+
+## What building it found, and this is the part worth reading
+
+**`lit` emitted the text after a row's closing brace and dropped the text before its opening
+one.** A line reading `took  {ark moving:1 quantity:1 where:4}` arrived as the row alone - the
+indentation gone and the word `took` with it.
+
+**Harmless on a `.4x`, where a row begins at the brace.** Not harmless under *What every command
+took and made*, where every entry is labelled `took` or `made` and **the label is the only thing
+saying which half of the pair you are reading.**
+
+**Measured after the repair: four files changed, and three of them are this item's.**
+`reports/report.css`, `reports/scenario.html`, `reports/scenario.md` and the new page. **So no
+`.4x` rendering in the tree has a prefix before its brace**, and the bug reached exactly the one
+document that does - which is why 288 renderings carried it without anybody seeing it.
+
+## It was found by a check rather than by looking, and that was not luck
+
+**The page reads plausibly without the labels.** `the_playthrough_page_says_what_the_markdown
+_says` strips the markup off the page and asserts every plain line of the source is in what is
+left - and it reported **413 lines absent** before the repair.
+
+**Its own first version asked a narrower question and this lane caught that too.** It skipped
+any source line holding a backtick or an angle bracket, compared the rest against the page *with
+its markup*, and still failed on 422 - because a syntax-marked row reaches the page as a dozen
+spans and no contiguous copy of itself. **Comparing the text to the text is the question;
+comparing it to the markup was a different one that happened to fail for a second reason.**
+
+## One thing left as it is
+
+**The emphasis marks do not survive and should not.** `**x**` becomes a tag, so the comparison
+above skips a line holding `` ` `` or `*`. 200-odd lines are compared and the count is asserted,
+so the skip cannot quietly become everything.
+
 ### C-192 - `Q-104` and `Q-105` are acted, and the check that holds `Q-104` passed over the bug it was written for
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-104` and `Q-105` · **cites** `Q-104`, `Q-105`, `C-186`, `Q-9`
