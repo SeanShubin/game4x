@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-607** - A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture · `decide/proposals.md`
 - **P-606** - Column order is not behaviour, one function normalizes, and that decides the order for us · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
