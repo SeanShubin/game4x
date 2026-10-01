@@ -8,6 +8,74 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-01 - global settings, and squads replace berth
+
+**Sean**: *we need a way to represent global settings. We are going to use this to replace berth.
+Instead there is going to be a total number of squads we can control. And a total number of units
+per squad.*
+
+**What it displaces.** `berth` is a capacity today - `{provides kind:place what:berth} -> 6` and
+`{consumes kind:pioneer what:berth} -> 1` in `scenario/main.4x`, and `spec/logistics.md` carries
+the containment rules it belongs to. **A berth is per place; a squad limit is per game**, which is
+why it needs a form that is not a row about a thing.
+
+**What is unstated.** Where a global setting lives in the notation - `planet` was made a thing for
+the sun, so a game-wide setting may want the same treatment or may want something new. Whether a
+squad is a thing in the state or only a limit on things. What becomes of `provides` and `consumes`
+if they lose their only two users.
+
+## 2026-10-01 - a hosted approval app, and unit tests are canonical where regression cases are not
+
+**Sean**: *we need a hosted app on github to track test approval. The tests I review now, those are
+my unit tests. Once I approve them, the code lane is clear to implement them. This needs to be
+hosted from the github page, and needs to communicate back so that the terminals running claude can
+see the results. I am ok with a github private access token in local storage. I am going to want to
+mark them as approved, pending, or denied. I am also going to want to do this same marking to the
+regression tests, but the regression test is more informational, it is not meant to block the build,
+just to catch my attention. If I see a bunch of regression tests fail or go to pending, I know there
+is something for me to check, but approved unit tests are canonical.*
+
+**Three states where there were two.** `reviewed/` records a reading and its absence records
+nothing - there is no way to say *denied*. **`reviewed/asked.md` is the nearest thing** and is a
+note rather than a state.
+
+**It supersedes `S-228`'s shape rather than extending it.** That one gave him tick, untick and
+comment through GitHub issues, and `.github/workflows/review.yml` is built and unposted. **A hosted
+page with a token is a different answer to the same question**, and the part that does not change is
+the one `CLAUDE.md` makes load-bearing: no lane may create, delete or change a record.
+
+**What is unstated.** How *approved, pending, denied* maps onto `reviewed/` - three files, a field,
+or three directories. What *communicate back* means concretely, given a static page and a token.
+Whether a denied test stays in `spec/tests/`. And whether marking a regression case *pending* is the
+same gesture as deleting one, which today is the only gesture he has there.
+
+## 2026-10-01 - the frontend begins, and the interface gets its own unit tests
+
+**Sean**: *it is time to start frontend work. I want to be able to move an ark around the planet.
+This involves selecting the ark, selecting the place for it to move, confirming the move, pressing
+an end turn button. We are going to have two sets of unit tests, one for the game rules and one for
+the user interface. User interface unit tests are going to be able to check which menu items are
+displayed, whether they are active or not, whether they have the users attention or not (an
+abstraction of the user hovering the mouse over it, or selecting it with a controller). We are going
+to need save and load. Top menu items are continue, load, new game, exit. There is going to be a
+status bar, always present, that I can check the text of. Save games will have a name, which will be
+in a directory locally and in localstorage on the browser.*
+
+**This is the review he queued and has not had.** `docs/notes/review-focus-separation-of-concerns`
+records it: player interaction, UI state and engine operation all separate, and
+`docs/architecture.md` names only the third. **A second suite of unit tests over interface state is
+that separation made checkable**, which is why it arrives as tests rather than as a rule.
+
+**What is unstated, and the first one is the whole shape.** What a user interface test is written
+in - the friendly form states game rows, and *displayed*, *active* and *has attention* are not game
+rows. Whether they live in `spec/tests/` beside the others or in a second directory. What a save
+game is, as data. Whether *continue* means the most recent save or a session in memory.
+
+**And `attention` is a third state of a thing, not a second.** Displayed and active are properties
+of a menu item; *has the user's attention* is a property of at most one item in the whole interface,
+which is a different kind of fact and the one a test is most likely to get wrong.
+
+
 ## 2026-09-30 - a regression case takes the test format, and convention over configuration is the reason
 
 **Sean**, after being talked through `regression/scenario/01/06-end-turn.4x`: *while this is

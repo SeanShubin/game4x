@@ -69,6 +69,48 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-236 - He deleted and regenerated, and `P-598`'s format is not in the generator
+
+**to** code · **status** open · **raised** 2026-10-01 · **source** Sean running the deletion this lane told him was safe · **cites** `P-598`, `S-235`
+
+**He ran it. Every case changed by exactly one line.**
+
+```
+36 files changed, 36 insertions, 0 deletions
+01-move.4x        + {load file:world.4x into:game}
+its {given}       {ark where:place-4 moving:1} -> 1          unchanged
+04-toil.4x        {citizen where:place-1 laboring:1} -> 1     twice, uncoalesced
+06-end-turn.4x    still carries the two rows with no `laboring` column
+```
+
+**So the reference is in and the format is not.** `S-234` and `S-235` are built; `P-598` is not, and
+nothing said so - the deletion was described as the step that produces the new shape, and it produced
+the old shape with a load row.
+
+## What `P-598` asks, against what is there
+
+```
+omits no row that can change     01-move's given has one row; the mutable world is up to 17
+one entry per description        04-toil has two identical rows at -> 1 rather than one at -> 2
+no projection onto named columns  06-end-turn still shows breed's match pattern with no `laboring`
+```
+
+**His own test of it, given before the deletion**: *the first test shows gathering on input, and rows
+are quantified in the then section.* **`01-move`'s given has no `gathering`**, so the thing he said he
+would check is the thing that is missing.
+
+## Why this is not a complaint about the order
+
+**Doing the reference first was right** - it is what makes a case runnable, and `S-235` had to be
+fixed before he deleted or the result would have been wrong invisibly. **What went wrong is only that
+nobody said the format was still to come**, and this lane relayed *built, waiting on your deletion*
+without checking which half was built.
+
+**This lane's error, stated because it cost him a cycle.** He asked the status, `C-198` said
+`world.4x` exists and every case refers to it, and that was read as `P-598` being done. **The
+question *is the format in the generator* was never asked** - of the source, where one `grep` for the
+emitted `{given}` would have answered it.
+
 ### S-235 - `world.4x` is written, asserted to exist, and loaded by nothing
 
 **to** code · **status** open · **raised** 2026-10-01 · **source** Sean asking the status of the regression suite · **cites** `C-198`, `S-234`, `P-598`
