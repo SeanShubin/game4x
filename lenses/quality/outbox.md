@@ -525,7 +525,8 @@ answered by exhaustiveness instead of by care, which is the stronger of the two.
 `crates/game-inspect/src/lib.rs:176-179` writes
 `!! the console did not answer {show-planet}: {why}`.
 
-## One half of the property is held by nothing, and it is the half the item was about
+## One half of the property was held by nothing, and it is held at `270772e3`
+
 
 **`says_names_every_outcome_rather_than_falling_back` reads `game_state.rs` only.** It locates the
 method by its exact signature, bounds the body at `"\n    }"`, requires all three variants, refuses
@@ -543,10 +544,18 @@ crate defining the trait rather than the crate whose systems were the reason for
 lives in the crate defining the method rather than the crate whose output was the reason for it.
 **A check placed where the code is, rather than where the property is.**
 
-**Reported to the code lane and not filed.** The marker is three hours old, nobody is about to
-change it, and the item is closed on the fix being right. Recorded so that a later reader asking
-*what holds the dump honest* gets the true answer, which is: the compiler holds `says`, and nothing
-holds the line.
+**Reported rather than filed, and taken at `270772e3` within the hour.**
+`a_dump_says_so_when_the_console_answered_nothing` is in `game-inspect` now, which is where the
+property is. **Verified rather than relayed**: it drives `describe` with a fake that answers nothing
+and asserts the marker, the reason, and that both sit under *-- the game, as the console reports
+it --* - the position being half the hazard. The fake's `browser()` returns `-- no entities --`, so
+**neither assertion can be satisfied by anything but the `says` path**, which is what stops it
+passing vacuously.
+
+**So the true answer to *what holds the dump honest* is now: the compiler holds `says`, and a test
+in the right crate holds the line.** The sentence above it, written an hour earlier, said nothing
+did - corrected here rather than left, for the reason this lane has been pressing all day.
+
 
 ### Q-112 - `scripts/review.sh` says it is the only thing that writes `reviewed/`, and it is not any more
 
