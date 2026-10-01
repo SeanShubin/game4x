@@ -176,6 +176,22 @@ generates it, since a hand edit is overwritten - then I read the result, and I d
 approve. **Deleting is the only thing I do to one.** And I may ask a lane to add cases so that a
 new feature is covered, which is asking for coverage rather than for a behaviour.
 
+**A regression case is written the way a test is written**: the rows that go in, the single command,
+and the rows that come out. **It omits no row that can change** - so the flow from input to output is
+on the page and nothing is left for me to remember, which is what a projection onto the columns a
+rule happened to name cost me. **A case will therefore show rows the command does not read, and that
+is acceptable**: I am using these to vet how the transformation function is applied, not its pre and
+post conditions.
+
+**What never changes is stated once and referred to.** A kind belongs to the scenario's setup rather
+than to each case exactly when no rule ever adds or removes one, so the test is mechanical rather
+than a judgement somebody maintains: if a rule ever starts creating a kind, that kind moves into the
+cases by itself. **The reference is what the runner follows, not only what I click** - and that is
+what lets a case be executed directly as a test, because it is how `place-1` exists.
+
+**A state has one entry per description**, so two things alike are one quantified row and never a row
+per firing. **What fired, and how many times, is the scenario's account rather than the case's.**
+
 A test is there for what I cannot reliably repeat. **I can remember to do a thing the first time;
 what I cannot do is remember a mundane check every time after that**, and that is what a failing
 test is for. So a check earns its place by guarding the repetition, not the one-off.
