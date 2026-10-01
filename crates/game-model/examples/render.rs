@@ -35,7 +35,7 @@
 //!
 //! `cargo run --example render`
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
 use friendly_notation as friendly;
@@ -126,6 +126,98 @@ pub fn mine() -> PathBuf {
 /// `crates/` - so `schema.4x` and `rules.4x` are the specification's, and `engine.4x`, `script.4x`
 /// and `setup.4x` name no game noun and stay here. A test's friendly side is `spec/tests/`'s, which
 /// `P-532` settled.
+/// What Sean has said about the generated cases, and what he has authorized.
+///
+/// **`spec/README.md` rule 3**: *a case's verdict is a row in `reviewed/cases.4x` and pins no
+/// behaviour... an authorization is a different relation from a verdict because it is consumed. A
+/// verdict stands until I change it; `{regenerate}` is spent by the regeneration it asks for and
+/// is gone afterwards.*
+///
+/// # Two columns this lane chose, and they are the only invention here
+///
+/// **The semantics are specified and the spelling is not.** `P-608` names the relations -
+/// `verdict` and `regenerate` - and says what each means; no promoted text gives their columns.
+///
+/// **So these follow the notation's own precedent**: a record says `{verdict state:approved}` and
+/// identifies its test with a separate `{test name:...}` row, because one file holds one test.
+/// **One file holds every case here**, so each row names the case it is about:
+///
+/// ```text
+/// {verdict case:scenario/01/02-gather state:denied}
+/// {regenerate case:scenario/01/02-gather}
+/// ```
+///
+/// **A case is named as the suite names it** - its path under `regression/` without the
+/// extension - because that is the identifier `Case.name` already carries and the one the
+/// failure message already prints.
+///
+/// **If either column is wrong, renaming it costs a rewrite of this file and nothing else.** No
+/// behaviour is pinned here - that is the whole of `P-608`'s first half - so unlike a test's
+/// record, a spelling change cannot cost an approval.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct Cases {
+    /// The case names he has denied. **A verdict stands until he changes it.**
+    pub denied: BTreeSet<String>,
+    /// The case names he has approved, which is the ordinary state and is recorded so that
+    /// *approved* and *never looked at* stay two facts, as they are for a test.
+    pub approved: BTreeSet<String>,
+    /// The case names he has authorized a regeneration for. **Spent by the run that acts on it.**
+    pub authorized: BTreeSet<String>,
+}
+
+/// Read `reviewed/cases.4x`, or an empty set where there is none.
+///
+/// **An absent file is not an error.** No verdict on any case is the state before he has pressed
+/// anything, and it is the state today.
+pub fn cases_in(text: &str) -> Result<Cases, String> {
+    let mut out = Cases::default();
+    for line in text.lines() {
+        let line = line.trim();
+        if line.is_empty() || !line.starts_with('{') {
+            continue;
+        }
+        let inside = line
+            .strip_prefix('{')
+            .and_then(|it| it.strip_suffix('}'))
+            .ok_or_else(|| format!("`{line}` is not a row"))?;
+        let mut words = inside.split_whitespace();
+        let relation = words.next().unwrap_or_default();
+        let values: BTreeMap<&str, &str> = words.filter_map(|word| word.split_once(':')).collect();
+        let named = values
+            .get("case")
+            .ok_or_else(|| format!("`{line}` names no case"))?
+            .to_string();
+        match relation {
+            "verdict" => match values.get("state").copied() {
+                Some("denied") => {
+                    out.denied.insert(named);
+                }
+                Some("approved") => {
+                    out.approved.insert(named);
+                }
+                // **An unknown state is refused rather than guessed**, the same way a test's is:
+                // treating it as approved would bind on a word nobody defined, and treating it as
+                // denied would drop a case he accepted.
+                other => {
+                    return Err(format!(
+                        "`{other:?}` is not a verdict; rule 3 names approved and denied"
+                    ));
+                }
+            },
+            "regenerate" => {
+                out.authorized.insert(named);
+            }
+            other => return Err(format!("`{other}` is not a relation this file may hold")),
+        }
+    }
+    // **A case cannot be both denied and approved**, which one file holding both rows would say.
+    let both: Vec<&String> = out.denied.intersection(&out.approved).collect();
+    if !both.is_empty() {
+        return Err(format!("{both:?} carry two verdicts"));
+    }
+    Ok(out)
+}
+
 /// What Sean said about a test, read out of its record.
 ///
 /// **`P-605`, `spec/README.md` rule 3**: *a record names its verdict and carries the behaviour

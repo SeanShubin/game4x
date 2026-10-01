@@ -41,6 +41,13 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
+// **`render` for `cases_in`, which reads what he said about the cases** - `E-3`. It is where
+// `verdict_of` is, so the two readers of his verdicts sit together and cannot disagree about
+// what an unknown state means.
+#[path = "../examples/render.rs"]
+#[allow(dead_code)]
+mod render;
+
 #[path = "../examples/scenario.rs"]
 #[allow(dead_code)]
 mod scenario;
@@ -72,6 +79,14 @@ fn every_command_has_an_expectation_and_it_is_current() {
         std::fs::write(&setup, &said).unwrap_or_else(|why| panic!("{}: {why}", setup.display()));
     }
 
+    // **What he has said about the cases, and what he has authorized** - `E-3`, `P-608`. An
+    // absent file is no verdict on anything, which is the state before he has pressed anything.
+    let marks_at = report_records().join("cases.4x");
+    let said_about_cases = std::fs::read_to_string(&marks_at).unwrap_or_default();
+    let marks = render::cases_in(&said_about_cases)
+        .unwrap_or_else(|why| panic!("{}: {why}", marks_at.display()));
+    let mut spent: Vec<String> = Vec::new();
+
     let (mut written, mut compared) = (Vec::new(), 0);
     // **The name travels beside the diff**, because the message below prints the deletion for
     // each grain and a deletion is composed from the path. Formatting it into one string first
@@ -89,6 +104,22 @@ fn every_command_has_an_expectation_and_it_is_current() {
             // the message says what moved rather than that something did.
             Ok(committed) => {
                 compared += 1;
+                // **An authorization is spent by the regeneration it asks for** - `P-608`. So a
+                // case he has authorized is rewritten here and the row goes, which is `E-3`'s *I
+                // authorize a regeneration and the case is rewritten without my deleting
+                // anything.*
+                //
+                // **Consuming an authorization is not deleting a record.** `CLAUDE.md` reserves
+                // creating and deleting a *record* to the review application; `P-608` says this
+                // relation exists precisely because it is consumed by what acts on it, and what
+                // acts on it is this.
+                let stem = name.trim_end_matches(".4x");
+                if marks.authorized.contains(stem) && committed != *produced {
+                    std::fs::write(&path, produced)
+                        .unwrap_or_else(|why| panic!("{}: {why}", path.display()));
+                    spent.push(stem.to_string());
+                    continue;
+                }
                 if committed != *produced {
                     let differs = committed
                         .lines()
@@ -125,6 +156,12 @@ fn every_command_has_an_expectation_and_it_is_current() {
         }
     }
 
+    if !spent.is_empty() {
+        println!(
+            "regenerated {} case(s) you authorized, and the authorization is spent: {spent:?}",
+            spent.len()
+        );
+    }
     if !written.is_empty() {
         println!(
             "wrote {} expectation(s) that were absent; read the diff: {written:?}",
@@ -583,4 +620,75 @@ fn every_case_holds_the_whole_mutable_state_once_per_description() {
         "only {checked} row(s) over {sections} section(s), so the sections are one row each and \
          the projection is still there"
     );
+}
+
+/// Where a verdict about a case lives, which is `reviewed/` and not `regression/`.
+///
+/// **A case is generated and its verdict is not.** `regression/` is written by the suite and
+/// `reviewed/` is written by the review application acting as Sean, so the two sit apart - which
+/// is why `P-608` puts the verdict in `reviewed/cases.4x` rather than beside the case.
+fn report_records() -> std::path::PathBuf {
+    scenario::regression_at()
+        .join("..")
+        .join("..")
+        .join("reviewed")
+}
+
+/// **A case's verdict is read, and an authorization is told apart from it.**
+///
+/// `E-3`'s *vetted when* is two gestures: *I mark a case denied and it stays marked across a run;
+/// I authorize a regeneration and the case is rewritten without my deleting anything.* `P-608`
+/// says why they are two relations: **a verdict stands until he changes it and `{regenerate}` is
+/// spent by the regeneration it asks for.**
+///
+/// # Driven over text, because `reviewed/` is his
+///
+/// **No case carries a verdict today**, so every branch the suite now has takes the path it took
+/// before and nothing would notice if the other were wrong - the same argument as the test
+/// verdicts, and the reason that one found a malformed row reading as approved.
+///
+/// **Writing a verdict here to watch it being read would be a lane writing in his column.** So
+/// the reader is driven over strings and the suite's use of it is left to the gate.
+#[test]
+fn a_case_verdict_stands_and_an_authorization_is_a_different_row() {
+    use render::cases_in;
+
+    let said = "\
+{verdict case:scenario/01/02-gather state:denied}
+{verdict case:rules/breed state:approved}
+{regenerate case:types/place}
+";
+    let marks = cases_in(said).expect("three rows");
+    assert_eq!(marks.denied.len(), 1);
+    assert!(marks.denied.contains("scenario/01/02-gather"));
+    assert_eq!(marks.approved.len(), 1);
+    assert_eq!(marks.authorized.len(), 1);
+    assert!(marks.authorized.contains("types/place"));
+
+    // **A verdict and an authorization about one case are not the same fact**, which is the whole
+    // reason `P-608` makes them two relations: one outlives being acted on and one does not.
+    let both = cases_in("{verdict case:x state:denied}\n{regenerate case:x}\n").expect("two rows");
+    assert!(both.denied.contains("x") && both.authorized.contains("x"));
+
+    // **No file is no verdict on anything**, which is the state today and is not an error.
+    assert_eq!(cases_in("").expect("nothing"), render::Cases::default());
+
+    // **And the refusals.** An unknown state would bind or drop a case on a word nobody defined;
+    // a row naming no case says something about nothing; two verdicts for one case say two
+    // things; a relation this file may not hold is a file somebody wrote by hand wrongly.
+    for (what, text) in [
+        ("an unknown state", "{verdict case:x state:maybe}\n"),
+        ("no state at all", "{verdict case:x}\n"),
+        ("no case named", "{verdict state:denied}\n"),
+        (
+            "two verdicts for one case",
+            "{verdict case:x state:denied}\n{verdict case:x state:approved}\n",
+        ),
+        ("a relation that is neither", "{approved case:x}\n"),
+    ] {
+        assert!(
+            cases_in(text).is_err(),
+            "{what} was read rather than refused"
+        );
+    }
 }

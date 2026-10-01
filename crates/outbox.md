@@ -141,6 +141,67 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-211 - `E-3`'s reader and the authorization are built, and two column names are this lane's invention
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `E-3` · **cites** `E-3`, `P-608`, `C-205`
+
+**derived from** *an authorization is a different relation from a verdict because it is consumed* - `spec/README.md` rule 3
+
+**Both halves of the *vetted when* are in.** A case he denies stays denied across a run, because
+nothing clears a verdict; a case he authorizes is rewritten by the next run and the row is spent.
+
+```
+render::cases_in       reads reviewed/cases.4x: denied, approved, authorized
+tests/regression.rs    an authorized case is rewritten, and the run says which were spent
+```
+
+## Two column names this lane chose, and they are the only invention
+
+**The semantics are specified and the spelling is not.** `P-608` names both relations and says
+what each means; **no promoted text gives their columns.**
+
+```
+{verdict case:scenario/01/02-gather state:denied}
+{regenerate case:scenario/01/02-gather}
+```
+
+**Chosen by the notation's own precedent**: a test's record says `{verdict state:approved}` and
+identifies its test with a separate `{test name:...}` row, because one file holds one test. **One
+file holds every case here**, so each row names the case it is about. A case is named as the suite
+names it - its path under `regression/` without the extension - **which is the identifier
+`Case.name` already carries and the failure message already prints.**
+
+**This is a choice where `C-205` refused to make one, and the difference is what it would cost to
+get wrong.** There, two specified orders conflicted and picking one would have silently rewritten
+fifty-seven approvals. **Here the file does not exist, nothing is approved in it, and no behaviour
+is pinned by it** - that is `P-608`'s first half - so renaming a column costs a rewrite of a file
+holding only what he has pressed. **Say the word and it is a sed.**
+
+## Who consumes an authorization, stated because it touches his directory
+
+**The suite does.** `CLAUDE.md` reserves creating and deleting a *record* to the review
+application; **`P-608` says this relation exists precisely because it is consumed by what acts on
+it**, and what acts on it is the run that regenerates. **A verdict is untouched either way** - the
+suite reads those and writes none.
+
+## Driven over text, because `reviewed/` is his
+
+**No case carries a verdict today**, so every branch the suite now has takes the path it took
+before and nothing would notice if the other were wrong. **Writing one to watch it being read
+would be a lane writing in his column**, so the reader is driven over strings: four acceptances
+and five refusals.
+
+**The refusals are the half that matters** - an unknown state, no state at all, a row naming no
+case, two verdicts for one case, and a relation the file may not hold. **An unknown state read as
+approved is how a case nobody decided about becomes one the suite regenerates**, which is the test
+verdicts' own near-miss said about cases.
+
+## What is left of `E-3`
+
+**The gesture.** Nothing writes `reviewed/cases.4x` yet - that is the page, and `E-4`. **The
+reader and the authorization are what `E-4` needs to have anything to show for 165 of its 222
+rows**, which is why this went first.
+
 ### C-210 - `E-2` is built, and the promotion check reported a correct promotion as missing
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `releases/marking-state.md`, and the gate going red on `P-606` · **cites** `E-2`, `P-605`, `P-606`, `Q-88`

@@ -29,6 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
+- **E-2** - `a25a5a4` E-2: he can deny a test, and the promotion check called a correct promotion missing · still open in `releases/marking-state.md`
 - **D-1** - `06df443` S-234 answers which store, and P-599 asks whether D-1 reaches the script's vocabulary · still open in `releases/rules-become-data.md`
 - **D-2** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
@@ -60,7 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (46)
+### To spec (47)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -70,6 +71,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-211** - `E-3`'s reader and the authorization are built, and two column names are this lane's invention · `crates/outbox.md`
 - **C-210** - `E-2` is built, and the promotion check reported a correct promotion as missing · `crates/outbox.md`
 - **C-203** - The suite split is followed in twelve places, and "named once" was a claim rather than a fact · `crates/outbox.md`
 - **C-202** - `S-236` is built: the case is the whole mutable state, one entry per description, and it costs a second deletion · `crates/outbox.md`
