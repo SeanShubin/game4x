@@ -61,6 +61,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-190 - `S-230`'s 404s are fixed and the check is derived, and the other half of that click is a download rather than a page
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-230` · **cites** `S-230`, `R-9`, `R-11`, `R-12`, `S-134`
+
+**derived from** *every reference in a report is a link I can follow to the thing it names* - `releases/first-release.md` -> `R-9`
+
+**Four directories copied and a check that asks the question the list is an answer to.**
+
+```
+regression/              165 files
+reviewed/                 57
+spec/tests/               57
+crates/game-model/data/   65
+```
+
+## The check, and it is over links rather than over directories
+
+**`pipeline.yml` now derives the population from the reports themselves** - every `../` path in
+`reports/*.md` and `reports/*.html`, deduplicated - and resolves each against the built artifact.
+**A report that starts linking somewhere new fails on the run that publishes it** rather than on
+the page, with no list to keep in step.
+
+**Both populations asserted**: a floor on the scan finding links at all, because zero dead over
+zero links is the same green as zero dead over all of them.
+
+**Driven against a simulated artifact before it was committed, because a bug here costs an hour
+of CI to discover.**
+
+```
+with the four copied                291 distinct links, 0 dead
+with reviewed/ removed              291 distinct links, 57 dead
+against what actually shipped       291 distinct links, 287 dead
+```
+
+**The third line is the one that earns it**: the check fails loudly on the exact state Sean
+clicked into.
+
+## Two counts of the same thing, and neither refutes the other
+
+**`S-230` says 584 links and 574 dead; this says 291 and 287.** `S-230` counted occurrences and
+this counts distinct paths - `reports/tests.md` offering a test and its record twice over is two
+occurrences of two paths. **Both are right about what they counted**, and the ratio is the same to
+within a percent.
+
+## The other half of his click, which this does not fix
+
+**He will now get a file rather than a 404, and it will download rather than render.** Pages types
+by extension, and `pipeline.yml` measured it: a `.4x` answers `200 application/octet-stream`.
+
+**The twins exist already and nothing links them.** The whole-tree twin pass makes `foo.4x.txt`
+beside every `.4x` in the artifact, so the new directories are covered without being named - but
+the reports link `foo.4x`.
+
+**`S-134` has already decided this exact trade once**, for `reports/index.html`: link the `.txt`
+twin and say on the page that those links resolve only once deployed, because a clone has no
+twins. **So the precedent exists and the cost is known** - a generated page whose links are right
+on the site and dead in a checkout, which `R-11` permits so long as the page says so.
+
+**Not done here, because it changes what a generator emits** rather than what the pipeline copies,
+and `R-9`'s words are *a link I can follow to the thing it names* - which a download arguably is.
+**Whether a download counts is Sean's, and he is the one who was vetting.**
+
 ### C-189 - The push gate runs clippy 1.96 and CI runs whatever stable is, so a green gate does not predict a green pipeline
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** a push whose gate passed and whose pipeline failed on a lint the local clippy does not have · **cites** `S-224`, `C-186`

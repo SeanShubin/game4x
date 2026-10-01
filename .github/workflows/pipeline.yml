@@ -240,6 +240,16 @@ jobs:
           cp -r scenario crates/game4x/dist/scenario
           mkdir -p crates/game4x/dist/spec
           cp -r spec/data crates/game4x/dist/spec/data
+          # **The four the hand list did not have** - `S-230`, found by Sean clicking the
+          # first outward link he came to. 574 of the reports' 584 outward links 404ed on
+          # the published site and 10 worked, and the two the comment above names are two
+          # of the ten. **The hazard was understood and the enumeration was by hand**, which
+          # is the shape this file has now met four times.
+          cp -r regression crates/game4x/dist/regression
+          cp -r reviewed crates/game4x/dist/reviewed
+          cp -r spec/tests crates/game4x/dist/spec/tests
+          mkdir -p crates/game4x/dist/crates/game-model
+          cp -r crates/game-model/data crates/game4x/dist/crates/game-model/data
           mkdir -p crates/game4x/dist/lenses/research crates/game4x/dist/tools/research/formulas
           cp lenses/research/formulas.html crates/game4x/dist/lenses/research/formulas.html
           cp tools/research/formulas/data.json crates/game4x/dist/tools/research/formulas/data.json
@@ -368,6 +378,34 @@ jobs:
           all_twins=$(find crates/game4x/dist -name '*.4x.txt' | wc -l)
           test "$all_inputs" -gt 150
           test "$all_twins" -eq "$all_inputs"
+          # **Every outward link a report makes, resolved against the artifact** - `S-230`.
+          # The copies above are a list and a list goes stale; this asks the question the
+          # list is an answer to, over every link rather than every directory.
+          #
+          # **Derived from the reports rather than from anything anyone remembered.** The
+          # population is whatever `../` paths the reports actually contain, so a report that
+          # starts linking somewhere new fails here on the run that publishes it, instead of
+          # on the page.
+          #
+          # **A link's fragment is not part of its path**, which is why the pattern stops at
+          # the characters a path may hold - `../spec/logistics.md#shape` is a link to the
+          # file.
+          outward=$(grep -oh '\.\./[a-zA-Z0-9_./-]*' reports/*.md reports/*.html \
+            | sed 's|^\.\./||' | sort -u)
+          dead=0
+          reached=0
+          for link in $outward; do
+            reached=$((reached + 1))
+            if [ ! -e "crates/game4x/dist/$link" ]; then
+              echo "  404 on the published site: ../$link"
+              dead=$((dead + 1))
+            fi
+          done
+          # **Both populations, because zero dead over zero links is the same green.** The
+          # floor is on the scan finding links at all; the equality is the finding itself.
+          test "$reached" -gt 100
+          test "$dead" -eq 0
+          echo "Resolved $reached distinct outward link(s) from the reports, none dead"
           echo "Published $thin thin-engine inputs with $thin_twins twins, $published of them tests"
           echo "Published $all_inputs .4x files with $all_twins twins, over the whole artifact"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
