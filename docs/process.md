@@ -176,6 +176,16 @@ generates it, since a hand edit is overwritten - then I read the result, and I d
 approve. **Deleting is the only thing I do to one.** And I may ask a lane to add cases so that a
 new feature is covered, which is asking for coverage rather than for a behaviour.
 
+**A verdict on a regression case is a reminder to myself, and nothing is bound by it.** A case
+observes rather than decides, so denying one does not release the code from anything - it says *look
+at this* and keeps saying it until I have. **A case nobody has marked is a case nobody has looked
+at**, which is the same as for a test.
+
+**Authorizing a regeneration is a separate gesture from a verdict.** A denial says the behaviour a
+case now shows is wrong; an authorization says it is right and the stored expectation should be
+rewritten to match. **Both can be true of different cases at once**, which is why they are two
+flags and not three states of one.
+
 **A regression case is written the way a test is written**: the rows that go in, the single command,
 and the rows that come out. **It omits no row that can change** - so the flow from input to output is
 on the page and nothing is left for me to remember, which is what a projection onto the columns a

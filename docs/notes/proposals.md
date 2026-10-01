@@ -11385,6 +11385,7 @@ work the release exists to order.
 | P-604, Two runs of the one function, and a command is the only crossing                                                      | `spec/invariants.md` -> The game is one function                                                                                                                                                         | 2026-10-01 |
 | P-605, A record holds a verdict and the behaviour it is about, and presence stops meaning two things                         | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-01 |
 | P-606, Column order is not behaviour, one function normalizes, and that decides the order for us                             | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-01 |
+| P-607, A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 

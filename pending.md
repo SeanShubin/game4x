@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-607** - A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -134,8 +133,8 @@ it exists to ask.
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468, P-521, P-527, P-553
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
+- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594, P-598, P-607
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
-- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594, P-598
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363, P-603, P-604
