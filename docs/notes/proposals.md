@@ -69,48 +69,77 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
-### S-228 - A dispatched workflow is Sean acting, and it is how a record gets written from a phone
+### S-228 - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean: *I am wondering if I need to host a tool on github to handle that outside of any lane* · **cites** `S-214`, `P-593`
+**to** code · **status** open · **raised** 2026-09-30 · **revised** 2026-09-30, after he said a button rather than a name · **source** Sean: *a hosted app on github would be fine* · **cites** `S-214`, `P-593`
 
-**He is right that it belongs outside any lane, and the mechanism already exists.**
-`.github/workflows/pipeline.yml` carries `workflow_dispatch`, so a workflow can be triggered from the
-GitHub app with inputs. **A workflow he dispatches is him acting**; no lane invokes it.
+**Sean, 2026-09-30**: *only I can say a test is approved and only I may say the current regression
+expectation should be deleted, but I also want to do this remotely with a button press, not
+necessarily through Claude. What I don't want to be doing is writing tests or navigating a
+filesystem to do either of these things.*
 
-## Two of them, and both are gestures he makes locally today
+**The first draft of this item asked him to type a test name as a workflow input**, which is
+navigating a filesystem with extra steps. **A button press means the waiting things are already
+listed and each one has its own control.**
+
+## Both lists are already computed, which is why this is a surface rather than a feature
 
 ```
-review a test        input: a test name
-                     copy spec/tests/<name>.4x to reviewed/<name>.4x, byte for byte, and commit
-                     refuse a name that is not in spec/tests/, and refuse one already recorded
-                     and identical
-
-accept a case        input: a suite, a turn, or one case
-                     delete it, run the generator, commit - and the diff is the review, which is
-                     what the gesture means locally
+unread tests    tools/outbox already derives it - Reading::Compared { tests, records, waiting },
+                and decide/attention.md prints the count and names what waits
+cases to accept regression/ holds 165 files in four suites. The set that waits on him is not
+                those 165: it is the ones whose present content disagrees with what the
+                generator would now write, and the suite reports them
 ```
 
-**The copy must be byte for byte and nothing may reformat it.** `reviewed/` is the record that he read
-*those bytes*; a workflow that rewrote whitespace would be recording a reading of something else.
+**So nothing has to work out what he should look at.** What is missing is a surface with controls and
+a writer that only he can set off.
 
-## The rule that makes this sound rather than a loophole, and it wants writing down
+## What makes it his, and it is a check rather than a convention
 
-**Only Sean may dispatch it.** A lane asking for a run would be a lane writing the record through one
-more hop, which is the thing `reviewed/` exists to prevent - the record is the one artifact nothing
-judged by it may touch, and both producers are judged by it.
+**`github.actor`.** A workflow that refuses to run unless the actor is him turns *only Sean may do
+this* into something mechanical. **Today it is a sentence in `CLAUDE.md` held by nothing** - the same
+shape as every other rule here that was written down and not carried, so the check is the point of
+the item rather than a detail of it.
 
-**So the item it would close is not `S-214`'s shape but its mirror**: the application can show an
-unread test and cannot be reached from a phone. **This closes the reach and must not widen the
-writer.**
+## Three ways to get a control, and they are not close in cost
 
-## What this lane is not asking for
+```
+issue checkboxes     a generated issue per kind, one task-list item per waiting thing, each
+                     linking to the rendered test or the diff. He taps it in the GitHub app;
+                     a workflow on `issues: edited` writes the records newly ticked.
+                     No hosting at all, and the issue is the list as well as the control
+dispatch dropdown    workflow_dispatch with a `choice` input whose options are the waiting
+                     things. Two taps. The options live in the YAML, so the pipeline has to
+                     regenerate the workflow file whenever the set changes
+a hosted app         Pages is static and cannot write, so this needs a GitHub App and an OAuth
+                     device flow. Real buttons, real work, and a second thing to keep alive
+```
 
-**Not remote reviewing in general.** Reading is already public - `reports/tests.md` links every test,
-its foundation form and its record. **What is missing is the writing**, and these two workflows are
-the writing and nothing else.
+**The first is the recommendation and the reason is that it needs nothing built to host it.** It is a
+tap in an app he already has, and the thing he taps is the same thing that tells him what is waiting.
 
-**And not a replacement for `scripts/review.ps1`.** The local application is how he reads several in
-one sitting; a dispatch is how he records one from a phone. **Two doors to one record.**
+## What the writer must and must not do
+
+```
+a test     copy spec/tests/<name>.4x to reviewed/<name>.4x byte for byte, and commit.
+           Nothing reformats it: reviewed/ records that he read those bytes
+a case     delete the case, run the generator, commit. The diff is the review, which is what
+           the gesture means locally
+```
+
+**And a lane may not reach it.** A lane asking for a run is a lane writing the record through one more
+hop, which is what `reviewed/` exists to prevent - the record is the one artifact nothing judged by it
+may touch, and both producers are judged by it. **`github.actor` is what enforces that**, so the rule
+and its carrier arrive together rather than the rule arriving alone.
+
+## What this is not
+
+**Not remote reviewing in general** - reading is already public, and `reports/tests.md` links every
+test, its foundation form and its record. **This is the writing and nothing else.**
+
+**And not a replacement for `scripts/review.ps1`.** That is how he reads several in one sitting; this
+is how he accepts one from a phone. **Two doors to one record.**
 
 ### S-227 - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow
 

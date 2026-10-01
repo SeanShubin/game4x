@@ -27,7 +27,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-188** - `5588006` S-227 and S-228: C-188 answered, and a dispatched workflow writes the record · still open in `crates/outbox.md`
+- **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
@@ -40,7 +40,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To code (10)
 
-- **S-228** - A dispatched workflow is Sean acting, and it is how a record gets written from a phone · `docs/notes/proposals.md`
+- **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
 - **S-227** - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow · `docs/notes/proposals.md`
 - **S-226** - Sean's rule exempts prototype code, and the second rules engine is not prototype code · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
