@@ -11,45 +11,5 @@ of it needs you.
 
 ## Open
 
-### P-602 - A squad groups units, and two global limits replace the berth
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-10-01 · **asks** approval · **kind** recovered · **shape** text · **into** `spec/units.md` -> a new section after *What a unit is*
-
-**`berth` is in no prose anywhere in `spec/`** - only in `spec/data/rules.4x`, `spec/data/schema.4x`
-and three tests. **So this adds a rule rather than replacing one**, and what it replaces is data.
-
-**Offered as a block, with the heading at `##`:**
-
-> ## Squads
->
-> **A squad is a grouping of units.** It is a shorthand, so that a move order reaches several units
-> rather than one at a time. **And it is a deliberate limit**: the game caps how many squads I may
-> control and how many units may be in one, so that play does not become micromanagement.
->
-> **Those two numbers are settings of the game rather than facts about any place in it.** A berth was
-> a capacity of a place and a squad limit is not - it holds wherever the units are, and does not
-> change because a settlement grew.
->
-> **The berth goes when the squad limits arrive.** A place no longer limits how many units may stand
-> in it; the two global numbers do.
-
-## What this does not settle, and will not until you say
-
-**Where a game-wide setting lives in the notation.** `planet` was made a thing so the sun had
-somewhere to be; a setting might go there, or want something new. **This proposal states the rule and
-not the form**, which is why it offers no row.
-
-**Whether a squad is a thing in the state.** A grouping that a move order names has to be nameable,
-which points at yes - but it is your call and nothing here assumes it.
-
-**What becomes of `provides` and `consumes`.** They have exactly two users between them and both are
-the berth - `{provides kind:place what:berth} -> 6` and `{consumes kind:pioneer what:berth} -> 1`.
-**So removing the berth leaves two relations with no users**, which is either a cleanup or a sign they
-were always about something more general.
-
-## What lands red
-
-**Three tests name the berth**, one of them by name:
-`a-scout-cannot-move-where-every-berth-is-taken`. **Promoting this does not break them** - it states a
-rule the data does not yet follow - but the test that asserts the berth and the rule that says it is
-gone cannot both be right for long, and clearing that is a reading of yours either way.
