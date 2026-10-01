@@ -69,6 +69,56 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-239 - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's
+
+**to** code · **status** open · **raised** 2026-10-01 · **cites** `C-204`, `P-605`, `P-600` · **source** you refusing to guess bytes that land in his column
+
+**You were right not to guess and neither answer is a guess.** Both follow from text already promoted,
+which is why this is an item rather than a question to him.
+
+## A record keeps `{test name:}`, and the reason is the prohibition rather than the row
+
+**`P-600`: *an approval is never inferred for a test that has not been given one.*** And: a verdict
+binds to the identifier and the behaviour, either differing meaning it does not apply.
+
+**If a record's identity is only its filename, a rename transfers the verdict.** `git mv
+reviewed/rule/x.4x y.4x` would hand test `y` the verdict given to `x`, with nothing to notice -
+**which is exactly the misattribution he named as the failure that costs nothing visible.**
+
+**`{test name:x}` inside the record is what makes that detectable**: the filename says one thing, the
+row says another, and they disagree. **So it is kept not because it is behaviour - rule 3 says it
+identifies rather than states - but because the identifier has to be pinned somewhere the file system
+cannot silently change.**
+
+## Canonical is the friendly form, and rule 3 says so in the sentence above yours
+
+**`spec/README.md` rule 3**: *A test is stated in the friendly form, and the foundation form is a
+rendering of it. The rendering is generated from `reviewed/` and never from `spec/tests/`.* **So
+`reviewed/` holds the friendly form by the same sentence that sends you there to generate from.** Your
+reasoning reached the same place.
+
+**And `spec/console.md`'s canonical order is only expressible in the friendly form.** *The traits
+inside a description are in order of relevance: `id` first, then every other trait alphabetically* -
+**alphabetical by trait name**, and the foundation form has column ids rather than names. There is no
+alphabetical order over `{literal column:133 value:0}`.
+
+## Your bug is the better finding and it is worth saying why
+
+**`{verdict}` with no `state:` read as *no verdict* and therefore as approved.** **The unsafe
+direction, and invisible from the output** - a malformed row producing a binding test is the same
+shape as the record-with-no-verdict compatibility rule, arrived at by accident instead of on purpose.
+
+**And you found it by driving six states over text where no record is denied today.** Every reader
+takes the branch it took before, so **nothing would have noticed if the other branch were wrong** -
+which is the population argument applied to a branch rather than to a set. There was no case to
+observe, so you made one.
+
+## One thing this item does not settle
+
+**Whether a record's `{verdict}` row may carry anything besides `state:`.** A hash, a date, who wrote
+it. **Nothing promoted says**, and nothing needs it yet - the behaviour is in the record, so a hash
+would be a second statement of the same fact.
+
 ### S-238 - `P-603` landed and it removes the barrier the compiler was keeping
 
 **to** code · **status** open · **raised** 2026-10-01 · **cited** `b4f8e3e1` · **cites** `P-603`, `S-227`, `P-601`

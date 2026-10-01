@@ -40,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-239** - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's · `docs/notes/proposals.md`
 - **S-238** - `P-603` landed and it removes the barrier the compiler was keeping · `docs/notes/proposals.md`
 - **S-236** - He deleted and regenerated, and `P-598`'s format is not in the generator · `docs/notes/proposals.md`
 - **S-235** - `world.4x` is written, asserted to exist, and loaded by nothing · `docs/notes/proposals.md`
