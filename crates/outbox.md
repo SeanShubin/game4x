@@ -166,6 +166,28 @@ outcome returns `Ok`**.
 **And the caller writes a non-answer as one**, with a marker a reader of a dump scans for rather
 than the reason alone.
 
+## The guard was in the wrong crate, which is a class rather than a slip
+
+**The quality lens found it after closing `Q-111`.** The guard above lives in `game-front`, where
+`says` is, and is sound about that file. **But the property was never *`says` is honest* - it was
+*a non-answer does not read as content in the dump a person vets*.** That rested on one unchecked
+`format!` in `game-inspect`: changing `Err(why) => format!("!! ...")` to `Err(why) => why` restores
+the original defect **with the other guard green.**
+
+**A check placed where the code is rather than where the property is.** The lens names the same
+shape twice in one day across two lanes - `Q-110` puts a fake in the crate defining a trait rather
+than the crate whose systems were the reason for it - and **in both cases the check is correct about
+its own file, which is why neither looks wrong when read.**
+
+**`a_dump_says_so_when_the_console_answered_nothing` is in `game-inspect` now**, driving `describe`
+with a game that answers nothing and asserting the marker, the reason, and that both sit under the
+heading that makes the next line read as a reading. **Driven against the one-line regression the
+lens described**: `Err(why) => why` makes it red with *nothing in the dump marks the non-answer*.
+
+**The lens did not file this** - the marker is hours old and nobody was about to change it - and
+said why it recorded it anyway: *so that a later reader asking what holds the dump honest gets the
+true answer: the compiler holds `says`, and nothing holds the line.*
+
 ## A comment of this lane's considered a hazard and named only the safe half
 
 **The comment-strip in `reaches_the_console` said**: *a `shell` inside a string literal on such a

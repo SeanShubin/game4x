@@ -190,3 +190,74 @@ fn describe(drawn: planet_bevy::globe::Drawn, game: &dyn Drives) -> String {
     ));
     lines.join("\n")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A game that answers nothing, which is the case the dump has to survive.
+    struct AnswersNothing;
+
+    impl Drives for AnswersNothing {
+        fn submit(&self, _: &str) -> String {
+            String::new()
+        }
+        fn change_drawing(&self) {}
+        fn browser(&self) -> String {
+            "-- no entities --".to_string()
+        }
+        fn says(&self, _: &str) -> Result<String, String> {
+            Err("the command changed the game and answered nothing".to_string())
+        }
+    }
+
+    /// **A non-answer does not read as content in the dump a person vets.**
+    ///
+    /// `Q-111` is about this line and nothing else: the dump is evidence Sean reads for `D-5`, and
+    /// a variant name under *the game, as the console reports it* is plausible English in the
+    /// place a planet belongs.
+    ///
+    /// # Why this is here and not beside `says`
+    ///
+    /// **The quality lens placed it after closing `Q-111`**: `says_names_every_outcome_rather_than
+    /// _falling_back` lives in `game-front`, where the method is, and is sound about that file -
+    /// but **the property was never *`says` is honest*, it was *a non-answer does not read as
+    /// content in the dump***. That rested on one unchecked `format!` here, and changing it to
+    /// `Err(why) => why` would restore the original defect with the other guard still green.
+    ///
+    /// **A check placed where the code is rather than where the property is.** The lens found the
+    /// same shape twice in one day across two lanes - `Q-110` puts a fake in the crate defining a
+    /// trait rather than the crate whose systems were the reason for it - and in both cases the
+    /// check is correct about its own file, which is why neither looks wrong when read.
+    #[test]
+    fn a_dump_says_so_when_the_console_answered_nothing() {
+        let drawn = planet_bevy::globe::Drawn {
+            drawing: planet_bevy::globe::Drawing::Practical,
+            regions: 12,
+            vertices: 0,
+            triangles: 0,
+            labels: 12,
+        };
+        let said = describe(drawn, &AnswersNothing);
+
+        // **The reason is there and so is a marker that is not English.** Either alone is not
+        // enough: the reason alone reads as a sentence the console might have said, and a marker
+        // with no reason sends a reader back to the code.
+        assert!(
+            said.contains("!!"),
+            "nothing in the dump marks the non-answer:\n{said}"
+        );
+        assert!(
+            said.contains("answered nothing"),
+            "the dump does not say why:\n{said}"
+        );
+        // **And the line is where a reader looks for the planet**, which is the whole hazard.
+        let at = said
+            .find("-- the game, as the console reports it --")
+            .expect("the heading is what makes the next line read as a reading");
+        assert!(
+            said[at..].contains("!!"),
+            "the marker is not under the heading it has to be under:\n{said}"
+        );
+    }
+}
