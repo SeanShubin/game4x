@@ -65,6 +65,16 @@ shows an empty set rather than a missing one - which is the state it is in rathe
   and a terminal here sees both without my touching git. **A page that lists 222 rows flat is not
   this capability met** - the rule tests, the interface tests and the four regression suites are
   distinguishable without my counting
+- **Shown without a control.** Sean, 2026-10-01, asked whether `types/` and `primitives/` belong on
+  the page at all: *let's show them, but these are informational only, no vetting capability need be
+  implemented. We can even link to them if it helps with comprehensibility.* **So the 113 cases in
+  those two suites are listed and linked and offer nothing to press.**
+- **That is the interface declining to offer a control, not the notation forbidding one.**
+  `spec/README.md` rule 3 says *no suite is privileged* and `reviewed/cases.4x` will take a verdict
+  for any case, including one of those 113. **A reader comparing the page to the rule would see a
+  contradiction and there is none** - one says what may be recorded and the other says what he has
+  asked to be built
+
 
 ### E-5 - Nothing but me can write what I said
 
