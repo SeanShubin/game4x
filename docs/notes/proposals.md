@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-233 - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean, vetting `D-5`: *where do I read that scenario as html* · **cites** `D-5`, `R-9`, `C-190`
+
+**He asked for it directly and it does not exist.** 288 HTML renderings in the tree and none of them is
+`scenario/played.md`.
+
+```
+reports/scenario/main.4x.html        the starting world and every command    yes
+reports/regression/scenario/01..05   36 pages, one per command               yes
+scenario/played.md                   what fired, and the world each turn     NO
+```
+
+**So the story half of `D-5` is browsable and the measured half is not.** `played.md` carries *15 of 16
+rules fired; 1 did not: ["perish"]*, the section naming the unusual situation `perish` needs, the world
+at the end of every turn, and *Columns a rule leaves as it found them*. **That is the evidence the
+clause asks him to observe**, and Pages does not render markdown, so the link gets him raw text at
+best.
+
+## What is asked
+
+**One rendering beside the 288 that exist**, generated the same way, linked from `reports/scenario.md`
+where the bare `../scenario/played.md` sits today. **`R-9` already requires the pair** - *every
+generated view has a diffable sibling beside it* - and here the markdown is the sibling with no view.
+
+## Why this one rather than `C-190`'s class
+
+**`C-190` asks whether a `.4x` that downloads counts as following a link, and that is his to answer.**
+This is not that question: a `.4x` at least has a twin published beside it and unlinked. **`played.md`
+has no rendering in existence**, so there is nothing to argue about and no trade to decide.
+
+**He asked for it to be done now**, which is why it is filed rather than offered.
+
+## One thing to get right
+
+**It is 718 lines with five per-turn world dumps.** A rendering that makes him scroll past four turns
+to reach *What fired* is worse than the markdown. **The section headings are already there** - `Turn 1`
+to `Turn 5`, `What fired`, `What a typical game does not use`, `Columns a rule leaves as it found
+them`, `The world it left` - so whatever the other 288 do with structure, this one needs it most.
+
 ### S-232 - The seven rows are landed, derived here rather than copied, and `C-192`'s check can go
 
 **to** code · **status** open · **raised** 2026-09-30 · **cited** `7d5781bc` · **cites** `C-192`, `Q-104`, `S-231`
