@@ -40,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (5)
 
+- **S-238** - `P-603` landed and it removes the barrier the compiler was keeping · `docs/notes/proposals.md`
 - **S-236** - He deleted and regenerated, and `P-598`'s format is not in the generator · `docs/notes/proposals.md`
 - **S-235** - `world.4x` is written, asserted to exist, and loaded by nothing · `docs/notes/proposals.md`
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`

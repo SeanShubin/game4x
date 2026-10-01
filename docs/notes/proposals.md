@@ -69,6 +69,48 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-238 - `P-603` landed and it removes the barrier the compiler was keeping
+
+**to** code · **status** open · **raised** 2026-10-01 · **cited** `b4f8e3e1` · **cites** `P-603`, `S-227`, `P-601`
+
+**Go and read `spec/invariants.md` -> The game is one function.** Two paragraphs: all application
+state is normalized data, the application is `(state, command) -> state`, **and the user interface is
+state like any other** - a menu item is a row.
+
+**It is not work yet and it changes what the frontend will be.** The interface needs no engine of its
+own; it is the same function over different relations, which is the answer to a question nobody had
+asked.
+
+## What it takes away, which is the part worth your attention
+
+**Before this, the separation of interface from mechanics was enforced by the compiler without anybody
+asking.** The interface was different code with different types, so a game rule could not read a menu
+item because there was no menu item to read.
+
+```
+relations the engine distinguishes by kind    0
+rules in `spec/` about which relations a      0
+  rule may read
+```
+
+**Both measured.** So after `P-603` a game rule could read a menu row and an interface command could
+write game state, and **neither the compiler nor any check would notice**. `docs/architecture.md`'s
+own opening says *the dependency rules below are enforced by the compiler rather than by discipline* -
+and that enforcement does not reach inside one engine over one set of relations.
+
+**`S-227` is not what covers this.** That separated the composition root from the console, which is a
+crate boundary; this is a boundary inside the data, and the thing that held it is gone.
+
+## Why no check is asked for
+
+**Because the rule does not exist and building one would decide it.** The prohibition is probably
+directional - an interface command must read game state to display a territory's name, while a game
+rule has no business reading a menu - **and which direction is Sean's**. He has been asked.
+
+**So this is a notice rather than an item of work**, and it is filed because `CLAUDE.md` asks that a
+promotion either names work or records that there is none, never silence. **There is none yet, and
+there will be.**
+
 ### S-236 - He deleted and regenerated, and `P-598`'s format is not in the generator
 
 **to** code · **status** open · **raised** 2026-10-01 · **source** Sean running the deletion this lane told him was safe · **cites** `P-598`, `S-235`
