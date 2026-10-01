@@ -25,6 +25,9 @@
 //! size was chosen. The first three are asked for from the page; the fourth types a line.
 
 use bevy::prelude::*;
+use std::sync::Arc;
+
+use game_front::game_state::Watches;
 use planet_bevy::globe::{DecidesWhatToDraw, Drawing, FollowsTheGame, Orbit, Planet};
 use planet_model::PlanetSize;
 
@@ -35,11 +38,34 @@ use planet_model::PlanetSize;
 /// systems and the advertisement of them arrive together and cannot disagree. A globe used
 /// to advertise five keys that started no game, on the first screen of a prototype,
 /// because those were two separate things to remember.
-pub struct FollowsTheGamePlugin;
+pub struct FollowsTheGamePlugin {
+    /// The game, as the one surface this crate needs - `S-227`.
+    ///
+    /// **Handed down by the composition root rather than reached for.** Sean, 2026-09-30:
+    /// *I would have wrapped access to game state in an interface, hooked up the
+    /// implementation in the composition roots.* What this crate asks of the game is five
+    /// methods, measured in `C-188`, and [`Watches`] is those five - **not the console**,
+    /// which would hand it the submit-and-read path it never calls.
+    pub game: Arc<dyn Watches>,
+}
+
+impl FollowsTheGamePlugin {
+    pub fn new(game: Arc<dyn Watches>) -> Self {
+        Self { game }
+    }
+}
+
+/// The handed-down interface, as a resource the systems can ask for.
+///
+/// **The wrapper is here and not in `game-front`**, because that crate has no engine in it and
+/// `docs/architecture.md` gives it that property. A `Resource` derive there would take it away.
+#[derive(Resource, Clone)]
+struct TheGame(Arc<dyn Watches>);
 
 impl Plugin for FollowsTheGamePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(FollowsTheGame(true))
+        app.insert_resource(TheGame(Arc::clone(&self.game)))
+            .insert_resource(FollowsTheGame(true))
             .insert_resource(Followed::default())
             .insert_resource(ResetsSeen::default())
             .insert_resource(DrawingAsksSeen::default())
@@ -69,15 +95,15 @@ struct Followed(u64);
 /// to set the size directly, which let the view hold a world the model did not have; the
 /// view is a projection of the model, so that had to go rather than be kept as a
 /// convenience.
-fn follow_the_game(mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
-    let generation = game_front::shell::generation();
+fn follow_the_game(game: Res<TheGame>, mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
+    let generation = game.0.generation();
     if generation == followed.0 {
         return;
     }
     followed.0 = generation;
     // No planet yet is not an error. A game begins with nothing in it and is designed into
     // existence, so this is what the first few commands of any game look like.
-    let Some(count) = game_front::shell::territory_count() else {
+    let Some(count) = game.0.territory_count() else {
         return;
     };
     // Only write when it would change something. Touching a `ResMut` marks it changed, and
@@ -106,10 +132,10 @@ const SIZE_KEYS: [KeyCode; 5] = [
 ///
 /// So a key and a typed line take the same path, and the globe learns about the result the
 /// same way either way: through [`follow_the_game`], watching the counter.
-fn keys_to_choose_size(keys: Res<ButtonInput<KeyCode>>) {
+fn keys_to_choose_size(game: Res<TheGame>, keys: Res<ButtonInput<KeyCode>>) {
     for (digit, size) in SIZE_KEYS.into_iter().zip(PlanetSize::ALL) {
         if keys.just_pressed(digit) {
-            game_front::shell::with(|console| console.submit(&chooses(size)));
+            game.0.submit(&chooses(size));
         }
     }
 }
@@ -136,8 +162,12 @@ struct ResetsSeen(u64);
 /// platform may lack*, and a tablet lacks every key, so the control has to reach the same
 /// place. It does it through a counter, because a button on a page is not on the engine's
 /// call stack.
-fn a_control_asks_for_a_reset(mut asked: ResMut<ResetsSeen>, mut orbit: ResMut<Orbit>) {
-    let requested = game_front::shell::resets();
+fn a_control_asks_for_a_reset(
+    game: Res<TheGame>,
+    mut asked: ResMut<ResetsSeen>,
+    mut orbit: ResMut<Orbit>,
+) {
+    let requested = game.0.resets();
     if requested != asked.0 {
         asked.0 = requested;
         *orbit = Orbit::default();
@@ -151,10 +181,11 @@ struct DrawingAsksSeen(u64);
 /// A control on the page asks for the other drawing. The `T` key is the other half, and is
 /// `planet-bevy`'s, for the same reason the `R` key is.
 fn a_control_asks_to_change_the_drawing(
+    game: Res<TheGame>,
     mut asked: ResMut<DrawingAsksSeen>,
     mut drawing: ResMut<Drawing>,
 ) {
-    let requested = game_front::shell::drawing_changes();
+    let requested = game.0.drawing_changes();
     if requested != asked.0 {
         asked.0 = requested;
         *drawing = drawing.other();

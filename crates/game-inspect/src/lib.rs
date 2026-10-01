@@ -33,8 +33,11 @@
 //! ships - the same binary plays and poses. A harness that ran a special path would be
 //! evidence about the harness.
 
+use std::sync::Arc;
+
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{Screenshot, save_to_disk};
+use game_front::game_state::Drives;
 
 pub mod options;
 
@@ -43,6 +46,12 @@ pub use options::{Misuse, Options, USAGE, read};
 /// Drives the application from the command line and writes what it finds.
 pub struct InspectPlugin {
     pub options: Options,
+    /// The game, as the one surface this crate needs - `S-227`.
+    ///
+    /// **Handed down by the composition root rather than reached for.** This is the wider of
+    /// the two surfaces `C-188` measured, and it is the harness - so the crate that reads the
+    /// game rather than watching it is the one nothing a player runs depends on.
+    pub game: Arc<dyn Drives>,
 }
 
 /// How many frames to wait after asking for the screenshot before giving up on it.
@@ -55,6 +64,7 @@ const PATIENCE: u32 = 240;
 #[derive(Resource)]
 struct Errand {
     options: Options,
+    game: Arc<dyn Drives>,
     frames: u32,
     asked: bool,
     waited: u32,
@@ -64,6 +74,7 @@ impl Plugin for InspectPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Errand {
             options: self.options.clone(),
+            game: Arc::clone(&self.game),
             frames: 0,
             asked: false,
             waited: 0,
@@ -104,12 +115,12 @@ fn run_the_errand(
     // and nothing is watching before there is a frame.
     if errand.frames == 1 {
         for line in errand.options.run.clone() {
-            let said = game_front::shell::submit(&line);
+            let said = errand.game.submit(&line);
             let last = said.lines().last().unwrap_or_default().to_string();
             info!("ran `{line}`: {last}");
         }
         if errand.options.realistic {
-            game_front::shell::change_drawing();
+            errand.game.change_drawing();
         }
     }
 
@@ -120,7 +131,7 @@ fn run_the_errand(
     if !errand.asked {
         errand.asked = true;
         if let Some(dump) = errand.options.dump.clone() {
-            let text = describe(*drawn);
+            let text = describe(*drawn, errand.game.as_ref());
             match std::fs::write(&dump, &text) {
                 Ok(()) => info!("dumped to {dump}"),
                 Err(why) => error!("cannot write {dump}: {why}"),
@@ -154,24 +165,15 @@ fn run_the_errand(
 /// [`game_front`], so what comes back is what a player would be told by `show` - no
 /// second opinion, no privileged access. The picture is measured from the mesh the engine
 /// was actually given, because that is the only place those facts exist.
-fn describe(drawn: planet_bevy::globe::Drawn) -> String {
+fn describe(drawn: planet_bevy::globe::Drawn, game: &dyn Drives) -> String {
     let mut lines = vec![
         format!("drawing: {}", drawn.drawing.name()),
         String::new(),
         "-- the game, as the console reports it --".to_string(),
-        game_front::shell::with(|console| {
-            console
-                .session
-                .run("{show-planet}", &game_front::library())
-                .map(|outcome| match outcome {
-                    game_console::Outcome::Said(said) => said,
-                    other => format!("{other:?}"),
-                })
-                .unwrap_or_else(|problem| problem.to_string())
-        }),
+        game.says("{show-planet}"),
         String::new(),
         "-- every entity --".to_string(),
-        game_front::shell::browser(),
+        game.browser(),
         String::new(),
         "-- what the engine was given --".to_string(),
     ];

@@ -52,8 +52,11 @@
 //! | The console  | stdin and stdout   | a text field and a transcript, on the page |
 //! | The browser  | `/browser`         | a panel, reached by its own button      |
 
+use std::sync::Arc;
+
 use bevy::prelude::*;
 use bevy::window::PresentMode;
+use game_front::game_state::Watches;
 use planet_render::{Params, WorldSpec};
 
 /// The planet to fall back on if the game has not made one yet.
@@ -80,7 +83,12 @@ fn main() {
     // What world to draw is a question for the game, not a constant here. The console is
     // already open on the release's planet, having built it out of `scenario/commands/setup.4x`
     // the only way a world can be built - by running commands.
-    let territories = game_front::shell::territory_count().unwrap_or(UNDESIGNED);
+    // **The one place the implementation is named** - `S-227`, and Sean's own words: *hooked
+    // up the implementation in the composition roots.* Everything below is handed this rather
+    // than reaching for it, so the game the globe follows and the game the harness drives are
+    // the same object because this line says so, not because a static says so.
+    let game = game_front::game_state::TheOneConsole;
+    let territories = Watches::territory_count(&game).unwrap_or(UNDESIGNED);
     let spec = WorldSpec {
         params: Params {
             region_count: territories,
@@ -122,12 +130,15 @@ fn main() {
         .add_plugins(planet_bevy::globe::GlobePlugin::new(spec))
         // What makes that globe show *this* game. Separate because planet-bevy no longer
         // knows a game exists, which is what stopped a polyhedron prototype linking one.
-        .add_plugins(game_globe::FollowsTheGamePlugin)
+        .add_plugins(game_globe::FollowsTheGamePlugin::new(Arc::new(game)))
         // The remote control: places the camera, types what it was told to, then writes a
         // picture and a dump and quits. Added always, because it does nothing at all
         // unless it was asked for something, and a harness compiled only sometimes is a
         // harness that tests a different program.
-        .add_plugins(game_inspect::InspectPlugin { options: asked })
+        .add_plugins(game_inspect::InspectPlugin {
+            options: asked,
+            game: Arc::new(game),
+        })
         .run();
 }
 

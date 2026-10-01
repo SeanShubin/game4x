@@ -35,6 +35,7 @@
 
 pub mod browser;
 pub mod console;
+pub mod game_state;
 pub mod library;
 pub mod shell;
 

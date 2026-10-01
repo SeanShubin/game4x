@@ -135,6 +135,75 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-196 - `S-227` is built: the root owns the game and hands down two narrow surfaces
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-227` · **cites** `S-227`, `C-188`, `Q-100`
+
+**derived from** *hooked up the implementation in the composition roots, and either wired up that interface or implemented smaller interfaces as needed* - Sean, 2026-09-30
+
+**Ten sites in three crates reached `game_front::shell::` directly. None does now.**
+
+```
+crates/game-front/src/game_state.rs   Watches, Drives, TheOneConsole
+crates/game-globe                     FollowsTheGamePlugin::new(Arc<dyn Watches>)
+crates/game-inspect                   InspectPlugin { options, game: Arc<dyn Drives> }
+crates/game4x/src/main.rs             constructs it once, hands it to both
+```
+
+## Two surfaces, because the measured sets barely overlap
+
+```
+Watches   generation, territory_count, resets, drawing_changes, submit     the globe
+Drives    submit, change_drawing, browser, says                            the harness
+```
+
+**`C-188` measured those before either trait was written**, and the split follows the
+measurement rather than a taste. **A single wide trait would hand `game-globe` the
+submit-and-read path it never calls**, which is what *smaller interfaces if I wanted to expose
+smaller surfaces* asks against. `game4x` needs one method and takes it from `Watches`, which it
+has in hand to pass on.
+
+**`says` is the one method that is not a shell function.** `game-inspect` reached
+`console.session.run("{show-planet}", ...)` - past the shell and into the console - and that is
+the widest reach there was. It is one method now and the harness cannot see the session.
+
+## The engine-free property is kept, which decided where things live
+
+**`crates/game-front` has one dependency and it is `game-console`.** A `#[derive(Resource)]`
+there would have given it Bevy and taken away the property `docs/architecture.md` names, so
+**the traits are plain and the resource wrapper is in each plugin crate**, which has Bevy
+already.
+
+## What did not change, and `C-188` predicted this
+
+**The `thread_local` stays and stops being load-bearing.** The page calls in through free
+`#[wasm_bindgen]` functions, which have nowhere to receive a handle, so `TheOneConsole` reaches
+`shell::with` - **an implementation detail behind the interface rather than the shape every
+caller adopts.**
+
+**`shell.rs`'s guarantee is kept by a different enforcer.** *Nothing else in the program holds a
+`Console` of its own* was held by a process-wide value and is now held by the root handing out
+one. **`C-188` said it would be the same fact with a different enforcer**, and it is.
+
+**The test lock is still there.** `C-188` said it goes if and only if the ten tests that take it
+end up owning what they assert about, and they do not - they test `shell` itself, which is still
+the one console. **A consequence to observe rather than a target**, and it was not aimed at.
+
+## Four checks, and one of them is the reason to have done this at all
+
+**`a_caller_against_the_interface_can_be_handed_a_different_game` is the point.** It drives a
+stand-in for `follow_the_game` with a game that has never run a command - **which is not
+possible against a process-wide console**, and was not possible before this.
+
+**`only_the_composition_root_reaches_the_one_console` is the rule.** Over every `.rs` file in
+`crates/` and `prototypes/` outside `game-front`, with the file count asserted. **Driven against
+the old state**: putting one reach back makes it red and names the line. `terminal::serve` is
+allowed by name, because a thread reading stdin is platform wiring rather than game state.
+
+**`the_one_console_is_both_surfaces_at_once`** is why the root can hand one value to two plugins
+and they are the same game by construction. **`neither_surface_has_grown`** counts the methods
+both ways, so a sixth is a decision somebody makes rather than a drift.
+
 ### C-195 - A pathspec commit does carry the hook's rewrite, and what it leaves staged is a revert
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** going to put `519cf624`'s sentence into `hooks/post-commit` and running it first · **cites** `C-194`, `S-228`

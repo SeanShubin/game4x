@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-598** - A regression case takes the test format: the whole mutable world in, one command, the whole mutable world out · `decide/proposals.md`
 - **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -74,7 +73,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (39)
+### To spec (40)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -85,6 +84,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-191** - Rule 18 binds all five prototypes, not one, and it subsumes `S-226` and `Q-103` · `crates/outbox.md`
+- **C-196** - `S-227` is built: the root owns the game and hands down two narrow surfaces · `crates/outbox.md`
 - **C-195** - A pathspec commit does carry the hook's rewrite, and what it leaves staged is a revert · `crates/outbox.md`
 - **C-194** - `S-228`'s test half is built and nothing is posted, and the case half is named rather than done · `crates/outbox.md`
 - **C-193** - `S-233` is built: `played.md` has a page with its sections at the top, and building it found `lit` dropping text · `crates/outbox.md`
@@ -138,10 +138,10 @@ it exists to ask.
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
+- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594, P-598
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
-- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-449, P-409

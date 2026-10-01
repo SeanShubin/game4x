@@ -572,3 +572,89 @@ fn paths_in(line: &str, tops: &BTreeSet<String>) -> Vec<String> {
     }
     found
 }
+
+/// **Only the composition root reaches the one console; everything else is handed an
+/// interface.**
+///
+/// `S-227`, from Sean: *I would have wrapped access to game state in an interface, hooked up
+/// the implementation in the composition roots.* `C-188` measured the state before it: ten
+/// sites in three crates reached `game_front::shell::` directly, so there was nothing to
+/// substitute and no place that said which game was which.
+///
+/// **This is the rule that keeps it that way.** A crate that names the shell again has reached
+/// past the seam, and nothing else would notice - the code would compile, the game would run,
+/// and the interface would quietly stop being the only door.
+#[test]
+fn only_the_composition_root_reaches_the_one_console() {
+    // **The terminal shell is platform wiring and not game state**, which is why it is named
+    // rather than covered. `game4x` spawns a thread that reads stdin; that is a surface the
+    // root attaches to the platform, like the window it describes two functions later.
+    const ALLOWED: [&str; 1] = ["game_front::shell::terminal::serve"];
+
+    let mut reached: Vec<String> = Vec::new();
+    let mut scanned = 0;
+    for base in ["crates", "prototypes"] {
+        for path in every_rust_file(&root().join(base)) {
+            let shown = path
+                .strip_prefix(root())
+                .unwrap_or(&path)
+                .to_string_lossy()
+                .replace('\\', "/");
+            // The crate that owns the console may of course name it.
+            if shown.starts_with("crates/game-front/") {
+                continue;
+            }
+            let Ok(text) = std::fs::read_to_string(&path) else {
+                continue;
+            };
+            scanned += 1;
+            for (at, line) in text.lines().enumerate() {
+                let said = line.trim();
+                // A doc comment naming it is prose, not a reach.
+                if said.starts_with("//") {
+                    continue;
+                }
+                if said.contains("game_front::shell::")
+                    && !ALLOWED.iter().any(|one| said.contains(one))
+                {
+                    reached.push(format!("{shown}:{}  {said}", at + 1));
+                }
+            }
+        }
+    }
+
+    // **Both populations**: a scan that found no files would report no reaches in exactly
+    // these words.
+    assert!(
+        scanned >= 50,
+        "only {scanned} file(s) scanned; this would prove little"
+    );
+    assert!(
+        reached.is_empty(),
+        "these reach the one console rather than being handed an interface - `S-227`:\n  {}",
+        reached.join("\n  ")
+    );
+}
+
+/// Every `.rs` file under a directory.
+fn every_rust_file(under: &Path) -> Vec<PathBuf> {
+    let mut found = Vec::new();
+    let mut stack = vec![under.to_path_buf()];
+    while let Some(at) = stack.pop() {
+        let Ok(entries) = std::fs::read_dir(&at) else {
+            continue;
+        };
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_dir() {
+                if path.file_name().and_then(|it| it.to_str()) != Some("target") {
+                    stack.push(path);
+                }
+            } else if path.extension().and_then(|it| it.to_str()) == Some("rs") {
+                found.push(path);
+            }
+        }
+    }
+    found.sort();
+    found
+}
