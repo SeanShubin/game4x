@@ -11386,6 +11386,7 @@ work the release exists to order.
 | P-605, A record holds a verdict and the behaviour it is about, and presence stops meaning two things                         | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-01 |
 | P-606, Column order is not behaviour, one function normalizes, and that decides the order for us                             | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-01 |
 | P-607, A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
+| P-608, A case's verdict is a row and pins nothing, and an authorization is consumed rather than kept                         | `spec/README.md` -> rule 3, after *presence used to mean both*                                                                                                                                           | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 

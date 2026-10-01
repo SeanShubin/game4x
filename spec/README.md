@@ -69,6 +69,19 @@ Add a file when a topic firms up. Add its row here first.
    constrains nothing either. **Presence used to mean both *I read this* and *this binds*, and
    those are now two different facts.**
 
+   **A case's verdict is a row in `reviewed/cases.4x` and pins no behaviour.** A test's record
+   carries the rows it approves, because a test is written by hand and can be reworded under me. **A
+   case is generated**, so it cannot change without the generator changing it, and the suite already
+   says which cases no longer match. **There is nothing to pin and nothing to compare.**
+
+   **An authorization is a different relation from a verdict because it is consumed.** A verdict
+   stands until I change it; `{regenerate}` is spent by the regeneration it asks for and is gone
+   afterwards. **A row that outlives being acted on and a row that does not are different kinds of
+   fact**, and one file holding both with a field to tell them apart would hide that.
+
+   **No suite is privileged.** A case in `types/` takes a verdict the same way one in `scenario/`
+   does, whether or not I have ever looked at that suite.
+
    **There are two sets of unit tests and they state different kinds of thing.**
    [`spec/tests/rule/`](tests/rule/) states what the game does - rows in, one command, rows out.
    [`spec/tests/interface/`](tests/interface/) states what the interface shows: which items are
