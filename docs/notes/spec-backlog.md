@@ -8,6 +8,54 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-30 - a regression case takes the test format, and convention over configuration is the reason
+
+**Sean**, after being talked through `regression/scenario/01/06-end-turn.4x`: *while this is
+technically correct, there is too much unsaid for the human to remember. Same problem I have with
+convention over configuration. It makes things more concise, but not simpler, because it moved the
+information from where the human can see it to where the human has to remember it.*
+
+**What he asked for.** *The same format as we do for tests. So the same number of regression tests,
+but each one will show the relevant input rows, the single command, and the relevant output rows.*
+And: *this changes my previous answer about the quantification, I don't want to see a row per firing
+if the rows are the same, I want a single quantified row.* And: *a link to the scenario setup too so
+I can look up the initial state.*
+
+**This reverses his *it is fine* of an hour earlier**, and `P-597` was withdrawn in between. The
+withdrawal still holds on its own terms: what the test decided was the game's behaviour - a rule
+reaches every row that matches - and what he is changing is the case's format, which no test states.
+
+**What `end-turn` made him read.** Ten parts - `upkeep`, `perish`, `breed`, `discard-disorder` and
+six `refresh` calls - three of which `repeat`. So four citizens appeared as ten entries in `{given}`
+and twelve in `{then}`, each entry a different part's slice, and two of them had no `laboring` column
+at all because `breed` never names it. **Nothing on the page said any of that.**
+
+## His hypothesis, and it is false today for one reason
+
+**Sean**: *I would expect with these changes the regression outputs could actually be executed
+directly as tests with no changes (depending on how the scenario setup works).*
+
+```
+authored tests in reviewed/     56 of 57 carry {territory} and {place} rows
+generated cases                 36 of 36 carry none
+```
+
+**So a case cannot run as a test**, because `toil where:place-1` requires `place-1` to exist and no
+case says it does. **The missing part is only the structural rows**, and they are constant: no clause
+in `spec/data/rules.4x` adds or removes a `territory`, `place`, `adjacency`, `capacity`, `provides`
+or `consumes` - they appear only under `role:require`. `scenario/main.4x` states thirteen of them,
+once, for the whole run.
+
+**So his link and his hypothesis are the same requirement seen from two sides.** A markdown link he
+can click makes it readable; a row the runner follows makes it runnable. **One artifact can do both
+and a hyperlink cannot.**
+
+Not yet a proposal: he asked whether the reference should be the scenario at start or the whole state
+per turn, and that answer decides the wording. Recommended to him as **both, for different jobs** -
+at-start for the runner, because the structural rows never change; the turn's own opening state for
+reading, because that bounds what he has to remember to one turn's commands rather than thirty-six.
+
+
 ## 2026-09-30 - a prototype is kept until its results are in the code, and thin-engine is how that ends
 
 **Sean**: *prototypes about experiments I will want to keep until I have already implemented their
