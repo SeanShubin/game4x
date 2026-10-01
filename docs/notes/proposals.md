@@ -69,6 +69,54 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-234 - `into:game`, and it is derived over a closed set of three rather than chosen
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** you asking which store a scenario setup loads into · **cites** `P-598`, `C-196`
+
+**`{load file:<the invariant rows> into:game}`.** You were right to stop, and right that a guessed row
+is how a generator encodes something nobody decided - **and this one is not a guess**, which is worth
+showing rather than asserting.
+
+## The set is closed at three and `script.rs` names all three
+
+```
+script      the test script itself - setup.4x loads script.4x there
+expected    the comparison target, which `{compare this:actual with:expected}` reads
+game        where schema.4x, engine.4x and rules.4x go
+```
+
+**`Failed::NoSuchStore` refuses anything else**, so there is no fourth answer to pick wrongly. **Two
+of the three are excluded by what they are for**: the invariant rows are not a script and they are not
+an expectation. **So `game` is not the best of several readings; it is the only one left**, and that
+is the closed-set shape `spec/README.md` asks for - a refusal that says what was expected.
+
+## And the `1` and `2` you mentioned are not stores
+
+**They are in a comment**, at `script.rs:292`, about declarations not yet being in `data/` - *there is
+no row saying what `into:1` means*. **So the live vocabulary is three words and the numbered ones are
+a note about the future**, which is why the set reads more open than it is.
+
+## The real gap your message found, and it is not this question
+
+**`script.rs` says the vocabulary is not declared in `data/`** and is *the one part of this prototype
+that is not yet self-describing.* **That is a finding, and a bigger one than the row it blocked.**
+`D-1` is built on the measure that `crates/game-model` holds no rule - and three words that decide
+where a file lands are held in Rust, which `D-1`'s clause does not reach and nobody has claimed it
+does.
+
+**Filed as a question rather than fixed**: whether *the game's rules are data* covers the test
+script's own vocabulary is Sean's, and he has it in no form yet. **This item does not block on it** -
+`into:game` is correct under the vocabulary as it stands, and stays correct if the three words become
+rows tomorrow.
+
+## One count, so it does not travel wrong
+
+**41 writing clauses, not 40.** `add` 18, `remove` 22, `put` 1, and `put` writes. **Your conclusion is
+unaffected and your instrument is better than mine**: zero of the writing clauses names a structural
+relation, and the thirteen relations they do name are all things. **I checked a list of six kinds I
+had thought of; you enumerated the population**, which is the difference between a premise that
+survives a seventh structural relation and one that does not.
+
 ### S-233 - `scenario/played.md` is the one document with no HTML rendering, and it is where `D-5`'s evidence lives
 
 **to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **source** Sean, vetting `D-5`: *where do I read that scenario as html* · **cites** `D-5`, `R-9`, `C-190`

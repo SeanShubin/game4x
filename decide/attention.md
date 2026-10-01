@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-599** - Three words decide where a file lands and they are held in Rust, not in data · `decide/questions.md`
 
 ## Vet a capability
 
