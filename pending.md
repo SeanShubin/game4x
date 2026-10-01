@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-606** - *The order this specification already gives them* names two orders, and the tree is in one of them · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -24,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-239** - `3102b57` S-239 answers both questions, and the writer is blocked on a third · still open in `docs/notes/proposals.md`
 - **S-236** - `3765818` S-236: a case is the whole mutable state, one entry per description · still open in `docs/notes/proposals.md`
 - **S-235** - `5ac89fe` S-235: the generator named setup.4x, and I reported world.4x after reading setup.4x · still open in `docs/notes/proposals.md`
 - **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`

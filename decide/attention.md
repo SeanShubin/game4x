@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-606** - *The order this specification already gives them* names two orders, and the tree is in one of them · `decide/questions.md`
 
 ## Vet a capability
 
