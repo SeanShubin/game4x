@@ -61,5 +61,3 @@ convert them**, on the same ruling that let a lane move them.
 dependency runs the other way, so it moves to `friendly-notation` - a refactor of a 712-line module.
 **That is the price of the trap not being there.**
 
-*Nothing is open. Everything filed has been decided.*
-
