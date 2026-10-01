@@ -9,6 +9,9 @@
 //! outbox --orphans        closed items whose closing line names a withdrawn proposal
 //! outbox --places         the outboxes it reads, one per line, for a caller that guards them
 //! outbox --attention      write decide/attention.md, everything waiting on Sean
+//! outbox --review-issue   the body of the issue listing every test with a checkbox
+//! outbox --review-plan F  what the ticks in a saved issue body would change
+//! outbox --review-apply F do it - only from a workflow gated on github.actor
 //! outbox --count          the aggregate, against the limit
 //! ```
 //!
@@ -22,8 +25,9 @@ use std::path::{Path, PathBuf};
 const DEPTH: usize = 400;
 
 use outbox::{
-    Item, LIMIT, Outboxes, attention, duplicate_ids, history, misfiled_by_asks, open_by_addressee,
-    pending, read, reading, same_section, unclosed,
+    Gesture, Item, LIMIT, Outboxes, attention, carry_out, duplicate_ids, gestures, history,
+    misfiled_by_asks, open_by_addressee, pending, read, reading, review_issue, same_section,
+    ticked_in, unclosed,
 };
 
 fn main() {
@@ -304,6 +308,60 @@ fn main() {
                 }
             }
         }
+        // **The review surface, printed rather than posted** - `S-228`. This writes the body
+        // of the issue that lists every test with a checkbox; a workflow is what puts it
+        // there, and `github.actor` is what makes a tick his.
+        Some("--review-issue") => {
+            print!("{}", review_issue(&root));
+            0
+        }
+        // **What a ticked body asks for, and then doing it.** Two commands rather than one so
+        // a run can be read before it writes: `--review-plan` says what would change and
+        // `--review-apply` changes it.
+        //
+        // **Only a workflow gated on the actor runs the second**, because `reviewed/` is the
+        // one artifact nothing judged by it may touch - and both producers are judged by it.
+        Some(asked @ ("--review-plan" | "--review-apply")) => {
+            let applying = asked == "--review-apply";
+            match arguments
+                .get(1)
+                .map(|at| (at.clone(), std::fs::read_to_string(at)))
+            {
+                None => {
+                    eprintln!("give the path of a file holding the issue body");
+                    2
+                }
+                Some((at, Err(why))) => {
+                    eprintln!("cannot read {at}: {why}");
+                    2
+                }
+                Some((_, Ok(body))) => {
+                    let wanted = gestures(&root, &ticked_in(&body));
+                    if wanted.is_empty() {
+                        println!("nothing to do: the ticks and `reviewed/` already agree");
+                    }
+                    let mut failed = 0;
+                    for gesture in &wanted {
+                        let said = match gesture {
+                            Gesture::Approve(name) => format!("approve {name}"),
+                            Gesture::Withdraw(name) => format!("withdraw {name}"),
+                        };
+                        if !applying {
+                            println!("would {said}");
+                            continue;
+                        }
+                        match carry_out(&root, gesture) {
+                            Ok(done) => println!("{done}"),
+                            Err(why) => {
+                                eprintln!("{said}: {why}");
+                                failed += 1;
+                            }
+                        }
+                    }
+                    if failed > 0 { 2 } else { 0 }
+                }
+            }
+        }
         Some("--sections") => {
             show_same_section(&all);
             0
@@ -390,6 +448,9 @@ outbox - what is open, and addressed to whom
     outbox --item ID        one item's fields, exit 1 if the id is nowhere
     outbox --write [PATH]   write the pending document, default pending.md
     outbox --attention [P]  write what waits on Sean, default decide/attention.md
+    outbox --review-issue   print the review issue body
+    outbox --review-plan F  what the ticks in a saved body would change
+    outbox --review-apply F carry them out against reviewed/
     outbox --help           this"
 }
 

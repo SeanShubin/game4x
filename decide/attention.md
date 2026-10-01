@@ -14,6 +14,7 @@ Nothing.
 
 No wording can be final until you do.
 
+- **P-597** - A generated case writes one row per firing and an authored test writes a map, and nothing says which `{given}` is · `decide/questions.md`
 - **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 
 ## Vet a capability

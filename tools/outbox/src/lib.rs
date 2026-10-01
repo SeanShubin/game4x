@@ -35,7 +35,7 @@
 //! Only the two lines are parsed. The separator between fields, the order of the fields
 //! after the first two, and every word of the prose are free to change.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 /// One addressed item, from some outbox.
@@ -1374,6 +1374,155 @@ fn stems(at: &Path) -> Result<Vec<String>, String> {
         .collect();
     found.sort();
     Ok(found)
+}
+
+/// The checkbox list of every test, ticked where Sean has read it.
+///
+/// `S-228`, from Sean: *only I can say a test is approved and only I may say the current
+/// regression expectation should be deleted, but I also want to do this remotely with a button
+/// press... What I don't want to be doing is writing tests or navigating a filesystem to do
+/// either of these things.*
+///
+/// # The list is a rendering of `reviewed/`, not a second copy of it
+///
+/// **A row is ticked if and only if a record is there**, and the body is regenerated from the
+/// records every time - so the issue cannot drift from the directory it describes. `S-228`:
+/// *tick is `r`, untick is `u`, and a comment on the issue is `x`*, which are the three gestures
+/// `review-web.rs` already has.
+///
+/// **An orphaned record renders as a ticked row whose test is gone**, which is the review
+/// application's own rule: a rename is two things he can see rather than one thing nobody may
+/// touch.
+pub fn review_issue(root: &Path) -> String {
+    let tests = stems(&root.join("spec/tests")).unwrap_or_default();
+    let records: BTreeSet<String> = stems(&root.join("reviewed"))
+        .unwrap_or_default()
+        .into_iter()
+        .collect();
+
+    let mut out = String::new();
+    out.push_str(
+        "**Generated. Tick to approve, untick to take a reading back, comment to ask for a \
+change.**\n\nA row is ticked when `reviewed/` holds a record of that name. This list is \
+rewritten from\nthe records, so it cannot disagree with them.\n\n",
+    );
+
+    let mut ticked = 0;
+    for name in &tests {
+        let has = records.contains(name);
+        if has {
+            ticked += 1;
+        }
+        let stem = name.strip_suffix(".4x").unwrap_or(name);
+        out.push_str(&format!(
+            "- [{}] [{stem}](../blob/master/spec/tests/{name})\n",
+            if has { "x" } else { " " }
+        ));
+    }
+
+    // **A record whose test is gone is shown rather than dropped.** Nothing else in the tree
+    // would say so, and it is half of what a rename looks like.
+    let orphans: Vec<&String> = records.iter().filter(|r| !tests.contains(r)).collect();
+    if !orphans.is_empty() {
+        out.push_str(
+            "\n**Records with no test of that name** - a rename leaves one of these \
+and an unread test:\n\n",
+        );
+        for name in orphans {
+            out.push_str(&format!("- `{name}`\n"));
+        }
+    }
+
+    out.push_str(&format!("\n{ticked} of {} read.\n", tests.len()));
+    out
+}
+
+/// Which test names a rendered issue body has ticked.
+///
+/// **Parsed from the body rather than from anything remembered**, because the body is what he
+/// touched. A task list item is `- [x] ` or `- [ ] `, and GitHub writes an upper-case `X` when
+/// some clients tick it - so the compare is case-insensitive on that one character.
+pub fn ticked_in(body: &str) -> BTreeSet<String> {
+    let mut out = BTreeSet::new();
+    for line in body.lines() {
+        let line = line.trim();
+        let Some(rest) = line.strip_prefix("- [") else {
+            continue;
+        };
+        let Some((mark, rest)) = rest.split_once(']') else {
+            continue;
+        };
+        if !mark.eq_ignore_ascii_case("x") {
+            continue;
+        }
+        // `- [x] [the-name](../blob/master/spec/tests/the-name.4x)`
+        let Some(open) = rest.find('[') else { continue };
+        let Some(close) = rest[open..].find(']') else {
+            continue;
+        };
+        let stem = &rest[open + 1..open + close];
+        if !stem.is_empty() {
+            out.insert(format!("{stem}.4x"));
+        }
+    }
+    out
+}
+
+/// What a tick list asks to be done to `reviewed/`.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Gesture {
+    /// Ticked and no record: copy the test in, byte for byte.
+    Approve(String),
+    /// Unticked and a record is there: delete it, which takes the reading back.
+    Withdraw(String),
+}
+
+/// The difference between what the body says and what `reviewed/` holds.
+///
+/// **Only a test that exists can be approved.** A ticked row naming no test is ignored rather
+/// than acted on - that is the orphan case, and the record it would write would record a
+/// reading of nothing.
+pub fn gestures(root: &Path, ticked: &BTreeSet<String>) -> Vec<Gesture> {
+    let tests: BTreeSet<String> = stems(&root.join("spec/tests"))
+        .unwrap_or_default()
+        .into_iter()
+        .collect();
+    let records: BTreeSet<String> = stems(&root.join("reviewed"))
+        .unwrap_or_default()
+        .into_iter()
+        .collect();
+
+    let mut out = Vec::new();
+    for name in &tests {
+        match (ticked.contains(name), records.contains(name)) {
+            (true, false) => out.push(Gesture::Approve(name.clone())),
+            (false, true) => out.push(Gesture::Withdraw(name.clone())),
+            _ => {}
+        }
+    }
+    out
+}
+
+/// Carry out one gesture against `reviewed/`.
+///
+/// **Nothing reformats a copy** - `S-228`. `reviewed/` records that he read *those bytes*, so
+/// this copies the file and does not parse, pad or normalise it. A writer that tidied
+/// whitespace would be recording a reading of something else.
+pub fn carry_out(root: &Path, gesture: &Gesture) -> Result<String, String> {
+    match gesture {
+        Gesture::Approve(name) => {
+            let from = root.join("spec/tests").join(name);
+            let to = root.join("reviewed").join(name);
+            let bytes = std::fs::read(&from).map_err(|why| format!("{}: {why}", from.display()))?;
+            std::fs::write(&to, bytes).map_err(|why| format!("{}: {why}", to.display()))?;
+            Ok(format!("approved {name}"))
+        }
+        Gesture::Withdraw(name) => {
+            let at = root.join("reviewed").join(name);
+            std::fs::remove_file(&at).map_err(|why| format!("{}: {why}", at.display()))?;
+            Ok(format!("withdrew {name}"))
+        }
+    }
 }
 
 /// Everything waiting on Sean, as markdown, for `decide/attention.md`.

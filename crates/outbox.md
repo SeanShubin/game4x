@@ -135,6 +135,77 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-194 - `S-228`'s test half is built and nothing is posted, and the case half is named rather than done
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `S-228` · **cites** `S-228`, `S-229`, `C-189`
+
+**derived from** *a record is created and deleted only by the review application, acting as Sean* - `CLAUDE.md` -> Perspectives
+
+**He can approve a test from a phone, and the rule that only he may is held by a check for the
+first time.**
+
+```
+tools/outbox --review-issue    the body: one row per test, ticked where a record exists
+tools/outbox --review-plan F   what the ticks in a saved body would change
+tools/outbox --review-apply F  do it
+.github/workflows/review.yml   the gate, and the two jobs either side of it
+tools/outbox/tests/review.rs   six checks
+```
+
+## The gate is the item rather than a detail of it
+
+**`CLAUDE.md` says no lane may write a record, and nothing held that.** `review.yml`'s `apply`
+job runs only when `github.actor == github.repository_owner`, **so a lane asking for a run is
+refused by the same gate a stranger is.** Anyone may tick a box; only his tick does anything.
+
+**Compared against the owner rather than a name in the YAML**, so there is no second place for
+the answer to live and go stale - which is the failure this repository keeps finding in hand
+lists.
+
+## What the surface is, and what keeps it honest
+
+**The body is a rendering of `reviewed/` and never a second copy.** A row is ticked if and only
+if a record of that name is there, and the body is rewritten from the records after every
+write - so the list says what happened rather than what was asked.
+
+**`the_issue_round_trips_against_the_records` is the guarantee.** Rendering the body and reading
+it back gives exactly the set of records, over the repository's own 57 with the count asserted.
+**A disagreement there is a tick nobody made**, and it would read as an approval of a test he
+never opened.
+
+**Five more, each for a way this could destroy something rather than fail to create it.** A tick
+copies bytes exactly, over a deliberately untidy file - trailing spaces, a tab, no final newline
+- because a record is *those bytes*. A tick naming no test is ignored, and the orphaned record
+it answers to is left alone, since removing one is a reading he takes back rather than
+housekeeping. And **both `- [x]` and `- [X]` count**: a reader that saw one spelling and not the
+other would read his tick as an untick and delete the record.
+
+## Nothing is posted, and that is deliberate
+
+**No issue exists and this lane did not make one.** Creating an issue is outward-facing and the
+workflow is a standing configuration; both are Sean's to set off, and the workflow does nothing
+at all until it is pushed. **`--review-issue` prints to stdout**, so the body can be read before
+anything is created.
+
+## The case half is not built, and the reason is a tool that does not exist yet
+
+**`S-228` asks for a second issue listing the regression cases whose behaviour has changed**,
+where tick is the only gesture. **The list is not derivable without writing.** `examples/suites.rs`'s
+`check` is what knows a case is stale, and it writes absent cases as it goes - so asking it costs
+a modified tree, which is the same reason `attention.md` names the suite rather than listing
+them.
+
+**What that half needs first is a read-only staleness report**, and that is a change to the
+suite rather than to this surface. **Named rather than attempted**, because half a control that
+deletes regression cases is worse than none.
+
+## And `S-229`'s half is done beside it
+
+**The pipeline says which toolchain it installed.** `C-189` reported a red CI after a green gate
+and could not say why from a machine with no `rustup`; `docs/process.md` declined the pin and
+asked for a notice instead. **A number, not a check** - nothing in CI can know what the local
+toolchain is, so asserting agreement is not available and printing is.
+
 ### C-193 - `S-233` is built: `played.md` has a page with its sections at the top, and building it found `lit` dropping text
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `S-233` · **cites** `S-233`, `D-5`, `R-9`, `C-190`

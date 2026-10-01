@@ -1,0 +1,130 @@
+# Approving a test from a phone, and the check that makes it his.
+#
+# `S-228`, from Sean: *only I can say a test is approved and only I may say the current
+# regression expectation should be deleted, but I also want to do this remotely with a
+# button press, not necessarily through Claude. What I don't want to be doing is writing
+# tests or navigating a filesystem to do either of these things.*
+#
+# **The control is a task list in an issue.** One row per test in `spec/tests/`, ticked when
+# `reviewed/` holds a record of that name. He taps a row in the GitHub app; this reads the
+# body back and makes `reviewed/` agree with it. Tick approves, untick takes the reading
+# back, and a comment is how he asks for a change without writing a test.
+#
+# **Nothing is hosted.** The issue is the list and the control at once, so there is no app to
+# keep alive and no OAuth to hold - and the issue's edit history is an audit trail of who
+# ticked what and when, for free.
+#
+# # What makes it his, and it is a check rather than a convention
+#
+# `CLAUDE.md`: *a record is created and deleted only by the review application, acting as
+# Sean... no lane creates a record, deletes one, or changes what one says - the bytes are
+# yours and the history of them is everybody's.* **Until now that was a sentence held by
+# nothing.** The `if` below is what holds it: this job does not run unless the actor is the
+# repository owner, so a lane asking for a run is refused by the same gate a stranger is.
+#
+# **That matters because both producers are judged by `reviewed/`.** The specification lane
+# writes the tests, so a lane that could write the record could approve its own work; the
+# code lane is what the tests constrain, so a lane that could write the record could clear a
+# failure by editing the approval instead of the code.
+#
+# # Why `issues: edited` and not a form
+#
+# A workflow_dispatch input would make him choose a test by name from a dropdown, which is
+# navigating a filesystem with extra steps - the first draft of `S-228` asked for exactly
+# that and was replaced. **A checkbox is one tap, and the thing he taps is the same thing
+# that tells him what is waiting.**
+name: Review
+
+on:
+  issues:
+    types: [edited]
+  # **Regenerating the list by hand**, for when a test is added or renamed and the issue has
+  # to be rewritten to match. It never writes `reviewed/`.
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: The issue number holding the test list
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  # **Rewrite the list from the records.** The body is a rendering of `reviewed/`, so this is
+  # what keeps it from drifting: a test added to `spec/tests/` appears unticked, and a record
+  # whose test was renamed away appears under its own heading.
+  relist:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Write the body from the records
+        run: cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --review-issue > body.md
+      - name: Put it in the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue edit "${{ inputs.issue }}" --body-file body.md
+
+  apply:
+    # **The gate, and it is the point of this file.** `github.actor` on an `issues` event is
+    # whoever edited the issue. Anyone may tick a box on a public repository; only his tick
+    # does anything.
+    #
+    # **Compared against the repository owner rather than a name in the YAML**, so there is no
+    # second place for the answer to live and go stale.
+    if: github.event_name == 'issues' && github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      # **The body as he left it**, written to a file rather than interpolated into a shell
+      # command: it is arbitrary text he can type into, and `${{ }}` in a `run:` is a
+      # substitution before the shell sees it.
+      - name: Take the body he edited
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue view "${{ github.event.issue.number }}" --json body --jq .body > body.md
+
+      # **Said before it is done**, so the run's log records what changed and why even when
+      # the commit below is a single line.
+      - name: What the ticks ask for
+        run: cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --review-plan body.md
+
+      - name: Make reviewed/ agree with the ticks
+        run: cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --review-apply body.md
+
+      # **Only `reviewed/` is staged, by name.** `CLAUDE.md` forbids `git add -A` here because
+      # three lanes share this tree - and on a runner the tree is clean, so the rule costs
+      # nothing and keeps the commit saying one thing.
+      #
+      # **The commit is attributed to him**, because the gesture was his and the record is the
+      # one artifact whose whole value is whose it is.
+      - name: Commit the records
+        run: |
+          if git diff --quiet -- reviewed; then
+            echo "reviewed/ already agrees with the ticks; nothing to commit"
+            exit 0
+          fi
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add -- reviewed
+          git commit -m "Reviewed: ${{ github.actor }} ticked through issue #${{ github.event.issue.number }}"
+          git push
+
+      # **The list is rewritten after the write, not before it.** What he ticked and what the
+      # directory holds can differ - a tick naming no test is ignored - so the body is made to
+      # say what happened rather than what was asked.
+      - name: Put the records back in the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git pull --ff-only
+          cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --review-issue > body.md
+          gh issue edit "${{ github.event.issue.number }}" --body-file body.md

@@ -94,6 +94,25 @@ jobs:
           targets: wasm32-unknown-unknown
           components: rustfmt, clippy
 
+      # **The version this run installed, said out loud** - `S-229`, and `C-189` is what it is
+      # for. `docs/process.md` declines a pin: the policy is to stay current and let `@stable`
+      # and a current machine be the same thing. **What that policy needs is a notice when they
+      # stop being the same thing**, and on 2026-09-30 the notice was a lint firing - which
+      # arrives late, by luck, and says nothing about why.
+      #
+      # **This run knows the version and said it nowhere.** A red after a green local gate now
+      # has a number beside it: compare it with `rustc --version` on the machine that ran the
+      # gate, and *the machine is behind* is a fact rather than an inference.
+      #
+      # **Not a check, deliberately.** Nothing here can know what the local toolchain is, so
+      # asserting agreement is not available; printing is.
+      - name: Say which toolchain this run is holding
+        run: |
+          rustc --version
+          cargo clippy --version
+          echo "The gate on a developer machine runs whatever is installed there."
+          echo "A red here after a green gate usually means that machine is behind - C-189."
+
       - name: Cache cargo + target
         uses: Swatinem/rust-cache@v2
         with:
