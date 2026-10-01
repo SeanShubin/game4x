@@ -147,8 +147,9 @@ ordering rather than on the question.
 
 **derived from** *the order that function puts columns in must not depend on anything editable* - `spec/README.md` rule 3
 
-**The writer writes `spec/console.md`'s order now**, not the schema's, so no record's bytes depend
-on a `seq:`. And `POST /convert` converts the fifty-seven, **run by him through the application**,
+The writer writes the order `spec/console.md` states rather than the schema's, so no record's
+bytes depend on a `seq:` any more. And `POST /convert` converts the fifty-seven, **run by him
+through the application**,
 which is what `CLAUDE.md` asks: *a record is created and deleted only by the review application,
 acting as Sean.*
 
