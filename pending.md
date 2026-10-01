@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-606** - *The order this specification already gives them* names two orders, and the tree is in one of them · `decide/questions.md`
+- **P-606** - Column order is not behaviour, one function normalizes, and that decides the order for us · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -25,6 +25,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-240** - `40598c9` S-240: he can review again, and the suite drives the startup now · still open in `docs/notes/proposals.md`
+- **P-606** - `cf3737b` P-606: the order this specification already gives them names two orders · still open in `decide/proposals.md`
 - **C-204** - `e55305b` S-239: both of C-204 questions are answered by what landed, neither is his · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
