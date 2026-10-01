@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-608** - A case's verdict is a row and pins nothing, and an authorization is consumed rather than kept · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`

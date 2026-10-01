@@ -8,7 +8,9 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-608** - A case's verdict is a row and pins nothing, and an authorization is consumed rather than kept · `decide/proposals.md`
 
 ## Answer a question
 
