@@ -8,6 +8,52 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-01 - a verdict is about a test; a record is a copy of one
+
+**Sean**: *the hosted app records facts about what I think of tests. Those facts need to be recorded
+somewhere, but are a different kind of thing than other records we store so different rules may be
+appropriate.*
+
+**What makes it a different kind.** A record in `reviewed/` **is** the test - the bytes are the thing
+approved, which is why nothing may reformat one. **A verdict is about a test**, so it has no bytes to
+be identical to, and the rules that protect a copy do not transfer.
+
+```
+a record    present or absent, and absent means nothing was read
+a verdict   one of three, and it changes - pending, then approved, then denied, then approved
+```
+
+**So a verdict wants a history and a record does not.** A record's history is the git log of a file
+appearing; a verdict's history is the thing he would actually read - *when did I change my mind about
+this test, and why*.
+
+## Where this leads, and it is one observation rather than a design
+
+**`reviewed/` already encodes *approved*.** A present record means he read it and let it stand.
+**`pending` is the absence of a verdict** rather than a stored value - nothing has been said yet.
+**So of the three states, only `denied` has nowhere to live.**
+
+**And `denied` is not a flag, by his own account**: *denied means the code lane is not bound by it,
+and that the specification instance needs me to say what to do instead of what I denied. I am
+recording that this is not what I want to do, and I must eventually clarify what that means exactly
+to the specification lane.* **That is an item with a reader and an open status**, which is a shape
+this repository already has.
+
+**Two rules do not transfer and one must.** Byte-identity does not - there is nothing to be identical
+to. One-entry-per-description does, in the form of one verdict per test. **And the one that must is
+that no lane writes a verdict**, for the reason `reviewed/` has it: the specification lane writes the
+tests and the code lane is judged by them, so either writing a verdict could approve its own work or
+clear a failure.
+
+## What is unstated
+
+Whether a denial's obligation is tracked as a proposal, so that `attention.md` can say *you denied
+this and have not said what instead*. Whether a regression case can be denied at all, given that
+deleting one is an acceptance and there is no gesture for the opposite. And whether a verdict on a
+test that then changes is still a verdict - a record is compared to its test on every build, and a
+verdict about words that have moved may be worse than none.
+
+
 ## 2026-10-01 - global settings, and squads replace berth
 
 **Sean**: *we need a way to represent global settings. We are going to use this to replace berth.
