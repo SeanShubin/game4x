@@ -19,7 +19,7 @@
 //! `cargo run --example report`
 
 use std::collections::BTreeMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use friendly_notation as friendly;
 
@@ -529,6 +529,155 @@ enum Outcome {
     },
 }
 
+/// Where the generated cases live, which is beside `spec/` rather than inside it.
+///
+/// **A case is generated and a test is approved**, which is why they sit apart: `spec/tests/`
+/// holds what Sean has read and `regression/` holds what the suite writes.
+pub fn cases_at() -> PathBuf {
+    mine().join("..").join("..").join("regression")
+}
+
+/// Every generated regression case, by suite.
+///
+/// **`E-4`**: *a page that lists 222 rows flat is not this capability met - the rule tests, the
+/// interface tests and the four regression suites are distinguishable without my counting.*
+///
+/// **The rows are 223 and the cases are 166.** Measured over `regression/**/*.4x` at `HEAD` and
+/// at three earlier commits, 166 every time - so the 222 and the 165 are a miscount rather than
+/// drift, and `C-213` asks the specification lane to correct the two *vetted when* lines that
+/// carry them. **This renders what is there** rather than what those lines predict, because a
+/// page built to a wrong number would make the number look right.
+pub fn every_case() -> Vec<(String, Vec<String>)> {
+    let at = cases_at();
+    let mut suites: Vec<(String, Vec<String>)> = Vec::new();
+    let Ok(entries) = std::fs::read_dir(&at) else {
+        return suites;
+    };
+    let mut named: Vec<PathBuf> = entries
+        .flatten()
+        .map(|it| it.path())
+        .filter(|it| it.is_dir())
+        .collect();
+    named.sort();
+    for suite in named {
+        let Some(name) = suite.file_name().map(|it| it.to_string_lossy().to_string()) else {
+            continue;
+        };
+        let mut cases = Vec::new();
+        walk(&suite, &suite, &mut cases);
+        cases.sort();
+        if !cases.is_empty() {
+            suites.push((name, cases));
+        }
+    }
+    suites
+}
+
+/// Collect every `.4x` under a suite, however deeply it nests.
+///
+/// **`scenario/` nests a turn directory and the others do not**, so a reader that assumed one
+/// level would have found the other three suites and none of scenario's thirty-seven - a
+/// plausible number over a narrower population, which is the class `CLAUDE.md` names.
+fn walk(root: &Path, at: &Path, into: &mut Vec<String>) {
+    let Ok(entries) = std::fs::read_dir(at) else {
+        return;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            walk(root, &path, into);
+        } else if path.extension().is_some_and(|it| it == "4x")
+            && let Ok(under) = path.strip_prefix(root)
+        {
+            into.push(under.to_string_lossy().replace('\\', "/"));
+        }
+    }
+}
+
+/// Which suites are shown and offer nothing to press.
+///
+/// **`E-4`**: *let's show them, but these are informational only, no vetting capability need be
+/// implemented* - Sean, 2026-10-01, asked about `types/` and `primitives/`. **Those two and no
+/// others**, so `rules/` and `scenario/` are markable because nothing singles them out.
+///
+/// **That is the interface declining to offer a control, not the notation forbidding one.**
+/// `spec/README.md` rule 3 says *no suite is privileged* and `reviewed/cases.4x` takes a verdict
+/// for any case, including one of these - so `render::cases_in` reads a verdict for all four and
+/// only the page is narrower.
+pub const SHOWN_ONLY: [&str; 2] = ["primitives", "types"];
+
+/// The regression suites rendered as their own section, each one foldable.
+///
+/// **`E-4` asks that the suites be distinguishable without his counting**, so each is a fold
+/// carrying its own count and saying in its own words whether it offers a control. A flat list of
+/// everything is the thing that line rules out.
+///
+/// **A case he has denied says so whether or not its suite offers a control**, because
+/// `reviewed/cases.4x` takes a verdict for any case and the page would otherwise hide one he had
+/// made elsewhere - *no suite is privileged* is about what may be recorded.
+fn cases_section(marks: &render::Cases, live: bool) -> String {
+    let mut out = String::new();
+    let suites = every_case();
+    let total: usize = suites.iter().map(|(_, cases)| cases.len()).sum();
+    out.push_str(&format!(
+        "<h2>Regression cases</h2>
+<p class=\"note\"><strong>{total}</strong> generated cases          in {} suites. A case is written by the test, so there is nothing to pin and nothing to          compare - a verdict on one records what you think of what it does, and a regeneration is          authorized separately.</p>
+",
+        suites.len()
+    ));
+    for (suite, cases) in &suites {
+        let shown_only = SHOWN_ONLY.contains(&suite.as_str());
+        let how = if shown_only {
+            "shown for reading; no control, by your instruction"
+        } else if live {
+            "markable"
+        } else {
+            "markable when served"
+        };
+        out.push_str(&format!(
+            "<details class=\"suite\" data-suite=\"{suite}\"><summary><b>{suite}</b> &middot;              {} case(s) &middot; <span class=\"note\">{how}</span></summary>
+<ul class=\"cases\">
+",
+            cases.len()
+        ));
+        for case in cases {
+            let name = format!("{suite}/{}", case.trim_end_matches(".4x"));
+            let said = if marks.denied.contains(&name) {
+                " <span class=\"red\">denied</span>"
+            } else if marks.approved.contains(&name) {
+                " <span class=\"ok\">approved</span>"
+            } else {
+                ""
+            };
+            let waiting = if marks.authorized.contains(&name) {
+                " <span class=\"seen\">regeneration authorized</span>"
+            } else {
+                ""
+            };
+            // **Linked whether or not it is markable**, which is the half of his instruction that
+            // is about the informational suites: *we can even link to them if it helps with
+            // comprehensibility.*
+            out.push_str(&format!(
+                "<li data-case=\"{name}\"><a href=\"../../regression/{name}.4x\"><code>{case}</code></a>{said}{waiting}"
+            ));
+            if !shown_only && live {
+                out.push_str(
+                    " <button data-mark=\"approved\">approve</button>                     <button data-mark=\"denied\">deny</button>                     <button data-mark=\"regenerate\">regenerate</button>",
+                );
+            }
+            out.push_str(
+                "</li>
+",
+            );
+        }
+        out.push_str(
+            "</ul></details>
+",
+        );
+    }
+    out
+}
+
 /// A rendering of the whole suite: the page, its diffable sibling, and the tally.
 pub struct Built {
     pub page: String,
@@ -1023,8 +1172,18 @@ not as expected
     } else {
         String::new()
     };
+    // **What he has said about the cases**, read the same way the suite reads it. An absent
+    // file is no verdict on anything, which is the state before he has pressed anything.
+    let marks = std::fs::read_to_string(records_at().join("cases.4x"))
+        .ok()
+        .and_then(|text| render::cases_in(&text).ok())
+        .unwrap_or_default();
+    let cases = cases_section(&marks, live);
+    let case_count: usize = every_case().iter().map(|(_, it)| it.len()).sum();
+    let rows = total + case_count;
+
     let page = format!(
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{lost}{cards}{script}</body>\n</html>\n"
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{rows}</strong> rows &middot; <strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{lost}{cards}{cases}{script}</body>\n</html>\n"
     );
     Built {
         page,

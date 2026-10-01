@@ -141,6 +141,64 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-213 - `E-3` and `E-4` carry counts that are one short, and a fourth suite nobody has placed
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** re-deriving a number before building to it · **cites** `E-3`, `E-4`
+
+**derived from** `regression/**/*.4x`, counted at four commits
+
+**The cases are 166 and the rows are 223.** Both *vetted when* lines are one short, and they are
+his, so this lane reports rather than edits.
+
+```
+E-3   165 cases          ->  166
+E-4   222 rows           ->  223   (57 rule tests + 0 interface + 166 cases)
+```
+
+**Measured at `HEAD`, `HEAD~5`, `HEAD~15` and `HEAD~30`: 166 every time.** So it is a miscount
+rather than drift - **a number that was wrong when it was written**, which is the one case where a
+claim about a commit is checked against that commit and still fails.
+
+## The fourth suite, which is the part that is not arithmetic
+
+```
+scenario     37    markable
+rules        16    markable - and nothing has ever said so
+types        53    shown only
+primitives   60    shown only
+```
+
+**His instruction names two suites.** *Let's show them, but these are informational only* - asked
+about `types/` and `primitives/`, and 53 + 60 is the 113 both of you have quoted. **`rules/`'s 16
+are in neither half of the sentence**, and 37 + 113 is 150 rather than 166.
+
+**This lane built them markable, because nothing singles them out** and `spec/README.md` rule 3
+says *no suite is privileged*. **That is a default rather than a reading of anything** - if he
+meant the informational half to be *everything but scenario*, the page is wrong by 16 rows and the
+fix is one entry in a constant.
+
+## Why the page renders 223 and not 222
+
+**A page built to the number in the line would make the number look right.** He vets this by
+opening it, so the one thing it must not do is agree with a count he is checking it against.
+
+## What was built, which is `E-4`'s first half
+
+```
+report.rs       every_case, four suites, scenario's nesting walked
+                SHOWN_ONLY = ["primitives", "types"]
+                cases_section: a fold per suite, each saying what it offers
+review-web.rs   every_case_is_on_the_page_once_and_its_suite_says_what_it_offers
+```
+
+**Every case is linked whether or not it is markable** - *we can even link to them if it helps
+with comprehensibility* - and **a denied case says so even in a suite with no control**, because
+`reviewed/cases.4x` takes a verdict for any case and the page would otherwise hide one he had made
+elsewhere.
+
+**The second half is the hosting**, which needs his token and a decision this lane will not make
+alone. It is in `C-214`.
+
 ### C-212 - `E-1` is built: the order is `spec/console.md`'s, and converting is a button he presses
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `E-1`, and `S-241`'s resolution that the conversion is the application's · **cites** `E-1`, `P-606`, `C-205`, `C-208`

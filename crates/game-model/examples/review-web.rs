@@ -816,6 +816,93 @@ mod tests {
         assert_eq!(report::drift(Some(&denied), &text).0, "reviewed");
     }
 
+    /// **Every case is on the page once, the suites are told apart, and only two offer no
+    /// control** - `E-4`.
+    ///
+    /// *A page that lists 222 rows flat is not this capability met - the rule tests, the
+    /// interface tests and the four regression suites are distinguishable without my counting.*
+    ///
+    /// # Driven over every case rather than over one
+    ///
+    /// **A check that found one case on the page would go on passing when a suite stopped being
+    /// rendered.** So this ranges over what is on disk and asserts the count, which is the pair
+    /// `CLAUDE.md` asks for: *check the rule over every case, not on one case, and assert how
+    /// many cases there were.*
+    ///
+    /// **And both populations are asserted non-empty**, because *shown and no control* is
+    /// vacuously true of a suite with no cases, and *markable* is vacuously true of no suites.
+    #[test]
+    fn every_case_is_on_the_page_once_and_its_suite_says_what_it_offers() {
+        let built = report::build(true).page;
+        let suites = report::every_case();
+        assert_eq!(suites.len(), 4, "four regression suites");
+
+        let (mut listed, mut markable, mut informational) = (0, 0, 0);
+        for (suite, cases) in &suites {
+            assert!(
+                built.contains(&format!("data-suite=\"{suite}\"")),
+                "`{suite}` is not its own fold, so the suites are not distinguishable"
+            );
+            assert!(!cases.is_empty(), "`{suite}` has no cases to be shown");
+            let shown_only = report::SHOWN_ONLY.contains(&suite.as_str());
+            if shown_only {
+                informational += cases.len();
+            } else {
+                markable += cases.len();
+            }
+            for case in cases {
+                let name = format!("{suite}/{}", case.trim_end_matches(".4x"));
+                let at = format!("data-case=\"{name}\"");
+                assert_eq!(
+                    built.matches(&at).count(),
+                    1,
+                    "`{name}` is on the page {} time(s)",
+                    built.matches(&at).count()
+                );
+                // **Linked whether or not it is markable**, which is the half of his instruction
+                // about the informational suites: *we can even link to them if it helps with
+                // comprehensibility.*
+                assert!(
+                    built.contains(&format!("regression/{name}.4x")),
+                    "`{name}` is listed and not linked"
+                );
+                listed += 1;
+            }
+        }
+
+        assert!(
+            markable > 0 && informational > 0,
+            "one kind of row, not two"
+        );
+        assert_eq!(listed, markable + informational);
+        assert_eq!(
+            informational, 113,
+            "the two suites he asked to be shown without a control"
+        );
+
+        // **The control follows the suite and not the case.** A case in an informational suite
+        // offers nothing to press; one in a markable suite offers all three.
+        for (suite, cases) in &suites {
+            let shown_only = report::SHOWN_ONLY.contains(&suite.as_str());
+            let case = cases.first().expect("a case");
+            let name = format!("{suite}/{}", case.trim_end_matches(".4x"));
+            let at = built
+                .find(&format!("data-case=\"{name}\""))
+                .expect("listed");
+            let row = &built[at..][..built[at..].find("</li>").expect("a row")];
+            // **The three names as the page writes them**, not as a sentence says them: `deny`
+            // is not a prefix of `denied`, and a predicate built from the English rather than
+            // the attribute reported `rules` as offering nothing.
+            for control in ["approved", "denied", "regenerate"] {
+                assert_eq!(
+                    row.contains(&format!("data-mark=\"{control}\"")),
+                    !shown_only,
+                    "`{suite}` offers the wrong controls: `{control}`"
+                );
+            }
+        }
+    }
+
     /// **The canonical order does not depend on anything editable, and converting changes no
     /// approval** - `E-1`.
     ///
