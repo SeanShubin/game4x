@@ -201,7 +201,16 @@ prototypes/goldberg-move   `bevy`, `planet-bevy`, `planet-render`, `sphere-tesse
 already wrong and nothing had noticed. **`goldberg-move`'s row said `bevy`** where its manifest
 declares four more.
 
-**Say when they land and this lane commits the check in the next breath.**
+**They landed at `7d5781bc` and the check is committed.** `S-232` derived the same seven
+independently before reading this item's list, which is the right way round - and found the
+same `goldberg-move`.
+
+**Two cells the predicate has to allow, and it does.** `game-front` keeps `wasm-bindgen` on web
+and `planet-view` keeps `png`: external rather than internal, both true, one conditional on the
+target. **The comparison filters each side to workspace crates**, so an external name in a cell
+is ignored by construction rather than by an exception - which is why those two passed without
+anything being added for them. **Verified by driving both rows rather than by reading the
+filter.**
 
 **Version one passed over the exact state `Q-104` found.** `members()` returns paths -
 `crates/game-console` - and a manifest writes `game-console`, so filtering each set by *is this a

@@ -137,6 +137,131 @@ fn every_crate_has_a_row_and_every_row_has_a_crate() {
 /// **The population is asserted because a count over nothing proves nothing**, and it is
 /// asserted at the real figure rather than a floor under it: `>= 5` tolerated losing two
 /// readers in silence.
+/// **Every local crate a row names is one that crate's manifest declares, and the other way.**
+///
+/// `Q-104`: *for a composition root the dependency list is the architecture statement, and
+/// `docs/architecture.md`'s column transcribes it rather than checking it, so a wrong manifest
+/// propagates into the document a reader would check the manifest against.* **A transcription
+/// nobody compares is a second copy**, and this repository's standing answer to a second copy is
+/// to derive it or to check it.
+///
+/// # What it compares, and what it deliberately does not
+///
+/// **Local path dependencies only.** `bevy`, `png`, `wasm-bindgen` and the rest are judgements
+/// about what is worth naming in a document for a reader, and the column says things like
+/// *`wasm-bindgen` on web* that no manifest field holds. **The set of workspace crates an edge
+/// points at is a fact**, and it is the part that went wrong: `game4x` declared `game-console`
+/// and named it in no line of code, while `main.rs` names `game-inspect` four times and the row
+/// did not have it.
+///
+/// **Dev-dependencies count as declared.** A row saying a crate is reached is right whether the
+/// edge is for the build or for the tests, and `goldberg-move` had a dev edge to `planet-model`
+/// that no code named.
+#[test]
+fn every_local_dependency_a_row_names_is_one_the_manifest_declares() {
+    let document = std::fs::read_to_string(root().join("docs/architecture.md"))
+        .expect("the architecture document is where the workflow says it is");
+    // **Bare crate names, because `members` returns paths.** It yields `crates/game-console`
+    // and a manifest writes `game-console`, so comparing the two filters everything out and
+    // leaves two empty sets agreeing. **That is how the first version of this check passed over
+    // the exact state `Q-104` found** - caught by driving it against that state rather than by
+    // reading it, and the reason `edges` below is asserted.
+    let workspace: BTreeSet<String> = members(
+        &std::fs::read_to_string(root().join("Cargo.toml")).expect("the workspace manifest"),
+    )
+    .into_iter()
+    .filter_map(|path| path.rsplit('/').next().map(str::to_string))
+    .collect();
+
+    let mut compared = 0;
+    let mut edges = 0;
+    let mut wrong: Vec<String> = Vec::new();
+    for (name, _) in rows(&document) {
+        let at = root().join(&name).join("Cargo.toml");
+        let Ok(manifest) = std::fs::read_to_string(&at) else {
+            continue;
+        };
+        // **Declared is any line opening `<crate>.workspace` or `<crate> = `**, over both
+        // dependency tables, with comments dropped. The manifests here write a local edge one
+        // of those two ways and nothing else.
+        let declared: BTreeSet<String> = manifest
+            .lines()
+            .map(|line| line.trim())
+            .filter(|line| !line.starts_with('#'))
+            .filter_map(|line| line.split(['.', ' ']).next())
+            .filter(|word| workspace.contains(*word))
+            .map(str::to_string)
+            .collect();
+        let written: BTreeSet<String> = row_dependencies(&document, &name)
+            .into_iter()
+            .filter(|word| workspace.contains(word))
+            .collect();
+        compared += 1;
+        edges += declared.len();
+
+        let missing: Vec<&String> = declared.difference(&written).collect();
+        let extra: Vec<&String> = written.difference(&declared).collect();
+        if !missing.is_empty() || !extra.is_empty() {
+            wrong.push(format!(
+                "{name}\n    declared and not in the row: {missing:?}\
+                 \n    in the row and not declared: {extra:?}"
+            ));
+        }
+    }
+
+    // **Both populations.** A table that stopped parsing would compare nothing and pass in
+    // exactly these words, which is `CLAUDE.md`'s count over nothing with the sign flipped.
+    assert!(
+        compared >= 15,
+        "only {compared} row(s) had a manifest to compare against; the table's shape has changed"
+    );
+    // **The edges, not only the rows.** Fifteen rows each comparing nothing to nothing is the
+    // green this check already produced once.
+    assert!(
+        edges >= 30,
+        "only {edges} local dependency edge(s) were found over {compared} row(s), so the          comparison below ran over almost nothing"
+    );
+    assert!(
+        wrong.is_empty(),
+        "docs/architecture.md's dependency column and the manifests disagree:\n  {}\n\n\
+         Only local crates are compared - `bevy` and the rest are a judgement about what is \
+         worth naming. See `Q-104`.",
+        wrong.join("\n  ")
+    );
+}
+
+/// The crates named in one row's dependency cell, by the row's own name.
+///
+/// **Located by the row's link rather than by matching the row**, because `tools/pad-tables`
+/// rewrites the column widths every commit - `CLAUDE.md`: *never put a table row in a match
+/// string*. The cell is split on `|` and stripped, which is pad-proof by construction.
+fn row_dependencies(document: &str, name: &str) -> BTreeSet<String> {
+    let opens = format!("| [`{name}`]");
+    for line in document.lines() {
+        let line = line.trim();
+        if !line.starts_with(&opens) {
+            continue;
+        }
+        let cells: Vec<&str> = line.split('|').collect();
+        let Some(cell) = cells.get(3) else {
+            return BTreeSet::new();
+        };
+        // **Every backtick span in the cell, rather than every comma-separated piece.** A
+        // cell says `` `graph-coloring` in tests `` and `` `wasm-bindgen` on web ``, so the
+        // qualifier travels with the name and splitting on commas keeps it. **The first
+        // version did and reported four rows wrong that were right** - the name matched
+        // nothing because `graph-coloring` in tests` is not a crate.
+        return cell
+            .split('`')
+            .skip(1)
+            .step_by(2)
+            .map(|word| word.trim().to_string())
+            .filter(|word| !word.is_empty())
+            .collect();
+    }
+    BTreeSet::new()
+}
+
 #[test]
 fn only_a_generator_or_a_check_reads_a_report() {
     let root = root();
