@@ -245,3 +245,94 @@ fn every_documented_door_runs_every_binary_that_writes_a_suite() {
         "every door was asked about every binary, and the count is what says so"
     );
 }
+
+/// **The read-only staleness report writes nothing, and agrees with the suite.**
+///
+/// `S-228`'s case half needs a list of the cases waiting on Sean, and the thing that knows is
+/// [`suites::check`] - which writes an absent case as it goes, because in a test the diff is the
+/// reading. **A report that rewrote the tree to answer a question is what `decide/attention.md`
+/// refuses to do**, so `suites::stale` is the same comparison with the writing taken out.
+///
+/// **What this asserts is the property that makes it usable**: running it leaves every file as
+/// it was. A report that quietly regenerated would be indistinguishable from one that did not,
+/// until it ran inside somebody's commit.
+#[test]
+fn the_staleness_report_changes_nothing_it_reads() {
+    let at = suites::suites_at();
+    let before: Vec<(std::path::PathBuf, Vec<u8>)> = walk(&at)
+        .into_iter()
+        .map(|path| {
+            let bytes = std::fs::read(&path).unwrap_or_default();
+            (path, bytes)
+        })
+        .collect();
+    assert!(
+        before.len() >= 100,
+        "only {} case file(s) under {}; this would prove little",
+        before.len(),
+        at.display()
+    );
+
+    let _ = suites::stale();
+
+    let after = walk(&at);
+    assert_eq!(after.len(), before.len(), "a file arrived or left");
+    for (path, bytes) in &before {
+        assert_eq!(
+            &std::fs::read(path).unwrap_or_default(),
+            bytes,
+            "{} changed while being read",
+            path.display()
+        );
+    }
+}
+
+/// **It says the same thing the suite says, which is what makes it worth trusting.**
+///
+/// Two derivations of one fact: `check` reports stale cases as part of failing, and `stale`
+/// reports them without writing. **If they ever disagree the report is the one to doubt**, and
+/// nothing else would notice - so this compares them over every suite.
+#[test]
+fn the_staleness_report_agrees_with_the_suite() {
+    let mut from_check = 0usize;
+    for (suite, cases) in [
+        ("rules", suites::rules_cases()),
+        ("types", suites::types_cases()),
+        ("primitives", suites::primitives_cases()),
+    ] {
+        let at = suites::suites_at().join(suite);
+        for suites::Case { name, text } in &cases {
+            if let Ok(committed) = std::fs::read_to_string(at.join(name))
+                && committed != *text
+            {
+                from_check += 1;
+            }
+        }
+    }
+    assert_eq!(
+        suites::stale().len(),
+        from_check,
+        "the report and a direct comparison disagree about how many cases are stale"
+    );
+}
+
+/// Every file under a directory, sorted.
+fn walk(at: &std::path::Path) -> Vec<std::path::PathBuf> {
+    let mut found = Vec::new();
+    let mut stack = vec![at.to_path_buf()];
+    while let Some(here) = stack.pop() {
+        let Ok(entries) = std::fs::read_dir(&here) else {
+            continue;
+        };
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_dir() {
+                stack.push(path);
+            } else {
+                found.push(path);
+            }
+        }
+    }
+    found.sort();
+    found
+}

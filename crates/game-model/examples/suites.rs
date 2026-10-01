@@ -248,6 +248,72 @@ pub fn primitives_cases() -> Vec<Case> {
         .collect()
 }
 
+/// A committed case that no longer says what the generator would write.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Stale {
+    /// Which suite it is in - `rules`, `types`, `primitives`.
+    pub suite: String,
+    /// The case's name within its suite, as the file is named.
+    pub name: String,
+    /// The first line that differs, said the way the suite says it.
+    pub differs: String,
+}
+
+/// Every stale case in every generated suite, **without writing anything**.
+///
+/// **[`check`] is what the suite runs and it writes as it goes** - an absent case is written so
+/// that the diff is the reading. That is right in a test and wrong everywhere else: a hook or a
+/// report that asked it would rewrite the tree under whoever was committing, which is why
+/// `decide/attention.md` says *a stale regression case is only knowable by generating* and names
+/// the suite rather than listing them.
+///
+/// **This is the same comparison with the writing taken out.** A case that is absent is skipped
+/// rather than created, so nothing a caller does can change the tree - and the one line
+/// `attention.md` could not compute becomes computable.
+///
+/// `S-228`'s case half needs this before it can exist: the issue listing cases to accept has to
+/// know which ones wait on him, and **half a control that deletes regression cases is worse than
+/// none.**
+pub fn stale() -> Vec<Stale> {
+    let mut out = Vec::new();
+    for (suite, cases) in [
+        ("rules", rules_cases()),
+        ("types", types_cases()),
+        ("primitives", primitives_cases()),
+    ] {
+        let at = suites_at().join(suite);
+        for Case { name, text } in &cases {
+            // **Absent is not stale.** A case nobody has generated yet constrains nothing and
+            // waits on no one; the suite writes it on the next run and the diff is the reading.
+            let Ok(committed) = std::fs::read_to_string(at.join(name)) else {
+                continue;
+            };
+            if committed == *text {
+                continue;
+            }
+            let differs = committed
+                .lines()
+                .zip(text.lines())
+                .enumerate()
+                .find(|(_, (was, now))| was != now)
+                .map(|(line, (was, now))| format!("line {}: was {was} / now {now}", line + 1))
+                .unwrap_or_else(|| {
+                    format!(
+                        "{} line(s) committed, {} produced",
+                        committed.lines().count(),
+                        text.lines().count()
+                    )
+                });
+            out.push(Stale {
+                suite: suite.to_string(),
+                name: name.clone(),
+                differs,
+            });
+        }
+    }
+    out
+}
+
 /// Write what is absent, compare what is there, and never overwrite one that is.
 ///
 /// **The three rules are `docs/process.md`'s and they are the whole of the pattern.** Returns the
@@ -355,6 +421,26 @@ pub fn on_disk(suite: &str) -> Vec<String> {
 }
 
 fn main() {
+    // **`--stale` writes nothing**, which is the whole reason it exists: a caller that only
+    // wants to know what waits on Sean must not rewrite the tree to find out. `S-228`.
+    if std::env::args().any(|it| it == "--stale") {
+        let waiting = stale();
+        for one in &waiting {
+            println!("{}/{}  {}", one.suite, one.name, one.differs);
+        }
+        // **The population it was counted against**, because zero stale over zero cases is
+        // the same line as zero stale over all of them - `CLAUDE.md`, a count over nothing is
+        // the same failure with the sign flipped.
+        let against: usize = [rules_cases(), types_cases(), primitives_cases()]
+            .iter()
+            .map(Vec::len)
+            .sum();
+        println!(
+            "{} of {against} case(s) no longer say what the generator writes",
+            waiting.len()
+        );
+        return;
+    }
     for (suite, cases) in [
         ("rules", rules_cases()),
         ("types", types_cases()),

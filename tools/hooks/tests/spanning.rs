@@ -249,16 +249,41 @@ fn post_commit_reports_what_a_pathspec_commit_left_staged() {
         "`hooks/post-commit` no longer reads what is staged after a commit"
     );
     assert!(
-        text.contains("these are staged and were not in that commit"),
+        text.contains("these are staged after a pathspec commit"),
         "`hooks/post-commit` no longer reports a stranded file"
+    );
+    // **The advice, not the wording, and it changed because the old wording was wrong.**
+    // `C-195` measured it: a pathspec commit *does* carry what the hook staged, and the index
+    // is left holding the state from before the hook ran - so against the new `HEAD` it reads
+    // as a change that undoes the regeneration. **Committing it reverts what just landed**,
+    // which is what the message used to invite.
+    assert!(
+        text.contains("DID land in that commit"),
+        "`hooks/post-commit` no longer says the hook's work reached the commit, which is the          half a reader gets wrong - see `C-195`"
+    );
+    assert!(
+        !text.contains("Commit them or unstage them"),
+        "`hooks/post-commit` offers committing the stranded files again, and that reverts the          regeneration the commit just made - `C-195`"
     );
 
     // **Reported and not reset**, which is the decision rather than an implementation detail.
-    // `git reset` appears once in this file and it is `pending.md`'s.
+    // One `git reset` runs in this file and it is `pending.md`'s.
+    //
+    // **Counted over the lines that run it rather than over the text.** This matched the string
+    // anywhere and went red when the message below started *telling* a reader to unstage -
+    // asking *is `git reset` written here* where the question is *does this hook reset anything
+    // else*. The narrower question again, and loud rather than quiet only because the advice
+    // arrived in the same change that broke it.
+    let runs: Vec<&str> = text
+        .lines()
+        .map(str::trim)
+        .filter(|line| line.starts_with("git reset"))
+        .collect();
     assert_eq!(
-        text.matches("git reset").count(),
+        runs.len(),
         1,
         "`hooks/post-commit` resets something other than `pending.md`, and unstaging is wrong \
-         wherever the index holds the file the working tree should have"
+         wherever the index holds the file the working tree should have: {runs:?}"
     );
+    assert!(runs[0].contains("pending.md"), "{:?}", runs[0]);
 }

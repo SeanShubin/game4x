@@ -135,6 +135,71 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-195 - A pathspec commit does carry the hook's rewrite, and what it leaves staged is a revert
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** going to put `519cf624`'s sentence into `hooks/post-commit` and running it first · **cites** `C-194`, `S-228`
+
+**derived from** *produce the answer a second way and find the two differ* - `CLAUDE.md` -> What done means
+
+**`519cf624`'s subject is false and this lane was about to encode it.** It says *a pathspec commit
+cannot carry the hook's own rewrite... so the regeneration is always one commit behind*. It can
+and it does.
+
+## Measured, in a throwaway repository, git 2.54.0
+
+A `pre-commit` that rewrites `generated.md` and `git add`s it; then
+`git commit -m x -- wanted.txt`, naming only the other file.
+
+```
+files in the commit    generated.md and wanted.txt
+HEAD:generated.md      the hook's version - it landed
+the index afterwards   the PRE-hook version
+git diff --cached      generated.md: rewritten -> original
+```
+
+**So the regeneration is not one commit behind. It is in the commit**, and what git restores
+afterwards is the index as it stood before the command - which, against the new `HEAD`, reads as
+a change that **undoes** what just landed.
+
+**Measured: the three lines above. I think the reason** is that a pathspec commit builds its tree
+in a temporary index and puts the real one back - that is an inference and nothing here rests on
+it.
+
+## Why it matters more than a wrong sentence
+
+**`hooks/post-commit` told a reader to consider committing it.** Its message read *these are
+staged and were not in that commit* - false, they were - and *commit them or unstage them*.
+**Committing them would revert the regeneration the commit had just made.**
+
+**And the `pending.md` branch five lines above it has always done the right thing**, resetting
+rather than reporting, for a reason nobody had written down. The hook is corrected and now says
+what was measured.
+
+## What is yours
+
+**`519cf624`'s subject cannot be amended and should not be.** What can be corrected is
+`CLAUDE.md`, and the sentence there is **literally true and invites the wrong action**: *takes
+those paths from the working tree and leaves the rest of the index alone.* The index is indeed
+left alone - that is exactly the problem, because the hook moved on without it.
+
+**The remedy you named is still right.** Pathspec bounds what you take from a shared index, which
+is what the four instances needed. **What it needs beside it is one more clause**: after a
+pathspec commit, unstage what the hook staged - never commit it.
+
+## And the other half you offered is built
+
+**`cargo run --example suites -- --stale` writes nothing**, which is what `S-228`'s case half
+needed and what `decide/attention.md` could not compute. `0 of 129` today.
+
+**Two checks.** One asserts that running the report leaves all 129 files byte-identical, over a
+population asserted at 100 or more - *a report that quietly regenerated would be
+indistinguishable from one that did not, until it ran inside somebody's commit*. The other
+derives the same number a second way and compares, because **if the report and the suite ever
+disagree the report is the one to doubt and nothing else would notice.**
+
+**Driven against a tampered case** rather than trusted at zero: appending a line to
+`regression/rules/breed.4x` makes it say `1 of 129`, and the file was restored.
+
 ### C-194 - `S-228`'s test half is built and nothing is posted, and the case half is named rather than done
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `S-228` · **cites** `S-228`, `S-229`, `C-189`

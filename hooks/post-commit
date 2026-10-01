@@ -65,13 +65,44 @@ fi
 # hazard is specific to `git commit <pathspec>`, which is the form the refusal message in
 # `pre-commit` recommends for getting out of a two-column index. **The two guards point in
 # opposite directions**, and that is worth a reader knowing rather than discovering.
+#
+# # What is left staged is a revert, not the hook's work - measured 2026-09-30
+#
+# **Two lanes believed the opposite of this and the message below said it.** It read *these are
+# staged and were not in that commit* and advised *commit them or unstage them*, and the
+# specification lane's `519cf624` explains the warnings by saying a pathspec commit **cannot**
+# carry the hook's rewrite, so the regeneration is always one commit behind.
+#
+# **Run rather than reasoned about**, in a throwaway repository on git 2.54.0: a pre-commit hook
+# that rewrites `generated.md` and `git add`s it, then `git commit -m x -- wanted.txt`.
+#
+# ```
+# the commit contains   generated.md and wanted.txt
+# HEAD:generated.md     the hook's version. It landed.
+# the index afterwards  the PRE-hook version
+# git diff --cached     generated.md: rewritten -> original
+# ```
+#
+# **So the rewrite does land, and what git restores afterwards is the index as it stood before
+# the command** - which, against the new HEAD, reads as a change that undoes the regeneration.
+# **Committing it would revert the file the commit just updated**, which is what the old message
+# told a reader to consider doing.
+#
+# **This is why the `pending.md` branch above resets rather than reports**, and that branch was
+# right for a reason nobody had written down. The right action is the same for every generated
+# file: unstage it. Measured: the commit landed the regeneration; **I think the reason** git
+# restores the pre-command index is that a pathspec commit builds its tree in a temporary index
+# and puts the real one back - that part is an inference and nothing here rests on it.
 stranded=$(git diff --cached --name-only)
 if [ -n "$stranded" ]; then
-    echo "post-commit: these are staged and were not in that commit:" >&2
+    echo "post-commit: these are staged after a pathspec commit:" >&2
     echo "$stranded" | sed 's/^/  /' >&2
-    echo "post-commit: a pathspec commit takes the working tree, so what pre-commit staged is" >&2
-    echo "post-commit: still staged - and the next commit in this tree takes it, whoever runs" >&2
-    echo "post-commit: it. Commit them or unstage them; do not leave them for somebody else." >&2
+    echo "post-commit: what pre-commit staged DID land in that commit. What is in the index now" >&2
+    echo "post-commit: is the state from before the hook ran, so against the new HEAD it reads" >&2
+    echo "post-commit: as a change that undoes the regeneration - measured 2026-09-30, see the" >&2
+    echo "post-commit: comment above this check." >&2
+    echo "post-commit: Unstage them - 'git reset -- <paths>'. Do not commit them, and do not" >&2
+    echo "post-commit: leave them: the next commit in this tree takes them, whoever runs it." >&2
 fi
 
 # Say when a commit spanned two columns after all, which `pre-commit` cannot catch.
