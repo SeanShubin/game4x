@@ -13,6 +13,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
+- **E-1** - The comparison normalizes, and no approval rests on an editable number · `releases/marking-state.md`
+- **E-2** - I can deny a test, not only approve one · `releases/marking-state.md`
+- **E-3** - A case takes a verdict and a regeneration is authorized separately · `releases/marking-state.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
@@ -31,9 +34,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
-- **E-1** - `95e72cf` E-1: records take spec/console.md's order, and converting is a button he presses · still open in `releases/marking-state.md`
-- **E-2** - `a25a5a4` E-2: he can deny a test, and the promotion check called a correct promotion missing · still open in `releases/marking-state.md`
-- **E-3** - `db4717c` E-3: a case takes a verdict, and an authorization is spent by the run it asks for · still open in `releases/marking-state.md`
 - **E-4** - `4cbe78c` E-4's rows: four suites told apart, 166 cases listed, 113 of them with nothing to press · still open in `releases/marking-state.md`
 - **D-1** - `06df443` S-234 answers which store, and P-599 asks whether D-1 reaches the script's vocabulary · still open in `releases/rules-become-data.md`
 - **D-2** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
@@ -43,12 +43,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (3)
 
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **E-1** - The comparison normalizes, and no approval rests on an editable number · `releases/marking-state.md`
-- **E-2** - I can deny a test, not only approve one · `releases/marking-state.md`
-- **E-3** - A case takes a verdict and a regeneration is authorized separately · `releases/marking-state.md`
 - **E-4** - I can do all of it from a page, from anywhere · `releases/marking-state.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
 

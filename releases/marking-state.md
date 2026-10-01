@@ -28,7 +28,7 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 ### E-1 - The comparison normalizes, and no approval rests on an editable number
 
-**to** code · **status** open · **from** `P-606`
+**to** sean · **status** **built** 2026-10-01 · **from** `P-606` · **cited** `95e72cf3` · **evidence reported by the code lane and re-derived here.** The canonical order lives in `friendly-notation`, which both crates reach, and `game-console`'s duplicate is deleted - so *one function does that normalizing* is one function. **The second half of the clause is not true yet and that is the point**: 449 of the rows in `reviewed/rule/` are still in the schema's order, because `POST /convert` is run by him through the application and nobody else may rewrite a record. **His first action on this capability is to run it.**
 
 - **In** - `spec/README.md` rule 3, *one function does that normalizing and everything that compares
   delegates to it*
@@ -39,7 +39,7 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 ### E-2 - I can deny a test, not only approve one
 
-**to** code · **status** open · **from** `P-605`
+**to** sean · **status** **built** 2026-10-01 · **from** `P-605` · **cited** `a25a5a47` · **evidence reported by the code lane and re-derived here.** `/denied` sits beside `/reviewed` as one gesture with two words, `review_of` returns a fourth mark, and the page has a deny button. **`a_denied_record_is_read_as_denied_and_an_old_one_as_approved` is the check**, which also holds the compatibility rule. Two judgements worth his eye: a denial whose rows no longer match is still *drifted*, and `denied` is its own class rather than `unseen` - showing it unread would ask him to read the one thing a denial says he has already done.
 
 - **In** - `spec/README.md` rule 3, *a record saying `denied` means it is not* bound
 - **Vetted when** - I deny a test, the suite stops running it, and the record says so. **The format
@@ -48,7 +48,7 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 ### E-3 - A case takes a verdict and a regeneration is authorized separately
 
-**to** code · **status** open · **from** `P-607`, `P-608`
+**to** sean · **status** **built** 2026-10-01 · **from** `P-607`, `P-608` · **cited** `db4717c2`, `c123b840` · **evidence reported by the code lane and re-derived here.** `{verdict case:... state:...}` and `{regenerate case:...}` in `reviewed/cases.4x`, with `a_case_verdict_stands_and_an_authorization_is_a_different_row` holding both halves. **The columns are the ones `P-608` showed him** rather than invented - `d37e657a`. And `world.4x` is excluded by *a case loads it* rather than by a name, which holds over all four suites where a `{when}` predicate would have excluded 129 real cases.
 
 - **In** - `spec/README.md` rule 3, *a case's verdict is a row in `reviewed/cases.4x` and pins no
   behaviour*

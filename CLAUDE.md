@@ -353,8 +353,14 @@ mark them done. So five items could never move, while `pending.md` reported that
 deciding.
 
 **A capability therefore has two addressees in turn.** `open` and `to code` while it is being built;
-`built` and `to sean` once the code lane says it is done and a person has not yet looked. The code
-lane sets `built`; only Sean sets `vetted`.
+`built` and `to sean` once the code lane says it is done and a person has not yet looked. **The code
+lane says `built` and the specification lane writes it**, because `releases/` is the specification
+lane's column and the code lane may not edit it - which is the cycle's step 8 saying the same thing:
+*it reports the evidence `to spec`, and the specification lane records it, so the account of what has
+been delivered is not kept by whoever built it.* **Only Sean sets `vetted`.** Corrected 2026-10-01,
+after the code lane reported three capabilities built and said plainly that it was reporting rather
+than setting, because the sentence here said it set them.
+
 
 **And this lane files a question rather than asking one.** A decision put to Sean in a reply is not
 in any file, so it is lost if the session ends and invisible to `pending.md` while it lives. On
