@@ -141,6 +141,67 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-206 - `P-605`'s writer is built in the schema's order, and the two halves of the rule now meet
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-239`'s argument that writing the existing order is compatibility rather than a choice · **cites** `P-605`, `P-606`, `P-600`, `C-205`
+
+**derived from** *producing bytes identical to what already exists is compatibility, not a choice* - `S-239`
+
+**The argument is right and it is why this is built rather than waiting.** If `P-606` answers
+`console.md`, **the rewrite is the same size whether this was written today or not** - so waiting
+bought nothing and cost the writer.
+
+```
+{verdict state:approved}
+{test name:a-bin-is-built-from-labor-and-metal}
+
+{given}
+... the rows, in the schema's declared order, no prose
+```
+
+## `{test name:}` is written from the file's name rather than copied
+
+**A test states it too and the two have always agreed.** Writing it from the name makes a
+disagreement impossible rather than unlikely - and `P-600`'s reason for keeping the row at all is
+that **the identifier must be pinned where the file system cannot silently change it.**
+
+## Four properties, over all fifty-seven rather than one example
+
+**A single example would pass on a writer that dropped a section**, or that kept the prose of tests
+whose comments happen to be short. `a_record_is_the_verdict_the_name_and_the_rows` folds every test
+and asserts: the verdict leads, there is exactly one verdict and one name, **no line is prose**, and
+**the behaviour is there** - which the first three do not say between them, since a record of a
+verdict and a name alone would pass all of them.
+
+## And the writer meets the reader, which nothing else made happen
+
+**`the_suite_reads_what_the_writer_writes`.** The writer is in an example a person drives through a
+browser and `verdict_of` is in the suite; **nothing else makes the two meet.** A record this writes
+that the suite could not read would have been found by Sean losing an approval, which is the
+expensive way.
+
+## One bug, and its second half is the one that mattered
+
+**`every_test` returns the file name and the handler's `name` is the stem**, and the first version
+joined `.4x` onto a name that had it. The panic named `...taken.4x.4x`, **which is the harmless
+half**: it would also have written `{test name:a-bin-....4x}`, so **the identifier the rename check
+turns on would have been wrong in every record.** Found by the check rather than by the path.
+
+## The trap `S-239` found, recorded where the writer is
+
+**Renumbering a `seq:` in the schema clears every verdict**, because the schema's declared order is
+what this emits and those values are editable with no meaning beyond order. **It is the safe
+direction** - the verdicts clear and he notices, rather than a stale one surviving - **and it is a
+trap laid for a later session.** Alphabetical order cannot do it, because names are not renumbered.
+**That is an argument for `P-606` answering `console.md`** and it is his to weigh, not this lane's.
+
+## What `P-606` still decides, and the cost either way
+
+**Nothing here is blocked on it.** If the answer is the schema's order, this is done. If it is
+`console.md`'s, the canonical ordering lives in `crates/game-console/src/containment.rs` and must
+move to `friendly-notation`, because `crates/game-model` cannot reach `game-console` - the
+dependency runs the other way.
+
 ### C-205 - `S-239` answers both of `C-204`'s questions, and the writer is blocked on a third nobody has asked
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** going to write the record and finding *canonical* means two different orders · **cites** `S-239`, `P-605`, `P-600`, `C-204`

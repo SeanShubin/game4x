@@ -56,6 +56,74 @@ use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::PathBuf;
 
+/// A record: the verdict, and the behaviour that verdict is about.
+///
+/// **`spec/README.md` rule 3**: *a record names its verdict and carries the behaviour that verdict
+/// is about - the rows, canonical, without the prose.* And `P-600`: *my approval is about what a
+/// test says, not where it is or how it is written... the behaviour is every `{...}` row, including
+/// a `{load}`, and nothing else - a comment explains and does not decide, and `{test name:}`
+/// identifies rather than states.*
+///
+/// # Why `{test name:}` is written although it is not behaviour
+///
+/// **An approval is never inferred for a test that has not been given one.** If a record's identity
+/// were only its filename, `git mv reviewed/rule/x.4x y.4x` would hand test `y` the verdict given
+/// to `x`, with nothing to notice - the silent misattribution `P-600` names as the one failure no
+/// convenience is worth. **The row is what makes a rename detectable.**
+///
+/// # Canonical is the schema's declared order, and writing it is compatibility
+///
+/// **Rule 3's *the order this specification already gives them* names two orders**, and the tree is
+/// in one of them: measured over all 57 records, 449 rows are not in alphabetical trait order and
+/// 51 are by coincidence. Every row is in the schema's declared order, which is what
+/// [`Names::row`] emits - for `citizen` that is `where, hungry, bearing, laboring, quantity`.
+///
+/// **So writing that order reproduces the rows that already exist**, which is compatibility rather
+/// than a choice. `P-606` asks him which order rule 3 meant; **if it is `console.md`'s, the rewrite
+/// is the same size whether this was written today or waited**, so waiting bought nothing.
+///
+/// # One trap worth knowing about, and it is loud
+///
+/// **Renumbering a `seq:` in the schema clears every verdict.** Those values are editable and carry
+/// no meaning beyond order, so a tidy-up nobody thinks twice about changes the order this writer
+/// emits, changes every record's bytes, and sends all 57 back to him. **It is the safe direction -
+/// the verdicts clear and he notices rather than a stale one surviving** - but it is a trap laid for
+/// a later session. Alphabetical order cannot do it, because names are not renumbered.
+fn record_for(name: &str, text: &str) -> Result<String, String> {
+    let (names, schema) = report::render::table(true);
+    let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
+
+    let mut out = String::from("{verdict state:approved}\n");
+    out.push_str(&format!("{{test name:{name}}}\n"));
+    let mut wrote = 0;
+    for row in &rows {
+        // **`{test name:}` is written once, above, from the file's own name.** A test states it
+        // too and the two have always agreed; writing the row from the name rather than copying it
+        // is what makes a disagreement impossible rather than unlikely.
+        if row.relation == "test" {
+            continue;
+        }
+        // **A section marker keeps its own line and takes a blank line before it**, so the record
+        // reads the way a test reads. It is a row of no relation, which `Names::row` writes as it
+        // is.
+        let written = names.row(row);
+        if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+            out.push('\n');
+        }
+        out.push_str(&written);
+        out.push('\n');
+        wrote += 1;
+    }
+    // **A record with no rows would be a verdict about nothing**, and an approval of nothing is
+    // the shape a reader would take for an approval of something.
+    if wrote == 0 {
+        return Err(format!(
+            "`{name}` folded to no rows, so there is no behaviour to record"
+        ));
+    }
+    Ok(out)
+}
+
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -258,9 +326,16 @@ fn answer(
                         Ok(text) => text,
                         Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     };
+                    // **A record is a verdict and the rows, not a copy of the file** - `P-605`.
+                    // This wrote the test byte for byte, prose and all, which is what a record was
+                    // while presence meant both *I read this* and *this binds*.
+                    let said = match record_for(&name, &text) {
+                        Ok(said) => said,
+                        Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
+                    };
                     let into = report::records_at();
                     let _ = std::fs::create_dir_all(&into);
-                    match std::fs::write(into.join(format!("{name}.4x")), text) {
+                    match std::fs::write(into.join(format!("{name}.4x")), said) {
                         Ok(()) => ok(PLAIN, "reviewed".to_string()),
                         Err(why) => ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     }
@@ -427,4 +502,83 @@ fn file(name: &str, note: &str) {
         }
     }
     std::fs::write(&at, lines.join("\n") + "\n").expect("reviewed/asked.md");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// **A record states the verdict, the identifier, and the behaviour - and nothing else.**
+    ///
+    /// `spec/README.md` rule 3: *a record names its verdict and carries the behaviour that verdict
+    /// is about - the rows, canonical, without the prose.*
+    ///
+    /// # Driven over every test in the tree, because one would prove the shape and not the rule
+    ///
+    /// **A single example would pass on a writer that dropped a section**, or that kept the prose
+    /// of tests whose comments happen to be short. This folds all 57 and asserts the three
+    /// properties of each.
+    #[test]
+    fn a_record_is_the_verdict_the_name_and_the_rows() {
+        let mut built = 0;
+        // **`every_test` returns the file name and the handler's `name` is the stem**, which is
+        // the unit a record is identified by - `{test name:a-bin-is-built-from-labor-and-metal}`.
+        // **The first version joined `.4x` onto a name that already had it**, and the panic named
+        // `...taken.4x.4x` - which would also have put the extension inside the `{test name:}`
+        // row, so the identifier the rename check turns on would have been wrong.
+        for file in report::every_test() {
+            let name = file.trim_end_matches(".4x").to_string();
+            let from = report::tests_at().join(&file);
+            let text = std::fs::read_to_string(&from)
+                .unwrap_or_else(|why| panic!("{}: {why}", from.display()));
+            let said = record_for(&name, &text).unwrap_or_else(|why| panic!("{name}: {why}"));
+
+            // **The verdict leads**, so a reader and `verdict_of` meet it before anything else.
+            assert!(
+                said.starts_with("{verdict state:approved}\n{test name:"),
+                "`{name}` does not open with its verdict and its name:\n{said}"
+            );
+            // **One verdict and one name**, because two of either says more than one thing about
+            // one test.
+            assert_eq!(said.matches("{verdict ").count(), 1, "{name}");
+            assert_eq!(said.matches("{test name:").count(), 1, "{name}");
+            // **No prose.** Every line is a row, a section marker or blank - a comment explains
+            // and does not decide, so it is not part of what he approved.
+            let prose: Vec<&str> = said
+                .lines()
+                .filter(|line| !line.trim().is_empty() && !line.trim_start().starts_with('{'))
+                .collect();
+            assert!(prose.is_empty(), "`{name}` carries prose: {prose:?}");
+            // **And the behaviour is there**, which the three above do not say between them: a
+            // record of a verdict and a name and nothing else would pass all of them.
+            assert!(
+                said.contains("{given}") && said.contains("{when}"),
+                "`{name}` has no behaviour in it:\n{said}"
+            );
+            built += 1;
+        }
+        assert!(built >= 40, "only {built} record(s) were built");
+    }
+
+    /// **What the writer produces reads as approved**, which is the one thing the readers need of
+    /// it.
+    ///
+    /// **The writer and `verdict_of` are the two halves of `P-605`** and nothing else makes them
+    /// meet: one is in an example that a person drives through a browser, the other in the suite.
+    /// **A record this writes that the suite could not read would be found by Sean losing an
+    /// approval**, which is the expensive way.
+    #[test]
+    fn the_suite_reads_what_the_writer_writes() {
+        let file = report::every_test()
+            .into_iter()
+            .next()
+            .expect("a test to record");
+        let name = file.trim_end_matches(".4x").to_string();
+        let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
+        let said = record_for(&name, &text).expect("a record");
+        assert_eq!(
+            report::render::verdict_of(&said),
+            Ok(report::render::Verdict::Approved)
+        );
+    }
 }

@@ -27,9 +27,12 @@ use friendly::Names;
 use game_model::notation::{Row, read};
 use game_model::script::{Files, run_test};
 
+// **`pub` so `review-web.rs` reaches the canonical writer through this module** rather than
+// borrowing `render.rs` a second time, which would give a file that loads both two copies of it
+// and fail clippy's `duplicate_mod` - the hazard `tests/reviewed.rs` already records.
 #[path = "render.rs"]
 #[allow(dead_code)]
-mod render;
+pub mod render;
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
