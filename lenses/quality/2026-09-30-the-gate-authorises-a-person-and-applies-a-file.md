@@ -106,7 +106,9 @@ because the crate and the module are not adjacent. **This lens drove the predica
 the effect of the fix without driving it** - a before-and-after written while editing, which is a
 prediction. The better instrument was pointed at the half already understood.
 
-**Fixed at `5d86f8d7`, and one form still escapes.** `names_the_shell` strips whitespace, removes
+**Fixed at `5d86f8d7`, one form escaped, and closed at `5a7f3021` by matching no shape at all.**
+`names_the_shell` strips whitespace, removes
+
 `ALLOWED` before judging the rest, and splits a braced group, so all five listed forms flag. But
 `split_once('}')` takes the first closing brace rather than the matching one:
 

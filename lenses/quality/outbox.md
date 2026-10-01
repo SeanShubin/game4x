@@ -354,7 +354,35 @@ has to have.
 **Whether.** **Worth fixing now.** ~~Dropping the two trailing colons closes all three forms~~ -
 **it closes two, and the code lane caught that.** See the correction below.
 
-## Fixed at `5d86f8d7`, this lens's repair was wrong, and one form still escapes - 2026-09-30
+## Closed at `5a7f3021`: no shape at all, and the escape at `5d86f8d7` is gone - 2026-09-30
+
+**The code lane took the token form rather than patching a fourth time.** `reaches_the_console` at
+`tools/outbox/tests/architecture.rs:684` removes the four admitted names from the line and asks
+whether `game_front` and `shell` both remain, so **there is no grouping left to parse and no shape
+to get wrong**. Driven over its eight forms plus the allowed call: five flag, four are clean, and
+`use game_front::{library::{browse, page}, shell}` - the escape this lens found at `5d86f8d7` - now
+flags. The refusal names the admitted set, which is the closed-set form `CLAUDE.md` asks for.
+
+**It added one step beyond the proposal: a trailing comment is dropped before judging.** Its doc
+names the string-literal hazard in one direction - *a `shell` inside a string literal on such a line
+would still fire; firing too often is the right error here.* **The other direction is a silent miss
+and is not named**: `//` inside a string literal *before* a reach truncates the line short of it.
+
+```
+False  let url = "https://x"; use game_front::shell;
+False  use front::shell;        (if a manifest renamed the dependency)
+```
+
+**Both are contrived and neither is filed.** Two statements on one line is what `rustfmt` splits, and
+no manifest renames `game-front`. **Recorded because the comment considered string literals and
+considered only the direction that is safe** - which is the asymmetry worth a reader's eye, not the
+severity.
+
+**Three patches, three escapes, and the code lane's sentence for it is the keeper**: a pattern has
+one more form than whoever wrote it thought of. The version that ends it is the one that matches no
+shape.
+
+## Superseded: fixed at `5d86f8d7`, this lens's repair was wrong, and one form still escaped
 
 **The repair above closes two of the three forms it claimed.** `use game_front::{shell, library};`
 contains neither `game_front::shell::` nor `game_front::shell` - the crate and the module are not
