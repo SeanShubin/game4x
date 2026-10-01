@@ -8,13 +8,13 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-604** - Two runs of the one function, and a command is the only crossing · `decide/proposals.md`
 
 ## Answer a question
 
-No wording can be final until you do.
-
-- **P-604** - Three forms the isolation could take, shown as rows · `decide/questions.md`
+Nothing.
 
 ## Vet a capability
 
