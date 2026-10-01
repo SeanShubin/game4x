@@ -14,6 +14,7 @@ Nothing.
 
 No wording can be final until you do.
 
+- **P-610** - Two ways the page can write, and they want different reach on your token · `decide/questions.md`
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `decide/questions.md`
 
 ## Vet a capability

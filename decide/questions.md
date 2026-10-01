@@ -11,6 +11,49 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-610 - Two ways the page can write, and they want different reach on your token
+
+**to** sean · **status** open · **raised** 2026-10-01 · **asks** a decision · **kind** recovered · **into** `releases/marking-state.md` -> `E-4` · **source** the code lane reaching the hosting half and declining to choose with your credential
+
+**The page can write two ways and the gestures are not alike.** Marking something is a file write; a
+regeneration needs the generator run, which a browser cannot do.
+
+```
+a verdict        {verdict case:... state:denied}  - a row in a file
+                 the page commits it through the API           needs  Contents: write
+a regeneration   {regenerate case:...} and then the generator
+                 the page dispatches review.yml, which runs it  needs  Actions: write
+```
+
+**So it is not a choice between two designs; it is a question about your token.** A regeneration
+cannot be a direct commit - the browser has no cargo - and a verdict need not be a dispatch.
+
+## The three shapes
+
+**One token with both permissions.** Everything works from the page, and the token can commit to
+`game4x` **and** start any workflow in it. **Simplest, widest reach.**
+
+**One token with `Contents: write` only.** The page marks; you start a regeneration yourself from the
+Actions tab. **The page can write records and cannot start anything**, and the gesture you lose is
+one you make rarely.
+
+**Two tokens.** The marking page holds the narrow one; the regeneration is behind the wider one you
+paste when you want it. **Least reach at any moment, most to carry.**
+
+## What decides it, and it is not convenience
+
+**The token sits in `localStorage` on `seanshubin.github.io`**, which also serves the game and the
+reports - so any script that reaches that origin can read it. **Adding `Actions: write` widens what a
+read token can do** from writing files to starting workflows.
+
+**The code lane has no preference and says so** - *it is his credential*. **Neither do I**, beyond
+noting that the narrow token covers four of the five gestures and the fifth is the rare one.
+
+## What this does not ask
+
+**Not whether the owner gate stays.** `E-5` keeps it either way: a dispatch is gated on
+`github.actor == github.repository_owner`, and a direct commit is signed by your token, which no lane
+has.
 ### P-609 - `rules/`'s sixteen cases are in neither half of what you said about the suites
 
 **to** sean · **status** open · **raised** 2026-10-01 · **asks** a decision · **kind** recovered · **into** `releases/marking-state.md` -> `E-4` · **source** the code lane building them markable by default and saying it was a default

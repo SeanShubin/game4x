@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-610** - Two ways the page can write, and they want different reach on your token · `decide/questions.md`
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
