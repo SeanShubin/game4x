@@ -83,9 +83,18 @@ Add a file when a topic firms up. Add its row here first.
    **My approval is about what a test says, not where it is or how it is written.** The behaviour is
    every `{...}` row, including a `{load}`, and nothing else - a comment explains and does not decide,
    and `{test name:}` identifies rather than states. **So two tests are the same test when their rows
-   say the same thing**, however the text differs: entries coalesced to one per description, traits and
-   entries in the order this specification already gives them, whitespace not significant because the
-   braces say where a row begins and ends.
+   say the same thing**, however the text differs: entries coalesced to one per description, **and the columns in a row normalized**, because the
+   order they are written in is not significant; whitespace not significant either, because the
+   braces say where a row begins and ends. **One function does that normalizing and everything
+   that compares delegates to it** - so no comparison can disagree with another about whether two
+   tests say the same thing.
+
+   **The order that function puts columns in must not depend on anything editable.** `id` first,
+   then every other trait alphabetically, then `occupied`, `free` and `capacity` last - **the order
+   this specification already states for an entry**, which depends on names. **An order taken from
+   the schema's `seq:` would mean renumbering those cleared every approval I have given**, and
+   renumbering is a tidy-up nobody thinks twice about.
+
 
    **An approval survives a change that does not change the behaviour** - a reworded comment, a
    reordered state, a repadded row. **It is cleared by any change that does**, including a `{load}`

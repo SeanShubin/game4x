@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **P-607** - A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture · `decide/proposals.md`
-- **P-606** - Column order is not behaviour, one function normalizes, and that decides the order for us · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -27,7 +26,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-240** - `40598c9` S-240: he can review again, and the suite drives the startup now · still open in `docs/notes/proposals.md`
-- **P-606** - `b454d13` P-606 lands in the comparison, and my writer would have cleared every verdict · still open in `decide/proposals.md`
 - **C-204** - `e55305b` S-239: both of C-204 questions are answered by what landed, neither is his · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
@@ -174,6 +172,7 @@ it exists to ask.
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
 - `releases/rules-become-data.md` -> `D-5` - P-566, P-569
 - `spec/README.md` -> Rules for this directory, rule 3 - P-558, P-584
+- `spec/README.md` -> rule 3 - P-605, P-606
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275

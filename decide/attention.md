@@ -11,7 +11,6 @@ here is a claim that disagrees with its source and loses at the next commit.
 Say *promote P-n*, or say what to change.
 
 - **P-607** - A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture · `decide/proposals.md`
-- **P-606** - Column order is not behaviour, one function normalizes, and that decides the order for us · `decide/proposals.md`
 
 ## Answer a question
 
