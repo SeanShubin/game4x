@@ -215,7 +215,12 @@ Four things the perspectives make necessary, all of which have teeth:
   new `HEAD` reads as a change that *undoes* what just landed. **So committing it reverts the
   regeneration**, and `hooks/post-commit` said *commit them or unstage them* until `47bab353`.
   `519cf624`'s subject says the regeneration cannot be carried; **it is false and cannot be
-  amended.**
+  amended.** **And `git reset` with no paths is the same hazard mirrored** - it empties the shared
+  index, so another lane's staged work is unstaged by a command you ran about your own. Nothing is
+  lost, because a reset without `--hard` leaves the working tree alone; what is lost is their
+  staging, silently. **Name the paths there too**, and say so if you have already done it: the lane
+  whose index you cleared cannot tell a reset from a commit that took their work.
+
   **The hook checks the columns twice as well**, before its tools and after them, and
   `hooks/post-commit` reports the instant after it returns, which is the only part nothing can
   refuse. It has happened four times - twenty-six lines, then twenty-one, then twenty, then **six

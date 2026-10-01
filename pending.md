@@ -30,6 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
 - **S-229** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
 - **S-228** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
+- **S-227** - `0733c1d` S-227: the root owns the game and hands down two narrow surfaces · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`

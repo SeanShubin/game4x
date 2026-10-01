@@ -104,6 +104,25 @@ is answered either by a correction or by an explanation, and *either way the cor
 lane's first move was to draft the sentence. **The order is what makes `CLAUDE.md`'s rule fire**: look
 for the test, then write prose only if there is none.
 
+## Settled by `P-598`, and this lane's reason for withdrawing it was wrong
+
+**It asked exactly the question `P-598` answers**, and offered the two options by name: *coalesce*,
+and *keep it per firing*. **`P-598` picks coalesce** - *a state has one entry per description, so two
+things alike are one quantified row and never a row per firing.*
+
+**So the withdrawal's reason does not hold.** It said a test already decides it, and the test decides
+the **game's behaviour** - a rule reaches every row that matches. **The format of a generated case is
+not something any test states**, and it was genuinely open: he answered *it is fine* within the hour
+and reversed it on reading a second case.
+
+**The instrument answered a narrower question than the one asked**, inside this lane's own withdrawal:
+*is this fact already asserted?* about behaviour, where the question was about format. **The right move
+was to leave it open and ask**, and what made the difference was him reading
+`regression/scenario/01/06-end-turn.4x` rather than anything this lane did.
+
+**Left withdrawn rather than reopened**, because `P-598` has landed and nothing waits on it. The
+record is corrected so that the reason does not read as a precedent.
+
 ### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
 
 **to** sean · **status** open · **raised** 2026-09-30 · **deferred** 2026-09-30, by him: *I will come back to it after I am happy with the first release* - so it waits on the first release rather than on him reading it, and no lane is blocked: nothing is deleted, `S-226` stays held · **asks** a decision · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules · **source** `C-191`, against the rule you promoted the same day
