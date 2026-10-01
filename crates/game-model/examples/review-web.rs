@@ -330,7 +330,7 @@ fn browsable() -> Vec<String> {
         // **The five shared files still have a friendly side and it is still generated** -
         // `examples/render.rs` writes them and only them. What left the prototype was the tests.
         (mine(), "data/friendly"),
-        (mine().join("../.."), "spec/tests"),
+        (mine().join("../.."), "spec/tests/rule"),
     ] {
         let Ok(entries) = std::fs::read_dir(root.join(under)) else {
             continue;
@@ -402,7 +402,7 @@ fn field(body: &str, name: &str) -> Option<String> {
 /// that test's section, and a file that is also edited by hand cannot be written to blind.
 fn file(name: &str, note: &str) {
     let at = report::records_at().join("asked.md");
-    let _ = std::fs::create_dir_all(mine().join("reviewed"));
+    let _ = std::fs::create_dir_all(mine().join("reviewed/rule"));
     let text = std::fs::read_to_string(&at).unwrap_or_else(|_| HEAD.to_string());
     let mut lines: Vec<String> = text.lines().map(str::to_string).collect();
     let heading = format!("## {name}");

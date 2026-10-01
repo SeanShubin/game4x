@@ -45,8 +45,25 @@ fn mine() -> PathBuf {
 /// **Named once rather than spelled out ten times**, which is what the move cost when they were
 /// spelled out: ten files, four of them tests, and nothing to change in one place.
 pub fn tests_at() -> PathBuf {
-    mine().join("..").join("..").join("spec").join("tests")
+    mine()
+        .join("..")
+        .join("..")
+        .join("spec")
+        .join("tests")
+        .join(SUITE)
 }
+
+/// Which suite of `spec/tests/` this engine runs.
+///
+/// **`spec/tests/` split into `rule/` and `interface/` on 2026-10-01**, and the engine runs the
+/// first: a rule test is about the transformation function, and an interface test is about what a
+/// person sees. **Named once here because the three paths below have to agree about it** - the
+/// source he writes, the record that he read it, and the copy the suite iterates.
+///
+/// **Sean, on what made the move cheap**: *it was always the case that my approval was about what
+/// the tests said, not where the tests were.* So moving a record is not creating or deleting one,
+/// which `CLAUDE.md` now says.
+pub const SUITE: &str = "rule";
 
 /// Where the form the engine actually runs lives, generated from `reviewed/`.
 ///
@@ -62,7 +79,7 @@ pub fn foundation_tests_at() -> PathBuf {
 /// **No instance writes it** - `CLAUDE.md`. The review application does, acting as him, and that
 /// application is this prototype's.
 pub fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed")
+    mine().join("..").join("..").join("reviewed").join(SUITE)
 }
 
 fn text(at: &str) -> String {
@@ -814,7 +831,7 @@ not as expected
                 " · not read yet, so there is no foundation form".to_string()
             };
             format!(
-                "<p class=\"raw\">on disk: <a href=\"/spec/tests/{stem}.4x\">spec/tests/{stem}.4x</a>{foundation}</p>\n"
+                "<p class=\"raw\">on disk: <a href=\"/spec/tests/rule/{stem}.4x\">spec/tests/rule/{stem}.4x</a>{foundation}</p>\n"
             )
         } else {
             // **A `.txt` twin, because a published `.4x` is a download.** Measured in the
@@ -823,7 +840,7 @@ not as expected
             // written at deploy and committed nowhere, so **these two links resolve on the site
             // and not in a clone** - which the note under the tally says out loud.
             format!(
-                "<p class=\"raw\">on disk: <a href=\"spec/tests/{stem}.4x.txt\">spec/tests/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
+                "<p class=\"raw\">on disk: <a href=\"spec/tests/rule/{stem}.4x.txt\">spec/tests/rule/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
             )
         };
         let said = if why.is_empty() {

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/discarding-disorder-can-be-fired-on-its-own.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/discarding-disorder-can-be-fired-on-its-own.4x</code></h1>
+<p class="note">One step of the turn, fired on its own: the metal over capacity goes.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/discarding-disorder-can-be-fired-on-its-own.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/discarding-disorder-can-be-fired-on-its-own.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">One step of the turn, fired on its own: the metal over capacity goes.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A part is a rule and a test may name it.</strong> Sean, 2026-09-18: *it will be easier to test the end</span>
+<span class="prose">turn command itself if i can test its parts.* <code>ending-a-turn-takes-what-is-in-disorder</code> fires the</span>
+<span class="prose">whole turn over this same world; this fires one step of it, and the two differ only in the</span>
+<span class="prose">command - which is the point rather than a redundancy.</span>
+<span class="prose"></span>
+<span class="prose"><strong>What the pair buys is a diagnosis.</strong> Delete the <code>{part ...}</code> row and the composite test goes red</span>
+<span class="prose">while this one stays green: <em>the turn stopped calling it</em> rather than <em>the rule broke</em>. One test</span>
+<span class="prose">could not tell those apart.</span>
+<span class="prose"></span>
+<span class="prose"><strong>A first draft asserted that a spent scout stayed spent</strong>, which is testing that a rule does not</span>
+<span class="prose">do something no rule of its shape could do. Sean, 2026-09-19: *it seems to test that we don't do</span>
+<span class="prose">something we wouldn't do anyways.* The scout is gone.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It is also what the mutation sweep asked for</strong>: with no test naming <code>discard-disorder</code>, the</span>
+<span class="prose">rule's name is read by nothing, and the sweep says so.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It names nothing, because there is nothing to name.</strong> The clause names <code>stock</code> - the family of</span>
+<span class="prose">everything that may lie loose - so the rule trims all of it and the turn fires it once. There is</span>
+<span class="prose">no <em>which</em>: whatever is in disorder goes.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Two bins at ten apiece is twenty, and twenty-two is two over.</strong></span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">discarding-disorder-can-be-fired-on-its-own</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 4</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">bin</span> <span class="key">for</span><span class="colon">:</span><span class="value">resource</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 10</span>
+<span class="brace">{</span><span class="relation">bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">metal</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 22</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">discard-disorder</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 4</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">bin</span> <span class="key">for</span><span class="colon">:</span><span class="value">resource</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 10</span>
+<span class="brace">{</span><span class="relation">bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">metal</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 20</span>
+</pre>
+</body>
+</html>

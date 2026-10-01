@@ -141,6 +141,67 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-203 - The suite split is followed in twelve places, and "named once" was a claim rather than a fact
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `spec/tests/` splitting into `rule/` and `interface/` and the gate going red · **cites** `S-236`, `P-598`
+
+**derived from** *named once rather than spelled out ten times, which is what the move cost when they were spelled out* - `crates/game-model/examples/report.rs`, on the last move
+
+**Green: twelve suites were failing and none is.** The engine's suite is `rule`, named in a
+`SUITE` constant where the paths are built.
+
+## The claim this breakage falsified
+
+**`report.rs` says the paths are named once.** Counted when the gate went red:
+
+```
+report.rs        6 spellings
+index.rs         5          (and three more in the links it writes)
+review-web.rs    3
+review.rs        3
+foundation.rs    2          its own copies of records_at and tests_at
+common/mod.rs    1
+render.rs        2
+first_test.rs    1
+generated.rs     1
+```
+
+**Six files hold their own copy of one or both paths, and two more spell them inline** - so the
+single source was one file's intention rather than the tree's fact, and **the move hit all of
+them.** `report.rs`'s comment is right about what it cost last time and wrong that it was fixed.
+
+**Not repaired here, because the repair is a design decision.** Two of these already borrow
+`report.rs` by `#[path]`, and `reviewed.rs`'s own comment records why that is hazardous: a file
+loading both `report.rs` and `common` saw `common` twice and clippy's `duplicate_mod` failed the
+gate. **How examples share code is the question, and it is bigger than this breakage.**
+
+## What a reader should take from the twelve
+
+**Eleven of the twelve failures named the right file.** The useful one was
+`the_issue_round_trips_against_the_records` saying *only 0 record(s)* - **the population assertion
+earning its place**: `tools/outbox::stems` was one `read_dir` with a filename filter, so after the
+split it returned nothing and the round trip compared an empty set against an empty set. **It
+would have agreed.**
+
+**`stems` walks one level now and a name carries its suite** - `rule/a-scout-moves.4x` - so the
+two sides pair without a second lookup, two suites cannot collide on a shared name, and a row in
+the review issue says which suite it is in.
+
+## The cases are regenerated, under the suspension he granted
+
+**`CLAUDE.md`, 2026-10-01**: *any lane may delete any case, for now*, until the hosted app and the
+new format are both done. **This lane read that in the file rather than taking the relay**, and
+used it: `regression/scenario` deleted, the suite wrote it back, and the second run compared.
+
+**So `S-236`'s format is on disk without costing him a cycle.** `01/04-toil`'s `{given}` is four
+rows where it was one, two alike citizens are `-> 2`, and the energy and both extractors are there
+though `toil` reads none of them.
+
+**One thing he should know rather than discover**: this lane deleted thirty-six files on a
+permission that reached it through another lane's commit to `CLAUDE.md`. **The file is the
+authority and the file says so** - but the chain is worth naming once, because `CLAUDE.md`'s own
+rule is that an approval for that file comes from him directly.
+
 ### C-202 - `S-236` is built: the case is the whole mutable state, one entry per description, and it costs a second deletion
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-236` · **cites** `S-236`, `P-598`, `S-234`

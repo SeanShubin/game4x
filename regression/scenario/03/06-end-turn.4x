@@ -16,31 +16,14 @@
 {load file:world.4x into:game}
 
 {given}
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 6
 {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 2
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
-{citizen where:place-3 hungry:0 bearing:1} -> 1
-{citizen where:place-3 hungry:0 bearing:1} -> 1
-{citizen where:place-3 hungry:1 bearing:0 laboring:0} -> 2
-{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 2
+{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 2
 {extractor where:place-1 what:food working:0} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
 {extractor where:place-3 what:food working:0} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 4
+{extractor where:place-3 what:metal working:1} -> 1
+{food where:place-1} -> 6
+{food where:place-3} -> 6
 {labor where:place-1} -> 5
 {labor where:place-3} -> 1
 
@@ -48,21 +31,9 @@
 {end-turn}
 
 {then}
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
 {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
-{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:0 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 1
-{citizen where:place-3 hungry:1 bearing:0 laboring:0} -> 2
-{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 2
-{citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 2
-{citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 2
+{citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
 {extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
 {extractor where:place-3 what:food working:1} -> 1
+{extractor where:place-3 what:metal working:1} -> 1

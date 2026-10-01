@@ -27,6 +27,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -65,6 +66,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -99,7 +101,80 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+
+as expected
+
+==============================================================================
+a-citizen-breeds-once-and-its-bearing-is-spent
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+    - consumes
+      - {consumes kind:citizen what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+      - {food where:place-1} -> 2
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+
+command  {breed where:place-1}
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+    - consumes
+      - {consumes kind:citizen what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+      - {food where:place-1} -> 1
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
+    - provides
+      - {provides kind:place what:berth} -> 6
     - scout
     - terrain
     - territory
@@ -131,6 +206,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -168,6 +244,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -204,6 +281,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -247,6 +325,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -283,6 +362,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -320,6 +400,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -355,6 +436,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -389,6 +471,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -427,6 +510,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -466,6 +550,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -499,6 +584,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -532,6 +618,7 @@ new state
       - {pioneer where:place-1 moving:1} -> 1
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -569,6 +656,7 @@ old state
       - {pioneer where:place-1 moving:1} -> 1
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -608,6 +696,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -642,6 +731,7 @@ old state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -681,6 +771,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -715,6 +806,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-2 moving:0} -> 2
@@ -751,6 +843,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -792,6 +885,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -830,6 +924,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -867,6 +962,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -905,6 +1001,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -955,6 +1052,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1003,6 +1101,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1036,6 +1135,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1066,6 +1166,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1101,6 +1202,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -1141,6 +1243,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -1181,6 +1284,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -1221,6 +1325,7 @@ old state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
       - {place id:3 of:territory-2 layer:surface name:place-3}
+    - planet
     - provides
     - scout
     - terrain
@@ -1265,6 +1370,7 @@ new state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
       - {place id:3 of:territory-2 layer:surface name:place-3}
+    - planet
     - provides
     - scout
     - terrain
@@ -1289,7 +1395,6 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:place-1 what:energy density:3} -> 1
     - energy
     - extractor
     - food
@@ -1298,6 +1403,8 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - planet
+      - {planet id:1 energy:3}
     - provides
     - scout
     - terrain
@@ -1321,7 +1428,6 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:place-1 what:energy density:3} -> 1
     - energy
       - {energy where:place-1} -> 3
     - extractor
@@ -1331,6 +1437,8 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - planet
+      - {planet id:1 energy:3}
     - provides
     - scout
     - terrain
@@ -1364,6 +1472,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1396,6 +1505,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1430,6 +1540,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -1437,12 +1548,44 @@ old state
       - {territory id:1 name:territory-1}
     - transport
     - yard
+      - {yard where:place-1} -> 1
 
-refused
-  `launch` needs {yard where:1} and it is not
+command  {launch where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  took   {energy where:place-1} -> 1
+  made   {ark where:place-2 moving:1 gathering:1} -> 1
 
-not as expected
-  refused  `launch` needs {yard where:place-1} and it is not
+new state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+      - {yard where:place-1} -> 1
+
+as expected
 
 ==============================================================================
 an-extractor-cannot-be-built-where-the-deposits-are-taken
@@ -1471,6 +1614,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1509,6 +1653,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1548,6 +1693,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1586,6 +1732,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1625,6 +1772,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1660,6 +1808,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1696,6 +1845,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1733,7 +1883,79 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+
+as expected
+
+==============================================================================
+breeding-does-not-give-a-citizen-its-labor-back
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+    - consumes
+      - {consumes kind:citizen what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+      - {food where:place-1} -> 1
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+
+command  {breed where:place-1}
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:0} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+    - consumes
+      - {consumes kind:citizen what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
+    - provides
+      - {provides kind:place what:berth} -> 6
     - scout
     - terrain
     - territory
@@ -1765,6 +1987,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1778,8 +2001,10 @@ command  {breed}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
 
 new state
   - root
@@ -1788,7 +2013,8 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - energy
@@ -1800,6 +2026,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1832,6 +2059,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1851,13 +2079,19 @@ command  {end-turn}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 5
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 3
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 5
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
 
 new state
   - root
@@ -1877,6 +2111,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1915,6 +2150,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1952,6 +2188,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -1988,6 +2225,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:0} -> 2
@@ -2026,6 +2264,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 3
@@ -2065,6 +2304,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2102,6 +2342,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2146,6 +2387,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2190,6 +2432,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2234,6 +2477,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2278,6 +2522,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2310,6 +2555,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:orbit name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -2353,6 +2599,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2386,6 +2633,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:0} -> 2
@@ -2421,6 +2669,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 3
@@ -2455,6 +2704,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 2
@@ -2488,6 +2738,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -2527,6 +2778,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -2566,6 +2818,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -2603,6 +2856,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2650,6 +2904,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2680,6 +2935,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:0} -> 3
@@ -2711,6 +2967,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 5
@@ -2747,6 +3004,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -2793,6 +3051,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -2828,6 +3087,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
       - {provides kind:place what:berth} -> 6
     - scout
@@ -2871,6 +3131,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2905,6 +3166,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -2939,6 +3201,7 @@ old state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -2979,6 +3242,7 @@ old state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -3023,6 +3287,7 @@ new state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-3 moving:0} -> 1
@@ -3060,6 +3325,7 @@ old state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-1 moving:1} -> 1
@@ -3096,6 +3362,7 @@ new state
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
       - {place id:3 of:territory-3 layer:surface name:place-3}
+    - planet
     - provides
     - scout
       - {scout where:place-2 moving:0} -> 1
@@ -3122,7 +3389,6 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:place-1 what:energy density:3} -> 1
     - energy
     - extractor
     - food
@@ -3131,6 +3397,8 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - planet
+      - {planet id:1 energy:3}
     - provides
     - scout
     - terrain
@@ -3166,6 +3434,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3188,14 +3457,21 @@ command  {end-turn}
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
   took   {food where:place-1} -> 4
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 6
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 3
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 3
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 3
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 3
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
 
 new state
   - root
@@ -3215,6 +3491,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3249,6 +3526,7 @@ old state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -3287,6 +3565,7 @@ new state
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
       - {place id:2 of:territory-2 layer:surface name:place-2}
+    - planet
     - provides
     - scout
     - terrain
@@ -3324,6 +3603,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3367,6 +3647,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3403,6 +3684,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3441,6 +3723,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3473,6 +3756,7 @@ old state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain
@@ -3508,6 +3792,7 @@ new state
     - pioneer
     - place
       - {place id:1 of:territory-1 layer:surface name:place-1}
+    - planet
     - provides
     - scout
     - terrain

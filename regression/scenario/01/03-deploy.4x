@@ -16,12 +16,14 @@
 {load file:world.4x into:game}
 
 {given}
-{ark where:place-2} -> 1
+{ark where:place-2 moving:0 gathering:0} -> 1
+{energy where:place-2} -> 3
 
 {when}
 {deploy where:place-2 what:ark}
 
 {then}
 {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{energy where:place-2} -> 3
 {extractor where:place-1 what:food working:1} -> 1
 {extractor where:place-1 what:metal working:1} -> 1

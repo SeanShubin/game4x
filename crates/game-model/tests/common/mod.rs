@@ -200,7 +200,7 @@ pub fn every_test() -> Vec<String> {
 /// them, and whether its two notations agree, are true of a draft as much as of an approved test -
 /// only *does the engine have to satisfy it* waits on a reading.
 pub fn every_read_test() -> (Vec<String>, Vec<String>) {
-    let record = mine().join("..").join("..").join("reviewed");
+    let record = mine().join("..").join("..").join("reviewed").join("rule");
     let (mut read, mut unread) = (Vec::new(), Vec::new());
     for file in every_test() {
         let name = file.rsplit('/').next().unwrap_or(&file).to_string();

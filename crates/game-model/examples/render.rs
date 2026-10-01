@@ -93,7 +93,10 @@ pub fn files() -> Vec<(String, bool)> {
             .filter(|name| name.ends_with(".4x"))
             .collect()
     };
-    let source = named("../../spec/tests");
+    // **`spec/tests/rule`, since the split on 2026-10-01.** The engine runs the rule suite and
+    // `data/foundation/tests` is its rendering, so the two sides compared here are that one pair -
+    // an interface test has no foundation form and is not the engine's to render.
+    let source = named("../../spec/tests/rule");
     let rendered = named("data/foundation/tests");
     let mut tests: Vec<String> = source.intersection(&rendered).cloned().collect();
     assert!(
@@ -127,7 +130,7 @@ pub fn friendly_at(file: &str) -> String {
     match file {
         "schema.4x" | "rules.4x" => format!("../../spec/data/{file}"),
         _ => match file.strip_prefix("tests/") {
-            Some(name) => format!("../../spec/tests/{name}"),
+            Some(name) => format!("../../spec/tests/rule/{name}"),
             None => format!("data/friendly/{file}"),
         },
     }

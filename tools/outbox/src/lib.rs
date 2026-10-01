@@ -1366,12 +1366,37 @@ pub fn reading(root: &Path) -> Reading {
 
 /// Every `.4x` file name in a directory, sorted.
 fn stems(at: &Path) -> Result<Vec<String>, String> {
-    let mut found: Vec<String> = std::fs::read_dir(at)
+    let mut found: Vec<String> = Vec::new();
+    for entry in std::fs::read_dir(at)
         .map_err(|why| why.to_string())?
         .flatten()
-        .map(|entry| entry.file_name().to_string_lossy().to_string())
-        .filter(|name| name.ends_with(".4x"))
-        .collect();
+    {
+        let name = entry.file_name().to_string_lossy().to_string();
+        if name.ends_with(".4x") {
+            found.push(name);
+            continue;
+        }
+        // **One level down, because `spec/tests/` holds suites** - `rule/` and `interface/` since
+        // 2026-10-01. **A name carries its suite** - `rule/a-scout-moves.4x` - so the two sides
+        // pair without a second lookup, two suites cannot collide on a shared test name, and the
+        // row in the issue says which suite it is in.
+        //
+        // **This was one `read_dir` with a filename filter, and three things were keyed to it.**
+        // After the split it returned nothing and `the_issue_round_trips_against_the_records`
+        // said *only 0 record(s)* - **the population assertion earning its place**, because the
+        // round trip compared an empty set against an empty set and would otherwise have agreed.
+        if entry.path().is_dir() {
+            for inner in std::fs::read_dir(entry.path())
+                .map_err(|why| why.to_string())?
+                .flatten()
+            {
+                let file = inner.file_name().to_string_lossy().to_string();
+                if file.ends_with(".4x") {
+                    found.push(format!("{name}/{file}"));
+                }
+            }
+        }
+    }
     found.sort();
     Ok(found)
 }

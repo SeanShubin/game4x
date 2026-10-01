@@ -16,12 +16,23 @@
 {load file:world.4x into:game}
 
 {given}
+{citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+{citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
 {extractor where:place-1 what:food working:1} -> 1
-{labor where:place-1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{extractor where:place-3 what:food working:1} -> 1
+{extractor where:place-3 what:metal working:1} -> 1
+{labor where:place-1} -> 6
 
 {when}
 {work where:place-1 what:food}
 
 {then}
+{citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+{citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
 {extractor where:place-1 what:food working:0} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{extractor where:place-3 what:food working:1} -> 1
+{extractor where:place-3 what:metal working:1} -> 1
 {food where:place-1} -> 6
+{labor where:place-1} -> 5

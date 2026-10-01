@@ -56,7 +56,7 @@ mod render;
 const FLOOR: usize = 40;
 
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed")
+    mine().join("..").join("..").join("reviewed").join("rule")
 }
 
 fn tests_at() -> PathBuf {

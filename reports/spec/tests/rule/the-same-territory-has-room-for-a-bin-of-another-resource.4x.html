@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/the-same-territory-has-room-for-a-bin-of-another-resource.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/the-same-territory-has-room-for-a-bin-of-another-resource.4x</code></h1>
+<p class="note">The same territory, the same full metal capacity, and a food bin goes up anyway.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/the-same-territory-has-room-for-a-bin-of-another-resource.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/the-same-territory-has-room-for-a-bin-of-another-resource.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">The same territory, the same full metal capacity, and a food bin goes up anyway.</span>
+<span class="prose"></span>
+<span class="prose"><strong>This is the whole point of the increment.</strong> Sean, 2026-09-17: *Each territory will have a limit</span>
+<span class="prose">of how many storage structures of each type it can hold.* <strong>Of each type</strong> is what this says and</span>
+<span class="prose">what <code>a-bin-cannot-be-built-where-the-capacity-is-taken</code> cannot say on its own - a cap that was</span>
+<span class="prose">counted per territory would refuse this too, and the pair is what tells the two apart.</span>
+<span class="prose"></span>
+<span class="prose"><strong>It needed no mechanism.</strong> A capacity names a <code>what</code>, so the metal bins and the food ones are</span>
+<span class="prose">counted against different questions without anything being said about resources.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The metal is spent on a food bin</strong>, which is what a bin costs rather than what it holds:</span>
+<span class="prose">building is one labor and one metal whatever the bin is for.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">the-same-territory-has-room-for-a-bin-of-another-resource</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
+<span class="brace">{</span><span class="relation">bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">labor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">metal</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">build-bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">place</span> <span class="key">for</span><span class="colon">:</span><span class="value">bin</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
+<span class="brace">{</span><span class="relation">bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">metal</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">bin</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+</pre>
+</body>
+</html>

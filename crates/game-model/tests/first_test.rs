@@ -203,7 +203,7 @@ fn a_test_sets_its_sections_apart() {
     // three directories were one population and took the suite down when they stopped being -
     // which said nothing this file is about, and hid what it is about behind a file-not-found.
     let mut skipped = 0;
-    for directory in ["data/foundation/tests", "../../spec/tests"] {
+    for directory in ["data/foundation/tests", "../../spec/tests/rule"] {
         for file in every_test() {
             let named = file.replace("data/foundation/tests", directory);
             let Ok(text) = std::fs::read_to_string(mine().join(&named)) else {

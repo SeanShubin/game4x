@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/toil-works-the-unworked-citizens-of-one-place.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/toil-works-the-unworked-citizens-of-one-place.4x</code></h1>
+<p class="note">Two citizens that can still work, one that has already worked, and one in the next territory: two</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/toil-works-the-unworked-citizens-of-one-place.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/toil-works-the-unworked-citizens-of-one-place.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">Two citizens that can still work, one that has already worked, and one in the next territory: two</span>
+<span class="prose">labour, and only the first two worked.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Four things have to be true at once and this is where each of them can be seen.</strong> <code>toil</code> names</span>
+<span class="prose">a place and works the citizens of that place; it works the ones that still have their <code>laboring</code></span>
+<span class="prose">and not the one that has spent it; it takes them one at a time; and it gives each back exactly as</span>
+<span class="prose">it found it but for the <code>laboring</code>.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The citizen in the next territory is untouched</strong>, which is what the place binding is for. Take</span>
+<span class="prose">it away and the rule matches a citizen in either place, which is two rows and no way to say</span>
+<span class="prose">which - so it is refused rather than guessing.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The one that has already worked is not worked again</strong>, which is what <code>laboring:1</code> is for, and it</span>
+<span class="prose">is stated in the <code>given</code> rather than produced. Without it the pattern matches both rows in this</span>
+<span class="prose">place and the rule is refused for the same reason.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>bearing:0</code> is stated so the reading can be seen doing its work.</strong> An <code>add</code> must name every</span>
+<span class="prose">column, so <code>toil</code> has to say what the citizen it gives back is like - and writing <code>bearing:1</code></span>
+<span class="prose">would hand a spent <code>bearing</code> back for free. It reads it instead, which is what <code>work</code> does with a</span>
+<span class="prose">deposit's density and <code>upkeep</code> with a parent's bearing.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Two labour and not one</strong>, because the rule takes one citizen at a time and repeats. Take the</span>
+<span class="prose">quantity away and it takes the row whole, and two citizens make a single labour between them.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">toil-works-the-unworked-citizens-of-one-place</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">0</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">0</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">toil</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">0</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
+<span class="brace">{</span><span class="relation">citizen</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">hungry</span><span class="colon">:</span><span class="value">1</span> <span class="key">bearing</span><span class="colon">:</span><span class="value">1</span> <span class="key">laboring</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">labor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+</pre>
+</body>
+</html>

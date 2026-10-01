@@ -16,63 +16,35 @@
 {load file:world.4x into:game}
 
 {given}
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 6
+{ark where:place-4 moving:1 gathering:1} -> 1
+{bin where:place-1 what:metal} -> 1
 {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-1 hungry:1} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 6
 {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 6
-{citizen where:place-3 hungry:1} -> 1
-{citizen where:place-3 hungry:1} -> 1
-{citizen where:place-3 hungry:1} -> 1
-{citizen where:place-3 hungry:1} -> 1
-{citizen where:place-3 hungry:1} -> 1
-{citizen where:place-3 hungry:1} -> 1
 {energy where:place-3} -> 5
 {extractor where:place-1 what:food working:0} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
 {extractor where:place-3 what:energy working:0} -> 1
 {extractor where:place-3 what:food working:0} -> 1
 {extractor where:place-3 what:metal working:0} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-1} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
-{food where:place-3} -> 1
+{food where:place-1} -> 6
+{food where:place-3} -> 6
 {labor where:place-1} -> 5
+{metal where:place-1} -> 5
 {metal where:place-3} -> 3
+{yard where:place-3} -> 1
 
 {when}
 {end-turn}
 
 {then}
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+{ark where:place-4 moving:1 gathering:1} -> 1
+{bin where:place-1 what:metal} -> 1
 {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-{citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 6
 {citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 6
 {extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
 {extractor where:place-3 what:energy working:1} -> 1
 {extractor where:place-3 what:food working:1} -> 1
 {extractor where:place-3 what:metal working:1} -> 1
+{metal where:place-1} -> 5
+{yard where:place-3} -> 1

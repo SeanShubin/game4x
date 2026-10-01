@@ -49,12 +49,28 @@ fn the_issue_round_trips_against_the_records() {
     let body = review_issue(&root);
     let read_back = ticked_in(&body);
 
-    let records: BTreeSet<String> = std::fs::read_dir(root.join("reviewed"))
+    // **Walked one level, because `reviewed/` holds suites** - `rule/` since 2026-10-01, and
+    // `interface/` when there is one. **This read the directory flat and found nothing**, which
+    // the floor below caught rather than letting an empty set agree with an empty set.
+    let mut records: BTreeSet<String> = BTreeSet::new();
+    for suite in std::fs::read_dir(root.join("reviewed"))
         .expect("reviewed/")
         .flatten()
-        .map(|it| it.file_name().to_string_lossy().to_string())
-        .filter(|name| name.ends_with(".4x"))
-        .collect();
+    {
+        let named = suite.file_name().to_string_lossy().to_string();
+        if named.ends_with(".4x") {
+            records.insert(named);
+            continue;
+        }
+        if suite.path().is_dir() {
+            for inner in std::fs::read_dir(suite.path()).expect("a suite").flatten() {
+                let file = inner.file_name().to_string_lossy().to_string();
+                if file.ends_with(".4x") {
+                    records.insert(format!("{named}/{file}"));
+                }
+            }
+        }
+    }
 
     assert!(
         records.len() >= 40,

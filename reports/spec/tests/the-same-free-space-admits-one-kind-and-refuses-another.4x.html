@@ -7,46 +7,9 @@
 </head>
 <body>
 <h1><code>spec/tests/the-same-free-space-admits-one-kind-and-refuses-another.4x</code></h1>
-<p class="note">The same free space admits one kind and refuses another.</p>
+<p class="note">-</p>
 <p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/tests/the-same-free-space-admits-one-kind-and-refuses-another.4x">the file itself, as text</a></p>
 <p class="generated">Generated from <code>spec/tests/the-same-free-space-admits-one-kind-and-refuses-another.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
-<pre class="four-x"><span class="prose">The same free space admits one kind and refuses another.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Sean, 2026-09-18</strong>: *It is certainly valid to test that different berth sizes work properly,</span>
-<span class="prose">but we don't specifically care what those sizes are for what units.<em> </em>*So the numbers are not the</span>
-<span class="prose">subject.<em></em> The rate belongs to the consumer, and two kinds meeting the same room get different</span>
-<span class="prose">answers - which is a fact about the engine and not about how big a transport is.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Neither number is stated outside this prototype.</strong> <code>berth</code>, <code>scout</code> and <code>transport</code> appear</span>
-<span class="prose">nowhere in <code>spec/</code> or <code>releases/</code>, which is <code>S-136</code>'s isolation working - so a name carrying <code>2</code></span>
-<span class="prose">and <code>1</code> would read as authoritative about something nothing states, and would go on reading that</span>
-<span class="prose">way after the numbers changed.</span>
-<span class="prose"></span>
-<span class="prose"><strong>The other half of the argument is in <code>a-scout-moves-where-there-is-a-berth-to-spare</code></strong>, which</span>
-<span class="prose">puts a scout into this same room and succeeds. A test states a <code>then</code> or a <code>refused</code> and not both</span>
-<span class="prose">- <code>Failed::BothEndings</code> - so the contrast has to live in two files, and naming the other one is</span>
-<span class="prose">what makes the pointer followable and gives a later rename something to find.</span>
-
-<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">the-same-free-space-admits-one-kind-and-refuses-another</span><span class="brace">}</span>
-
-<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">provides</span> <span class="key">kind</span><span class="colon">:</span><span class="value">place</span> <span class="key">what</span><span class="colon">:</span><span class="value">berth</span><span class="brace">}</span><span class="arrow"> -&gt; 6</span>
-<span class="brace">{</span><span class="relation">consumes</span> <span class="key">kind</span><span class="colon">:</span><span class="value">scout</span> <span class="key">what</span><span class="colon">:</span><span class="value">berth</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
-<span class="brace">{</span><span class="relation">consumes</span> <span class="key">kind</span><span class="colon">:</span><span class="value">transport</span> <span class="key">what</span><span class="colon">:</span><span class="value">berth</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
-<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">adjacency</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">from</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">transport</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
-<span class="brace">{</span><span class="relation">transport</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
-<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-2</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
-
-<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">move</span> <span class="key">what</span><span class="colon">:</span><span class="value">transport</span> <span class="key">from</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
-
-<span class="brace">{</span><span class="relation">refused</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">provides</span> <span class="key">kind</span><span class="colon">:</span><span class="value">place</span> <span class="key">what</span><span class="colon">:</span><span class="value">berth</span><span class="brace">}</span><span class="arrow"> -&gt; 7</span>
-</pre>
+<pre class="four-x"></pre>
 </body>
 </html>

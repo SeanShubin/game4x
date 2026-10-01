@@ -586,8 +586,9 @@ fn rules_with_cover() -> Vec<(String, usize, usize)> {
 
     // **What each test commands**, read from the rows under its `{when}`.
     let mut commanded: Vec<BTreeMap<String, ()>> = Vec::new();
-    for test in named_files("reviewed") {
-        let text = std::fs::read_to_string(root().join("reviewed").join(&test)).unwrap_or_default();
+    for test in named_files("reviewed/rule") {
+        let text =
+            std::fs::read_to_string(root().join("reviewed/rule").join(&test)).unwrap_or_default();
         let mut inside = false;
         let mut mine = BTreeMap::new();
         for line in text.lines() {
@@ -642,11 +643,14 @@ pub fn write_all() -> (usize, usize) {
 
     // -- The tests Sean has read ------------------------------------------------------------
     let mut tests = Vec::new();
-    for name in named_files("spec/tests") {
+    for name in named_files("spec/tests/rule") {
         let stem = name.trim_end_matches(".4x");
-        let record = root().join("reviewed").join(&name);
+        let record = root().join("reviewed/rule").join(&name);
         let mut beside = vec![
-            ("as text".to_string(), up("", &format!("spec/tests/{name}"))),
+            (
+                "as text".to_string(),
+                up("", &format!("spec/tests/rule/{name}")),
+            ),
             (
                 "foundation form".to_string(),
                 rendered(&format!("reports/foundation/{name}")),
@@ -664,17 +668,17 @@ pub fn write_all() -> (usize, usize) {
             // is `no_test_differs_from_what_sean_read`'s job rather than a reader's.
             beside.push((
                 "the record he read it, as text".to_string(),
-                up("", &format!("reviewed/{name}")),
+                up("", &format!("reviewed/rule/{name}")),
             ));
         } else {
             beside.push(("not read yet".to_string(), "tests.html".to_string()));
         }
         tests.push(Entry {
-            at: rendered(&format!("spec/tests/{name}")),
+            at: rendered(&format!("spec/tests/rule/{name}")),
             said: format!(
                 "{} - {}",
                 stem,
-                title_of(&root().join("spec/tests").join(&name))
+                title_of(&root().join("spec/tests/rule").join(&name))
             ),
             beside,
         });

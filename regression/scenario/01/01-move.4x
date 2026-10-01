@@ -16,7 +16,7 @@
 {load file:world.4x into:game}
 
 {given}
-{ark where:place-4 moving:1} -> 1
+{ark where:place-4 moving:1 gathering:1} -> 1
 
 {when}
 {move what:ark from:place-4 to:place-2}

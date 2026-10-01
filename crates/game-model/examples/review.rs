@@ -39,12 +39,26 @@ use std::path::PathBuf;
 /// rather than borrowed from `report`, because this example shares no code with it and a
 /// `#[path]` include to reach two functions would be the larger coupling.
 fn tests_at() -> PathBuf {
-    mine().join("..").join("..").join("spec").join("tests")
+    mine()
+        .join("..")
+        .join("..")
+        .join("spec")
+        .join("tests")
+        .join(SUITE)
 }
 
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed")
+    mine().join("..").join("..").join("reviewed").join(SUITE)
 }
+
+/// Which suite of `spec/tests/` this reads - `spec/tests/` split into `rule/` and `interface/` on
+/// 2026-10-01.
+///
+/// **Six files spell these two paths twenty times between them**, and `report.rs`'s own comment
+/// says they are *named once rather than spelled out ten times*. **That was a claim rather than a
+/// fact** and the split hit all six - which is why this constant is a stopgap and `C-203` asks for
+/// one source.
+const SUITE: &str = "rule";
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))

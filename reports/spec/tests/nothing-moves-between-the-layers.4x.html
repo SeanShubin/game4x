@@ -7,41 +7,9 @@
 </head>
 <body>
 <h1><code>spec/tests/nothing-moves-between-the-layers.4x</code></h1>
-<p class="note">A scout on the ground, an orbit next door, and the move refused.</p>
+<p class="note">-</p>
 <p class="where"><a href="../../index.html">The index</a> · <a href="../../../spec/tests/nothing-moves-between-the-layers.4x">the file itself, as text</a></p>
 <p class="generated">Generated from <code>spec/tests/nothing-moves-between-the-layers.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
-<pre class="four-x"><span class="prose">A scout on the ground, an orbit next door, and the move refused.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Sean, 2026-09-20</strong>: <em>for now I am thinking nothing will move between layers.</em> So the two places a</span>
-<span class="prose">move names must share a layer, and a surface and an orbit never do.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Nothing says no.</strong> The <code>to</code> place takes its <code>layer</code> from the <code>from</code> place's, so the pattern asks</span>
-<span class="prose">for a surface place with that id and there is not one - <em></em>what would be an equality test is a</span>
-<span class="prose">match that fails<em></em>, which is the move this engine makes everywhere a comparison would do.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Adjacency is why this needed saying.</strong> The graph joins territories and knows nothing of layers,</span>
-<span class="prose">so the orbit above a neighbour is exactly as adjacent as its ground - and until the layers had to</span>
-<span class="prose">agree, a scout could walk into space.</span>
-<span class="prose"></span>
-<span class="prose"><strong>Crossing still happens and is never a move.</strong> Deploying an ark takes it out of an orbit and puts</span>
-<span class="prose">what it becomes on the ground; building one takes resources off the ground and puts an ark in</span>
-<span class="prose">orbit. Both are transformations rather than journeys.</span>
-
-<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">nothing-moves-between-the-layers</span><span class="brace">}</span>
-
-<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">orbit</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">adjacency</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">from</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">territory-2</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
-
-<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">move</span> <span class="key">what</span><span class="colon">:</span><span class="value">scout</span> <span class="key">from</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">to</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
-
-<span class="brace">{</span><span class="relation">refused</span><span class="brace">}</span>
-<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">2</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-2</span><span class="brace">}</span>
-</pre>
+<pre class="four-x"></pre>
 </body>
 </html>

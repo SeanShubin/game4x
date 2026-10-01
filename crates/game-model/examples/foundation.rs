@@ -53,13 +53,22 @@ mod render;
 /// two opinions about when a run is vacuous, and the one that is lower is the one that decides.
 const FLOOR: usize = 40;
 
+/// Which suite of `spec/tests/` this reads - `spec/tests/` split into `rule/` and `interface/` on
+/// 2026-10-01.
+///
+/// **Six files spell these two paths twenty times between them**, and `report.rs`'s own comment
+/// says they are *named once rather than spelled out ten times*. **That was a claim rather than a
+/// fact** and the split hit all six - which is why this constant is a stopgap and `C-203` asks for
+/// one source.
+const SUITE: &str = "rule";
+
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 
 /// The record of what Sean has read, which is what rule 3 makes the source.
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed")
+    mine().join("..").join("..").join("reviewed").join(SUITE)
 }
 
 /// The working copies, read **only** to say which of them are waiting on him.
@@ -67,7 +76,12 @@ fn records_at() -> PathBuf {
 /// **Nothing is generated from here.** This directory is what a test says; `reviewed/` is what he
 /// has read, and rule 3 says the rendering follows the second.
 fn tests_at() -> PathBuf {
-    mine().join("..").join("..").join("spec").join("tests")
+    mine()
+        .join("..")
+        .join("..")
+        .join("spec")
+        .join("tests")
+        .join(SUITE)
 }
 
 /// Where the generated foundation form goes.

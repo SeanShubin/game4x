@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/refresh-lets-a-spent-extractor-work-again.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/refresh-lets-a-spent-extractor-work-again.4x</code></h1>
+<p class="note">One extractor, worked, refreshed, and worked again - twelve food from a deposit of six.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/refresh-lets-a-spent-extractor-work-again.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/refresh-lets-a-spent-extractor-work-again.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">One extractor, worked, refreshed, and worked again - twelve food from a deposit of six.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The extractor is spent inside the test rather than in the <code>given</code>.</strong> It was the other way</span>
+<span class="prose">round, and the mutation check said the <code>given</code> could have started it ready and the test would</span>
+<span class="prose">still have passed - so it showed that refresh and work compose, not that refresh was needed.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Now every line of the <code>given</code> is load-bearing.</strong> Starting at <code>working:0</code> refuses the first</span>
+<span class="prose">work; deleting the refresh refuses the second; one labor refuses the second; and the density is</span>
+<span class="prose">what makes twelve rather than any other number.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Found by the quality lens re-deriving the survivor</strong> rather than by a check - the check named</span>
+<span class="prose">the row and the reading of why the obvious repair would not have worked was a person's.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">refresh-lets-a-spent-extractor-work-again</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">for</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">deposit</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">density</span><span class="colon">:</span><span class="value">6</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">extractor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">working</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">labor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">work</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">refresh</span> <span class="key">what</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">trait</span><span class="colon">:</span><span class="value">working</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">work</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">capacity</span> <span class="key">of</span><span class="colon">:</span><span class="value">deposit</span> <span class="key">for</span><span class="colon">:</span><span class="value">extractor</span> <span class="key">what</span><span class="colon">:</span><span class="value">resource</span> <span class="key">per</span><span class="colon">:</span><span class="value">place</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">deposit</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">density</span><span class="colon">:</span><span class="value">6</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">extractor</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">what</span><span class="colon">:</span><span class="value">food</span> <span class="key">working</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">food</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span><span class="arrow"> -&gt; 12</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/one-refresh-reaches-a-scout-and-a-transport.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/one-refresh-reaches-a-scout-and-a-transport.4x</code></h1>
+<p class="note">One command refreshes two kinds, because `unit` is the family they both belong to.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/one-refresh-reaches-a-scout-and-a-transport.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/one-refresh-reaches-a-scout-and-a-transport.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">One command refreshes two kinds, because <code>unit</code> is the family they both belong to.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Sean, 2026-09-18</strong>: *I should be able to declare separate things with separate commands, as</span>
+<span class="prose">well as explicitly declare group commands. So i can refresh a scout, refresh a transport,</span>
+<span class="prose">refresh all movable, refresh all workable, and their intersections.* This is the group form;</span>
+<span class="prose"><code>refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one</code> is the separate one, and the two are</span>
+<span class="prose">the same rule with a different argument.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Two kinds and not two rules is the whole point.</strong> <code>what:unit</code> denotes every member of the</span>
+<span class="prose">family, so adding a third kind of unit changes nothing here - where a rule per kind would need</span>
+<span class="prose">a fourth rule and a fifth.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Each kind starts with a spent group and a fresh one</strong>, so the two join and the count is the</span>
+<span class="prose">sum: two scouts and one, three; one transport and two, three. <em></em>The numbers are crossed between</span>
+<span class="prose">the kinds<em></em> - 2 and 1 for the scout, 1 and 2 for the transport - so a test that read one kind's</span>
+<span class="prose">row for the other's would not add up.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Every value in the <code>given</code> is load-bearing, and the mutation sweep is what says so.</strong> An</span>
+<span class="prose">earlier draft started both kinds wholly spent; changing either <code>moving:0</code> to <code>moving:1</code> then</span>
+<span class="prose">made the command a no-op and the <code>then</code> a copy of the <code>given</code>, and the test passed having</span>
+<span class="prose">refreshed nothing. <strong>A spent group beside a fresh one is what closes that</strong> - flipping either</span>
+<span class="prose">value now puts two rows of one kind on one key, which the structure refuses.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Poisoned three ways besides.</strong> Refreshing <code>what:scout</code> leaves the transports spent;</span>
+<span class="prose">refreshing <code>what:transport</code> leaves the scouts spent; and <code>trait:working</code> is refused, because no</span>
+<span class="prose">unit carries one.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">one-refresh-reaches-a-scout-and-a-transport</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">transport</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">transport</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 2</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">refresh</span> <span class="key">what</span><span class="colon">:</span><span class="value">unit</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
+<span class="brace">{</span><span class="relation">transport</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 3</span>
+</pre>
+</body>
+</html>
