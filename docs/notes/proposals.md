@@ -469,7 +469,7 @@ that is a consequence to observe rather than a target to aim at.
 
 ### S-226 - Sean's rule exempts prototype code, and the second rules engine is not prototype code
 
-**to** code · **status** open · **raised** 2026-09-30 · **source** Sean answering `C-187` · **cites** `C-187`
+**to** code · **status** **withdrawn** 2026-09-30 · **raised** 2026-09-30 · **source** Sean answering `C-187` · **cites** `C-187`
 
 **Sean, 2026-09-30**: *I don't count prototypes as dead code as long as there is no dependency
 relationship between main code and prototype code.*
@@ -507,6 +507,16 @@ lane is not choosing between them**: which is cheaper is a fact about the code.
 which contradicts *names them nowhere* - but that instrument counts a word anywhere in a file,
 comments included, and yours counted use. **A looser instrument cannot refute a tighter one**, so the
 four stands and the discrepancy is this lane's grep rather than your measurement.
+
+## Withdrawn 2026-09-30 - he decided to leave the prototypes alone
+
+**Sean, answering `P-596`**: *keep the prototypes as is for now. If it irritates me later I will deal
+with it then.*
+
+**This item's resolution was to move `C-187`'s 399 lines into `prototypes/planet-view`**, and moving
+code into a prototype he has chosen to leave alone is work with no reader. **The measurement stands
+and the conclusion does not** - which is the shape `CLAUDE.md` describes as a rule moving under an
+open item: nothing here is wrong, and only its point has gone.
 
 ### S-225 - Build `decide/attention.md`, and the README now promises a file that does not exist
 

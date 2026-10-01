@@ -26,6 +26,75 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
+
+**to** sean · **status** **answered** 2026-09-30 · **raised** 2026-09-30 · **answered by him**: *keep the prototypes as is for now. If it irritates me later I will deal with it then.*
+
+**Rule 18 says a prototype replicates rather than links, and *it is almost always a smaller and
+modified version*.** The code lane measured what replicating would actually cost, and the second half
+of your sentence is what the measurement contradicts.
+
+```
+                 own lines    main-code lines linked
+gap-view               717                 4,129
+goldberg-move          888                 9,023
+goldberg-view          181                 9,023
+hex-torus-view       1,004                   367
+planet-view            450                12,431
+```
+
+**Replicating what `planet-view` links copies 12,431 lines into a prototype of 450**, and about 35,000
+lines across the five. **That is not a smaller and modified version; it is the mainline with a copy
+date.** So rule 18 as written cannot be satisfied by replicating here - which is the rule working, not
+failing: it says a prototype must not hold main code in place, and the honest reading of these numbers
+is that four of these five are not prototypes any more.
+
+## The choice, and only you can make it
+
+**Delete, or keep and accept the breach.** `docs/prototypes/README.md` says *that answer is the
+deliverable; the code is a byproduct*, and **three of the five have their answer recorded** - so
+deleting takes the breach, `planet-ecs`, `planet-flat`, `planet-raster` and `C-187`'s 399-line rules
+engine with it, and loses nothing written down.
+
+**Against that is your own keep-rule**, stated the same day: *prototypes about experiments I will want
+to keep until I have already implemented their results into code.* **`planet-view`'s note records an
+open question** - *GPU is an open question, not a decision that has been made* - and `planet-raster` is
+the apparatus for answering it. **So the keep-rule protects at least one of the five and the link-rule
+condemns it**, and that is the contradiction rather than a cost to weigh.
+
+## What is not being asked
+
+**Not whether to delete `planet-view`.** The two rules disagree about it, so a lane choosing either
+would be deciding which of your rules wins. **Three of the five may be a different answer from the
+other two**, and which three is a fact the code lane has - the recorded answers - rather than a
+judgement.
+
+**And nothing has been deleted.** `C-191` says so plainly: *I have not deleted a prototype on my own
+reading of one rule.* **`S-226` is held rather than refused** for the same reason - its resolution
+moves 399 lines into a prototype that is itself in breach.
+*Nothing is open. Everything filed has been decided.*
+
+## Answered 2026-09-30 - the breach is accepted, and rule 18 states the end state
+
+**Sean**: *let me just decide on P-596 now. Keep the prototypes as is for now. If it irritates me
+later I will deal with it then.*
+
+**So all five prototypes go on linking main code**, and `docs/architecture.md` rule 18 goes on saying
+they must not. **That is not a contradiction to clean up**: nothing in that document claims to
+describe the repository as it stands - its own opening says the dependency rules *are enforced by the
+compiler rather than by discipline*, and rule 18's subject is not enforced by anything.
+`spec/README.md` rule 4 draws the same line: *what is wanted and unbuilt is a future plan.*
+
+**Recorded here so the same proposal is not filed again.** `CLAUDE.md` asks for every rejection to
+carry his reason, and this one's reason is that the irritation has not arrived - which is a decision
+about when to spend attention rather than about what the right shape is. **A lane that re-derives the
+breach will find the measurement true and the answer already given.**
+
+**`S-226` is withdrawn with it.** Its resolution was to move `C-187`'s 399 lines into
+`prototypes/planet-view`, and moving code into a prototype he has chosen to leave alone is work with
+no reader. **`C-191` has its answer too**, and the code lane was right not to delete on one rule's
+reading: the rule was not the thing that decided it.
+
 ### P-597 - A generated case writes one row per firing and an authored test writes a map, and nothing says which `{given}` is
 
 **to** sean · **status** **withdrawn** 2026-09-30, by him saying it is fine and by a test already deciding it · **raised** 2026-09-30 · **asks** nothing now · **kind** recovered · **source** Sean reading `regression/scenario/01/04-toil.4x`

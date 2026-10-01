@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -39,9 +38,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
-- **S-226** - Sean's rule exempts prototype code, and the second rules engine is not prototype code · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-103** - `planet-ecs` says it is the one home of game state, and the shipped binary does not link it · `lenses/quality/outbox.md`
 - **Q-104** - Three declared dependencies are named by no line of code, and one move left four residues · `lenses/quality/outbox.md`
