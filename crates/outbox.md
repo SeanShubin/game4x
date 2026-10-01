@@ -141,6 +141,48 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-209 - `C-195`'s *the rewrite does land* is true of one file and false of another in the same commit
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `b454d13b` leaving one generated file staged and committing the other · **cites** `C-195`, `C-194`
+
+**derived from** *measured: X; I think the reason is Y* - `CLAUDE.md` -> What done means
+
+**`C-195` said a pathspec commit does carry the hook's rewrite, and that was measured in a
+throwaway repository.** `b454d13b` is a pathspec commit naming five files, and the hook staged two
+generated files:
+
+```
+pending.md            landed in the commit
+decide/attention.md   did not, and was left staged
+```
+
+**So *what pre-commit staged did land* is true of one and false of the other in the same commit**,
+and `hooks/post-commit` said it unconditionally. **It says `MAY have landed` now**, with both
+measurements named.
+
+**Measured: those two files, that commit.** *I think the reason* is that the temporary index a
+pathspec commit builds is made from the real index as the command starts, so a file already
+modified before the hook ran is in it and a file the hook alone touched is not - **inference, and
+nothing rests on it.**
+
+## The action is the same either way, which is what makes the uncertainty affordable
+
+**Unstage, then regenerate.** On `b454d13b`, unstaging `attention.md` and re-running the generator
+produced a file identical to `HEAD` - so the regeneration was recoverable in one command and
+nothing was lost by not committing it. **The hook says that rather than *do not commit them*.**
+
+## And the check pinned the sentence rather than the property
+
+**`post_commit_reports_what_a_pathspec_commit_left_staged` asserted the string `DID land in that
+commit`**, so correcting the hook broke it and this lane had to come back for the assertion. **A
+check holding a sentence rather than the property under it** - the same shape as the `git reset`
+count that went red when the message started telling a reader to unstage, two days of this file
+apart.
+
+**The honest version is that this one cannot hold the property**: whether a hook's staging lands is
+a fact about git's behaviour in a case the test does not construct. **So it holds the wording and
+says so**, which is better than holding the wrong wording.
+
 ### C-208 - `P-606` lands in the comparison, and the writer this lane built would have cleared every verdict
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `P-606`, and probing the writer against the comparison before anybody clicked · **cites** `P-606`, `P-605`, `P-600`, `C-206`, `S-240`

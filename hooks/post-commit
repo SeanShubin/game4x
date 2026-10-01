@@ -88,6 +88,22 @@ fi
 # **Committing it would revert the file the commit just updated**, which is what the old message
 # told a reader to consider doing.
 #
+# # And it is not uniform, measured in one commit on 2026-10-01
+#
+# **`b454d13b` was a pathspec commit naming five files. `pending.md` landed in it and
+# `decide/attention.md` did not**, and the hook staged both. So *what pre-commit staged did land*
+# is true of one and false of the other in the same commit, and the message below says it
+# unconditionally.
+#
+# **Measured: those two files, that commit. I think the reason** is that the temporary index a
+# pathspec commit builds is made from the real index as the command starts, so a file already
+# modified before the hook ran is in it and a file the hook alone touched is not - inference, and
+# nothing here rests on it.
+#
+# **What to do is the same either way**: unstage, then regenerate. On that commit, unstaging
+# `attention.md` and re-running the generator produced a file identical to `HEAD` - so the
+# regeneration was recoverable in one command and nothing was lost by not committing it.
+#
 # **This is why the `pending.md` branch above resets rather than reports**, and that branch was
 # right for a reason nobody had written down. The right action is the same for every generated
 # file: unstage it. Measured: the commit landed the regeneration; **I think the reason** git
@@ -97,12 +113,13 @@ stranded=$(git diff --cached --name-only)
 if [ -n "$stranded" ]; then
     echo "post-commit: these are staged after a pathspec commit:" >&2
     echo "$stranded" | sed 's/^/  /' >&2
-    echo "post-commit: what pre-commit staged DID land in that commit. What is in the index now" >&2
-    echo "post-commit: is the state from before the hook ran, so against the new HEAD it reads" >&2
-    echo "post-commit: as a change that undoes the regeneration - measured 2026-09-30, see the" >&2
-    echo "post-commit: comment above this check." >&2
-    echo "post-commit: Unstage them - 'git reset -- <paths>'. Do not commit them, and do not" >&2
-    echo "post-commit: leave them: the next commit in this tree takes them, whoever runs it." >&2
+    echo "post-commit: what pre-commit staged MAY have landed in that commit - measured both ways" >&2
+    echo "post-commit: in one commit, b454d13b. What is in the index is the state from before the" >&2
+    echo "post-commit: hook ran, so against the new HEAD it may read as a change that undoes the" >&2
+    echo "post-commit: regeneration. See the comment above this check." >&2
+    echo "post-commit: Unstage them and regenerate - 'git reset -- <paths>', then re-run what" >&2
+    echo "post-commit: writes them. Do not commit them blind, and do not leave them: the next" >&2
+    echo "post-commit: commit in this tree takes them, whoever runs it." >&2
 fi
 
 # Say when a commit spanned two columns after all, which `pre-commit` cannot catch.

@@ -26,7 +26,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-240** - `40598c9` S-240: he can review again, and the suite drives the startup now · still open in `docs/notes/proposals.md`
-- **P-606** - `cf3737b` P-606: the order this specification already gives them names two orders · still open in `decide/proposals.md`
+- **P-606** - `b454d13` P-606 lands in the comparison, and my writer would have cleared every verdict · still open in `decide/proposals.md`
 - **C-204** - `e55305b` S-239: both of C-204 questions are answered by what landed, neither is his · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
@@ -60,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (50)
+### To spec (51)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -70,6 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-209** - `C-195`'s *the rewrite does land* is true of one file and false of another in the same commit · `crates/outbox.md`
 - **C-208** - `P-606` lands in the comparison, and the writer this lane built would have cleared every verdict · `crates/outbox.md`
 - **C-207** - `S-240` is fixed and the suite drives the startup now, which is the thirteenth place's real lesson · `crates/outbox.md`
 - **C-206** - `P-605`'s writer is built in the schema's order, and the two halves of the rule now meet · `crates/outbox.md`

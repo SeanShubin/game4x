@@ -257,9 +257,14 @@ fn post_commit_reports_what_a_pathspec_commit_left_staged() {
     // is left holding the state from before the hook ran - so against the new `HEAD` it reads
     // as a change that undoes the regeneration. **Committing it reverts what just landed**,
     // which is what the message used to invite.
+    // **`MAY have landed`, not `DID`** - `C-209`. `b454d13b` was a pathspec commit where
+    // `pending.md` landed and `decide/attention.md` did not, both staged by the hook, so the
+    // unconditional claim was false of one of two files in the same commit. **The assertion
+    // pinned the stronger wording and this lane had to come back for it**, which is a check
+    // holding a sentence rather than the property under it.
     assert!(
-        text.contains("DID land in that commit"),
-        "`hooks/post-commit` no longer says the hook's work reached the commit, which is the          half a reader gets wrong - see `C-195`"
+        text.contains("MAY have landed in that commit"),
+        "`hooks/post-commit` no longer says the hook's work may have reached the commit, which          is the half a reader gets wrong - `C-195` and `C-209`"
     );
     assert!(
         !text.contains("Commit them or unstage them"),
