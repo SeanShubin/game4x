@@ -13,7 +13,7 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
 
-**to** sean · **status** open · **raised** 2026-09-30 · **asks** a decision · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules · **source** `C-191`, against the rule you promoted the same day
+**to** sean · **status** open · **raised** 2026-09-30 · **deferred** 2026-09-30, by him: *I will come back to it after I am happy with the first release* - so it waits on the first release rather than on him reading it, and no lane is blocked: nothing is deleted, `S-226` stays held · **asks** a decision · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules · **source** `C-191`, against the rule you promoted the same day
 
 **Rule 18 says a prototype replicates rather than links, and *it is almost always a smaller and
 modified version*.** The code lane measured what replicating would actually cost, and the second half
