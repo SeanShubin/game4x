@@ -8,6 +8,36 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-30 - upgrade early, and the reason is that the tests do not know what the game is built on
+
+**Sean**, choosing among three answers to `C-189`: *Option 3 is what I want to go with, perhaps even
+more aggressively. I prefer to upgrade to latest sooner rather than later, especially since the tests
+I review not only don't know about versions, they don't even know what technology the app is built
+on.*
+
+**The reason is measurable and was measured.** Over all 57 files in `reviewed/`, with word
+boundaries: **zero rows and zero comment lines** name `rust`, `cargo`, `wasm`, `bevy`, `crate`,
+`binary` or `impl`. A first pass said eight and every one was the word *structure* matching `struct`
+as a substring - a plausible number about the wrong population, in the check of his own sentence.
+
+**So an upgrade cannot invalidate a reviewed test.** It can only break the code, which the gate
+catches - and did, on `e25c0dca`, where CI's newer clippy found a redundant borrow the gate's older
+one does not know about.
+
+**What he chose, and what it rules out.** Not a pin: pinning CI to this machine's `1.96.1` would
+freeze the pipeline three months behind and leave it there, because bumping needs a local toolchain
+to test against and there is no `rustup` here. **Keeping the machine current makes the gate
+predictive without a pin at all**, because `@stable` and a current local toolchain are the same
+thing.
+
+**The gap it leaves is a trigger.** Nothing says a new stable exists; today the notification was CI
+going red on a lint. Under *upgrade early* that red means *your machine is behind*, which is
+actionable - but it arrives late and only when a lint happens to fire.
+
+Not yet a proposal: what lands in `docs/process.md` is the policy and its reason, and the trigger is
+a mechanic for the lane that owns the pipeline.
+
+
 ## 2026-09-30 - one file for everything awaiting his review
 
 **Sean**, asked whether everything he reviews would be discoverable from public GitHub after a push:
