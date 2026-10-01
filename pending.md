@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-598** - A regression case takes the test format: the whole mutable world in, one command, the whole mutable world out · `decide/proposals.md`
 - **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
