@@ -34,6 +34,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
+- **Q-104** - `061c022` Q-105 acted and Q-104 half acted, with the check held for a column not mine · still open in `lenses/quality/outbox.md`
+- **Q-105** - `061c022` Q-105 acted and Q-104 half acted, with the check held for a column not mine · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
