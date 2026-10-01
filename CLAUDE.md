@@ -204,7 +204,7 @@ Four things the perspectives make necessary, all of which have teeth:
   changes - so a file you stage is committed by whoever commits next, under a message about
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
-    it: the window runs from your `git add` to the moment git builds the commit. **What bounds what
+  it: the window runs from your `git add` to the moment git builds the commit. **What bounds what
   you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
   working tree and leaves the rest of the index alone. **The rule had no carrier until this
   sentence**, which is `tools/anchor` again: a hazard described, a remedy not named, and four
