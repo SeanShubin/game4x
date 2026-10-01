@@ -45,7 +45,7 @@ is pasted rather than composed. **Deleting it is the approval**, and it is yours
 
 ## What is in this file
 
-Outboxes read: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposals.md`, `decide/questions.md`, `crates/outbox.md`, `releases/README.md`, `releases/first-release.md`, `releases/rules-become-data.md`, `lenses/quality/outbox.md`, `lenses/research/outbox.md`
+Outboxes read: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposals.md`, `decide/questions.md`, `crates/outbox.md`, `releases/README.md`, `releases/first-release.md`, `releases/marking-state.md`, `releases/rules-become-data.md`, `lenses/quality/outbox.md`, `lenses/research/outbox.md`
 
 Five kinds of thing can wait on you, and four of them are above. **If a thing waits on you
 and is not here, that is a defect in `tools/outbox` rather than something to remember** -
