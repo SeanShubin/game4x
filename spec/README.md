@@ -54,10 +54,20 @@ Add a file when a topic firms up. Add its row here first.
    rendering is generated from `reviewed/` and never from `spec/tests/`, so that what the engine runs
    is derived from what has been read rather than compared with it.
 
-   **A test is written in `spec/tests/`, and a copy of it in `reviewed/` is the record that I have
-   read it.** The review application makes that copy and removes it, acting as me; nothing else
-   puts a file there. **So the two directories hold the same tests only while I have read every
-   one**, and a test nobody has read is in the first and not the second - which is what makes
+   **A test is written in `spec/tests/`, and `reviewed/` holds what I thought of it.** A record
+   names its verdict and carries the behaviour that verdict is about - the rows, canonical, without
+   the prose. **No record means I have not looked**; a record saying `approved` means the code is
+   bound by it; a record saying `denied` means it is not, and that I owe the specification a
+   statement of what I want instead.
+
+   **The review application writes a record and removes one, acting as me; nothing else puts a file
+   there.** A denied test stays in `spec/tests/` - the verdict is a fact about my response, not
+   about where the test lives.
+
+   **What the engine runs is what the verdicts approve.** The foundation form is generated from the
+   approved records, so a test I have not read constrains nothing and a test I have denied
+   constrains nothing either. **Presence used to mean both *I read this* and *this binds*, and
+   those are now two different facts.**
 
    **There are two sets of unit tests and they state different kinds of thing.**
    [`spec/tests/rule/`](tests/rule/) states what the game does - rows in, one command, rows out.
@@ -69,7 +79,6 @@ Add a file when a topic firms up. Add its row here first.
 
    **What has my attention is a property of the interface and names at most one item.** It is not a
    flag on an item, because two items could then hold it.
-   generating from `reviewed/` mean something.
 
    **My approval is about what a test says, not where it is or how it is written.** The behaviour is
    every `{...}` row, including a `{load}`, and nothing else - a comment explains and does not decide,

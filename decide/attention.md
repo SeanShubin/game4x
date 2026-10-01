@@ -8,9 +8,7 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Say *promote P-n*, or say what to change.
-
-- **P-605** - A record holds a verdict and the behaviour it is about, and presence stops meaning two things · `decide/proposals.md`
+Nothing.
 
 ## Answer a question
 

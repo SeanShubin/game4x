@@ -11268,6 +11268,7 @@ work the release exists to order.
 | P-602, A squad groups units, and two global limits replace the berth                                                         | `spec/units.md` -> a new section after *What a unit is*                                                                                                                                                  | 2026-10-01 |
 | P-603, The application is one function over normalized state, and the interface is not an exception                          | `spec/invariants.md` -> The game is one function                                                                                                                                                         | 2026-10-01 |
 | P-604, Two runs of the one function, and a command is the only crossing                                                      | `spec/invariants.md` -> The game is one function                                                                                                                                                         | 2026-10-01 |
+| P-605, A record holds a verdict and the behaviour it is about, and presence stops meaning two things                         | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 
