@@ -12,10 +12,16 @@ path = "src/main.rs"
 # Bevy's default feature set includes audio, which nothing here uses and whose wasm
 # backend is a known source of startup panics on a static host. See the sibling
 # boardgame repository, where dropping it fixed exactly that.
-# `png` is here for the screenshot path in `inspect.rs`: `save_to_disk` encodes by
-# extension, and without it a `--shot` would fail at run time rather than at build time.
+# `png` is here for the screenshot path, which is `game-inspect` since `8628c437`:
+# `save_to_disk` encodes by extension, and without it a `--shot` would fail at run time
+# rather than at build time. **The feature belongs to the binary rather than to the crate
+# that uses it**, which is why it stayed here when the code left - `Q-104`.
 bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui", "png"] }
-game-console.workspace = true
+# **`game-console` is not declared here and the layering is unchanged** - `Q-104`.
+# `8628c437` moved `inspect.rs` and `options.rs` out to `crates/game-inspect`, and
+# `game_console::Outcome` at the old `inspect.rs:149` was this crate's only use of it.
+# The root reaches the game through `game_front::shell`, which is the one door, so a
+# direct edge here would say this crate talks to the console and it does not.
 game-front.workspace = true
 game-globe.workspace = true
 game-inspect.workspace = true

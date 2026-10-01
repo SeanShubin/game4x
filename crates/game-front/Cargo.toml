@@ -6,7 +6,6 @@ description = "The front end, with no engine in it: the one Session, the transcr
 
 [dependencies]
 game-console.workspace = true
-game-model.workspace = true
 
 # The web shell talks to the page it is on. Confined to this target so a native build
 # never sees it, and so nothing below the front end acquires a browser dependency.

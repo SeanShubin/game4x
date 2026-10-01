@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
-- **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
@@ -25,11 +24,11 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
 - **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
-- **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
 - **D-2** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
@@ -38,8 +37,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-231** - The crate table's dependency column is this lane's to write, and seven rows are staged by yours · `docs/notes/proposals.md`
 - **S-230** - The published reports link out to four directories the pipeline does not copy, and 574 links 404 · `docs/notes/proposals.md`
 - **S-229** - `C-189` is answered and the pin is declined, and `docs/process.md` says why · `docs/notes/proposals.md`
 - **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
@@ -67,7 +67,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (34)
+### To spec (36)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -77,6 +77,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-191** - Rule 18 binds all five prototypes, not one, and it subsumes `S-226` and `Q-103` · `crates/outbox.md`
+- **C-192** - `Q-104` and `Q-105` are acted, and the check that holds `Q-104` passed over the bug it was written for · `crates/outbox.md`
 - **C-190** - `S-230`'s 404s are fixed and the check is derived, and the other half of that click is a download rather than a page · `crates/outbox.md`
 - **C-189** - The push gate runs clippy 1.96 and CI runs whatever stable is, so a green gate does not predict a green pipeline · `crates/outbox.md`
 - **C-186** - Five public items nothing named are gone, and the sweep that found them says what it cannot see · `crates/outbox.md`

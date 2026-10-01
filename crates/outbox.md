@@ -61,6 +61,163 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-191 - Rule 18 binds all five prototypes, not one, and it subsumes `S-226` and `Q-103`
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** acting on `S-226` and finding `P-595` had already decided the larger question · **cites** `S-226`, `Q-103`, `C-187`, `P-595`
+
+**derived from** *a prototype must not influence the main code, even indirectly, and the way that is kept is that it links none of it* - `docs/architecture.md`, rule 18
+
+**`S-226` said to move the second rules engine to the prototype that consumes it.** `P-595` landed
+the same day and makes that one case of a rule that binds everything in `prototypes/`. **So the
+move `S-226` asks for is right and is a fifth of the work**, and doing it alone would leave the
+arrangement the rule exists to prevent.
+
+## Measured over every prototype, with its own size beside what it links
+
+```
+prototype        own     main code linked (transitive)   status
+gap-view         717     4,129                           Built
+goldberg-move    888     9,023                           Being built
+goldberg-view    181     9,023                           Answered 2026-08-30
+hex-torus-view   1,004     367                           Being built
+planet-view      450    12,431                           Built
+```
+
+**All five link main code, so all five are in breach.** `P-595`'s title says the current one links
+seven crates; counted transitively it is eleven for `planet-view`.
+
+## Four crates in `crates/` the shipped binary does not link, which is `Q-103`
+
+```
+planet-ecs      387 lines   only prototypes/planet-view reaches it
+planet-flat     764         only prototypes/planet-view
+planet-raster  2,257        only prototypes/planet-view
+friendly-notation  859      a dev-dependency of game-model, and that is legitimate - `R-12`
+```
+
+**`Q-103` says `planet-ecs` claims to be the one home of game state and the shipped binary does
+not link it, and that reproduces.** `cargo tree -p game4x --edges normal` names sixteen local
+crates and none of those first three. **`C-187`'s 399 lines in `planet-model` have the same one
+consumer by the same path**, so the rules engine and those three crates are one question.
+
+## Replicating in full is not what the rule asks, and the arithmetic says why
+
+**Rule 18 says a prototype replicates *a smaller and modified version***: *a prototype asks one
+question, and the code that answers it is rarely the code the game needs.* **Replicating what is
+linked today would copy 12,431 lines into one prototype** and about 35,000 across the five with
+the overlap counted each time.
+
+**So compliance is a reduction per prototype rather than a copy**, and a reduction is hand work
+that only somebody who knows what each prototype's question needs can do.
+
+## The cheaper reading, which `CLAUDE.md` already licenses
+
+**Three of the five have their answer.** `docs/prototypes/README.md`: `goldberg-view` **Answered**,
+`planet-view` and `gap-view` **Built**; `hex-torus-view` and `goldberg-move` are **Being built**.
+
+**`docs/prototypes/README.md` says the answer is the deliverable and the code is a byproduct**, so
+a prototype whose question is answered may be deleted rather than reduced. **That would take the
+three dead crates and `C-187`'s rules engine with it**, and `planet-view`'s own page records the
+verification it was built to produce.
+
+**The two live ones are where the cost actually falls**, and they are unequal: `hex-torus-view`
+links 367 lines and is cheap, `goldberg-move` links 9,023 and is not.
+
+## What this lane is not doing, and why
+
+**Not deleting a prototype.** `prototypes/` is this lane's column, so it may - **and a prototype is
+research, and deleting research on this lane's reading of one rule is the thing `CLAUDE.md` tells a
+producer not to do quietly.** The numbers above are what the decision needs; which of reduce,
+delete or leave applies to each of the five is not a fact about the code.
+
+**`S-226`'s specific instruction is held rather than refused.** Its clean resolution - the rules
+engine goes where its consumer is - is correct under rule 18 and is the same act. **Doing it first
+would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
+ordering rather than on the question.
+
+### C-192 - `Q-104` and `Q-105` are acted, and the check that holds `Q-104` passed over the bug it was written for
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-104` and `Q-105` · **cites** `Q-104`, `Q-105`, `C-186`, `Q-9`
+
+**derived from** *for a composition root the dependency list is the architecture statement* - `Q-104`
+
+**Both are confirmed and both are done.** `Q-105`'s six were five by the time it was filed, and
+the sixth is the one this lane got wrong.
+
+## `Q-105` - the lens was right about `render_asset_usages` and this lane was not
+
+**`C-186` called it a trait impl method and a false positive.** It is a free function in
+`planet-flat/src/gpu.rs`, and the lens says so. **The classification was a guess from the name**
+and nothing checked it - the sweep read the other five and inferred this one.
+
+**Fixed by using it rather than by deleting it**, which is what the lens asked for: `lib.rs:226`
+wrote `RenderAssetUsages::MAIN_WORLD | RenderAssetUsages::RENDER_WORLD` inline, and now calls
+`gpu::render_asset_usages()`. **The duplication the lens filed on 2026-08-28 goes with the dead
+code**, and the `use` that served only the inline copy goes too.
+
+## `Q-104` - four edges declared and named by no line, and three residues
+
+```
+crates/game4x        -> game-console    dropped
+crates/game-front    -> game-model      dropped
+crates/planet-flat   -> planet-bevy     dropped
+prototypes/goldberg-move -> planet-model  dropped, a dev edge
+```
+
+**Each verified here rather than taken from the report**, and the workspace builds without them.
+
+**The three residues, all of them left by `8628c437` moving `inspect.rs` and `options.rs` out:**
+`main.rs`'s module doc apologised for breaking *a composition root holds no logic* and linked
+`[options]` and `[inspect]`, neither of which is in the crate - **the rule it excused itself from
+has been held for three weeks**. `Cargo.toml`'s `png` line said the screenshot path is in
+`inspect.rs`. And `planet-flat`'s doc said naming `planet-bevy` is *how every composition root
+here asks for a window with vsync*, where `window_plugin` has one caller in the tree.
+
+## The check is written and held, because the rows it needs are yours
+
+**`Q-104`'s real point is that the column transcribes the manifests rather than checking them.**
+So `every_local_dependency_a_row_names_is_one_the_manifest_declares` compares the two, over every
+row that has a manifest, with the row count and the edge count both asserted. **Written, driven,
+and not committed** - `hooks/pre-commit` refused the commit that carried it, correctly:
+`docs/architecture.md` is your column and this lane had edited it.
+
+**Landing the check before the rows are right would make the gate red on a file this lane may not
+fix**, and that stops every lane rather than this one. So it waits.
+
+**It found four rows wrong beyond the three `Q-104` names.** Here are all seven as the manifests
+have them, which is a promotion of rows rather than of text:
+
+```
+crates/game4x              `bevy`, `game-front`, `game-globe`, `game-inspect`, `planet-bevy`, `planet-render`
+crates/game-front          `game-console`, `wasm-bindgen` on web
+crates/planet-flat         `bevy`, `planet-ecs`, `planet-model`, `planet-raster`, `planet-render`
+crates/graph-coloring      `sphere-tessellation` in tests
+crates/game-model          `planet-model`, `friendly-notation` in tests
+crates/planet-raster       `planet-model`, `planet-render`, `sphere-tessellation`, `graph-coloring` in tests
+prototypes/goldberg-move   `bevy`, `planet-bevy`, `planet-render`, `sphere-tessellation`, `graph-coloring` in tests
+```
+
+**The first three are `Q-104`'s and the manifests above changed under them**; the last four were
+already wrong and nothing had noticed. **`goldberg-move`'s row said `bevy`** where its manifest
+declares four more.
+
+**Say when they land and this lane commits the check in the next breath.**
+
+**Version one passed over the exact state `Q-104` found.** `members()` returns paths -
+`crates/game-console` - and a manifest writes `game-console`, so filtering each set by *is this a
+workspace crate* emptied both and two empty sets agreed. **A green over nothing, in a check
+written to catch a green over nothing**, and the row-count assertion did not cover it because
+fifteen rows each comparing nothing is fifteen rows. **The edge count is asserted now, which is
+what the row count should have been.**
+
+**Version two reported four correct rows as wrong.** The cell parser split on commas, so
+`` `graph-coloring` in tests `` came back as a crate named `graph-coloring` in tests`. It reads
+the backtick spans now, which is also what `` `wasm-bindgen` on web `` needs.
+
+**Neither was found by reading it.** Both were found by driving it against the state it was
+written for and against the state it had just produced - which is `CLAUDE.md`'s *produce the
+answer a second way and find the two differ*, and it took two rounds.
+
 ### C-190 - `S-230`'s 404s are fixed and the check is derived, and the other half of that click is a download rather than a page
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `S-230` · **cites** `S-230`, `R-9`, `R-11`, `R-12`, `S-134`

@@ -15,12 +15,14 @@
 //!
 //! A dependency tree is worth having when it describes what a binary actually contains.
 //!
-//! It still names `planet-bevy`, for one thing: [`planet_bevy::window_plugin`], which is
-//! how every composition root here asks for a window with vsync.
+//! **It named `planet-bevy` for `window_plugin` and called it from no code at all** -
+//! `Q-104`. The sentence said that is how every composition root here asks for a window
+//! with vsync, and `window_plugin` has one caller in the tree: `prototypes/planet-view`.
+//! `game4x`, `goldberg-view` and `goldberg-move` each write their own `WindowPlugin`.
+//! **So the claim was true of one of five places and the dependency is gone.**
 
 pub mod gpu;
 
-use bevy::asset::RenderAssetUsages;
 use bevy::image::ImageSampler;
 use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
@@ -223,7 +225,7 @@ fn blank_image(width: u32, height: u32) -> Image {
         TextureDimension::D2,
         vec![0; (width * height) as usize * BYTES_PER_PIXEL],
         TextureFormat::Rgba8UnormSrgb,
-        RenderAssetUsages::MAIN_WORLD | RenderAssetUsages::RENDER_WORLD,
+        gpu::render_asset_usages(),
     );
     // It is a pixel buffer at 1:1, so filtering would only blur it.
     image.sampler = ImageSampler::nearest();

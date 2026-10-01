@@ -2572,7 +2572,6 @@ name = "game-front"
 version = "0.1.0"
 dependencies = [
  "game-console",
- "game-model",
  "wasm-bindgen",
 ]
 
@@ -2609,7 +2608,6 @@ name = "game4x"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "game-console",
  "game-front",
  "game-globe",
  "game-inspect",
@@ -2779,7 +2777,6 @@ dependencies = [
  "bevy",
  "graph-coloring",
  "planet-bevy",
- "planet-model",
  "planet-render",
  "sphere-tessellation",
 ]
@@ -4071,7 +4068,6 @@ name = "planet-flat"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "planet-bevy",
  "planet-ecs",
  "planet-model",
  "planet-raster",

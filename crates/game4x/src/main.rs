@@ -23,20 +23,17 @@
 //! It is the only place that knows both that Bevy exists and that the game exists at the
 //! same time. See `docs/architecture.md`.
 //!
-//! # Two things live here, and only one of them is wiring
+//! # The exception this crate used to carry is gone
 //!
 //! `docs/architecture.md` says a composition root holds no logic, and that if it is large
-//! enough to be worth testing then something has leaked into it. [`main`] meets that. The
-//! crate as a whole does not, and the exception is deliberate rather than drift:
+//! enough to be worth testing then something has leaked into it. **This crate held two
+//! exceptions to that and holds neither now**: `8628c437` moved `options.rs` and
+//! `inspect.rs` out to `crates/game-inspect`, which is where the remote control is tested.
+//! What is left is `main` and the window it describes.
 //!
-//! - [`options`] reads the command line. A root has to be told what to build, and reading
-//!   the words that say so has to happen before anything is built. `prototypes/planet-view`
-//!   parses its options in its root for the same reason.
-//! - [`inspect`] is the remote control: put the camera at stated angles, choose a drawing,
-//!   run some commands, wait for the world to settle, write a PNG and a dump, quit. It is
-//!   a Bevy plugin, and it is tested, and it cannot live anywhere else - **it has to drive
-//!   the shipped binary.** A harness that ran a special path would be evidence about the
-//!   harness.
+//! **The apology outlived the thing it apologised for by three weeks** - `Q-104`, which
+//! found it by asking which declared dependencies no line of code names. The paragraph
+//! still linked `[options]` and `[inspect]`, neither of which is in this crate.
 //!
 //! So the rule holds where it matters - nothing here decides anything about the game - and
 //! is broken in the one place where obeying it would make the picture untestable. Half of

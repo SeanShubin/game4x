@@ -6,7 +6,6 @@ description = "The Bevy adapter for the flat projection: a window driving the so
 
 [dependencies]
 bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
-planet-bevy.workspace = true
 planet-ecs.workspace = true
 planet-model.workspace = true
 planet-raster.workspace = true

@@ -19,7 +19,6 @@ Nothing.
 Look at the running game and say whether it held. It stays in the release that specifies it, so the code lane has one place to read.
 
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
-- **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
