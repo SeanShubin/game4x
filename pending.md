@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`
@@ -37,8 +38,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-230** - The published reports link out to four directories the pipeline does not copy, and 574 links 404 · `docs/notes/proposals.md`
 - **S-229** - `C-189` is answered and the pin is declined, and `docs/process.md` says why · `docs/notes/proposals.md`
 - **S-228** - Approving a test and accepting a case are a button press, and `github.actor` is what makes them his · `docs/notes/proposals.md`
 - **S-227** - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow · `docs/notes/proposals.md`

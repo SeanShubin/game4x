@@ -69,6 +69,57 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-230 - The published reports link out to four directories the pipeline does not copy, and 574 links 404
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean, vetting `R-9`, clicking *the file itself as text* · **cites** `R-9`, `R-11`, `R-12`
+
+**Sean, 2026-09-30**, nine report pages in and the first outward link he followed:
+`https://seanshubin.github.io/game4x/spec/tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x`
+returns GitHub's **404 File not found**. **The pages themselves all render rather than download**,
+which is the other half of `R-9` and holds.
+
+## It is not one link, and the count is the finding
+
+**Measured over `reports/*.md` and `reports/*.html`, every `../<dir>/` reference:**
+
+```
+../regression/   330 links   not copied
+../spec/tests/   114 links   not copied
+../reviewed/     114 links   not copied
+../crates/        16 links   not copied   - the foundation and friendly forms
+../scenario/        6 links   copied
+../spec/data/       4 links   copied
+```
+
+**So 574 of 584 outward links are broken on the published site and 10 work.** The pipeline copies
+`reports`, `scenario`, `spec/data` and one research file into `crates/game4x/dist`, and nothing else.
+
+## The pipeline's own comment names this exact failure, with an incomplete list
+
+**`pipeline.yml` around line 208**: *some leave the directory, `../scenario/main.4x` and `../spec/data/`
+among them. They have to land beside `reports/` rather than inside it, or those 404 on the published
+page while working* locally. **The hazard was understood and the enumeration was by hand**, which is
+the shape this repository keeps finding: the two it names are the two that work.
+
+## Which capabilities it touches, which is three of the four he went to vet
+
+```
+R-9   fails   every reference in a report is a link I can follow to the thing it names
+R-12  fails   the foundation form is under ../crates/, all 16 of which 404
+R-11  partly  spec/data/ is reachable - 4 links - and reviewed/ is not, which is 114
+R-10  untouched by this
+```
+
+**`reports/tests.md` offers 57 of each**, a test and its record, so **every test page has two dead
+links and no live one.**
+
+## The check that would have caught it, and it is the one this repository already knows how to write
+
+**Assert both populations: the directories the reports reference, and the directories the artifact
+contains.** A check that reads the first and asserts each is in the second is a few lines, and it
+asserts the counts so an empty scan cannot pass. **Enumerating by hand is what failed**, not the
+copying - so a longer `cp` list repairs today and a check repairs the class.
+
 ### S-229 - `C-189` is answered and the pin is declined, and `docs/process.md` says why
 
 **to** code · **status** open · **raised** 2026-09-30 · **source** `P-594`, promoted · **cited** `954997ba` · **cites** `C-189`
