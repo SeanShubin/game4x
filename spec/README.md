@@ -60,6 +60,26 @@ Add a file when a topic firms up. Add its row here first.
    one**, and a test nobody has read is in the first and not the second - which is what makes
    generating from `reviewed/` mean something.
 
+   **My approval is about what a test says, not where it is or how it is written.** The behaviour is
+   every `{...}` row, including a `{load}`, and nothing else - a comment explains and does not decide,
+   and `{test name:}` identifies rather than states. **So two tests are the same test when their rows
+   say the same thing**, however the text differs: entries coalesced to one per description, traits and
+   entries in the order this specification already gives them, whitespace not significant because the
+   braces say where a row begins and ends.
+
+   **An approval survives a change that does not change the behaviour** - a reworded comment, a
+   reordered state, a repadded row. **It is cleared by any change that does**, including a `{load}`
+   naming a different file. A cleared approval costs me one reading; a stale one costs me nothing I
+   would notice, which is why they are not treated alike.
+
+   **An approval is never inferred for a test that has not been given one.** Matching a test to an
+   approval it was not given - because it was only renamed, or because it looks like one that was
+   approved - is the one failure that is silent, and no convenience is worth it.
+
+   **A change to what a test loads, or to the rules it runs against, clears nothing.** If it changed
+   what a test means, the test is red and the suite names which ones; if it did not, nothing happened.
+   **Clearing is for changes nothing else can see**, and the suite can see all of these.
+
    **A test states one part, and a part is small enough to hold in my head.** The point of the
    directory is that every piece of the game is checked independently, so a test that needs a
    narrative to follow has stopped being one - **and an arc of play belongs to the scenario instead.**

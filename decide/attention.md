@@ -12,7 +12,6 @@ Say *promote P-n*, or say what to change.
 
 - **P-602** - A squad groups units, and two global limits replace the berth · `decide/proposals.md`
 - **P-601** - Two sets of unit tests, and only one of them decides what the game does · `decide/proposals.md`
-- **P-600** - What an approval is about, when it survives, and when it is cleared · `decide/proposals.md`
 
 ## Answer a question
 

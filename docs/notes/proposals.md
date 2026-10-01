@@ -11221,6 +11221,7 @@ work the release exists to order.
 | P-595, A prototype replicates what it needs and links none of it, and the current one links seven crates                     | `docs/architecture.md` -> Rules                                                                                                                                                                          | 2026-10-01 |
 | P-594, Upgrade early, and no pin, because a test that names no technology cannot be broken by one                            | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
 | P-598, A regression case takes the test format: the whole mutable world in, one command, the whole mutable world out         | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
+| P-600, What an approval is about, when it survives, and when it is cleared                                                   | `spec/README.md` -> rule 3, after *generating from `reviewed/` mean something*                                                                                                                           | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 
