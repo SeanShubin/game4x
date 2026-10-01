@@ -97,10 +97,35 @@ present state and blind to the drift it exists to catch** - which is the shape `
 `game_front::shell::terminal::serve` anywhere in it - including in a trailing comment - exempts
 every other reach on that line.
 
-**Whether.** **Worth fixing now, and it costs nothing today.** Dropping the two trailing colons
-closes all three forms, and the only lines in the tree that `game_front::shell` matches without
-`game_front::shell::` are a `Cargo.toml` comment and a line of `crates/outbox.md` - **neither of
-which this check reads**, because it walks `every_rust_file`. Measured, not assumed.
+**Whether.** **Worth fixing now.** ~~Dropping the two trailing colons closes all three forms~~ -
+**it closes two**, and the code lane caught it.
+
+**Corrected 2026-09-30, and the shape matters more than the correction.**
+`use game_front::{shell, library};` contains neither `game_front::shell::` nor `game_front::shell`,
+because the crate and the module are not adjacent. **This lens drove the predicate and then asserted
+the effect of the fix without driving it** - a before-and-after written while editing, which is a
+prediction. The better instrument was pointed at the half already understood.
+
+**Fixed at `5d86f8d7`, and one form still escapes.** `names_the_shell` strips whitespace, removes
+`ALLOWED` before judging the rest, and splits a braced group, so all five listed forms flag. But
+`split_once('}')` takes the first closing brace rather than the matching one:
+
+```
+  now  line
+ True  use game_front::{shell::{generation, resets}};
+False  use game_front::{library::{browse, page}, shell};
+```
+
+A nested group *before* `shell` truncates the outer group before `shell` is examined. Realistic:
+`game-globe` already writes `use game_front::game_state::Watches;`, and `rustfmt` makes nested
+groups.
+
+**The third round on one predicate is the finding, and a fourth patch is the wrong answer.** Every
+import form must contain both `game_front::` and `shell`, whatever the grouping - so requiring both
+tokens after `ALLOWED` is removed needs no brace matching, and the closed set it must admit is four
+names, measured: `game_state::Watches`, `game_state::Drives`, `game_state::TheOneConsole`,
+`shell::terminal::serve`. Offered to the code lane rather than filed.
+
 
 ---
 

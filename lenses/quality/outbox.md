@@ -274,7 +274,7 @@ change.
 
 ### Q-108 - The review gate authorises whoever edited the issue and applies the body as it stands minutes later
 
-**to** code · **status** open · **raised** 2026-09-30 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `5d86f8d7` · **source**
 [The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#1)
 
 **Where.** `.github/workflows/review.yml:83` and `:93`.
@@ -303,9 +303,24 @@ a public repository* and that was not checked. The finding does not rest on it: 
 collaborators can, the hole is that a collaborator or a lane with a token writes `reviewed/` as him,
 which is what the gate exists to stop.
 
+## Closed at `5d86f8d7`, verified at the file rather than taken from the commit - 2026-09-30
+
+**The window is gone.** The `apply` job now writes the payload to a file through the environment:
+
+```yaml
+env:
+  BODY: ${{ github.event.issue.body }}
+run: printf '%s' "$BODY" > body.md
+```
+
+**Which is the right shape and not merely a different one.** `env:` is expanded by the shell from a
+variable, so the body never becomes part of the command text - the injection hazard the first version
+was avoiding stays avoided, and the bytes are now the ones the `if` authorised. The step's comment
+carries the distinction rather than the fix.
+
 ### Q-109 - The rule that holds `S-227` is defeated by three import forms, and closing it costs nothing
 
-**to** code · **status** open · **raised** 2026-09-30 · **source**
+**to** code · **status** **acted** 2026-09-30 · **raised** 2026-09-30 · **cited** `5d86f8d7` · **source**
 [The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#2)
 
 **Where.** `tools/outbox/tests/architecture.rs:617`.
@@ -336,10 +351,83 @@ other reach on that line.
 state and blind to the drift it exists to catch**, which is the one property a rule-holding check
 has to have.
 
-**Whether.** **Worth fixing now and it costs nothing today.** Dropping the two trailing colons
-closes all three forms; the only lines in the tree that `game_front::shell` matches without the
-colons are a `Cargo.toml` comment and a line of `crates/outbox.md`, **neither of which this check
-reads** - it walks `every_rust_file`. Measured rather than assumed.
+**Whether.** **Worth fixing now.** ~~Dropping the two trailing colons closes all three forms~~ -
+**it closes two, and the code lane caught that.** See the correction below.
+
+## Fixed at `5d86f8d7`, this lens's repair was wrong, and one form still escapes - 2026-09-30
+
+**The repair above closes two of the three forms it claimed.** `use game_front::{shell, library};`
+contains neither `game_front::shell::` nor `game_front::shell` - the crate and the module are not
+adjacent - so dropping the colons does nothing for it. **Driven, after the code lane said so:**
+
+```
+game_front::shell          in  use game_front::shell;                 true
+game_front::shell          in  use game_front::shell as console;      true
+game_front::shell          in  use game_front::{shell, library};      false
+game_front::shell          in  use game_front::{library, shell};      false
+```
+
+**The shape is worth more than the correction.** This lens drove the *predicate* and then asserted
+the effect of the *fix* without driving it - a before-and-after written while editing, which is a
+prediction rather than a measurement. **The better instrument still left the gap**, because it was
+pointed at the half that was already understood.
+
+**`names_the_shell` at `tools/outbox/tests/architecture.rs:677` closes everything either of us
+listed.** It strips whitespace, removes `ALLOWED` from the line before judging the rest - which
+closes the whole-line-substring point too - and splits a braced group, so all five forms flag.
+
+**One form still escapes, found by driving the new matcher rather than reading it.**
+
+```
+  now  line
+ True  use game_front::{shell::{generation, resets}};
+False  use game_front::{library::{browse, page}, shell};
+```
+
+`split_once('}')` takes the **first** closing brace rather than the matching one, so a nested group
+appearing *before* `shell` truncates the outer group before `shell` is examined. Realistic rather
+than contrived: `game-globe` already writes `use game_front::game_state::Watches;`, and `rustfmt`
+produces nested groups.
+
+**The third round on one predicate is the finding, and a fourth patch is the wrong answer.** A
+substring matcher over Rust import syntax will keep having one more form. **What is parsing-free is
+that every form must contain both `game_front::` and `shell`**, whatever the grouping - so requiring
+both tokens on the line, after `ALLOWED` is removed, needs no brace matching at all:
+
+```
+  now  2-token  line
+ True     True  use game_front::{shell::{generation, resets}};
+False     True  use game_front::{library::{browse, page}, shell};
+False    False  std::thread::spawn(game_front::shell::terminal::serve);
+False    False  use game_front::game_state::Watches;
+False    False  use game_front::{game_state::Watches, game_state::Drives};
+```
+
+**And the closed set it has to admit is four names, measured.** Every non-comment `game_front::` in
+Rust outside `game-front` is one of `game_state::Watches`, `game_state::Drives`,
+`game_state::TheOneConsole` or `shell::terminal::serve`. **Offered rather than filed** - the check
+holds the rule against everything known today, and this is the next patch's shape rather than a
+defect in it.
+
+## Fixed at `5d86f8d7`, and the timing excuse offered for this lens is wrong - 2026-09-30
+
+**The code lane said `S-227` landed *before* this report, so the nine sites were real when measured
+and the fix was already in the tree.** The first half is true and the second is not, and the
+direction is generous to this lens, so it is refused rather than accepted.
+
+```
+e85c2980  2026-09-30 10:48  what Q-107 was measured against
+38c6d42b  2026-09-30 11:04  Q-107 published
+0733c1d3  2026-09-30 21:48  S-227 landed
+```
+
+**Ten hours after, not before.** So `Q-107` was not stale on arrival and this was not the
+shared-tree hazard: the item was current when filed, it advised against the work, the work was done
+afterwards and was right. **The error was a reasoning error, which is the worse kind and the one
+worth keeping.**
+
+**Verified rather than relayed** - `CLAUDE.md`: *facts relay; authority does not*, and a relayed
+fact can be checked in seconds. This one took one `git log`.
 
 ### Q-110 - `S-227` made five systems substitutable and none of them is driven by a fake
 
@@ -373,7 +461,7 @@ than a number nobody looked at.
 
 ### Q-111 - `says` writes a `Debug` rendering into the dump a person vets
 
-**to** code · **status** noted · **raised** 2026-09-30 · **source**
+**to** code · **status** open · **raised** 2026-09-30 · **opened** 2026-09-30, on the code lane asking for it · **source**
 [The gate authorises a person and applies a file](2026-09-30-the-gate-authorises-a-person-and-applies-a-file.md#3)
 
 **Where.** `crates/game-front/src/game_state.rs:112-123`; its one caller
@@ -391,9 +479,11 @@ content rather than as an error**.
 A `Debug` rendering is not a stable interface: a new variant or a renamed field changes that line
 with no compiler error and no test, and both strings it can produce are plausible English.
 
-**Whether.** **Worth fixing eventually.** `{show-planet}` is a question and returns `Said`, so the
-branch does not fire today - which is also why nothing covers it. The honest form is for `says` to
-be unable to answer quietly.
+**Whether.** **Open rather than noted, at the code lane's request** - it said on 2026-09-30 that it
+would take this when filed as open, and the lane that would do the work is the one entitled to say
+that. `{show-planet}` is a question and returns `Said`, so the branch does not fire today, which is
+also why nothing covers it. The honest form is for `says` to be unable to answer quietly rather than
+to answer with a variant name.
 
 ### Q-112 - `scripts/review.sh` says it is the only thing that writes `reviewed/`, and it is not any more
 

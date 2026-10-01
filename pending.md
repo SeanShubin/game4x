@@ -39,12 +39,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-108** - The review gate authorises whoever edited the issue and applies the body as it stands minutes later · `lenses/quality/outbox.md`
-- **Q-109** - The rule that holds `S-227` is defeated by three import forms, and closing it costs nothing · `lenses/quality/outbox.md`
+- **Q-111** - `says` writes a `Debug` rendering into the dump a person vets · `lenses/quality/outbox.md`
 
 ### To quality (2)
 
