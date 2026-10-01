@@ -8,9 +8,7 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Say *promote P-n*, or say what to change.
-
-- **P-603** - The application is one function over normalized state, and the interface is not an exception · `decide/proposals.md`
+Nothing.
 
 ## Answer a question
 

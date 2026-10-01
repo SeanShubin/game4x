@@ -127,6 +127,15 @@ specific rule.
   transition in order to the starting state. One that answers differently twice breaks the dump,
   and a state that cannot be written down and read back is not a state.
 
+**This is not special to the game.** All application state can be represented as normalized data,
+and the application is a function from that state and a command to a new state. **The user
+interface is state like any other** - a menu item is a row, what is displayed is a row, what has my
+attention is a row - so an interface test is given rows, one command, then rows, in the same form.
+
+**Which is why the tests look the way they do.** `{given}` is old state as normalized rows,
+`{when}` is a command as a row, `{then}` is new state as normalized rows. **The shape is not a
+convention of the test format; it is the shape of the thing being tested.**
+
 ## The game is data
 
 - Every kind of thing, and every recipe that turns some things into others, is data rather than

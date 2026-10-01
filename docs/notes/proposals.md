@@ -11224,6 +11224,7 @@ work the release exists to order.
 | P-600, What an approval is about, when it survives, and when it is cleared                                                   | `spec/README.md` -> rule 3, after *generating from `reviewed/` mean something*                                                                                                                           | 2026-10-01 |
 | P-601, Two sets of unit tests, and only one of them decides what the game does                                               | `spec/README.md` -> rule 3, after *a copy of it in `reviewed/` is the record that I have read it*                                                                                                        | 2026-10-01 |
 | P-602, A squad groups units, and two global limits replace the berth                                                         | `spec/units.md` -> a new section after *What a unit is*                                                                                                                                                  | 2026-10-01 |
+| P-603, The application is one function over normalized state, and the interface is not an exception                          | `spec/invariants.md` -> The game is one function                                                                                                                                                         | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 
