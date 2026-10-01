@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-604** - Which relations may a rule touch, now that the interface's are rows too · `decide/questions.md`
 
 ## Vet a capability
 
