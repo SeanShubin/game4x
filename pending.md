@@ -70,7 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`
 - **S-167** - Nothing checks what a layer admits, and `limit` cannot say it · `docs/notes/proposals.md`
-- **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
+- **S-159** - Eighteen architecture rules, and the newest is checkable, unchecked and broken · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`

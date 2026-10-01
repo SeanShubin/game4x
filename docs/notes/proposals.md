@@ -3162,16 +3162,16 @@ two systems move; the root goes back to assembling.
 **Nothing is red.** No gate fails on this today, which is the finding: the rule has been written
 down and unheld for as long as it has existed.
 
-### S-159 - Seventeen architecture rules, six of them checkable and unchecked
+### S-159 - Eighteen architecture rules, and the newest is checkable, unchecked and broken
 
 **to** spec · **status** open · **raised** 2026-09-23 · **source** `P-545`, and Sean deciding that `spec/` covers the shape of the artifact
 
-**Re-measured 2026-09-25: still seventeen rules, and no longer six unchecked.** `tools/spec/tests/architecture.rs` checks rule 4 by reading the manifests, so the count in the title is stale by at least one - **and this lane wrote that check without editing this item.**
+**Re-measured 2026-09-30: eighteen rules, because `P-595` landed one.** `tools/spec/tests/architecture.rs` checks rule 4 by reading the manifests, so the count in the title is stale by at least one - **and this lane wrote that check without editing this item.**
 
 **This lane's own work, filed so the gap is in an outbox rather than in a proposal's paragraph.**
 
 `P-545` makes `spec/` cover the artifact's shape. The rules are in `docs/architecture.md`, which
-is this lane's column and reached by review rather than promotion - so **seventeen rules
+is this lane's column and reached by review rather than promotion - so **eighteen rules
 constraining the code currently sit where Claude may reword them without Sean's approval.**
 
 ## The classification, by one question
@@ -3236,7 +3236,7 @@ details of the other concerns.*
 concerns** - zero for `user interface`, `interface state`, `local state`, `player interaction` and
 `interacting with`.**Both fall inside *engine adapter* as the layer table draws it** - and that table's file has not changed since `cdc4fdff` at 10:12:53, ten hours before `local state` existed.
 
-**So a crate can satisfy all seventeen rules and still keep local state beside engine operation.**
+**So a crate can satisfy all eighteen rules and still keep local state beside engine operation.**
 This item's six are checkable and unchecked; **that one is not written down at all**, and it is in
 `docs/notes/spec-backlog.md` where a thing he has said but not promoted belongs.
 
@@ -3250,6 +3250,23 @@ grouped them** and will not guess at the grouping in this item.
 `CLAUDE.md`: a fact already asserted by a test does not belong in prose too, and the spec links
 down to a note for reasoning rather than the reverse. **So the normative sentence moves and the
 explanation stays**, with the diagram and the layer discussion where they are.
+
+## 2026-09-30, and this is the number going stale without anyone editing it
+
+**`P-595` landed as rule 18 and nothing in this item changed**, which is the shape `CLAUDE.md`
+describes: a number an item derives names the rule it came from, and this one derived from the
+length of a list that grew somewhere else. **It was caught by `spec touching docs/architecture.md`
+before promoting**, rather than by anybody re-reading the item.
+
+**Four occurrences, and a `head -4` showed three.** The fourth sits at the end of the item, where
+*a crate can satisfy all of them and still keep local state beside engine operation* - which rule 18
+does not touch, so that claim survives the new count. **The instrument truncated rather than
+erring**, which is this week's class with `head` as the narrower question.
+
+**Rule 18 is checkable, unchecked, and false today** - `cargo tree` answers it in one command, and
+`prototypes/planet-view` links seven crates the game also links. **So it joins the classification as
+a fourth kind**: not merely unchecked but known to be broken, which none of the other seventeen were
+when they were counted.
 
 ### S-158 - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/`
 
