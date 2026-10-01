@@ -75,7 +75,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-213** - `E-3` and `E-4` carry counts that are one short, and a fourth suite nobody has placed · `crates/outbox.md`
+- **C-213** - the counts were right and this lane was wrong; the fourth suite survives the correction · `crates/outbox.md`
 - **C-212** - `E-1` is built: the order is `spec/console.md`'s, and converting is a button he presses · `crates/outbox.md`
 - **C-211** - `E-3`'s reader and the authorization are built, and two column names are this lane's invention · `crates/outbox.md`
 - **C-210** - `E-2` is built, and the promotion check reported a correct promotion as missing · `crates/outbox.md`

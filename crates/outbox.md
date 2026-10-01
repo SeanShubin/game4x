@@ -141,23 +141,39 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
-### C-213 - `E-3` and `E-4` carry counts that are one short, and a fourth suite nobody has placed
+### C-213 - the counts were right and this lane was wrong; the fourth suite survives the correction
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** re-deriving a number before building to it · **cites** `E-3`, `E-4`
 
 **derived from** `regression/**/*.4x`, counted at four commits
 
-**The cases are 166 and the rows are 223.** Both *vetted when* lines are one short, and they are
-his, so this lane reports rather than edits.
+**165 and 222 are correct and this lane counted `world.4x` as a case.** It is the scenario's
+world - no command, no `{then}` - and the thirty-six cases load it. **The page offered a control
+on it**, which is worse than the count: a verdict on it observes nothing, and `{regenerate}` on it
+would rewrite the world those thirty-six are compared against.
 
 ```
-E-3   165 cases          ->  166
-E-4   222 rows           ->  223   (57 rule tests + 0 interface + 166 cases)
+scenario      36 cases + world.4x
+rules         16
+types         53
+primitives    60
+cases        165        rows 222 (57 + 0 + 165)
 ```
 
-**Measured at `HEAD`, `HEAD~5`, `HEAD~15` and `HEAD~30`: 166 every time.** So it is a miscount
-rather than drift - **a number that was wrong when it was written**, which is the one case where a
-claim about a commit is checked against that commit and still fails.
+## The predicate, which is the part worth keeping
+
+**A structural test does not survive the four suites.** `{when}` and `{test name:}` are each true
+of the thirty-six scenario cases and of **none** of the other hundred and twenty-nine - `rules/`,
+`types/` and `primitives/` hold declarations rather than runs. **Either would have excluded 129
+real cases to exclude one input.**
+
+**What is actually true of `world.4x` is that a case loads it.** That holds over every suite, says
+*why* it is not a case rather than what it happens to look like, and excludes a second input added
+tomorrow without anyone editing a list.
+
+**And comments are dropped before the line is read.** `world.4x` explains the load line in its own
+header, so a reader that took the whole file found thirty-seven loaders of a file that has
+thirty-six. **Quoting a thing and doing it are the same bytes.**
 
 ## The fourth suite, which is the part that is not arithmetic
 
@@ -170,17 +186,21 @@ primitives   60    shown only
 
 **His instruction names two suites.** *Let's show them, but these are informational only* - asked
 about `types/` and `primitives/`, and 53 + 60 is the 113 both of you have quoted. **`rules/`'s 16
-are in neither half of the sentence**, and 37 + 113 is 150 rather than 166.
+are in neither half of the sentence**, and 36 + 113 is 149 rather than 165. **The arithmetic that
+made this visible was wrong by one and the gap it pointed at is unchanged**, which is what makes
+it a real question rather than an artifact of the miscount.
 
 **This lane built them markable, because nothing singles them out** and `spec/README.md` rule 3
 says *no suite is privileged*. **That is a default rather than a reading of anything** - if he
 meant the informational half to be *everything but scenario*, the page is wrong by 16 rows and the
 fix is one entry in a constant.
 
-## Why the page renders 223 and not 222
+## The page renders 222, and the reasoning that got there was still right
 
-**A page built to the number in the line would make the number look right.** He vets this by
-opening it, so the one thing it must not do is agree with a count he is checking it against.
+**A page built to the number in a line would make the number look right**, which is why this lane
+rendered 223 before checking. **The check is what settled it** - `world.4x` is excluded because a
+case loads it, and the page agrees with the line because both are now derived from the same fact
+rather than from each other.
 
 ## What was built, which is `E-4`'s first half
 

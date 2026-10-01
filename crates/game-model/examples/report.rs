@@ -18,7 +18,7 @@
 //!
 //! `cargo run --example report`
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 use friendly_notation as friendly;
@@ -566,6 +566,8 @@ pub fn every_case() -> Vec<(String, Vec<String>)> {
         let mut cases = Vec::new();
         walk(&suite, &suite, &mut cases);
         cases.sort();
+        let loaded = loaded_by(&suite, &cases);
+        cases.retain(|case| !loaded.contains(case));
         if !cases.is_empty() {
             suites.push((name, cases));
         }
@@ -592,6 +594,54 @@ fn walk(root: &Path, at: &Path, into: &mut Vec<String>) {
             into.push(under.to_string_lossy().replace('\\', "/"));
         }
     }
+}
+
+/// The files a case loads, which are inputs rather than cases.
+///
+/// **`regression/scenario/world.4x` is the scenario's world and not a case.** It has no command
+/// and no `{then}`, so a verdict on it would observe nothing - and `{regenerate}` on it would
+/// rewrite the thing the other thirty-six are compared against. **So it is not a row.**
+///
+/// # The predicate is the role, not the shape
+///
+/// **A structural test does not survive the four suites.** `{when}` and `{test name:}` are both
+/// true of the thirty-six scenario cases and of none of the other hundred and twenty-nine -
+/// `rules/`, `types/` and `primitives/` hold declarations rather than runs. **Either one would
+/// have excluded 129 real cases to exclude one input**, which is the class of a predicate read
+/// off a single example.
+///
+/// **What is actually true of `world.4x` is that a case loads it.** That holds over every suite,
+/// says why it is not a case rather than what it happens to look like, and **excludes a second
+/// input added tomorrow without anyone editing a list.**
+///
+/// **Comments are dropped before the line is read.** `world.4x` explains the load line in its own
+/// header - *a case opens `{load file:world.4x into:game}` and the runner follows it* - so a
+/// reader that took the whole file found thirty-seven loaders of a file that has thirty-six.
+/// **Quoting a thing and doing it are the same bytes**, which `CLAUDE.md` names.
+fn loaded_by(suite: &Path, cases: &[String]) -> BTreeSet<String> {
+    let mut loaded = BTreeSet::new();
+    for case in cases {
+        let Ok(text) = std::fs::read_to_string(suite.join(case)) else {
+            continue;
+        };
+        for line in text.lines().map(str::trim) {
+            if line.starts_with('#') {
+                continue;
+            }
+            let Some(at) = line.find("{load file:") else {
+                continue;
+            };
+            let rest = &line[at + "{load file:".len()..];
+            let named: String = rest
+                .chars()
+                .take_while(|it| !it.is_whitespace() && *it != '}')
+                .collect();
+            if !named.is_empty() {
+                loaded.insert(named);
+            }
+        }
+    }
+    loaded
 }
 
 /// Which suites are shown and offer nothing to press.

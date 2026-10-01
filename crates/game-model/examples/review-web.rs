@@ -874,6 +874,26 @@ mod tests {
             markable > 0 && informational > 0,
             "one kind of row, not two"
         );
+
+        // **An input is not a case, and `world.4x` is the one there is.** A verdict on it would
+        // observe nothing - no command, no `{then}` - and `{regenerate}` on it would rewrite the
+        // world the other thirty-six are compared against.
+        //
+        // **Asserted against the file being on disk**, so this cannot pass by the file having
+        // been renamed: a check that only asked *is it absent from the page* would go green the
+        // day `world.4x` stopped existing, which is a count over nothing.
+        assert!(
+            report::cases_at()
+                .join("scenario")
+                .join("world.4x")
+                .exists(),
+            "world.4x is gone, so excluding it from the page proves nothing"
+        );
+        assert!(
+            !built.contains("data-case=\"scenario/world\""),
+            "`world.4x` is offered as a case, and a verdict on it observes nothing"
+        );
+        assert_eq!(listed, 165, "the cases, with the world they load excluded");
         assert_eq!(listed, markable + informational);
         assert_eq!(
             informational, 113,
