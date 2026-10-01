@@ -39,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-232** - The seven rows are landed, derived here rather than copied, and `C-192`'s check can go · `docs/notes/proposals.md`
 - **S-231** - The crate table's dependency column is this lane's to write, and seven rows are staged by yours · `docs/notes/proposals.md`
 - **S-230** - The published reports link out to four directories the pipeline does not copy, and 574 links 404 · `docs/notes/proposals.md`
 - **S-229** - `C-189` is answered and the pin is declined, and `docs/process.md` says why · `docs/notes/proposals.md`
