@@ -84,13 +84,24 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      # **The body as he left it**, written to a file rather than interpolated into a shell
-      # command: it is arbitrary text he can type into, and `${{ }}` in a `run:` is a
-      # substitution before the shell sees it.
+      # **The body as he left it, which means the payload and not a later fetch** - `Q-108`.
+      #
+      # **This read `gh issue view` and that is a different sentence.** The `if` above authorises
+      # the person who made *that edit*; between the event firing and a step running there is a
+      # queued runner, a provision and a toolchain install. **Anything reaching the issue body
+      # inside that window was applied under his authorisation** and committed with his name -
+      # and the delete is the sharper half, because `CLAUDE.md` says the suite runs the copies in
+      # `reviewed/`, so withdrawing a record stops a test constraining anything.
+      #
+      # **The mitigation below created it.** Refusing to interpolate the payload through `${{ }}`
+      # in a `run:` is right; **refusing to interpolate it and refusing to read it are different
+      # decisions**, and the second was taken as though it followed from the first.
+      # `github.event.issue.body` reaches a file through `env:`, which the shell expands and no
+      # YAML substitution touches.
       - name: Take the body he edited
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh issue view "${{ github.event.issue.number }}" --json body --jq .body > body.md
+          BODY: ${{ github.event.issue.body }}
+        run: printf '%s' "$BODY" > body.md
 
       # **Said before it is done**, so the run's log records what changed and why even when
       # the commit below is a single line.

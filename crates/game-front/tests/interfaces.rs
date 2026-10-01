@@ -102,8 +102,36 @@ fn neither_surface_has_grown() {
         "submit",
     ];
     let drives = ["submit", "change_drawing", "browser", "says"];
-    assert_eq!(watches.len(), 5);
-    assert_eq!(drives.len(), 4);
+
+    // **`assert_eq!(watches.len(), 5)` was here and said nothing** - a literal array compared
+    // against its own length, which cannot fail and cannot report anything. Found by the quality
+    // lens sampling three assertions of this session's; this was the one that was vacuous.
+    //
+    // **What it meant to assert is the shape of the two lists**, so that is what is checked: no
+    // name twice, and the one method both traits share named as shared rather than left to be
+    // noticed.
+    assert_eq!(
+        watches
+            .iter()
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        watches.len(),
+        "a name is listed twice"
+    );
+    assert_eq!(
+        drives
+            .iter()
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        drives.len(),
+        "a name is listed twice"
+    );
+    let shared: Vec<&&str> = watches.iter().filter(|it| drives.contains(it)).collect();
+    assert_eq!(
+        shared,
+        vec![&"submit"],
+        "the two surfaces share exactly one method, and which one is the point"
+    );
 
     let source = include_str!("../src/game_state.rs");
     for name in watches.iter().chain(drives.iter()) {
@@ -113,10 +141,22 @@ fn neither_surface_has_grown() {
         );
     }
     // And the other way: every `fn` declared in a trait is one of the names above.
-    let declared: Vec<&str> = source
-        .lines()
-        .map(str::trim)
-        .filter(|line| line.starts_with("fn ") && line.ends_with(';'))
+    // **Counted over the signature rather than over the line**, because a signature rustfmt has
+    // wrapped ends its first line on a `,` and this counted it as nothing - **a count that
+    // silently becomes zero**, which is the failure this whole file is about. The quality lens
+    // called it reachable rather than likely; the longest signature here is 47 characters.
+    //
+    // **So the source is collapsed to one line first**, and a declaration is `fn ...;` with no
+    // `{` before the `;` - a trait method rather than one with a body.
+    let tight = source.split_whitespace().collect::<Vec<_>>().join(" ");
+    let declared: Vec<&str> = tight
+        .match_indices("fn ")
+        .filter_map(|(at, _)| {
+            let rest = &tight[at..];
+            let end = rest.find(';')?;
+            let body = rest.find('{').unwrap_or(usize::MAX);
+            (end < body).then_some(&rest[..end])
+        })
         .collect();
     assert_eq!(
         declared.len(),

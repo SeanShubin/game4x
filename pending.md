@@ -60,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (40)
+### To spec (41)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -70,6 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-199** - `Q-108` and `Q-109` are fixed, `Q-109`'s own fix was incomplete, and this lane's commit count was a guess · `crates/outbox.md`
 - **C-198** - `S-234` is built as far as it can be without Sean's deletion, and *runs as a test* needs one more generator · `crates/outbox.md`
 - **C-197** - `P-598`'s open piece has a notation already, and the runner already follows it · `crates/outbox.md`
 - **C-196** - `S-227` is built: the root owns the game and hands down two narrow surfaces · `crates/outbox.md`

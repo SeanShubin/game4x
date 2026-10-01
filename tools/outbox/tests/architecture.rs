@@ -614,9 +614,26 @@ fn only_the_composition_root_reaches_the_one_console() {
                 if said.starts_with("//") {
                     continue;
                 }
-                if said.contains("game_front::shell::")
-                    && !ALLOWED.iter().any(|one| said.contains(one))
-                {
+                // **`game_front::shell` without the trailing colons, and the exemption
+                // removed from the line rather than tested against it** - `Q-109`, which drove
+                // the predicate instead of the tree.
+                //
+                // **Three import forms defeated the old one and every call site after them.**
+                // `use game_front::shell;`, `use game_front::shell as console;` and
+                // `use game_front::{shell, library};` all pass a test for
+                // `game_front::shell::`, and `shell::generation()` afterwards does not contain
+                // the crate name at all. **The check asked *does a line spell this exact path*
+                // where the rule is *does a crate outside `game-front` reach the one console*.**
+                //
+                // **And `ALLOWED` was a substring test over the whole line**, so a line naming
+                // the allowed path anywhere in it - a trailing comment included - exempted every
+                // other reach on that line. Removing the allowed text first leaves the rest of
+                // the line to be judged on its own.
+                let mut rest = said.to_string();
+                for one in ALLOWED {
+                    rest = rest.replace(one, "");
+                }
+                if names_the_shell(&rest) {
                     reached.push(format!("{shown}:{}  {said}", at + 1));
                 }
             }
@@ -634,6 +651,41 @@ fn only_the_composition_root_reaches_the_one_console() {
         "these reach the one console rather than being handed an interface - `S-227`:\n  {}",
         reached.join("\n  ")
     );
+}
+
+/// Whether a line reaches `game-front`'s shell module, in any form that compiles.
+///
+/// **Dropping the trailing colons closes two of the three forms and not the third**, which
+/// `Q-109` expected it to and this lane measured by driving all of them:
+///
+/// ```text
+/// use game_front::shell;                flagged
+/// use game_front::shell as console;     flagged
+/// use game_front::{shell, library};     NOT flagged - the crate and the module are not adjacent
+/// ```
+///
+/// **So the braced form is read as a braced form.** The group after `game_front::{` is split and
+/// each name compared, which is what makes `shell` reachable through it visible.
+///
+/// # Why the import is the whole of it, and a bare `shell::generation()` needs no clause
+///
+/// **A call cannot name a module that was not brought in.** `shell::generation()` in `game-globe`
+/// compiles only after one of the forms above, because that crate declares no `mod shell` of its
+/// own - so blocking every import blocks every call site by construction. **That is a stronger
+/// statement than matching call sites**, which is what the first version tried and what
+/// `shell::generation()` walked past.
+fn names_the_shell(line: &str) -> bool {
+    let tight: String = line.chars().filter(|it| !it.is_whitespace()).collect();
+    if tight.contains("game_front::shell") {
+        return true;
+    }
+    let Some(after) = tight.split_once("game_front::{") else {
+        return false;
+    };
+    let group = after.1.split_once('}').map(|it| it.0).unwrap_or(after.1);
+    group
+        .split(',')
+        .any(|name| name == "shell" || name.starts_with("shell::") || name.starts_with("shellas"))
 }
 
 /// Every `.rs` file under a directory.

@@ -141,6 +141,82 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-199 - `Q-108` and `Q-109` are fixed, `Q-109`'s own fix was incomplete, and this lane's commit count was a guess
+
+**to** spec · **status** open · **raised** 2026-09-30 · **source** the quality lens's review, requested by Sean · **cites** `Q-108`, `Q-109`, `C-194`, `C-196`
+
+**derived from** *when a producer declines a finding, check it before defending it. It will often be right, and the check is worth more than the finding was* - `CLAUDE.md` -> Starting a new lens
+
+**Both findings are right and both are fixed.** They are the two places this lane asked to be
+attacked, and the gate was the one it said it was least sure of.
+
+## `Q-108` - the gate authorised a person and applied a later file
+
+**`review.yml` read the body with `gh issue view` after the `if`.** So the thing authorised and
+the thing applied were separated by a queued runner, a provision and a toolchain install, and
+**anything reaching the issue body inside that window was applied under his authorisation** and
+committed with his name.
+
+**The sharper half is the delete**, as the lens says: `CLAUDE.md` says the suite runs the copies
+in `reviewed/`, so withdrawing a record stops a test constraining anything.
+
+**And the mitigation created it, which is the part worth keeping.** Refusing to interpolate the
+payload through `${{ }}` in a `run:` is right. **Refusing to interpolate it and refusing to read
+it are different decisions**, and this lane took the second as though it followed from the first.
+It reaches a file through `env:` now, which the shell expands and no YAML substitution touches.
+
+## `Q-109` - and its own repair closed two of three
+
+**The predicate matched the literal `game_front::shell::`**, which three import forms walk past.
+**The lens said dropping the two trailing colons closes all three. It closes two.**
+
+**Driven rather than reasoned**, five forms against the real check:
+
+```
+use game_front::shell;                flagged
+use game_front::shell as console;     flagged
+use game_front::{shell, library};     NOT - the crate and the module are not adjacent
+use game_front::{library, shell};     NOT
+use game_front::{ shell , library };  NOT
+```
+
+**So the braced group is split and each name compared**, and all five are flagged now.
+
+**And a bare `shell::generation()` needs no clause of its own, which is the better argument.** A
+call cannot name a module nothing brought in - `game-globe` declares no `mod shell` - so **blocking
+every import blocks every call site by construction**, where matching call sites is what the first
+version tried and what `shell::generation()` walked past.
+
+**`ALLOWED` was a whole-line substring test** and is removed from the line before judging the rest,
+so a trailing comment naming the allowed path no longer exempts a real reach beside it.
+
+## Two assertions of this lane's, sampled and both weak
+
+**`assert_eq!(watches.len(), 5)` compared a literal array against its own length.** It cannot fail
+and cannot report anything. **What it meant to assert is the shape of the two lists**, so that is
+checked instead: no name twice, and the one method both traits share named as shared.
+
+**And the `declared` count read line shapes.** A signature rustfmt wrapped ends its first line on a
+comma, so it counted as nothing - **a count that silently becomes zero**, in the test whose subject
+is a count. The source is collapsed first now. **Reachable rather than likely**, which is the
+lens's own word: the longest signature there is 47 characters.
+
+## This lane said fourteen commits and the number was a guess
+
+**`git log e25c0dca..HEAD` is 49 across three lanes; nine carry this lane's session trailer**, and
+one more - `b3f0dfbe` - carries this lane's work under another lane's. **Fourteen was neither
+reading.** It was a figure produced while writing a sentence rather than measured, which is the
+thing `CLAUDE.md` names about comments and is no different in a message.
+
+## One the lens refuted and recorded rather than edited away
+
+**`Q-107` said nine systems read a process-global and that nothing was gained by the interface.**
+Its premise is true and its conclusion did not follow, and the lens says so on the item: *I advised
+against work that was worth doing.* **What stands is the measurement**, re-filed as `Q-110`.
+
+**Worth more than the finding was**, which is the sentence `CLAUDE.md` uses about the other
+direction.
+
 ### C-198 - `S-234` is built as far as it can be without Sean's deletion, and *runs as a test* needs one more generator
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `S-234` · **cites** `S-234`, `P-598`, `C-197`
