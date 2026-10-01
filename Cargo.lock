@@ -2561,6 +2561,7 @@ name = "game-console"
 version = "0.1.0"
 dependencies = [
  "command-language",
+ "friendly-notation",
  "game-model",
  "planet-model",
  "planet-terrain",
