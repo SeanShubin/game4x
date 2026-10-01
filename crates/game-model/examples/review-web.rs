@@ -56,6 +56,21 @@ use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::PathBuf;
 
+/// Where a test's address begins, under the repository root.
+///
+/// **`spec/tests/` split into `rule/` and `interface/` on 2026-10-01 and this file said it three
+/// times.** One said `spec/tests/rule` and two said `spec/tests/`, so
+/// `every_test_is_browsable` refused to start - *57 of 57 tests have no address* - and Sean could
+/// not review a test. **`S-240`**, and the check did exactly what its own comment says: *loudly,
+/// at startup, before the first page*, because *a server that answers 404 on every link looks
+/// exactly like one that is working until somebody clicks.*
+///
+/// **Fixing only the call site that panicked would have broken the other direction.** Line 207
+/// trimmed `spec/tests/` off an address and compared the remainder to a bare stem, so with the
+/// first repaired it would have left `rule/name` and reported every test as unlisted - the half
+/// `S-214` added, failing for the opposite reason.
+const UNDER: &str = "spec/tests/rule/";
+
 /// A record: the verdict, and the behaviour that verdict is about.
 ///
 /// **`spec/README.md` rule 3**: *a record names its verdict and carries the behaviour that verdict
@@ -172,7 +187,7 @@ fn every_test_is_browsable(known: &[String], browsable: &[String]) {
     let missing: Vec<&String> = known
         .iter()
         .filter(|name| {
-            let wanted = format!("spec/tests/{name}.4x");
+            let wanted = format!("{UNDER}{name}.4x");
             !browsable.contains(&wanted)
         })
         .collect();
@@ -201,10 +216,10 @@ fn every_test_is_browsable(known: &[String], browsable: &[String]) {
     // property; either alone passes over the gap the other is for.
     let unlisted: Vec<&String> = browsable
         .iter()
-        .filter(|at| at.starts_with("spec/tests/") && at.ends_with(".4x"))
+        .filter(|at| at.starts_with(UNDER) && at.ends_with(".4x"))
         .filter(|at| {
             let name = at
-                .trim_start_matches("spec/tests/")
+                .trim_start_matches(UNDER)
                 .trim_end_matches(".4x")
                 .to_string();
             !known.contains(&name)
@@ -405,7 +420,7 @@ fn browsable() -> Vec<String> {
         // **The five shared files still have a friendly side and it is still generated** -
         // `examples/render.rs` writes them and only them. What left the prototype was the tests.
         (mine(), "data/friendly"),
-        (mine().join("../.."), "spec/tests/rule"),
+        (mine().join("../.."), UNDER.trim_end_matches('/')),
     ] {
         let Ok(entries) = std::fs::read_dir(root.join(under)) else {
             continue;
@@ -558,6 +573,39 @@ mod tests {
             built += 1;
         }
         assert!(built >= 40, "only {built} record(s) were built");
+    }
+
+    /// **The startup check passes, driven by the suite rather than by a person starting a
+    /// server.**
+    ///
+    /// `S-240` is why this exists. `spec/tests/` split and this file said the prefix three times -
+    /// one with `rule/` and two without - so `every_test_is_browsable` refused to start and Sean
+    /// could not review a test. **The check was working exactly as designed**: loudly, at startup,
+    /// before the first page, because a server that answers 404 on every link looks like one that
+    /// works until somebody clicks.
+    ///
+    /// **What had no check is that nothing drives the example.** `87dd8cc5` swept the thirteenth
+    /// place out of twelve because the compiler and the suite could see twelve; this one is a
+    /// runtime assertion in a program a person starts. **An example a person drives is the one
+    /// thing no check drives** - the same gap as `the_suite_reads_what_the_writer_writes` having
+    /// had no home, one file over.
+    ///
+    /// **So the suite drives the startup now**, with the same two inputs `main` builds.
+    #[test]
+    fn the_startup_check_passes_before_anybody_starts_the_server() {
+        let known: Vec<String> = report::every_test()
+            .into_iter()
+            .map(|name| name.trim_end_matches(".4x").to_string())
+            .collect();
+        let browsable = browsable();
+        assert!(known.len() > 40, "only {} test(s) known", known.len());
+        assert!(
+            browsable.len() > 40,
+            "only {} address(es) found",
+            browsable.len()
+        );
+        // **Panics with the names if it fails**, which is the whole of the startup behaviour.
+        every_test_is_browsable(&known, &browsable);
     }
 
     /// **What the writer produces reads as approved**, which is the one thing the readers need of

@@ -141,6 +141,62 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-207 - `S-240` is fixed and the suite drives the startup now, which is the thirteenth place's real lesson
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-240`, and Sean unable to review a test · **cites** `S-240`, `C-203`, `P-606`
+
+**derived from** *a server that answers 404 on every link looks exactly like one that is working until somebody clicks* - `review-web.rs`'s own comment
+
+**He can review again.** The prefix is named once in that file, where it was said three times -
+one with `rule/` and two without.
+
+## Fixing the line that panicked would have broken the other direction
+
+**Only one of the three is the one `S-240` names.** The other two are the half `S-214` added:
+
+```
+175  format!("spec/tests/{name}.4x")        panicked - 57 of 57 have no address
+204  starts_with("spec/tests/")             still true of spec/tests/rule/..., so silent
+207  trim_start_matches("spec/tests/")      would have left `rule/name` against a bare stem
+```
+
+**So repairing 175 alone would have reported every test as *unlisted* instead** - the same check
+failing for the opposite reason, which is why all three are one constant now.
+
+## The check was working and I want that on the record above the fix
+
+**It refused to serve 404s to the one person it exists for**, loudly, at startup, before the first
+page. **Its comment names three failures it covers - a directory that moved, a directory that
+could not be read, and a root somebody forgot to list - and says they are the same defect from the
+reader's side.** A directory moved and it said so.
+
+## What had no check is that nothing drives the example
+
+**`87dd8cc5` swept twelve places because the compiler and the suite could see twelve.** This is the
+thirteenth: a runtime assertion in a program a person starts. **An example a person drives is the
+one thing no check drives** - and that is the same gap as
+`the_suite_reads_what_the_writer_writes` having had no home, one file over, found the same day.
+
+**`the_startup_check_passes_before_anybody_starts_the_server` closes it.** It builds the two inputs
+`main` builds and calls the same assertion. **Driven against the exact `S-240` state**: setting the
+prefix back to `spec/tests/` reproduces *57 of 57 tests have no address* with all fifty-seven
+named.
+
+## And `P-606`'s answer is a constraint on the comparison rather than on the writer
+
+**Sean**: *the order of the columns is not significant, so this should not make tests different,
+although we should be deterministic about them either way.*
+
+**So column order is not behaviour at all**, which is neither of the two orders either lane
+offered. The writer picks one deterministically - the schema's, which is what is built - and **the
+comparison has to normalise order away.**
+
+**The `seq:` trap turns entirely on which side does the work**, which is `S-240`'s sharpest point
+and is now a requirement rather than a worry: **if the comparison reads written bytes, renumbering
+a `seq:` still clears every verdict; if it normalises column order, the written form changes and
+the behaviour does not, so nothing clears.** Not yet done - the comparison is
+`no_test_differs_from_what_sean_read`'s and is this lane's next piece.
+
 ### C-206 - `P-605`'s writer is built in the schema's order, and the two halves of the rule now meet
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-239`'s argument that writing the existing order is compatibility rather than a choice · **cites** `P-605`, `P-606`, `P-600`, `C-205`
