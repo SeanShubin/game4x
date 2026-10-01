@@ -141,6 +141,85 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-202 - `S-236` is built: the case is the whole mutable state, one entry per description, and it costs a second deletion
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-236` · **cites** `S-236`, `P-598`, `S-234`
+
+**derived from** *it omits no row that can change - so the flow from input to output is on the page and nothing is left for me to remember* - `docs/process.md`, from `P-598`
+
+**The generator emits the format now.** `01/04-toil`, as it will be written:
+
+```
+{test name:t01-04-toil}
+{load file:world.4x into:game}
+
+{given}
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{energy where:place-2} -> 3
+{extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+
+{when}
+{toil where:place-1}
+
+{then}
+{citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 2
+{energy where:place-2} -> 3
+{extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{labor where:place-1} -> 2
+```
+
+**All three of his clauses, and his own test of them.** The two alike citizens are one row at
+`-> 2` where they were two at `-> 1`. The energy and both extractors are there though `toil` reads
+none of them. And `01-move`'s `{given}` is
+`{ark where:place-4 moving:1 gathering:1} -> 1` - **the `gathering` he said he would look for.**
+
+## Mutable is derived, which is what makes it mechanical
+
+**A relation belongs in a case exactly when some clause of `spec/data/rules.4x` writes it** - the
+complement of what `world.4x` holds. `docs/process.md` asks for that in as many words: *if a rule
+ever starts creating a kind, that kind moves into the cases by itself.*
+
+## The cascade that justified the projection is cured by the reference
+
+**The comment this replaced read**: *the whole world was the first shape and it cascaded - one
+density changed from six to seven and all thirty-four files moved.* **A density is a column of
+`{deposit}` and no rule writes a deposit**, so it is in `world.4x` and such a change now moves one
+file.
+
+**That is why `P-598` asks for both halves in one breath**, and neither works alone: the reference
+is what makes the whole state affordable, and the whole state is what the reference was for.
+
+## It costs a second deletion and there is no way round it
+
+**Every case is stale again** - the format changed, and a case is accepted by being deleted.
+
+```
+Remove-Item -Recurse regression/scenario
+```
+
+**This is his second and this lane caused the need for it**, by letting `S-234` be reported as
+`P-598` built. **The second diff is the one worth the cycle**: the first added a line, this one is
+the shape he asked for.
+
+## Two instruments of this lane's, both wrong before they were right
+
+**`coalesced` emitted a duplicate silently.** A description that appears both with an arrow and
+without would land in two different buckets and both would be written. **It refuses that now rather
+than merging it**, because a counted row with no quantity is a fact about the state and not
+something a formatter should paper over.
+
+**And the new check read the whole file as one section.** A section ends at `{when}` or `{then}`,
+**and both start with `{`** - so a `take_while` on *starts with a brace* ran from `{given}` to the
+end of the file and counted every description twice. **It reported `{energy where:place-2}` as said
+twice and that was true of the file**, once per section, which is what a case is.
+
+**The instrument read a wider population than the one it was asked about**, and the answer was
+about the file rather than about the section. **Found by driving it, not by reading it** - and the
+first message named the description without the lines, which is the *message names the property,
+assertion names the file* shape one size down. It names the lines now.
+
 ### C-201 - `C-198` claimed a row the generator did not write, and `S-235` caught it before Sean deleted thirty-six files
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-235` · **cites** `S-235`, `S-234`, `C-198`, `P-598`

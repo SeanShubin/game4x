@@ -590,6 +590,11 @@ pub fn regression_cases() -> Vec<Case> {
         );
     }
 
+    // **Derived once, outside the loop.** Which relations a rule writes is a fact about the
+    // ruleset rather than about a command, and reading `spec/data/rules.4x` thirty-six times would
+    // say so less clearly than reading it here.
+    let written = relations_a_rule_writes();
+
     let mut out = Vec::new();
     let mut seen: BTreeMap<usize, usize> = BTreeMap::new();
     for (at, (turn, effect)) in history.iter().enumerate() {
@@ -598,19 +603,40 @@ pub fn regression_cases() -> Vec<Case> {
             .map(|(next, _)| next)
             .unwrap_or_else(|why| panic!("command {}: {why:?}", at + 1));
 
-        // **What this command took and what it made, and nothing else.** The whole world was the
-        // first shape and it cascaded: one density changed from six to seven and **all thirty-four
-        // files moved**, because every later case carried a `{given}` it had merely inherited.
-        // Sean, 2026-09-27: *when something changes I will know exactly what changed* - and
-        // thirty-four files is not knowing.
+        // **The whole mutable state, before and after** - `P-598`: *a regression case is written
+        // the way a test is written: the rows that go in, the single command, and the rows that
+        // come out. It omits no row that can change - so the flow from input to output is on the
+        // page and nothing is left for me to remember, which is what a projection onto the columns
+        // a rule happened to name cost me.*
+        //
+        // **This was `effect.took` and `effect.made`, which is that projection.** A case showed
+        // only the columns the command's clauses named, so `01-move`'s `{given}` had no
+        // `gathering` and `06-end-turn` showed `breed`'s match pattern with no `laboring` - and
+        // Sean's own test of the format was *the first test shows gathering on input*.
+        //
+        // # The cascade that drove the projection is cured by the reference rather than by the
+        // # projection
+        //
+        // **The comment here used to read**: *the whole world was the first shape and it cascaded -
+        // one density changed from six to seven and all thirty-four files moved.* **A density is a
+        // column of `{deposit}`, and no rule adds or removes a deposit**, so it is in `world.4x`
+        // now and such a change moves one file. **That is why `P-598` asks for both halves in one
+        // breath** and why neither works alone: the reference is what makes the whole state
+        // affordable, and the whole state is what the reference was for.
+        //
+        // **Mutable is derived, not listed.** A relation belongs here exactly when some clause of
+        // `spec/data/rules.4x` adds, puts or removes it - the complement of what `world.4x`
+        // holds - so a relation that starts being written moves into the cases by itself, which
+        // `docs/process.md` asks for in as many words: *if a rule ever starts creating a kind,
+        // that kind moves into the cases by itself.*
         let names = Names::of(after_game.rows().rows());
-        let render = |rows: &[Row]| -> Vec<String> {
-            let mut out: Vec<String> = rows.iter().map(|it| names.row(it)).collect();
-            out.sort();
-            out
+        let mutable = |of: &Game| -> Vec<String> {
+            let mut lines: Vec<String> = of.rows().rows().iter().map(|it| names.row(it)).collect();
+            lines.retain(|line| written.contains(&relation_in(line)));
+            coalesced(lines)
         };
-        let before = render(&effect.took);
-        let after = render(&effect.made);
+        let before = mutable(&game);
+        let after = mutable(&after_game);
 
         // **A directory per turn, and a case named by its position in that turn.** So the listing
         // is the play order, which is how the file is read.
@@ -706,6 +732,75 @@ pub fn regression_cases() -> Vec<Case> {
         "only {} case(s), which is not the main scenario",
         out.len()
     );
+    out
+}
+
+/// The relation a rendered row opens with.
+///
+/// **Read off the rendering rather than the row**, because the rendering is what both the cases
+/// and `world.4x` are made of, and the two halves have to agree about which relation a line is.
+fn relation_in(line: &str) -> String {
+    line.trim()
+        .trim_start_matches('{')
+        .split([' ', '}'])
+        .next()
+        .unwrap_or_default()
+        .to_string()
+}
+
+/// One entry per description, with the quantities summed.
+///
+/// **`P-598`**: *a state has one entry per description, so two things alike are one quantified row
+/// and never a row per firing. What fired, and how many times, is the scenario's account rather
+/// than the case's.*
+///
+/// **`04-toil` is the case that asked for it**: two identical `{citizen where:place-1 laboring:1}
+/// -> 1` rows where the state holds two alike citizens. **The store keeps them apart and the page
+/// should not**, because a reader counting rows to learn a quantity is doing the arithmetic the
+/// arrow exists to do.
+///
+/// **A row with no arrow carries no quantity** and is passed through. Two of those with the same
+/// description would be a store holding one thing twice, which `schema.4x` refuses by the key - so
+/// this does not have to invent a quantity for them, and asserts it never sees the case.
+fn coalesced(lines: Vec<String>) -> Vec<String> {
+    let mut quantified: BTreeMap<String, i64> = BTreeMap::new();
+    let mut plain: BTreeSet<String> = BTreeSet::new();
+    for line in lines {
+        match line.rsplit_once(" -> ") {
+            Some((description, count)) => {
+                let how_many: i64 = count.trim().parse().unwrap_or_else(|_| {
+                    panic!("`{line}` ends in an arrow and `{count}` is not a number")
+                });
+                *quantified.entry(description.to_string()).or_insert(0) += how_many;
+            }
+            None => {
+                assert!(
+                    plain.insert(line.clone()),
+                    "`{line}` appears twice with no quantity, which the key should refuse"
+                );
+            }
+        }
+    }
+    // **A description cannot be both quantified and not.** Two lines sharing a description where
+    // one carries an arrow and the other does not would both survive this, which is a duplicate
+    // emitted silently - the thing coalescing exists to prevent. **Refused rather than merged**,
+    // because a row of a counted relation with no quantity is a fact about the state and not
+    // something this function should paper over.
+    let both: Vec<&String> = plain
+        .iter()
+        .filter(|it| quantified.contains_key(*it))
+        .collect();
+    assert!(
+        both.is_empty(),
+        "these appear with a quantity and without one, so the state says a description twice:          {both:?}"
+    );
+    let mut out: Vec<String> = plain.into_iter().collect();
+    out.extend(
+        quantified
+            .into_iter()
+            .map(|(description, how_many)| format!("{description} -> {how_many}")),
+    );
+    out.sort();
     out
 }
 

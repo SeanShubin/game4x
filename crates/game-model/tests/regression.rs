@@ -475,3 +475,112 @@ fn every_case_refers_to_a_world_that_holds_what_a_command_needs() {
         "`{named}` holds almost nothing, which is not the scenario's world"
     );
 }
+
+/// **A case omits no row that can change, and says each description once.**
+///
+/// `P-598`, in Sean's words: *a regression case is written the way a test is written: the rows that
+/// go in, the single command, and the rows that come out. **It omits no row that can change** - so
+/// the flow from input to output is on the page and nothing is left for me to remember, which is
+/// what a projection onto the columns a rule happened to name cost me.* And: ***a state has one
+/// entry per description**, so two things alike are one quantified row and never a row per firing.*
+///
+/// **The format is what this asserts, not an example of it.** `S-236` found the generator still
+/// emitting `effect.took` and `effect.made` - the projection - after `S-234` and `S-235` had put the
+/// reference in, and **nothing said so**: the deletion was described as the step that produces the
+/// new shape and it produced the old shape with a load row.
+///
+/// **Checked over every case rather than over the two he named.** His test was *the first test shows
+/// gathering on input*; a check that asserted only that would pass on a generator that projected
+/// everything else.
+#[test]
+fn every_case_holds_the_whole_mutable_state_once_per_description() {
+    let cases = scenario::regression_cases();
+    assert!(cases.len() > 10, "only {} case(s)", cases.len());
+
+    let world = std::fs::read_to_string(scenario::regression_at().join("world.4x"))
+        .expect("the invariant rows");
+    let invariant: BTreeSet<String> = world
+        .lines()
+        .map(str::trim)
+        .filter(|line| line.starts_with('{'))
+        .map(|line| {
+            line.trim_start_matches('{')
+                .split([' ', '}'])
+                .next()
+                .unwrap_or_default()
+                .to_string()
+        })
+        .collect();
+    assert!(invariant.len() >= 5, "{invariant:?} is not the world");
+
+    let mut checked = 0;
+    let mut sections = 0;
+    for Case { name, text, .. } in &cases {
+        for marker in ["{given}", "{then}"] {
+            // **Stops at the next section marker, which the first version did not.** A section
+            // ends at `{when}` or `{then}`, and **both start with `{`** - so a `take_while` on
+            // *starts with a brace* read the whole file from `{given}` onward and counted every
+            // description twice, once per section.
+            //
+            // **It reported `{energy where:place-2}` as said twice and that was true of the
+            // file** - once in `{given}` and once in `{then}`, which is what a case is. The
+            // instrument read a wider population than the one it was asked about, and the answer
+            // it gave was about the file rather than about the section.
+            const MARKERS: [&str; 4] = ["{given}", "{when}", "{then}", "{refused}"];
+            let rows: Vec<&str> = text
+                .lines()
+                .map(str::trim)
+                .skip_while(|line| *line != marker)
+                .skip(1)
+                .take_while(|line| !MARKERS.contains(line))
+                .filter(|line| line.starts_with('{'))
+                .collect();
+            assert!(!rows.is_empty(), "`{name}`'s {marker} holds no rows at all");
+            sections += 1;
+
+            // **One entry per description**, which is the half `04-toil` asked for: it had two
+            // identical `{citizen ...} -> 1` rows where the state holds two alike citizens.
+            let mut descriptions: BTreeMap<&str, usize> = BTreeMap::new();
+            for row in &rows {
+                let description = row.rsplit_once(" -> ").map(|it| it.0).unwrap_or(row);
+                *descriptions.entry(description).or_insert(0) += 1;
+            }
+            let twice: Vec<&&str> = descriptions
+                .iter()
+                .filter(|(_, how_many)| **how_many > 1)
+                .map(|(description, _)| description)
+                .collect();
+            assert!(
+                twice.is_empty(),
+                "`{name}`'s {marker} says a description more than once, so a reader counts rows \
+                 to learn a quantity: {twice:?}"
+            );
+
+            // **No invariant relation is repeated into the case.** What never changes is stated
+            // once and referred to, so a `{place}` row here would be the thing `world.4x` exists
+            // to stop.
+            let repeated: Vec<&&str> = rows
+                .iter()
+                .filter(|row| {
+                    let relation = row
+                        .trim_start_matches('{')
+                        .split([' ', '}'])
+                        .next()
+                        .unwrap_or_default();
+                    invariant.contains(relation)
+                })
+                .collect();
+            assert!(
+                repeated.is_empty(),
+                "`{name}`'s {marker} repeats rows that `world.4x` already holds: {repeated:?}"
+            );
+            checked += rows.len();
+        }
+    }
+    assert_eq!(sections, cases.len() * 2, "two sections per case");
+    assert!(
+        checked > cases.len() * 2,
+        "only {checked} row(s) over {sections} section(s), so the sections are one row each and \
+         the projection is still there"
+    );
+}
