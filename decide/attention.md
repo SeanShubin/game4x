@@ -14,6 +14,7 @@ Nothing.
 
 No wording can be final until you do.
 
+- **P-603** - Rule 3 now says an interface test is in the friendly form, and nobody has decided that · `decide/questions.md`
 - **P-599** - Three words decide where a file lands and they are held in Rust, not in data · `decide/questions.md`
 
 ## Vet a capability

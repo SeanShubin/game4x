@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-603** - Rule 3 now says an interface test is in the friendly form, and nobody has decided that · `decide/questions.md`
 - **P-599** - Three words decide where a file lands and they are held in Rust, not in data · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
