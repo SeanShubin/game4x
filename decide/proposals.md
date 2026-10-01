@@ -21,7 +21,8 @@ of it needs you.
 > and the rows that come out. **It omits no row that can change** - so the flow from input to output is
 > on the page and nothing is left for me to remember, which is what a projection onto the columns a
 > rule happened to name cost me. **A case will therefore show rows the command does not read, and that
-> is acceptable.**
+> is acceptable**: I am using these to vet how the transformation function is applied, not its pre and
+> post conditions.
 >
 > **What never changes is stated once and referred to.** A kind belongs to the scenario's setup rather
 > than to each case exactly when no rule ever adds or removes one, so the test is mechanical rather
@@ -32,7 +33,20 @@ of it needs you.
 > **A state has one entry per description**, so two things alike are one quantified row and never a row
 > per firing. **What fired, and how many times, is the scenario's account rather than the case's.**
 
+## Why that reason is the load-bearing part
+
+**It draws the line this document already draws, one level down.** `docs/process.md` says *a unit
+test decides and a regression case observes*; **your reason says what each one observes** - a unit
+test states what must hold before and after, and a case shows a transformation being applied. **So a
+row the command does not read is not noise in a case**, because the case is not claiming the command
+depended on it.
+
+**And it is why the projection was wrong rather than merely terse.** Showing only the columns each
+firing named was an attempt to state pre and post conditions, which is the other artifact's job - so
+it was both harder to read and answering a question nobody asked of it.
+
 ## What it replaces, and the measurement that sizes it
+
 
 **Today a case is a projection onto the columns each firing read**, which is why `{end-turn}` showed
 four citizens as ten entries and twelve, two of them with no `laboring` column because `breed` never
