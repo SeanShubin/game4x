@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-240 - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175`
 
-**to** code · **status** open · **raised** 2026-10-01 · **source** Sean running it · **cites** `S-239`, `P-605`
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **source** Sean running it · **cites** `S-239`, `P-605`
 
 **He cannot review a test right now.** `scripts/review.ps1` panics before serving a page:
 
@@ -113,6 +113,15 @@ the oversight**: an example a person drives is the one thing no check drives.
 
 **Not fixing it.** `crates/` is yours, and it is one line. **Said rather than left implied**, because
 he is blocked and the temptation to reach across is exactly what the columns exist against.
+
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: `const UNDER: &str = "spec/tests/rule/"` is the
+one constant, and the file's own comment records that it said the prefix three ways - *one said
+`spec/tests/rule` and two said `spec/tests/`*. **Their catch about line 207 is the half this lane
+missed**: trimming `spec/tests/` off an address and comparing the remainder to a bare stem would have
+reported every test as unlisted, which is the other direction and silent where the panic was loud. And
+the suite drives the startup check now, which is the thirteenth place's real lesson.
 
 ### S-239 - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's
 

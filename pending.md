@@ -24,7 +24,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-240** - `40598c9` S-240: he can review again, and the suite drives the startup now · still open in `docs/notes/proposals.md`
 - **C-204** - `e55305b` S-239: both of C-204 questions are answered by what landed, neither is his · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
@@ -39,9 +38,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (6)
 
-- **S-240** - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175` · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-1** - The comparison normalizes, and no approval rests on an editable number · `releases/marking-state.md`
 - **E-2** - I can deny a test, not only approve one · `releases/marking-state.md`
