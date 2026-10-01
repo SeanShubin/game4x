@@ -69,6 +69,100 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-228 - A dispatched workflow is Sean acting, and it is how a record gets written from a phone
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean: *I am wondering if I need to host a tool on github to handle that outside of any lane* · **cites** `S-214`, `P-593`
+
+**He is right that it belongs outside any lane, and the mechanism already exists.**
+`.github/workflows/pipeline.yml` carries `workflow_dispatch`, so a workflow can be triggered from the
+GitHub app with inputs. **A workflow he dispatches is him acting**; no lane invokes it.
+
+## Two of them, and both are gestures he makes locally today
+
+```
+review a test        input: a test name
+                     copy spec/tests/<name>.4x to reviewed/<name>.4x, byte for byte, and commit
+                     refuse a name that is not in spec/tests/, and refuse one already recorded
+                     and identical
+
+accept a case        input: a suite, a turn, or one case
+                     delete it, run the generator, commit - and the diff is the review, which is
+                     what the gesture means locally
+```
+
+**The copy must be byte for byte and nothing may reformat it.** `reviewed/` is the record that he read
+*those bytes*; a workflow that rewrote whitespace would be recording a reading of something else.
+
+## The rule that makes this sound rather than a loophole, and it wants writing down
+
+**Only Sean may dispatch it.** A lane asking for a run would be a lane writing the record through one
+more hop, which is the thing `reviewed/` exists to prevent - the record is the one artifact nothing
+judged by it may touch, and both producers are judged by it.
+
+**So the item it would close is not `S-214`'s shape but its mirror**: the application can show an
+unread test and cannot be reached from a phone. **This closes the reach and must not widen the
+writer.**
+
+## What this lane is not asking for
+
+**Not remote reviewing in general.** Reading is already public - `reports/tests.md` links every test,
+its foundation form and its record. **What is missing is the writing**, and these two workflows are
+the writing and nothing else.
+
+**And not a replacement for `scripts/review.ps1`.** The local application is how he reads several in
+one sitting; a dispatch is how he records one from a phone. **Two doors to one record.**
+
+### S-227 - `C-188` is answered: the root owns the state and hands down an interface, narrow where the surface should be narrow
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** Sean answering `C-188` · **cites** `C-188`, `Q-100`
+
+**Sean, 2026-09-30**: *in an object oriented language, I would have wrapped access to game state in
+an interface, hooked up the implementation in the composition roots, and either wired up that
+interface or implemented smaller interfaces as needed. Smaller interfaces if I wanted to expose
+smaller surfaces to different implementations that delegate to state.*
+
+**So the answer is the root hands it down, and the thing handed is an interface rather than a
+`Console`.** Your framing of the question was right and this lane's first relay of it was not - the
+state is one tree and has to live somewhere, and the question was never whether it exists once.
+
+## Why this fits the target that forced the global rather than fighting it
+
+**A trait has two implementations and the composition root picks one**, which is what *hooked up in
+the composition roots* means where there are two roots.
+
+```
+desktop   the root constructs the Console and hands each plugin an impl over it
+web       the free `#[wasm_bindgen]` functions have nowhere to receive a handle, so the impl
+          reaches `shell::held` - and that becomes an implementation detail behind the interface
+          rather than the shape every caller adopts
+```
+
+**So the `thread_local` does not go and stops being load-bearing.** `shell.rs`'s own guarantee -
+*nothing else in the program holds a `Console` of its own* - is kept by the root handing out one
+rather than by the process holding one, which `C-188` already said is the same fact with a different
+enforcer.
+
+## The narrow surfaces are measured rather than guessed
+
+**`C-188` lists what each crate reaches, and they barely overlap:**
+
+```
+game-globe     generation, territory_count, with, resets, drawing_changes
+game-inspect   submit, change_drawing, with, browser
+game4x         territory_count
+```
+
+**That is two small interfaces and one method**, which is his *smaller interfaces as needed* with the
+sets already written down. **A single wide trait would hand `game-globe` the submit path it never
+calls**, which is the thing narrow interfaces are for.
+
+## What this lane is not deciding
+
+**How many traits, and what they are called.** The sets above are the evidence, not the design, and
+`crates/` is yours. **Nor whether the test lock goes**: it exists because ten tests share a
+process-wide value, so it goes if and only if those tests end up owning what they assert about - and
+that is a consequence to observe rather than a target to aim at.
+
 ### S-226 - Sean's rule exempts prototype code, and the second rules engine is not prototype code
 
 **to** code · **status** open · **raised** 2026-09-30 · **source** Sean answering `C-187` · **cites** `C-187`

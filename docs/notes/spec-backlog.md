@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-30 - a prototype is kept until its results are in the code, and thin-engine is how that ends
+
+**Sean**: *prototypes about experiments I will want to keep until I have already implemented their
+results into code.*
+
+**It is the other half of `P-595`** - that one says a prototype must not hold main code in place, and
+this one says main code must not delete a prototype whose answer it has not taken. **Together they
+say a prototype is free-standing and outlives nothing.**
+
+**`prototypes/thin-engine` is the worked example and it is not a deletion.** `48927aa6` on 2026-09-22
+moved it to `crates/thin-engine` - *stops being a prototype and joins the gate* - and `f633864a` on
+2026-09-25 made it `crates/game-model`. **The results were implemented and then the name went**, so
+nothing was lost and the rule was followed before it was stated.
+
+**And it decides `planet-view`, against the reading this lane offered.** Its note records *GPU is an
+open question, not a decision that has been made*, and `planet-raster` is the apparatus for answering
+it. **So the keep-rule protects it and deleting it is not available** - which makes `P-595`'s
+resolution for that prototype a replication rather than a deletion, as `P-595` says.
+
+Not yet a proposal: it belongs beside `P-595` in `docs/architecture.md`, and is held back only
+because that one is unread.
+
 ## 2026-09-30 - a prototype is not dead code, and the test is the dependency graph
 
 **Sean**, answering `C-187`: *I don't count prototypes as dead code as long as there is no dependency
