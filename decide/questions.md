@@ -13,7 +13,7 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ### P-597 - A generated case writes one row per firing and an authored test writes a map, and nothing says which `{given}` is
 
-**to** sean · **status** open · **raised** 2026-09-30 · **asks** a decision · **kind** recovered · **shape** text · **into** `spec/console.md` -> the state · **source** Sean reading `regression/scenario/01/04-toil.4x`
+**to** sean · **status** **withdrawn** 2026-09-30, by him saying it is fine and by a test already deciding it · **raised** 2026-09-30 · **asks** nothing now · **kind** recovered · **source** Sean reading `regression/scenario/01/04-toil.4x`
 
 **The same notation means two things and `spec/` does not say so.** Found by him asking why a
 generated case writes two rows of one rather than one row of two.
@@ -69,6 +69,41 @@ alike. **The cost is that `{given}` means two things** and a reader has to know 
 **This lane is not choosing.** A regression case exists to be read by you and deleted by you, so what
 it should show is yours - and either answer wants a sentence in `spec/console.md`, which is why it is
 here rather than filed to the code lane as a defect.
+
+## Withdrawn 2026-09-30 - the test already says it, so prose would be a copy
+
+**Sean**: *now that I understand it I think it is fine.*
+
+**And `reviewed/toil-works-the-unworked-citizens-of-one-place.4x` already decides it**, which is the
+reason this is withdrawn rather than rewritten to ask approval:
+
+```
+given   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
+        {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 1
+        {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
+when    {toil where:place-1}
+then    {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 3
+        {labor where:place-1} -> 2
+```
+
+**One command, two matches, two labor** - and the other place untouched. **So *a rule reaches every
+row that matches* is asserted by a test he has read**, and `CLAUDE.md` is explicit: *a fact already
+asserted by a test does not belong in prose too. The test is the stronger statement, and a prose copy
+can drift from it.*
+
+**`spec/console.md`'s *a command without one fires once* is about firings and not about matches**, and
+reads as a gap only until the test is found. **Nothing was missing from `spec/`; what was missing was
+the connection between the generated form and the test**, and the test's own name carries it - *the
+unworked citizens*, plural.
+
+## What this proposal got wrong, which is worth more than what it got right
+
+**It was drafted before looking for the test.** `docs/process.md` says a case he does not understand
+is answered either by a correction or by an explanation, and *either way the correction lands in
+`spec/` and in a unit test* - so the first move is to ask whether the unit test exists, and this
+lane's first move was to draft the sentence. **The order is what makes `CLAUDE.md`'s rule fire**: look
+for the test, then write prose only if there is none.
+
 ### P-596 - All five prototypes link main code, and rule 18 cannot be kept by replicating
 
 **to** sean · **status** open · **raised** 2026-09-30 · **deferred** 2026-09-30, by him: *I will come back to it after I am happy with the first release* - so it waits on the first release rather than on him reading it, and no lane is blocked: nothing is deleted, `S-226` stays held · **asks** a decision · **kind** recovered · **shape** text · **into** `docs/architecture.md` -> Rules · **source** `C-191`, against the rule you promoted the same day

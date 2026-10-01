@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-597** - A generated case writes one row per firing and an authored test writes a map, and nothing says which `{given}` is · `decide/questions.md`
 - **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -29,8 +28,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-233** - `01ade83` S-233: played.md gets a page, and building it found lit dropping text · still open in `docs/notes/proposals.md`
 - **S-232** - `af5d21c` The C-192 check lands, now that S-232 put the seven rows right · still open in `docs/notes/proposals.md`
 - **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
-- **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
-- **P-597** - `b3f0dfb` Publish attention.md and pending.md with P-597 · still open in `decide/questions.md`
+- **S-229** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
+- **S-228** - `4a51ac7` What b3f0dfbe actually contains: S-228's test half and S-229's · still open in `docs/notes/proposals.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
