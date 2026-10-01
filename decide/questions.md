@@ -11,54 +11,60 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-604 - A rule already reaches only what it declares, so the question is what it may declare
+### P-604 - Three forms the isolation could take, shown as rows
 
-**to** sean · **status** open · **raised** 2026-10-01 · **revised** 2026-10-01, after he said the single function is logical rather than architectural · **asks** a decision · **kind** recovered · **into** `spec/invariants.md` -> The game is one function
+**to** sean · **status** open · **raised** 2026-10-01 · **revised** 2026-10-01, twice: first after he said the single function is logical rather than architectural, then after he said the choice was not legible · **asks** a decision · **kind** recovered · **into** `spec/invariants.md` -> The game is one function
 
-**Sean**: *conceptually the game is a single function, but that does not have to mean there is
-literally a single function that has access to all state. In object oriented languages I break up the
-state all over the place in different implementations behind interfaces, and implementations have
-access to only the interfaces relevant to them. That is what I am trying to capture in the code
-architecture. It is logically (old-state, command) -> (new-state), but that may be represented without
-coupling everything to a global state.*
+**You have settled that there is isolation. This asks what form it takes, and the first version asked
+it abstractly, which was this lane's error.** Three forms, as rows.
 
-**That property is already true of a rule, and this proposal's first version missed it.** Measured in
-`spec/data/rules.4x`:
+## One - a column on `relation`
 
 ```
-clauses that declare their own relation     55 of 55
-a `{reading}` names                         another clause of the same rule, never a relation
-a `{relation-of}` takes the relation from   an input, so the caller picks within a family
-anything that reaches unnamed state         none
+{relation id:21 name:citizen concern:game}
+{relation id:60 name:menu-item concern:interface}
+{rule id:1 name:move concern:game}
 ```
 
-**So a rule is handed its clauses' relations and nothing else.** There is no wildcard and nothing to
-read all of state with - which is the OO property he describes, arrived at by the data model rather
-than by interfaces.
+**A clause is refused when its relation's `concern` is not the rule's.** One new column on two
+existing relations and nothing else; `move` keeps its five clauses and gains a word.
 
-## So the question is narrower and the earlier framing was wrong
+## Two - the file is the group
 
-**It is not *what may a rule read*. It is *what may a rule declare*.** Declaring a clause is free
-today: nothing stops a rule of the game naming a relation that belongs to the interface, and the
-moment such relations exist, one could.
+```
+spec/data/schema.4x            game relations
+spec/data/interface-schema.4x  interface relations
+spec/data/rules.4x             may declare clauses over the first and a named shared set
+spec/data/interface-rules.4x   may declare clauses over the second and the same shared set
+```
 
-**And the mechanism exists in miniature.** `unit` is a family and `{relation-of clause:clause-3
-input:what}` lets `move` serve every member of it. **So *a rule over a group of relations* is already
-expressible**, and what is missing is a group that bounds rather than a group that parameterises.
+**No new concept at all - the boundary is where a thing is written**, which is how `crates/` already
+works. **The cost is that the engine has to know which file a relation came from**, and today it reads
+rows and forgets.
 
-## The choice
+## Three - two runs, and a command is the only crossing
 
-**How relations are grouped, and whether a rule's group bounds what it may declare.** A family groups
-relations that behave alike so one rule can serve them; this would group relations that belong
-together so a rule *cannot* leave them - the same word for the opposite purpose, which is worth
-deciding deliberately rather than by reusing `family`.
+```
+the game engine      state: game relations        commands: move, toil, end-turn
+the interface engine state: interface relations   commands: select, confirm, hover
+                     and it emits a game command rather than touching game state
+```
 
-**Nothing is offered**, because the sentence depends on whether the grouping is a new relation, an
-existing one reused, or a property of the rule rather than of the relations.
+**Nothing is refused because nothing is reachable.** Two invocations of one function over disjoint
+state, which is your *different implementations behind interfaces* read literally. **The cost is that
+showing a territory's name means the interface holds a copy**, derived by something that is not a
+rule.
 
-## What this drops from the first version
+## What each one costs you to live with
 
-**The three readings about reads and writes.** They were asking how to police a crossing; **his
-answer is that a rule should never be given the chance to make one.** A prohibition and an absent
-capability look alike when they hold and differ entirely when something is added - which is `S-227`'s
-lesson about `shell::` said about data instead of code.
+**One** is the cheapest to build and the easiest to weaken - a `concern` is a word somebody can
+change on a relation, and nothing says which concern a new relation belongs to.
+
+**Two** makes the boundary visible in the tree and gives the generator a job: a relation's concern
+stops being a fact anybody states and becomes a fact about where it lives.
+
+**Three** is the only one where a game rule reading a menu is *not expressible* rather than *refused*
+- and the only one that forces a decision about what holds the interface's copy of game state.
+
+**`family` is not one of these.** It groups relations that behave alike so one rule can serve all of
+them; this groups relations so a rule cannot leave the group. **Same word, opposite purpose.**

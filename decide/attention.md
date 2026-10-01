@@ -14,7 +14,7 @@ Nothing.
 
 No wording can be final until you do.
 
-- **P-604** - A rule already reaches only what it declares, so the question is what it may declare · `decide/questions.md`
+- **P-604** - Three forms the isolation could take, shown as rows · `decide/questions.md`
 
 ## Vet a capability
 
