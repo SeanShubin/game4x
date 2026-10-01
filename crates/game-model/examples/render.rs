@@ -126,6 +126,78 @@ pub fn mine() -> PathBuf {
 /// `crates/` - so `schema.4x` and `rules.4x` are the specification's, and `engine.4x`, `script.4x`
 /// and `setup.4x` name no game noun and stay here. A test's friendly side is `spec/tests/`'s, which
 /// `P-532` settled.
+/// What Sean said about a test, read out of its record.
+///
+/// **`P-605`, `spec/README.md` rule 3**: *a record names its verdict and carries the behaviour
+/// that verdict is about - the rows, canonical, without the prose. No record means I have not
+/// looked; a record saying `approved` means the code is bound by it; a record saying `denied`
+/// means it is not, and that I owe the specification a statement of what I want instead.*
+///
+/// # The weld this splits, which is why there was never room for a third state
+///
+/// **Presence used to mean both *I read this* and *this binds*.** Those are two facts now, so a
+/// directory listing answers the first and only a verdict answers the second.
+///
+/// **The one to fear is the suite running a denied test** - a failure that looks exactly like
+/// nothing being wrong. `foundation.rs` says reading `reviewed/` rather than `spec/tests/` *is
+/// the whole of the rule*; **that rule has a second half now and the first half alone is not
+/// sufficient.**
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Verdict {
+    /// The code is bound by it.
+    Approved,
+    /// It is not binding, and he owes the specification what he wants instead.
+    Denied,
+}
+
+/// The verdict a record states, or `Approved` where it states none.
+///
+/// **A record with no `{verdict}` row is `Approved`, and that is backward compatibility rather
+/// than a default.** The fifty-seven records written before `P-605` are byte copies, and under
+/// the rule they were written under **presence meant both halves of the weld** - so reading them
+/// as approved preserves exactly what they recorded.
+///
+/// **Nothing converts them and nothing here may.** `reviewed/` is written by the review
+/// application acting as Sean, and a format migration is that application's gesture rather than
+/// a reader's - `C-204` puts the question where he can answer it.
+///
+/// **An unknown state is refused rather than guessed.** A record saying `pending` or anything
+/// else is a record this code does not understand, and treating it as approved would bind the
+/// code on a word nobody defined.
+pub fn verdict_of(text: &str) -> Result<Verdict, String> {
+    let stated: Vec<&str> = text
+        .lines()
+        .map(str::trim)
+        // **`{verdict}` as well as `{verdict ...}`**, because a row with no `state:` is a
+        // malformed verdict and not the absence of one. **Matching only the spelling with a
+        // trailing space read it as no verdict at all, which is `Approved`** - the unsafe
+        // direction, and the one a reader would never notice. Found by driving the five
+        // spellings rather than by reading the filter.
+        .filter(|line| line == &"{verdict}" || line.starts_with("{verdict "))
+        .collect();
+    match stated.len() {
+        0 => Ok(Verdict::Approved),
+        1 => {
+            let said = stated[0]
+                .split_whitespace()
+                .find_map(|part| part.strip_prefix("state:"))
+                .map(|it| it.trim_end_matches('}'))
+                .unwrap_or_default();
+            match said {
+                "approved" => Ok(Verdict::Approved),
+                "denied" => Ok(Verdict::Denied),
+                other => Err(format!(
+                    "`{other}` is not a verdict this code knows; `spec/README.md` rule 3 names \
+                     approved and denied, and a third would bind the code on a word nobody defined"
+                )),
+            }
+        }
+        many => Err(format!(
+            "{many} `{{verdict}}` rows in one record, so it says more than one thing about one test"
+        )),
+    }
+}
+
 pub fn friendly_at(file: &str) -> String {
     match file {
         "schema.4x" | "rules.4x" => format!("../../spec/data/{file}"),

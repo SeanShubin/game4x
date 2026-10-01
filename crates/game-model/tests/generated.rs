@@ -97,7 +97,22 @@ fn shape(row: &Row) -> (String, Vec<(String, String)>) {
 fn what_the_engine_runs_is_what_the_record_generates() {
     let schema = Schema::of(&rows(&render::friendly_at("schema.4x"))).expect("a schema");
 
-    let records: BTreeSet<String> = names_in(&records_at()).into_iter().collect();
+    // **Only an approved record generates** - `spec/README.md` rule 3 since `P-605`. This ran
+    // every file in the directory, which was right while presence meant both *I read this* and
+    // *this binds*; **a denied test is now a test the code is not bound by**, and running it is
+    // the failure that looks exactly like nothing being wrong.
+    let approved: BTreeSet<String> = names_in(&records_at())
+        .into_iter()
+        .filter(|name| {
+            let said = std::fs::read_to_string(records_at().join(name))
+                .unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
+            match render::verdict_of(&said).unwrap_or_else(|why| panic!("reviewed/{name}: {why}")) {
+                render::Verdict::Approved => true,
+                render::Verdict::Denied => false,
+            }
+        })
+        .collect();
+    let records = approved;
     let drafts = names_in(&tests_at());
     let unread: Vec<String> = drafts
         .iter()
@@ -293,4 +308,67 @@ fn the_relations_written_in_no_declared_order_are_the_rule_names() {
         "these are the relations a test names that no `{{relation}}` row declares, so their \
          column order is the notation's rather than the schema's"
     );
+}
+
+/// **A verdict is read, and `denied` keeps a test out of the suite.**
+///
+/// `P-605`, `spec/README.md` rule 3: *no record means I have not looked; a record saying
+/// `approved` means the code is bound by it; a record saying `denied` means it is not.*
+///
+/// # Why this is driven rather than observed
+///
+/// **No record in the tree is denied today**, so every reader that now consults a verdict is
+/// taking the same branch it took before and nothing would notice if the other branch were
+/// wrong. **The one to fear is the suite running a denied test** - a failure that looks exactly
+/// like nothing being wrong, because a denied test either goes red where the code is correct or
+/// goes green and records agreement with something he rejected.
+///
+/// **So the three states are driven over text rather than over the directory.** The directory is
+/// what cannot be arranged: `reviewed/` is written by the review application acting as Sean, and
+/// a test that wrote a denial there to watch it being skipped would be a lane writing a verdict.
+#[test]
+fn a_denied_record_is_read_as_denied_and_an_old_one_as_approved() {
+    let rows = "{test name:x}\n\n{given}\n{scout where:place-1} -> 1\n";
+
+    // **A record from before `P-605` has no verdict row and is approved**, because presence
+    // meant both halves of the weld under the rule it was written under. All 57 in the tree are
+    // this shape today.
+    assert_eq!(
+        render::verdict_of(rows),
+        Ok(render::Verdict::Approved),
+        "a record with no verdict is what every record was until P-605"
+    );
+    assert_eq!(
+        render::verdict_of(&format!("{{verdict state:approved}}\n{rows}")),
+        Ok(render::Verdict::Approved)
+    );
+    assert_eq!(
+        render::verdict_of(&format!("{{verdict state:denied}}\n{rows}")),
+        Ok(render::Verdict::Denied)
+    );
+
+    // **A state nobody defined is refused rather than guessed.** Treating it as approved would
+    // bind the code on a word with no meaning; treating it as denied would silently drop a test
+    // he approved. **Neither is available, so it fails.**
+    assert!(render::verdict_of(&format!("{{verdict state:pending}}\n{rows}")).is_err());
+    assert!(render::verdict_of(&format!("{{verdict}}\n{rows}")).is_err());
+
+    // **Two verdicts in one record say more than one thing about one test.**
+    assert!(
+        render::verdict_of(&format!(
+            "{{verdict state:approved}}\n{{verdict state:denied}}\n{rows}"
+        ))
+        .is_err()
+    );
+
+    // **And every record in the tree reads**, which is the population this ranges over for real:
+    // a reader that errored on the records that exist would have failed the suite above, and this
+    // says so rather than leaving it to that.
+    let mut read = 0;
+    for name in names_in(&records_at()) {
+        let said = std::fs::read_to_string(records_at().join(&name)).expect("a record");
+        render::verdict_of(&said).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
+        read += 1;
+    }
+    assert!(read >= FLOOR, "only {read} record(s) were read");
 }

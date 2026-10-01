@@ -82,11 +82,30 @@ fn nothing_addressed_to_an_instance_is_in_the_file() {
 #[test]
 fn a_test_waiting_on_a_reading_is_named_either_way() {
     let at = temporary("waiting");
+    // **A record is a verdict since `P-605`, not a copy.** This wrote `changed.4x` in two
+    // spellings and expected a `RecordDiffers` - the comparison that is gone, because
+    // `spec/README.md` rule 3 says *an approval survives a change that does not change the
+    // behaviour*, and a byte comparison reported a reworded comment as a reading owed.
+    //
+    // **The two states left are the two a reader can see**: no record at all, and a record
+    // saying `denied`. Whether two tests say the same thing needs folding and is the engine's.
     write(&at, "spec/tests/read.4x", "{test name:read}\n");
-    write(&at, "reviewed/read.4x", "{test name:read}\n");
+    write(
+        &at,
+        "reviewed/read.4x",
+        "{verdict state:approved}\n{test name:read}\n",
+    );
     write(&at, "spec/tests/never-read.4x", "{test name:never}\n");
-    write(&at, "spec/tests/changed.4x", "{test name:changed} now\n");
-    write(&at, "reviewed/changed.4x", "{test name:changed} then\n");
+    write(
+        &at,
+        "spec/tests/turned-down.4x",
+        "{test name:turned-down}\n",
+    );
+    write(
+        &at,
+        "reviewed/turned-down.4x",
+        "{verdict state:denied}\n{test name:turned-down}\n",
+    );
 
     let Reading::Compared {
         tests,
@@ -102,10 +121,31 @@ fn a_test_waiting_on_a_reading_is_named_either_way() {
         2,
         "two of the three are waiting: {waiting:?}"
     );
-    assert_eq!(waiting[0].name, "changed.4x");
-    assert_eq!(waiting[0].why, Unreading::RecordDiffers);
-    assert_eq!(waiting[1].name, "never-read.4x");
-    assert_eq!(waiting[1].why, Unreading::NoRecord);
+    assert_eq!(waiting[0].name, "never-read.4x");
+    assert_eq!(waiting[0].why, Unreading::NoRecord);
+    assert_eq!(waiting[1].name, "turned-down.4x");
+    assert_eq!(waiting[1].why, Unreading::Denied);
+
+    // **A record with no verdict reads as approved**, which is every record written before
+    // `P-605`: the fifty-seven in the tree have none.
+    write(&at, "reviewed/read.4x", "{test name:read}\n");
+    let Reading::Compared { waiting, .. } = reading(&at) else {
+        panic!("a comparison");
+    };
+    assert_eq!(
+        waiting.len(),
+        2,
+        "the old shape is still approved: {waiting:?}"
+    );
+
+    // **And a state nobody defined is blind rather than approved or denied**, because guessing
+    // either way decides something about a test on a word with no meaning.
+    write(
+        &at,
+        "reviewed/read.4x",
+        "{verdict state:maybe}\n{test name:read}\n",
+    );
+    assert!(matches!(reading(&at), Reading::Blind(_)));
 }
 
 /// **An empty directory is blind rather than good news**, which is the failure with the sign

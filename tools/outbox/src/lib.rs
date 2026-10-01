@@ -1271,13 +1271,61 @@ pub struct Unread {
     pub why: Unreading,
 }
 
-/// The two ways a test can be waiting on a reading.
+/// The two ways a test can be waiting on him.
+///
+/// **`RecordDiffers` is gone and its comparison with it** - `P-605` and `P-600`. A record is not
+/// a copy of a test any more: it names a verdict and carries *the rows, canonical, without the
+/// prose*. **So `read != said` over whole files answers neither question it used to.**
+///
+/// **And it was already wrong about the one it did answer.** `spec/README.md` rule 3: *my
+/// approval is about what a test says, not where it is or how it is written... an approval
+/// survives a change that does not change the behaviour - a reworded comment, a reordered state,
+/// a repadded row.* **A byte comparison reports all three as a reading owed.**
+///
+/// **What replaces it is not here, deliberately.** Deciding whether two tests say the same thing
+/// means folding both to rows, coalescing entries and ordering them as the specification orders
+/// them - which needs the engine, and `tools/outbox` has no engine. **That comparison is
+/// `no_test_differs_from_what_sean_read`'s**, in `crates/game-model`, where `fold` is.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Unreading {
     /// In `spec/tests/` and not in `reviewed/`: nobody has read it at all.
     NoRecord,
-    /// In both and different: he read something else under this name.
-    RecordDiffers,
+    /// A record saying `denied`: he has looked, the code is not bound, and he owes the
+    /// specification a statement of what he wants instead. **Not a reading owed** - it is listed
+    /// because it waits on him in the other direction.
+    Denied,
+}
+
+/// The verdict a record states, read without an engine.
+///
+/// **A second implementation of `render::verdict_of`, and it says so.** `tools/outbox` is outside
+/// the workspace and cannot depend on `crates/game-model`, so the two exist - which is `C-203`'s
+/// subject one directory over. **They must agree about three things**: no `{verdict}` row means
+/// approved, an unknown state is refused, and `{verdict}` with no `state:` is malformed rather
+/// than absent.
+fn verdict_in(text: &str) -> Result<bool, String> {
+    let stated: Vec<&str> = text
+        .lines()
+        .map(str::trim)
+        .filter(|line| *line == "{verdict}" || line.starts_with("{verdict "))
+        .collect();
+    match stated.len() {
+        // **No verdict is approved**, because every record written before `P-605` is a byte copy
+        // and presence meant both halves of the weld under the rule it was written under.
+        0 => Ok(true),
+        1 => match stated[0]
+            .split_whitespace()
+            .find_map(|part| part.strip_prefix("state:"))
+            .map(|it| it.trim_end_matches('}'))
+        {
+            Some("approved") => Ok(true),
+            Some("denied") => Ok(false),
+            other => Err(format!(
+                "`{other:?}` is not a verdict `spec/README.md` rule 3 names"
+            )),
+        },
+        many => Err(format!("{many} verdicts in one record")),
+    }
 }
 
 /// What comparing `spec/tests/` against `reviewed/` established.
@@ -1342,19 +1390,24 @@ pub fn reading(root: &Path) -> Reading {
     for name in &tests {
         let mine = tests_at.join(name);
         let theirs = records_at.join(name);
-        let Ok(said) = std::fs::read_to_string(&mine) else {
+        if std::fs::read_to_string(&mine).is_err() {
             continue;
-        };
+        }
         match std::fs::read_to_string(&theirs) {
             Err(_) => waiting.push(Unread {
                 name: name.clone(),
                 why: Unreading::NoRecord,
             }),
-            Ok(read) if read != said => waiting.push(Unread {
-                name: name.clone(),
-                why: Unreading::RecordDiffers,
-            }),
-            Ok(_) => {}
+            Ok(record) => match verdict_in(&record) {
+                Ok(true) => {}
+                Ok(false) => waiting.push(Unread {
+                    name: name.clone(),
+                    why: Unreading::Denied,
+                }),
+                Err(why) => {
+                    return Reading::Blind(format!("`reviewed/{name}`: {why}"));
+                }
+            },
         }
     }
     Reading::Compared {
@@ -1672,8 +1725,8 @@ these are\nwaiting. **Read it in the review application**, which writes the reco
                     one.name,
                     match one.why {
                         Unreading::NoRecord => "no record; nobody has read it",
-                        Unreading::RecordDiffers =>
-                            "the record differs from the test, so what you read is not what is there",
+                        Unreading::Denied =>
+                            "denied, so it binds nothing - the specification is owed what you want instead",
                     }
                 ));
             }
