@@ -8,9 +8,7 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Say *promote P-n*, or say what to change.
-
-- **P-594** - Upgrade early, and no pin, because a test that names no technology cannot be broken by one · `decide/proposals.md`
+Nothing.
 
 ## Answer a question
 

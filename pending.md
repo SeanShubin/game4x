@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-594** - Upgrade early, and no pin, because a test that names no technology cannot be broken by one · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -125,6 +124,7 @@ it exists to ask.
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
+- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-449, P-409
@@ -136,7 +136,6 @@ it exists to ask.
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
-- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334

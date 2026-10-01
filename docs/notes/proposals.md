@@ -10799,6 +10799,7 @@ work the release exists to order.
 | P-592, `P-591` removed a command its own rule protects, and this lane put the wrong row in the table                         | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-30 |
 | P-593, `decide/attention.md`: one generated file for everything waiting on you                                               | `decide/README.md` -> The three things only you can do                                                                                                                                                   | 2026-09-30 |
 | P-595, A prototype replicates what it needs and links none of it, and the current one links seven crates                     | `docs/architecture.md` -> Rules                                                                                                                                                                          | 2026-10-01 |
+| P-594, Upgrade early, and no pin, because a test that names no technology cannot be broken by one                            | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
 
 ## Forecast cleanups that were checked and not filed
 

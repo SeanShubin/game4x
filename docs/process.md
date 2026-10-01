@@ -187,6 +187,20 @@ As long as that foundation is maintained, other scenarios check that particular 
 reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
 automation. **What the main scenario has to cover is a fact about the application and is stated with it.**
 
+**I take a new toolchain early rather than late, and there is no pin.** Pinning would make the
+pipeline predictable by making it old, and it would stay old, because bumping a pin needs a
+toolchain to test the bump against. **Keeping this machine current makes the gate predictive
+without a pin**, because *stable* and a current machine are the same thing.
+
+**What makes that cheap is that the tests do not know what the game is built on.** A reviewed test
+names a territory, a citizen and a deposit; it names no language, no crate and no version. **So an
+upgrade cannot change what the game is specified to do** - it can only break the code, which the
+gate catches and has caught.
+
+**The red that arrives after a green gate means my machine is behind**, not that the pipeline is
+broken. It is the only notice I get that a new toolchain exists, and taking it promptly is what
+keeps it rare.
+
 ## What I am pushing out
 
 **This is not a commercial product and has no paying customers**, so I am not ensuring it is
