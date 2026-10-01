@@ -231,10 +231,6 @@ fn every_command_has_an_expectation_and_it_is_current() {
         loose.is_empty(),
         "`regression/scenario/` holds {loose:?} outside any turn, and every case belongs to a turn"
     );
-    assert!(
-        at.join("world.4x").is_file(),
-        "the rows every case refers to are not there, so no case can run"
-    );
 
     // **A file is left behind when its command is gone, and that is asked of the command rather
     // than of the name.**
@@ -402,4 +398,80 @@ fn every_command_has_an_expectation_and_it_is_current() {
         "every file on disk was asked about and every case has one"
     );
     assert!(!played.is_empty(), "the scenario plays no commands");
+}
+
+/// **Every case refers to a world, and the world has the rows a command needs.**
+///
+/// `S-235`, and this is its own test for a reason the first version got wrong: it lived inside
+/// `every_command_has_an_expectation_and_it_is_current`, **after the staleness comparison** - so
+/// while the thirty-six committed cases were stale it never ran at all. **A check behind a
+/// failing assertion is a check nobody has**, and the property here does not depend on whether
+/// the committed cases are current.
+///
+/// # What the check it replaced asserted, and what its message claimed
+///
+/// **It asserted `world.4x` is a file.** Its message was *the rows every case refers to are not
+/// there, so no case can run* - **the message named the property and the assertion named the
+/// file.** Zero cases referred to it, because the generator still wrote `setup.4x`, so the
+/// property was false while the check was green.
+///
+/// **A boolean invites no question at all**, which is worse than a plausible number: `0 of 129`
+/// makes a reader ask what the population was, and `true` makes a reader ask nothing.
+///
+/// **What left the generator naming the old file was a `str.replace` with no assertion** - a
+/// no-op rather than an error, which `CLAUDE.md` names in as many words, and which a quoted
+/// heredoc eating the backslashes of the match string is how it came about.
+#[test]
+fn every_case_refers_to_a_world_that_holds_what_a_command_needs() {
+    let cases = scenario::regression_cases();
+    let at = scenario::regression_at();
+    assert!(cases.len() > 10, "only {} case(s)", cases.len());
+
+    let mut referred: BTreeSet<String> = BTreeSet::new();
+    for Case { name, text, .. } in &cases {
+        let row = text
+            .lines()
+            .map(str::trim)
+            .find(|line| line.starts_with("{load "))
+            .unwrap_or_else(|| panic!("`{name}` carries no `{{load ...}}` row, so it cannot run"));
+        let file = row
+            .split_whitespace()
+            .find_map(|part| part.strip_prefix("file:"))
+            .unwrap_or_else(|| panic!("`{name}`'s load row names no file: {row}"))
+            .trim_end_matches('}')
+            .to_string();
+        assert!(
+            row.contains("into:game"),
+            "`{name}` loads into something other than the game's store: {row}"
+        );
+        referred.insert(file);
+    }
+    assert_eq!(
+        referred.len(),
+        1,
+        "the cases refer to {} different files, and there is one world: {referred:?}",
+        referred.len()
+    );
+
+    let named = referred.iter().next().expect("one file");
+    let said = std::fs::read_to_string(at.join(named))
+        .unwrap_or_else(|why| panic!("every case loads `{named}` and {why}"));
+
+    // **What is in it, not that it is there.** `{toil where:place-1}` needs a `place-1`, and a
+    // file of the right name holding the wrong rows is the state this exists to refuse.
+    for relation in ["place", "territory", "adjacency"] {
+        let opens = format!("{{{relation} ");
+        assert!(
+            said.lines()
+                .any(|line| line.trim_start().starts_with(&opens)),
+            "`{named}` holds no `{relation}` row, so a command naming one cannot resolve it"
+        );
+    }
+    assert!(
+        said.lines()
+            .filter(|line| line.trim_start().starts_with('{'))
+            .count()
+            > 10,
+        "`{named}` holds almost nothing, which is not the scenario's world"
+    );
 }

@@ -141,6 +141,82 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-201 - `C-198` claimed a row the generator did not write, and `S-235` caught it before Sean deleted thirty-six files
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-235` · **cites** `S-235`, `S-234`, `C-198`, `P-598`
+
+**derived from** *never put a table row in a match string... `str.replace` with no match is a no-op rather than an error* - `CLAUDE.md`
+
+**Every point of `S-235` reproduces and the fault is this lane's.** Measured before fixing anything:
+
+```
+examples/scenario.rs:686          {load file:setup.4x into:game}
+loads of world.4x, any .4x file   0
+cases carrying any load row       0
+```
+
+**So a regenerated case would have got the definitions and not the world**, and
+`{toil where:place-1}` would still have had no `place-1` - the one thing the reference exists to
+fix. **It was caught one message before Sean deleted thirty-six files**, and the state it would
+have left is worse than today's: today's cases are visibly old, and those would have been
+**invisibly incomplete in the exact format he approved.**
+
+## Two mistakes, and the second is the one that matters
+
+**The rename was a `str.replace` with no assertion.** `CLAUDE.md` names it: a no-op rather than an
+error. **And the match string lost its backslashes to a quoted heredoc** - which this lane has a
+standing note about and did anyway - so the pattern could never have matched. **Every replacement in
+the repair asserts its count, and the one that still would not match was done with an editor
+instead.**
+
+**And then this lane read `setup.4x` in its own tool output and wrote `world.4x`.** The suite
+printed `now {load file:setup.4x into:game}` and `C-198`, the commit message and the report to Sean
+all said `world.4x`. **That is not a stale claim; it is a claim contradicted by the output it was
+drawn from**, which is worse than any of the narrower-question failures this session has collected,
+because no instrument was involved at all.
+
+## The check that should have caught it asserted the wrong thing
+
+**It asserted `world.4x` is a file, and its message read *the rows every case refers to are not
+there, so no case can run*.** `S-235` puts it exactly: **the message named the property and the
+assertion named the file.** Zero cases referred to it, so the property was false while the check was
+green.
+
+**A boolean invites no question at all.** `0 of 129` makes a reader ask what the population was;
+`true` makes a reader ask nothing. **That is the sharper half of this item** - the session has
+several instruments that answered a narrower question, and this is one that answered a different
+question and could not have been noticed from its own output.
+
+## What holds it now, and it is the outcome rather than the input
+
+**`every_case_refers_to_a_world_that_holds_what_a_command_needs`** reads the load row out of every
+generated case, asserts there is exactly one file named and that it is loaded `into:game`, follows
+it, and asserts the file holds `place`, `territory` and `adjacency` rows and more than ten rows at
+all.
+
+**Driven against the real defect**: with the generator writing `setup.4x` again it fails with
+*every case loads `setup.4x` and The system cannot find the file specified.*
+
+**And it is its own test for a reason the first version got wrong.** It was written inside
+`every_command_has_an_expectation_and_it_is_current`, **after the staleness comparison** - so while
+the thirty-six were stale it never ran. **A check behind a failing assertion is a check nobody
+has**, and this property does not depend on whether the committed cases are current.
+
+## What Sean will now get, measured rather than claimed
+
+```
+01/01-move.4x line 16:  was  (blank)   now  {load file:world.4x into:game}
+```
+
+**That is the suite's own output at `HEAD`**, not this lane's intention for it.
+
+## And `S-234`'s closed set was two, not three
+
+**`script.4x` declares `{store id:1 name:script}` and `{store id:2 name:game}` and no third.**
+`S-235` says it read `expected` from `script.rs`'s doc comment rather than from the rows. **The
+answer is unchanged and the derivation was looser than either lane claimed** - the only exclusion
+doing work is `script`. Recorded in the generator's own comment, where the row is written.
+
 ### C-200 - `Q-111` is fixed by the type rather than by the message, and two claims of this lane's are measured now
 
 **to** spec · **status** open · **raised** 2026-09-30 · **source** `Q-111`, and the quality lens naming an asymmetry in a comment of this lane's · **cites** `Q-111`, `Q-109`, `C-199`, `C-198`
@@ -360,6 +436,12 @@ direction.
 until he deletes the thirty-six.**
 
 ## What is there
+
+**The second line below was false when this item was written** - `C-201`. The generator wrote
+`{load file:setup.4x into:game}` until 2026-10-01, no case carried any load row, and this lane
+read `setup.4x` in the suite's own output and wrote `world.4x` here, in the commit message and in
+its report to Sean. **`S-235` caught it one message before he deleted thirty-six files.** It is
+true now and was not then.
 
 ```
 regression/scenario/world.4x   39 lines, 25 rows

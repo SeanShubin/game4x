@@ -5,7 +5,7 @@
 # **Every case under `regression/scenario/` refers to this rather than repeating it** -
 # `docs/process.md`, from `P-598`: *what never changes is referred to rather than
 # repeated, and the reference is what the runner follows, not only what he clicks.*
-# A case opens `{load file:setup.4x into:game}` and the runner follows it, which is
+# A case opens `{load file:world.4x into:game}` and the runner follows it, which is
 # what makes a case executable as a test.
 #
 # **Which rows are here is derived rather than listed.** A relation is invariant when

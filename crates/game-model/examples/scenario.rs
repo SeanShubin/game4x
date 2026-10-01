@@ -683,7 +683,7 @@ pub fn regression_cases() -> Vec<Case> {
         // **The runner already follows it and nothing was invented here.** `{load}` is
         // `{primitive id:12 word:load}`, `crates/game-model/src/script.rs` implements it, and
         // `data/foundation/setup.4x` uses it four times today.
-        text.push_str("{load file:setup.4x into:game}\n\n");
+        text.push_str("{load file:world.4x into:game}\n\n");
         text.push_str("{given}\n");
         for line in &before {
             text.push_str(&format!("{line}\n"));
@@ -754,7 +754,11 @@ fn relations_a_rule_writes() -> BTreeSet<String> {
 /// The scenario's invariant rows: its world, less everything a rule can touch.
 ///
 /// **This is the file a case refers to instead of repeating.** `S-234` names the store:
-/// `{load file:... into:game}`, derived over a closed set of three rather than chosen -
+/// `{load file:world.4x into:game}`, derived over a closed set of **two** rather than chosen -
+/// `script.4x` declares `{store id:1 name:script}` and `{store id:2 name:game}` and no third, so
+/// the only exclusion doing any work is `script`: the invariant rows are not a test script.
+/// **`S-234` said three, reading `script.rs`'s doc comment rather than the rows**, and `S-235`
+/// corrected it. The answer is unchanged and the derivation was looser than it claimed -
 /// `script` is the test script and `expected` is the comparison target, so `game` is the only
 /// reading left and `Failed::NoSuchStore` refuses a fourth.
 ///
@@ -826,7 +830,7 @@ pub fn invariant_rows() -> String {
          # **Every case under `regression/scenario/` refers to this rather than repeating it** -\n\
          # `docs/process.md`, from `P-598`: *what never changes is referred to rather than\n\
          # repeated, and the reference is what the runner follows, not only what he clicks.*\n\
-         # A case opens `{load file:setup.4x into:game}` and the runner follows it, which is\n\
+         # A case opens `{load file:world.4x into:game}` and the runner follows it, which is\n\
          # what makes a case executable as a test.\n\
          #\n\
          # **Which rows are here is derived rather than listed.** A relation is invariant when\n\
