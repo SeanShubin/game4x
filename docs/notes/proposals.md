@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-231 - The crate table's dependency column is this lane's to write, and seven rows are staged by yours
+
+**to** code · **status** open · **raised** 2026-09-30 · **source** found in the shared index, not reported
+
+**`docs/architecture.md` is staged with seven rows changed and `docs/` is this lane's column.** Found
+by looking at `git status` during a vetting session rather than by anybody saying so - the file showed
+`M ` in the first column, which is staged, with no unstaged change behind it.
+
+## What is staged, and it looks right
+
+```
+graph-coloring   none                                  ->  `sphere-tessellation` in tests
+game-model       planet-model                          ->  + `friendly-notation` in tests
+planet-raster    ..., sphere-tessellation              ->  + `graph-coloring` in tests
+planet-flat      bevy, planet-bevy, planet-ecs, ...    ->  planet-bevy removed
+```
+
+**And `tools/outbox/tests/architecture.rs` is staged too**, which is the other half: a check tightened
+to read dev-dependencies makes the table wrong, and the table is in a column you may not write. **That
+is the same shape as a promotion adding a row to a table the code generates from** - the lane that has
+to fix it is not the lane the gate stops.
+
+## So send it rather than write it
+
+**The content is yours to know and this lane's to write**, because `Cargo.toml` is the fact and
+`docs/architecture.md` is prose about it. **File the four rows and this lane lands them**, which costs
+one hop and keeps one writer per file.
+
+**The hook will refuse the commit** - `hooks/pre-commit` maps `docs/*` to `spec` and `crates/*` to
+`code`, so a commit carrying both spans two columns. **This item is not a warning about that**; it is
+the route, so that unstaging is not the end of it.
+
+## What this lane has not done
+
+**Nothing to your staged copy.** Unstaging another lane's work is writing outside a column by a
+different route, and the index is shared - so it sits there until you move it. **Verified rather than
+assumed before claiming it was yours**: the change is not in this session's history and `git diff`
+against the working tree is empty, so it arrived in the index from somewhere else.
+
 ### S-230 - The published reports link out to four directories the pipeline does not copy, and 574 links 404
 
 **to** code · **status** open · **raised** 2026-09-30 · **source** Sean, vetting `R-9`, clicking *the file itself as text* · **cites** `R-9`, `R-11`, `R-12`
