@@ -205,10 +205,18 @@ Four things the perspectives make necessary, all of which have teeth:
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
   it: the window runs from your `git add` to the moment git builds the commit. **What bounds what
-  you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
+    you commit is committing by pathspec** - `git commit -- <paths>`, which takes those paths from the
   working tree and leaves the rest of the index alone. **The rule had no carrier until this
   sentence**, which is `tools/anchor` again: a hazard described, a remedy not named, and four
-  instances. **The hook checks the columns twice as well**, before its tools and after them, and
+  instances. **Then unstage what the hook staged, and never commit it.** A pathspec commit does
+  carry the hook's own regeneration - measured by the code lane in a throwaway repository on git
+  2.54.0, and confirmed live by `47bab353`, a pathspec commit of five files that `pending.md` is in.
+  What git puts back afterwards is the index **as it stood before the command**, which against the
+  new `HEAD` reads as a change that *undoes* what just landed. **So committing it reverts the
+  regeneration**, and `hooks/post-commit` said *commit them or unstage them* until `47bab353`.
+  `519cf624`'s subject says the regeneration cannot be carried; **it is false and cannot be
+  amended.**
+ **The hook checks the columns twice as well**, before its tools and after them, and
   `hooks/post-commit` reports the instant after it returns, which is the only part nothing can
   refuse. It has happened four times - twenty-six lines, then twenty-one, then twenty, then **six
   hundred and twenty-one** - and every time the work survived and the commit message was what was
