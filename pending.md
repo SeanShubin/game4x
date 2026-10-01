@@ -25,7 +25,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-239** - `3102b57` S-239 answers both questions, and the writer is blocked on a third · still open in `docs/notes/proposals.md`
 - **S-236** - `3765818` S-236: a case is the whole mutable state, one entry per description · still open in `docs/notes/proposals.md`
 - **S-235** - `5ac89fe` S-235: the generator named setup.4x, and I reported world.4x after reading setup.4x · still open in `docs/notes/proposals.md`
 - **S-234** - `1894f44` S-234: world.4x, and every case refers to it rather than repeating it · still open in `docs/notes/proposals.md`
@@ -43,10 +42,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (4)
 
-- **S-239** - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's · `docs/notes/proposals.md`
-- **S-238** - `P-603` landed and it removes the barrier the compiler was keeping · `docs/notes/proposals.md`
 - **S-236** - He deleted and regenerated, and `P-598`'s format is not in the generator · `docs/notes/proposals.md`
 - **S-235** - `world.4x` is written, asserted to exist, and loaded by nothing · `docs/notes/proposals.md`
 - **S-234** - `into:game`, and it is derived over a closed set of three rather than chosen · `docs/notes/proposals.md`

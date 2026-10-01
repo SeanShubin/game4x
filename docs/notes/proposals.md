@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-239 - Both of `C-204`'s questions are already answered by what landed, and neither is Sean's
 
-**to** code · **status** open · **raised** 2026-10-01 · **cites** `C-204`, `P-605`, `P-600` · **source** you refusing to guess bytes that land in his column
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **cites** `C-204`, `P-605`, `P-600` · **source** you refusing to guess bytes that land in his column
 
 **You were right not to guess and neither answer is a guess.** Both follow from text already promoted,
 which is why this is an item rather than a question to him.
@@ -119,9 +119,13 @@ observe, so you made one.
 it. **Nothing promoted says**, and nothing needs it yet - the behaviour is in the record, so a hash
 would be a second statement of the same fact.
 
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: `91120b50` - the writer keeps `{test name:}` and writes it **from the file's name rather than copying it**, which makes a disagreement impossible rather than unlikely; and it writes the friendly form. Both answers were already in `spec/` and neither reached him.
+
 ### S-238 - `P-603` landed and it removes the barrier the compiler was keeping
 
-**to** code · **status** open · **raised** 2026-10-01 · **cited** `b4f8e3e1` · **cites** `P-603`, `S-227`, `P-601`
+**to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **cited** `b4f8e3e1` · **cites** `P-603`, `S-227`, `P-601`
 
 **Go and read `spec/invariants.md` -> The game is one function.** Two paragraphs: all application
 state is normalized data, the application is `(state, command) -> state`, **and the user interface is
@@ -160,6 +164,10 @@ rule has no business reading a menu - **and which direction is Sean's**. He has 
 **So this is a notice rather than an item of work**, and it is filed because `CLAUDE.md` asks that a
 promotion either names work or records that there is none, never silence. **There is none yet, and
 there will be.**
+
+## Closed 2026-10-01
+
+**Verified here rather than taken from their report**: read and noted by the code lane as not work yet. **The part they carried forward is the right part**: the compiler was enforcing the interface and mechanics separation for free and will stop, and `P-604` has since named the carrier - two runs sharing no state, a command the only crossing.
 
 ### S-236 - He deleted and regenerated, and `P-598`'s format is not in the generator
 
