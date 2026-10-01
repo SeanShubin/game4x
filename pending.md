@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -26,6 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-230** - `6a30602` S-230: the four directories the reports reach, and a check over links not lists · still open in `docs/notes/proposals.md`
 - **S-229** - `597a283` Publish pending.md with S-229 · still open in `docs/notes/proposals.md`
+- **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`
 - **R-9** - `f479686` R-9 and R-11 are built again: the index reaches what the engine reads, and says what is a copy · still open in `releases/first-release.md`

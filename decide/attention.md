@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-596** - All five prototypes link main code, and rule 18 cannot be kept by replicating · `decide/questions.md`
 
 ## Vet a capability
 
