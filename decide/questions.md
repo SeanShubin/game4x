@@ -11,53 +11,54 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-604 - Which relations may a rule touch, now that the interface's are rows too
+### P-604 - A rule already reaches only what it declares, so the question is what it may declare
 
-**to** sean · **status** open · **raised** 2026-10-01 · **asks** a decision · **kind** recovered · **into** `spec/invariants.md` -> The game is one function · **source** him asking whether the composition roots keep interface detail out of mechanics
+**to** sean · **status** open · **raised** 2026-10-01 · **revised** 2026-10-01, after he said the single function is logical rather than architectural · **asks** a decision · **kind** recovered · **into** `spec/invariants.md` -> The game is one function
 
-**`P-603` made the interface state in the same form, and that removed the thing that was keeping them
-apart.** Not a crate boundary - `S-227` holds that one - but a boundary inside the data.
+**Sean**: *conceptually the game is a single function, but that does not have to mean there is
+literally a single function that has access to all state. In object oriented languages I break up the
+state all over the place in different implementations behind interfaces, and implementations have
+access to only the interfaces relevant to them. That is what I am trying to capture in the code
+architecture. It is logically (old-state, command) -> (new-state), but that may be represented without
+coupling everything to a global state.*
+
+**That property is already true of a rule, and this proposal's first version missed it.** Measured in
+`spec/data/rules.4x`:
 
 ```
-relations the engine distinguishes by kind     0
-rules in `spec/` about which relations a       0
-  rule may read
+clauses that declare their own relation     55 of 55
+a `{reading}` names                         another clause of the same rule, never a relation
+a `{relation-of}` takes the relation from   an input, so the caller picks within a family
+anything that reaches unnamed state         none
 ```
 
-**Before `P-603` a game rule could not read a menu item because there was no menu item to read.**
-Now there will be, and `docs/architecture.md`'s *enforced by the compiler rather than by discipline*
-does not reach inside one engine over one set of relations.
+**So a rule is handed its clauses' relations and nothing else.** There is no wildcard and nothing to
+read all of state with - which is the OO property he describes, arrived at by the data model rather
+than by interfaces.
 
-## The question, and the symmetric answer is wrong
+## So the question is narrower and the earlier framing was wrong
 
-**A menu has to show a territory's name**, so *no crossing in either direction* cannot be the rule as
-stated. **And a game rule has no business reading what has my attention.** So the prohibition is not
-symmetric, and which asymmetry it is decides what a check can say.
+**It is not *what may a rule read*. It is *what may a rule declare*.** Declaring a clause is free
+today: nothing stops a rule of the game naming a relation that belongs to the interface, and the
+moment such relations exist, one could.
 
-## Three readings, and the third may dissolve it
+**And the mechanism exists in miniature.** `unit` is a family and `{relation-of clause:clause-3
+input:what}` lets `move` serve every member of it. **So *a rule over a group of relations* is already
+expressible**, and what is missing is a group that bounds rather than a group that parameterises.
 
-**Directional.** An interface relation may be read by a rule of the interface and by nothing else; a
-game relation may be read by either. **Cheap to check and it permits a rule of the game to depend on
-nothing the player is hovering over.**
+## The choice
 
-**Reads yes, writes no.** Either side may read the other; only its own side may be written. **Weaker,
-and it allows a rule of the game to branch on a menu**, which is the case this is being asked about.
+**How relations are grouped, and whether a rule's group bounds what it may declare.** A family groups
+relations that behave alike so one rule can serve them; this would group relations that belong
+together so a rule *cannot* leave them - the same word for the opposite purpose, which is worth
+deciding deliberately rather than by reusing `family`.
 
-**No state crossing at all, because there is none to make.** The interface **reads** game state to
-display it and **affects** game state only by issuing a command - which is what *select the ark,
-select the place, confirm the move* already describes. **Then the crossing is a command rather than a
-read**, and the rule is about what may be written rather than what may be seen.
+**Nothing is offered**, because the sentence depends on whether the grouping is a new relation, an
+existing one reused, or a property of the rule rather than of the relations.
 
-**That third reading also splits the interface's own state in two**, which is worth knowing before
-choosing: *what is displayed* is a view of game state and **what has my attention is not** - nothing
-in the game knows the cursor is over a menu. So interface relations are partly derived and partly
-their own, and only the second part is unambiguously the interface's.
+## What this drops from the first version
 
-## What is not asked
-
-**Not the wording.** No block is offered, because each reading is a different sentence and two of
-them need a second one about commands. **Say which and the words follow in a day.**
-
-**And not a check.** Whichever you pick is checkable over every rule rather than reviewed case by
-case - which is the shape this repository keeps finding it needs - but building one now would be a
-lane deciding this.
+**The three readings about reads and writes.** They were asking how to police a crossing; **his
+answer is that a rule should never be given the chance to make one.** A prohibition and an absent
+capability look alike when they hold and differ entirely when something is added - which is `S-227`'s
+lesson about `shell::` said about data instead of code.

@@ -8,6 +8,39 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-01 - one function logically, state behind interfaces architecturally
+
+**Sean**: *conceptually the game is a single function, but that does not have to mean there is
+literally a single function that has access to all state. In object oriented languages I break up the
+state all over the place in different implementations behind interfaces, and implementations have
+access to only the interfaces relevant to them. That is what I am trying to capture in the code
+architecture. It is logically (old-state, command) -> (new-state), but that may be represented without
+coupling everything to a global state.*
+
+**`spec/invariants.md` states the logical half and nothing states the architectural one.** *A game
+state and a transition yield a new game state* is about what is true, and he is describing how it is
+built - which is `docs/architecture.md`'s subject rather than `spec/`'s.
+
+**And the property is already true of a rule.** Measured: 55 of 55 clauses declare their own relation,
+a `{reading}` names another clause rather than a relation, a `{relation-of}` takes the relation from an
+input, and nothing reaches unnamed state. **So a rule is handed its clauses' relations and nothing
+else** - the OO property arrived at through the data model rather than through interfaces.
+
+**`S-227` is the same thought in code**, built two days earlier from a measurement rather than a
+principle: `Watches` is five methods and `Drives` is four, each taken from what that consumer actually
+calls, and the root hands each plugin only its own. **Nobody connected the two at the time.**
+
+## What is unstated
+
+**What bounds what a rule may declare.** Reaching unnamed state is impossible and naming any relation
+is free, so after the interface's relations exist a game rule could declare one. `P-604` asks how
+relations are grouped so that it cannot.
+
+**And whether `family` is that grouping or its opposite.** A family groups relations that behave alike
+so one rule can serve all of them; this would group relations that belong together so a rule cannot
+leave the group. **Same word, opposite purpose.**
+
+
 ## 2026-10-01 - a verdict is on the behaviour, so prose may change and approval survives
 
 **Sean**, asked whether a verdict on a test that then changes is still a verdict: *the verdict is on
