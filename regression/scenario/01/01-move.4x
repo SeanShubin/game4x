@@ -13,6 +13,7 @@
 # `scenario/played.md` is where the whole world at each turn's end is.
 
 {test name:t01-01-move}
+{load file:world.4x into:game}
 
 {given}
 {ark where:place-4 moving:1} -> 1

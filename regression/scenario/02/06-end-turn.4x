@@ -13,6 +13,7 @@
 # `scenario/played.md` is where the whole world at each turn's end is.
 
 {test name:t02-06-end-turn}
+{load file:world.4x into:game}
 
 {given}
 {citizen where:place-1 hungry:0 bearing:0 laboring:0} -> 2

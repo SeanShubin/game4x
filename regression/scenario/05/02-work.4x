@@ -13,6 +13,7 @@
 # `scenario/played.md` is where the whole world at each turn's end is.
 
 {test name:t05-02-work}
+{load file:world.4x into:game}
 
 {given}
 {extractor where:place-1 what:food working:1} -> 1
