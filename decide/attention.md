@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `decide/questions.md`
 
 ## Vet a capability
 
