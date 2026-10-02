@@ -247,6 +247,14 @@ a checkout and nothing else - no lint, no test, no build. **A run that fails say
 publishes anyway**, because the page is where I find out what is waiting on me, and a failing
 build is exactly when I most need to be able to look.
 
+**The whole site publishes whether or not the run succeeded.** A failing build leaves a broken
+game published rather than nothing published, because deploying is how I verify and a staging
+area that vanishes when it breaks is no use to me.
+
+**And what broke is reachable from the report root.** I find out by navigating from the reports
+index rather than by reading a run's log, so a run that fails leaves a page saying what failed,
+linked from there.
+
 ## What verification requires
 
 ### State
