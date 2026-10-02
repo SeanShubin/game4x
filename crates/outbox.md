@@ -500,6 +500,24 @@ meant to look at.**
 named tests. **A lint failure withholding the page costs exactly what a test failure did**, so it is
 the obvious next thing to move - and it is his to say.
 
+**Two corrections to that sentence, 2026-10-02, and the second changes what he is deciding.**
+
+**They no longer withhold the page at all** - `X-43` and `C-225`. `deploy` runs `if: always()` and
+the assembly carries it, so a lint failure publishes a late site rather than no site. **What this
+paragraph described stopped being true the same day it was written.**
+
+**And the cost is two edits in two files rather than one** - `X-44`'s refinement, verified here:
+`hooks/pre-push` runs `cargo fmt --all -- --check` and `cargo clippy --workspace --all-targets`
+itself, and its own comment says it *mirrors the gate job in `.github/workflows/pipeline.yml` minus
+the WASM build*. **So moving them out of CI leaves the hook exactly as it is.**
+
+**That is the half that still costs him something, and it is a different cost.** CI's lint decides
+whether the site publishes; **the hook's lint decides whether he can push at all** - so a
+`reviewed/` change he makes from a phone is gated locally on the whole Bevy workspace being green.
+**`CLAUDE.md` already names that hazard** - *a documentation-only or report-only push is gated on
+code that perspective did not write and must not repair* - and it now applies to him rather than to
+a lane.
+
 
 ### C-221 - The review page is at `reports/review/` and the root reports page links it
 
