@@ -104,87 +104,6 @@ const UNDER: &str = "spec/tests/rule/";
 /// emits, changes every record's bytes, and sends all 57 back to him. **It is the safe direction -
 /// the verdicts clear and he notices rather than a stale one surviving** - but it is a trap laid for
 /// a later session. Alphabetical order cannot do it, because names are not renumbered.
-/// One rendered row, with its columns in the order `spec/console.md` states.
-///
-/// **`P-606`**: *the order that function puts columns in must not depend on anything editable.
-/// `id` first, then every other trait alphabetically, then `occupied`, `free` and `capacity`
-/// last - an order taken from the schema's `seq:` would mean renumbering those cleared every
-/// approval I have given, and renumbering is a tidy-up nobody thinks twice about.*
-///
-/// **`Names::row` writes the schema's declared order**, which is exactly the editable one. So the
-/// columns are reordered after it rather than instead of it: the renderer knows how to name a
-/// value and this knows where it goes.
-fn canonical(written: &str) -> String {
-    let said = written.trim();
-    let (row, arrow) = match said.rsplit_once(" -> ") {
-        Some((row, count)) => (row, Some(count)),
-        None => (said, None),
-    };
-    let Some(inside) = row.strip_prefix('{').and_then(|it| it.strip_suffix('}')) else {
-        return written.to_string();
-    };
-    let mut words = inside.split(' ').filter(|it| !it.is_empty());
-    let Some(relation) = words.next() else {
-        return written.to_string();
-    };
-    let columns: Vec<(String, Option<String>)> = words
-        .map(|word| match word.split_once(':') {
-            Some((key, value)) => (key.to_string(), Some(value.to_string())),
-            // **A valueless word keeps its place by name**, which is how a declaration's `id`
-            // sorts without displacing `name` - `P-481` and `P-483`.
-            None => (word.to_string(), None),
-        })
-        .collect();
-    let ordered = friendly_notation::in_canonical_order(columns);
-    let mut out = format!("{{{relation}");
-    for (key, value) in ordered {
-        match value {
-            Some(value) => out.push_str(&format!(" {key}:{value}")),
-            None => out.push_str(&format!(" {key}")),
-        }
-    }
-    out.push('}');
-    if let Some(count) = arrow {
-        out.push_str(&format!(" -> {count}"));
-    }
-    out
-}
-
-fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, String> {
-    let (names, schema) = report::render::table(true);
-    let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
-
-    let mut out = format!("{{verdict state:{verdict}}}\n");
-    out.push_str(&format!("{{test name:{name}}}\n"));
-    let mut wrote = 0;
-    for row in &rows {
-        // **`{test name:}` is written once, above, from the file's own name.** A test states it
-        // too and the two have always agreed; writing the row from the name rather than copying it
-        // is what makes a disagreement impossible rather than unlikely.
-        if row.relation == "test" {
-            continue;
-        }
-        // **A section marker keeps its own line and takes a blank line before it**, so the record
-        // reads the way a test reads. It is a row of no relation, which `Names::row` writes as it
-        // is.
-        let written = canonical(&names.row(row));
-        if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
-            out.push('\n');
-        }
-        out.push_str(&written);
-        out.push('\n');
-        wrote += 1;
-    }
-    // **A record with no rows would be a verdict about nothing**, and an approval of nothing is
-    // the shape a reader would take for an approval of something.
-    if wrote == 0 {
-        return Err(format!(
-            "`{name}` folded to no rows, so there is no behaviour to record"
-        ));
-    }
-    Ok(out)
-}
-
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -372,7 +291,7 @@ fn answer(
                 let Ok(text) = std::fs::read_to_string(&from) else {
                     continue;
                 };
-                let now = match record_for(name, &text, verdict) {
+                let now = match report::render::record_for(name, &text, verdict) {
                     Ok(now) => now,
                     Err(why) => return ("500".to_string(), PLAIN, format!("{file}: {why}")),
                 };
@@ -467,7 +386,7 @@ fn answer(
                     } else {
                         "approved"
                     };
-                    let said = match record_for(&name, &text, verdict) {
+                    let said = match report::render::record_for(&name, &text, verdict) {
                         Ok(said) => said,
                         Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     };
@@ -669,8 +588,8 @@ mod tests {
             let from = report::tests_at().join(&file);
             let text = std::fs::read_to_string(&from)
                 .unwrap_or_else(|why| panic!("{}: {why}", from.display()));
-            let said =
-                record_for(&name, &text, "approved").unwrap_or_else(|why| panic!("{name}: {why}"));
+            let said = report::render::record_for(&name, &text, "approved")
+                .unwrap_or_else(|why| panic!("{name}: {why}"));
 
             // **The verdict leads**, so a reader and `verdict_of` meet it before anything else.
             assert!(
@@ -749,8 +668,8 @@ mod tests {
             let name = file.trim_end_matches(".4x").to_string();
             let text = std::fs::read_to_string(report::tests_at().join(&file))
                 .unwrap_or_else(|why| panic!("{file}: {why}"));
-            let said =
-                record_for(&name, &text, "approved").unwrap_or_else(|why| panic!("{name}: {why}"));
+            let said = report::render::record_for(&name, &text, "approved")
+                .unwrap_or_else(|why| panic!("{name}: {why}"));
             let (status, lines) = report::drift(Some(&said), &text);
             assert_eq!(
                 status,
@@ -788,8 +707,8 @@ mod tests {
         let name = file.trim_end_matches(".4x").to_string();
         let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
 
-        let denied = record_for(&name, &text, "denied").expect("a denial");
-        let approved = record_for(&name, &text, "approved").expect("an approval");
+        let denied = report::render::record_for(&name, &text, "denied").expect("a denial");
+        let approved = report::render::record_for(&name, &text, "approved").expect("an approval");
 
         // **The reader the suite uses**, which is what decides whether the engine is held to it.
         assert_eq!(
@@ -895,9 +814,16 @@ mod tests {
         );
         assert_eq!(listed, 165, "the cases, with the world they load excluded");
         assert_eq!(listed, markable + informational);
+        // **Three suites shown and one reviewed**, which is his *I was expecting to review 3
+        // things... everything else was to be informational only* read against his earlier
+        // answer about `types/` and `primitives/`.
         assert_eq!(
-            informational, 113,
-            "the two suites he asked to be shown without a control"
+            informational, 129,
+            "the three suites he asked to be shown without a control"
+        );
+        assert_eq!(
+            markable, 36,
+            "the regression scenario, which is the one he reads"
         );
 
         // **The control follows the suite and not the case.** A case in an informational suite
@@ -913,7 +839,13 @@ mod tests {
             // **The three names as the page writes them**, not as a sentence says them: `deny`
             // is not a prefix of `denied`, and a predicate built from the English rather than
             // the attribute reported `rules` as offering nothing.
-            for control in ["approved", "denied", "regenerate"] {
+            // **Regenerate is unoffered and the gesture survives**, so the page has two
+            // controls and `reviewed/cases.4x` still takes three relations.
+            assert!(
+                !row.contains("data-mark=\"regenerate\""),
+                "`{suite}` offers a regenerate button, which he asked to drop"
+            );
+            for control in ["approved", "denied"] {
                 assert_eq!(
                     row.contains(&format!("data-mark=\"{control}\"")),
                     !shown_only,
@@ -921,6 +853,64 @@ mod tests {
                 );
             }
         }
+    }
+
+    /// **The page he opens away from this machine can write, and carries no secret** - `E-4`.
+    ///
+    /// *I open a page away from this machine, mark a rule test and a regression case, and a
+    /// terminal here sees both without my touching git.*
+    ///
+    /// # What this can and cannot check
+    ///
+    /// **Measured: the page carries the writer, every record it would write, and no token.** The
+    /// round trip through GitHub is his observation and not a test's - which is what makes this
+    /// capability one only a person can vet.
+    ///
+    /// **So this asserts the half that would be false if the work had not been done**, and says
+    /// so rather than implying it covers the rest.
+    #[test]
+    fn the_page_that_has_no_server_writes_through_the_api_and_holds_no_secret() {
+        let hosted = report::build(false).page;
+        let served = report::build(true).page;
+
+        // **One script or the other, never both** - two writers would re-send what the first
+        // already wrote.
+        assert!(
+            hosted.contains("api.github.com"),
+            "the hosted page cannot write"
+        );
+        assert!(
+            !served.contains("api.github.com"),
+            "the served page would write twice"
+        );
+
+        // **Every markable test carries the bytes it would commit**, because there is no server
+        // to ask for them. The body is the record without its verdict line.
+        let tests = report::every_test().len();
+        assert!(
+            tests > 0,
+            "no tests, so carrying their records proves nothing"
+        );
+        assert_eq!(
+            hosted.matches("data-record=").count(),
+            tests,
+            "a test offers a button and the page does not know what it would write"
+        );
+
+        // **No secret, now or by accident later.** The token is his, lives in his browser, and
+        // nothing generates it into a file this repository tracks.
+        for leak in ["ghp_", "github_pat_", "Authorization: Bearer ey"] {
+            assert!(!hosted.contains(leak), "`{leak}` is in a generated page");
+        }
+
+        // **Two controls and not three**, which is him dropping the regenerate feature. The
+        // gesture survives in `reviewed/cases.4x`; what goes is the button.
+        assert_eq!(hosted.matches("data-mark=\"regenerate\"").count(), 0);
+        assert_eq!(
+            hosted.matches("data-mark=\"approved\"").count(),
+            36,
+            "the regression scenario is what he marks, and nothing else"
+        );
     }
 
     /// **The canonical order does not depend on anything editable, and converting changes no
@@ -943,8 +933,8 @@ mod tests {
             let name = file.trim_end_matches(".4x").to_string();
             let text = std::fs::read_to_string(report::tests_at().join(&file))
                 .unwrap_or_else(|why| panic!("{file}: {why}"));
-            let now =
-                record_for(&name, &text, "approved").unwrap_or_else(|why| panic!("{name}: {why}"));
+            let now = report::render::record_for(&name, &text, "approved")
+                .unwrap_or_else(|why| panic!("{name}: {why}"));
 
             // **Still agrees with the test**, which is the whole of what a conversion may not
             // break.
@@ -999,7 +989,7 @@ mod tests {
             .expect("a test to record");
         let name = file.trim_end_matches(".4x").to_string();
         let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
-        let said = record_for(&name, &text, "approved").expect("a record");
+        let said = report::render::record_for(&name, &text, "approved").expect("a record");
         assert_eq!(
             report::render::verdict_of(&said),
             Ok(report::render::Verdict::Approved)

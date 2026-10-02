@@ -451,3 +451,84 @@ fn main() {
     }
     println!("{changed} rewritten");
 }
+
+/// One rendered row, with its columns in the order `spec/console.md` states.
+///
+/// **`P-606`**: *the order that function puts columns in must not depend on anything editable.
+/// `id` first, then every other trait alphabetically, then `occupied`, `free` and `capacity`
+/// last - an order taken from the schema's `seq:` would mean renumbering those cleared every
+/// approval I have given, and renumbering is a tidy-up nobody thinks twice about.*
+///
+/// **`Names::row` writes the schema's declared order**, which is exactly the editable one. So the
+/// columns are reordered after it rather than instead of it: the renderer knows how to name a
+/// value and this knows where it goes.
+pub fn canonical(written: &str) -> String {
+    let said = written.trim();
+    let (row, arrow) = match said.rsplit_once(" -> ") {
+        Some((row, count)) => (row, Some(count)),
+        None => (said, None),
+    };
+    let Some(inside) = row.strip_prefix('{').and_then(|it| it.strip_suffix('}')) else {
+        return written.to_string();
+    };
+    let mut words = inside.split(' ').filter(|it| !it.is_empty());
+    let Some(relation) = words.next() else {
+        return written.to_string();
+    };
+    let columns: Vec<(String, Option<String>)> = words
+        .map(|word| match word.split_once(':') {
+            Some((key, value)) => (key.to_string(), Some(value.to_string())),
+            // **A valueless word keeps its place by name**, which is how a declaration's `id`
+            // sorts without displacing `name` - `P-481` and `P-483`.
+            None => (word.to_string(), None),
+        })
+        .collect();
+    let ordered = friendly_notation::in_canonical_order(columns);
+    let mut out = format!("{{{relation}");
+    for (key, value) in ordered {
+        match value {
+            Some(value) => out.push_str(&format!(" {key}:{value}")),
+            None => out.push_str(&format!(" {key}")),
+        }
+    }
+    out.push('}');
+    if let Some(count) = arrow {
+        out.push_str(&format!(" -> {count}"));
+    }
+    out
+}
+
+pub fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, String> {
+    let (names, schema) = table(true);
+    let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
+
+    let mut out = format!("{{verdict state:{verdict}}}\n");
+    out.push_str(&format!("{{test name:{name}}}\n"));
+    let mut wrote = 0;
+    for row in &rows {
+        // **`{test name:}` is written once, above, from the file's own name.** A test states it
+        // too and the two have always agreed; writing the row from the name rather than copying it
+        // is what makes a disagreement impossible rather than unlikely.
+        if row.relation == "test" {
+            continue;
+        }
+        // **A section marker keeps its own line and takes a blank line before it**, so the record
+        // reads the way a test reads. It is a row of no relation, which `Names::row` writes as it
+        // is.
+        let written = canonical(&names.row(row));
+        if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+            out.push('\n');
+        }
+        out.push_str(&written);
+        out.push('\n');
+        wrote += 1;
+    }
+    // **A record with no rows would be a verdict about nothing**, and an approval of nothing is
+    // the shape a reader would take for an approval of something.
+    if wrote == 0 {
+        return Err(format!(
+            "`{name}` folded to no rows, so there is no behaviour to record"
+        ));
+    }
+    Ok(out)
+}

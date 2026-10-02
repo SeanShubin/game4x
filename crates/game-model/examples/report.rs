@@ -186,6 +186,31 @@ impl Converting {
     }
 }
 
+/// A record's bytes as base64, so the page can carry one in an attribute.
+///
+/// **The GitHub contents API takes a file that way**, and encoding here means the page never has
+/// to encode text it did not generate - `E-4`. **Written out rather than taken from a crate**,
+/// because a dependency for sixteen lines of table lookup is a dependency to keep current.
+fn encoded(raw: &str) -> String {
+    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let bytes = raw.as_bytes();
+    let mut out = String::new();
+    for chunk in bytes.chunks(3) {
+        let mut block = [0u8; 3];
+        block[..chunk.len()].copy_from_slice(chunk);
+        let packed = u32::from(block[0]) << 16 | u32::from(block[1]) << 8 | u32::from(block[2]);
+        for at in 0..4 {
+            if at <= chunk.len() {
+                let six = (packed >> (18 - 6 * at)) & 0b11_1111;
+                out.push(ALPHABET[six as usize] as char);
+            } else {
+                out.push('=');
+            }
+        }
+    }
+    out
+}
+
 fn escaped(raw: &str) -> String {
     raw.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -646,15 +671,26 @@ fn loaded_by(suite: &Path, cases: &[String]) -> BTreeSet<String> {
 
 /// Which suites are shown and offer nothing to press.
 ///
-/// **`E-4`**: *let's show them, but these are informational only, no vetting capability need be
-/// implemented* - Sean, 2026-10-01, asked about `types/` and `primitives/`. **Those two and no
-/// others**, so `rules/` and `scenario/` are markable because nothing singles them out.
+/// **`E-4`, and it is three suites rather than two.** Sean, 2026-10-01, asked where
+/// `regression/rules/`'s sixteen fall: *I was expecting to review 3 things. The tests I was
+/// reviewing before. The new user interface tests. And the regression tests. Everything else was
+/// to be informational only.*
+///
+/// **The three he reviews are the rule tests, the interface tests and `regression/scenario/`.**
+/// *The regression tests* alone could have meant all four suites; his earlier instruction had
+/// already made `types/` and `primitives/` informational, so it cannot - and `rules/` falls in
+/// *everything else* rather than being singled out.
+///
+/// ```text
+/// markable      57 rule tests + 0 interface + 36 scenario cases  =  93
+/// shown only    16 rules + 53 types + 60 primitives              = 129
+/// ```
 ///
 /// **That is the interface declining to offer a control, not the notation forbidding one.**
 /// `spec/README.md` rule 3 says *no suite is privileged* and `reviewed/cases.4x` takes a verdict
 /// for any case, including one of these - so `render::cases_in` reads a verdict for all four and
 /// only the page is narrower.
-pub const SHOWN_ONLY: [&str; 2] = ["primitives", "types"];
+pub const SHOWN_ONLY: [&str; 3] = ["primitives", "rules", "types"];
 
 /// The regression suites rendered as their own section, each one foldable.
 ///
@@ -710,9 +746,20 @@ fn cases_section(marks: &render::Cases, live: bool) -> String {
             out.push_str(&format!(
                 "<li data-case=\"{name}\"><a href=\"../../regression/{name}.4x\"><code>{case}</code></a>{said}{waiting}"
             ));
-            if !shown_only && live {
+            // **The controls are on the page whether or not a server is listening.** Served,
+            // the local script posts them; hosted, the writer script commits them with his
+            // token. **A copy opened from disk offers them and says it is reading only**, which
+            // is honest about where it is rather than pretending the row is unmarkable.
+            if !shown_only {
+                // **Two controls and not three.** Sean, 2026-10-01: *I can drop the regenerate
+                // feature for now, does that make it simpler.* **The gesture is not dropped, only
+                // unoffered** - `reviewed/cases.4x` still takes a `{regenerate}` row and the next
+                // run still spends it, so what goes is the button rather than the capability.
+                //
+                // **And the saving is reach rather than code**: a verdict is a file write, so the
+                // page needs `Contents: write` and nothing that starts a workflow.
                 out.push_str(
-                    " <button data-mark=\"approved\">approve</button>                     <button data-mark=\"denied\">deny</button>                     <button data-mark=\"regenerate\">regenerate</button>",
+                    " <button data-mark=\"approved\">approve</button>                     <button data-mark=\"denied\">deny</button>",
                 );
             }
             out.push_str(
@@ -1187,8 +1234,17 @@ not as expected
         } else {
             format!("<ul class=\"asked\">{wants}</ul>\n")
         };
+        // **The record this test would get, carried by the page that offers the button.**
+        // `E-4`: the hosted page writes a verdict with a `Contents: write` token, so it has to
+        // know the bytes - there is no server to ask. **The body is identical for both
+        // verdicts**, so one copy travels and the script writes the state line above it.
+        let would_write = render::record_for(&stem, &source, "approved")
+            .ok()
+            .and_then(|it| it.split_once('\n').map(|(_, rest)| rest.to_string()))
+            .map(|body| format!(" data-record=\"{}\"", encoded(&body)))
+            .unwrap_or_default();
         cards.push_str(&format!(
-            "<details class=\"test {class}\"{open} data-test=\"{stem}\">\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span> <span class=\"badge {seen_class}\" data-mark>{mark}</span>{chip}{acts}</summary>\n{raw}{said}{noted}<pre>{body}{seen}</pre>\n</details>\n"
+            "<details class=\"test {class}\"{open} data-test=\"{stem}\"{would_write}>\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span> <span class=\"badge {seen_class}\" data-mark>{mark}</span>{chip}{acts}</summary>\n{raw}{said}{noted}<pre>{body}{seen}</pre>\n</details>\n"
         ));
     }
 
@@ -1217,10 +1273,12 @@ not as expected
         " Each test links to its source as a <code>.txt</code> twin, which is written when the          site is deployed and committed nowhere - so those links resolve at          <code>/game4x/reports/thin-engine/</code> and not in a clone."
     };
     let body_attribute = if live { " data-live" } else { "" };
+    // **Served, the local script posts; hosted, the writer commits with his token.** Never
+    // both: one of them would re-send what the other already wrote.
     let script = if live {
         format!("<script>{SCRIPT}</script>\n")
     } else {
-        String::new()
+        format!("<script>{WRITER}</script>\n")
     };
     // **What he has said about the cases**, read the same way the suite reads it. An absent
     // file is no verdict on anything, which is the state before he has pressed anything.
@@ -1260,6 +1318,146 @@ fn main() {
 /// **Both themes, because a report nobody can read in their own is not one** - the same rule
 /// `R-10` states for a generated drawing. Every mark is an alpha over whatever the page sits on,
 /// so it lands on white and on black.
+const WRITER: &str = r#"
+// **The hosted page writes a verdict, and starts nothing** - `E-4`. Sean, 2026-10-01: *I can
+// drop the regenerate feature for now, does that make it simpler.* It does: a verdict is a file
+// write, so this needs `Contents: write` and never `Actions: write`.
+//
+// **The token is his and this page is him writing.** It is held in `localStorage` on this origin,
+// sent only as an `Authorization` header to `api.github.com`, and never put in a URL, a query
+// string, a log line or the DOM. **Nothing here reads it back out for display.**
+(() => {
+  const cards = [...document.querySelectorAll('details[data-test][data-record]')];
+  const cases = [...document.querySelectorAll('li[data-case] button[data-mark]')];
+  if (!cards.length && !cases.length) return;
+
+  // **Derived from where the page is, rather than written in.** A Pages URL says who owns it:
+  // `https://<owner>.github.io/<repo>/...`. So the page carries no repository name to go stale,
+  // and a copy served from anywhere else simply offers no writing.
+  const host = location.hostname.match(/^([^.]+)\.github\.io$/);
+  const repo = host && location.pathname.split('/').filter(Boolean)[0];
+  const owner = host && host[1];
+  const api = owner && repo ? `https://api.github.com/repos/${owner}/${repo}/contents` : null;
+
+  const KEY = 'game4x-token';
+  const bar = document.createElement('p');
+  bar.className = 'note';
+  document.querySelector('.tally').after(bar);
+
+  const held = () => {
+    try { return localStorage.getItem(KEY) || ''; } catch { return ''; }
+  };
+
+  const say = (what) => { bar.textContent = what; };
+
+  const draw = () => {
+    if (!api) {
+      say('Reading only: this page writes just from its Pages URL, which says which repository to write to.');
+      return;
+    }
+    bar.textContent = '';
+    if (held()) {
+      const out = document.createElement('button');
+      out.textContent = 'forget token';
+      out.onclick = () => {
+        try { localStorage.removeItem(KEY); } catch {}
+        draw();
+      };
+      bar.append(`Writing to ${owner}/${repo} as you. `, out);
+      return;
+    }
+    const field = document.createElement('input');
+    field.type = 'password';
+    field.placeholder = 'fine-grained token, Contents: write';
+    field.autocomplete = 'off';
+    const save = document.createElement('button');
+    save.textContent = 'hold it';
+    save.onclick = () => {
+      if (!field.value) return;
+      try { localStorage.setItem(KEY, field.value); } catch {}
+      field.value = '';
+      draw();
+    };
+    bar.append('Reading only until you paste a token. It stays in this browser. ', field, ' ', save);
+  };
+  draw();
+
+  // **Read before writing, because the API needs the blob it is replacing.** A file that is not
+  // there has no sha and is created instead, which is what an unread test is.
+  const put = async (path, content, message) => {
+    const token = held();
+    if (!token || !api) throw new Error('no token');
+    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
+    let sha;
+    const found = await fetch(`${api}/${path}`, { headers });
+    if (found.ok) sha = (await found.json()).sha;
+    else if (found.status !== 404) throw new Error(`reading ${path}: ${found.status}`);
+    const sent = await fetch(`${api}/${path}`, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, content, sha }),
+    });
+    if (!sent.ok) throw new Error(`writing ${path}: ${sent.status}`);
+  };
+
+  const encode = (text) => btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+
+  // **A test's record is the verdict line and the body the page carries.** The body is identical
+  // for both verdicts, which is why one copy travels.
+  for (const card of cards) {
+    const name = card.dataset.test;
+    for (const [state, label] of [['approved', 'approve'], ['denied', 'deny']]) {
+      const press = document.createElement('button');
+      press.textContent = label;
+      press.onclick = async () => {
+        press.disabled = true;
+        try {
+          const body = atob(card.dataset.record);
+          await put(
+            `reviewed/rule/${name}.4x`,
+            encode(`{verdict state:${state}}\n${body}`),
+            `${state}: ${name}`,
+          );
+          say(`${name} is ${state}.`);
+        } catch (why) {
+          say(`${name} was not written: ${why.message}`);
+        }
+        press.disabled = false;
+      };
+      card.querySelector('summary').append(' ', press);
+    }
+  }
+
+  // **A case's verdict is a row in one file**, so writing one is read, replace, write - and the
+  // row for that case is replaced rather than appended, or a second press would say both things.
+  for (const press of cases) {
+    const row = press.closest('li[data-case]');
+    const name = row.dataset.case;
+    const state = press.dataset.mark;
+    press.onclick = async () => {
+      press.disabled = true;
+      try {
+        const token = held();
+        let was = '';
+        const found = await fetch(`${api}/reviewed/cases.4x`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+        });
+        if (found.ok) was = atob((await found.json()).content.replace(/\s/g, ''));
+        const kept = was
+          .split('\n')
+          .filter((line) => line.trim() && !line.includes(`case:${name} `) && !line.includes(`case:${name}}`));
+        kept.push(`{verdict case:${name} state:${state}}`);
+        await put('reviewed/cases.4x', encode(kept.join('\n') + '\n'), `${state}: ${name}`);
+        say(`${name} is ${state}.`);
+      } catch (why) {
+        say(`${name} was not written: ${why.message}`);
+      }
+      press.disabled = false;
+    };
+  }
+})();
+"#;
+
 const SCRIPT: &str = r#"
 // **Served, never written to disk.** `report.html` carries no script - see the top of `report.rs`.
 (() => {
