@@ -50,8 +50,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-249** - The review page publishes under a dead crate's name and nothing links to it · `docs/notes/proposals.md`
 - **S-247** - A fourth `{terrain}` row is refused, and the territory it names is declared above it · `docs/notes/proposals.md`
 - **S-244** - `rustup` was installed all along, and `C-189`'s premise is false · `docs/notes/proposals.md`
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`

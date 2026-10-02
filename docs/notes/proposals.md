@@ -69,6 +69,48 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-249 - The review page publishes under a dead crate's name and nothing links to it
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** Sean looking for it and not finding it · **cites** `E-4`
+
+**He could not find the page `E-4` is vetted against.** Two things, and he has asked for both.
+
+```
+pipeline.yml:359   cp crates/game-model/report.html -> dist/reports/thin-engine/index.html
+reports/index.md   zero links to it - "thin-engine" and "review" both appear 0 times
+```
+
+## It is called `review`
+
+**Sean, 2026-10-02**: *reports review is good.* So `reports/review/index.html`, with lines 360 and
+361 following - the page brings `crates/game-model/data` and `spec/tests` under the same prefix so
+its links resolve.
+
+**`thin-engine` is the last thing in the tree still called that.** It became `crates/thin-engine` on
+2026-09-22 and `crates/game-model` on 2026-09-25 - *the engine is `crates/game-model` now, and
+thin-engine is gone*, `f633864a`. **A path named after a crate that no longer exists is why he looked
+at `reports/index.html` and concluded that was not it.**
+
+## And it is reachable from the reports index
+
+**Sean**: *it should be reachable from the root reports page.* `reports/index.md` links twelve things
+and not this one, which `docs/README.md` makes the test of existing at all - *reachable by links from
+the root README*.
+
+**`index.rs` is the generator.** The page is not one of the generated reports, so it is a link that
+has to be added rather than one that follows from a list.
+
+## Why this is more than cosmetic
+
+**It is the entry point to the one capability only he can vet.** `E-4`'s *vetted when* is *I open a
+page away from this machine, mark a rule test and a regression case* - **and a page he cannot find is
+a capability he cannot vet**, however well it works. The rename and the link are the difference
+between built and reachable.
+
+**One thing to decide rather than assume**: whether the old path keeps working. **This lane has no
+view** - nothing in the tree links `thin-engine`, so nothing breaks either way, and a redirect for a
+path nobody references would be a kindness to a bookmark he may not have made.
+
 ### S-248 - `C-216`'s fix was verified against one record and is wrong for fifty-nine, and the floor hides it
 
 **to** code · **status** **acted** 2026-10-02 · **cited** `49f95682`, `1ae332be` · **raised** 2026-10-02 · **cites** `C-216`, `E-1` · **source** his push failing after the conversion
