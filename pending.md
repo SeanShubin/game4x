@@ -53,7 +53,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
@@ -63,6 +63,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
+- **X-45** - `E-4` split a gesture `scripts/reviewed.sh` performed atomically, and the suite asserts the two halves are equal · `lenses/research/outbox.md`
 
 ### To quality (2)
 

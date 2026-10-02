@@ -2320,6 +2320,101 @@ finding against it.
 carries that sentence, so the question is filed and on the designed route to Sean rather than
 living in a comment. **This lens looked for it expecting to find nothing**, which would have been a
 false alarm of the expensive kind.
+### X-45 - `E-4` split a gesture `scripts/reviewed.sh` performed atomically, and the suite asserts the two halves are equal
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** checking the code lane's claim that `hooks/pre-push` gates a `reviewed/` change Sean makes from a phone · **found by** the claim being false and the composition behind it being worse than the claim
+
+**The claim this came from is wrong and the thing underneath it is real.** `hooks/pre-push` does
+**not** gate an approval from the page: `core.hooksPath` is a local config, unset on a runner, so
+`review.yml`'s own `git push` runs no hook, and `E-4` writes through the GitHub API with no push at
+all. **Nothing tracked sets `hooksPath`** - `scripts/gate.sh:59` and `scripts/push.sh:163` both
+name *a clone where `core.hooksPath` was never set* as the case they handle.
+
+## What is actually true, and it reaches him by a different route
+
+**A record landing does not make the engine obey it.** `spec/tests/` is what he reads,
+`crates/game-model/data/foundation/tests/` is what the suite iterates, and
+`every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read` asserts the two
+populations **equal**. **Only `scripts/reviewed.sh` closes that gap**, locally, by running
+`cargo run --example foundation` - and **no workflow runs the generator at all**, confirmed over
+`.github/workflows/`.
+
+**So the composition is: his approval arrives ungated, the run goes red, and the repair is a local
+push gated on the whole Bevy workspace being green.** Each half is correct alone, which is why
+neither was caught by anything.
+
+## Measured, not argued - six commits today, two windows
+
+Counted with `git ls-tree -r --name-only <commit>` over both directories:
+
+| commit     | time  | records | foundation | suite |
+| ---------- | ----- | ------- | ---------- | ----- |
+| `724644ed` | 12:58 | 60      | 59         | RED   |
+| `cf263ac4` | 12:58 | 61      | 59         | RED   |
+| `d9118df8` | 12:58 | 61      | 59         | RED   |
+| `62f16340` | 12:58 | 61      | 59         | RED   |
+| `a0b37dca` | 13:18 | 61      | 61         | green |
+| `aa3c2b17` | 13:54 | 62      | 61         | RED   |
+| `0710f728` | 13:54 | 63      | 61         | RED   |
+| `72df841d` | 14:10 | 63      | 63         | green |
+
+**Two windows, of 20 and 16 minutes**, both closed by a lane sitting down at the repository. The
+closing commits say what they were - *The foundation forms of his ice and jungle approvals*,
+*Every test is read: the foundation and reports his last two approvals regenerated*.
+
+**`checks` has no `needs:` and nothing depends on it, and a failed job still fails the run** - the
+code lane's own words. So those six commits are red runs, each published.
+
+## Why this is new rather than `S-222` again
+
+**`S-222` named the window and it was a window inside one script.** `scripts/reviewed.sh` commits
+the records and then runs the generator and commits that, in sequence, with its own comment saying
+why: *a test he has just approved constrains nothing until the generator has run.* **The two halves
+were one gesture, seconds apart, by whoever ran it.**
+
+**`E-4` separated them in space and time.** The approval now arrives from a page, from anywhere,
+while nobody is at the machine that can generate the form. **The window went from seconds inside a
+script to however long it is before a lane notices** - twenty minutes today, and bounded by nothing.
+
+**This is the capability working, not a defect in it.** *I can do all of it from a page, from
+anywhere* is exactly what he asked for. What was not carried across is the second half of the
+gesture the old path performed for free.
+
+## Whether
+
+**Worth doing now, and it is the first concrete customer for the engine gate.** The generator's
+whole dependency closure is three local crates and no third-party package - **8 seconds cold**,
+measured into an empty target directory:
+
+```
+CARGO_TARGET_DIR=<empty> cargo build \
+  --manifest-path crates/game-model/Cargo.toml --example foundation
+  -> 8 seconds, 3 packages
+```
+
+**And the runner that would do it already exists and already pushes.** `review.yml` commits
+`reviewed/` as him and pushes, gated on `github.actor == github.repository_owner`. **A job that
+runs the generator after a record lands needs no Bevy, no WASM and no toolchain beyond stable
+Rust** - which is the three-gate shape's engine half, arriving as one job rather than as a
+restructure.
+
+**This lens proposes no design.** Two things worth saying about the shape rather than the fix:
+the generated form is `crates/`, which is the code lane's column and not his, so a job writing it
+is not writing `reviewed/` and needs none of `review.yml`'s owner gate for the *record* reason;
+and whether the generator should run on the record-landing path or be a check that refuses the
+mismatch is a real choice, because the second leaves his approval red until a person acts and the
+first does not.
+
+## The shape
+
+**Two halves, each correct, checked separately.** `review.yml` was verified as a writer of
+records; `reviewed.rs` was verified as a reader of the two populations; **nothing asked what
+happens between them.** Found by checking a claim that was false - *the hook gates his phone push*
+- and finding that the route the claim imagined does not exist while a worse one does.
+
+**It is the fifth of this class in two days and the only one that is a composition rather than a
+sentence.** The other four were each a claim that had gone stale or spoken about something
+adjacent; this one is two artifacts that were never wrong and were never put together.
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
 **to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below
