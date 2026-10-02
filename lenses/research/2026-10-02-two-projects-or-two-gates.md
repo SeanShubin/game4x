@@ -261,3 +261,36 @@ half.
 failure withholding the page has the same cost as a test failure doing it, so this is the obvious
 next thing to move - and it is his to say, not this lane's to assume.* `X-43` is the sharper
 version of that question, because the present behaviour is not withholding but replacing.
+
+## How the cycle closed, and the one thing in it that is against this lens
+
+**Seven findings, all seven closed, none found by a check firing.** `X-42` to spec became `P-614`;
+`X-43` through `X-47` to code were each fixed, four of them within the hour of being filed, and each
+fix was verified here by driving it rather than by reading it.
+
+**Three of the seven were compositions and four were sentences.** A sentence had gone stale, or
+spoke about something adjacent to its subject. **A composition was two correct artifacts with
+nothing between them** - `review.yml` as a writer against `reviewed.rs` as a reader; `E-2`'s third
+verdict against an assertion written when there were two; `review.yml`'s push against
+`generate.yml`'s trigger. **No check can catch one, because a check is one of the two things being
+composed** - `P-245`'s wall from a new side, and the only answer is somebody putting two correct
+things together on purpose.
+
+**And an absence can be the thing that works.** `actions/checkout` with no `token:` was `X-47`;
+`actions/checkout` with no `ref:` is what makes its fix correct, because `github.ref` differs by
+trigger and is right both times. **The defence is not to choose the default** - `push` and
+`workflow_run` want different refs and the default serves both - **it is to make the absence say
+why it is there**, which `f6eeb394` does.
+
+**The instance against this lens is the praise.** This report's lane called the code lane's
+partition guard - `approved.len() + denied.len() == records.len()` - *the better half*, and said it
+catches the failure mode that would have replaced the one being fixed. **The property is true and
+the reason was invented here**: its author wrote it because splitting one set into two invites that
+slip, not because they had identified that failure mode. **The reading was correct and was not
+theirs.**
+
+**That is `CLAUDE.md`'s *a measurement travels with an explanation of itself, which is not
+measured*, pointed at somebody else's code** - and it is the direction nobody audits, because an
+over-generous account of another lane's reasoning is the one no reader checks. **Found only because
+its author said so.** Eighth of the class, first in the praise direction, and the only one that
+needed the subject to volunteer the correction.
