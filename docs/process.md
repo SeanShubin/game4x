@@ -242,6 +242,11 @@ later, and it may never come for something I decide to throw away instead.
 specification is mine; nothing about deploying early loosens that. **The two are independent
 axes**, and reading one from the other is the mistake this section exists to prevent.
 
+**Nothing withholds the review page.** It is committed rather than built, so publishing it needs
+a checkout and nothing else - no lint, no test, no build. **A run that fails says so and the page
+publishes anyway**, because the page is where I find out what is waiting on me, and a failing
+build is exactly when I most need to be able to look.
+
 ## What verification requires
 
 ### State

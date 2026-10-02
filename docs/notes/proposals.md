@@ -11968,6 +11968,7 @@ work the release exists to order.
 | P-607, A verdict on a case is a reminder, and authorizing a regeneration is a separate gesture                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-10-01 |
 | P-608, A case's verdict is a row and pins nothing, and an authorization is consumed rather than kept                         | `spec/README.md` -> rule 3, after *presence used to mean both*                                                                                                                                           | 2026-10-01 |
 | P-611, Three states, one vocabulary, and only one of the two kinds clears on change                                          | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-02 |
+| P-612, Nothing withholds the review page                                                                                     | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
 
 ## Forecast cleanups that were checked and not filed
 
