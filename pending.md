@@ -30,8 +30,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-242** - `a7a4bdf` S-241 and S-242: three states, and convert is a button that checks before it writes · still open in `docs/notes/proposals.md`
-- **S-241** - `a7a4bdf` S-241 and S-242: three states, and convert is a button that checks before it writes · still open in `docs/notes/proposals.md`
 - **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
 - **P-610** - `43a123a` P-610: two ways the page can write, and they want different reach on his token · still open in `docs/notes/decisions.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
@@ -48,10 +46,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-242** - `POST /convert` has no control, so `E-1` cannot be vetted by a gesture he would make · `docs/notes/proposals.md`
-- **S-241** - `P-611` landed and the application shows four marks for a test where the rule says three · `docs/notes/proposals.md`
+- **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
 

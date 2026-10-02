@@ -69,9 +69,40 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-243 - CI's clippy fails on one line and the deploy is skipped, so his page is not up
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** the push at `2db6e388` · **cites** `P-594`, `E-4`
+
+**The push landed and the gate did not.** `origin/master` is `2db6e388`; **Pages was skipped**, so the
+page `E-4` is vetted against does not exist yet.
+
+```
+error: approximate value of `f{32, 64}::consts::GOLDEN_RATIO` found
+  --> crates/sphere-tessellation/src/icosahedral.rs:32:21
+32 | const GOLDEN: f64 = 1.618_033_988_749_895;
+   = help: consider using the constant directly
+```
+
+**A lint his clippy does not have.** `f64::consts::GOLDEN_RATIO` is a recent stabilisation, so
+`approx_constant` has nothing to say about that line on `0.1.96` and flags it on CI's stable. **His
+gate was green and correct for the clippy it had** - `P-594`'s *the red that arrives after a green
+gate means my machine is behind*, for the second time in a day.
+
+## Which repair is yours and the choice is real
+
+**The constant, or an `#[allow]` with a reason.** A file about icosahedral geometry has a reasonable
+claim to spelling the golden ratio out where a reader can see the digits, and `GOLDEN_RATIO` is newly
+stable so using it raises the crate's floor. **This lane has no view and `crates/` is yours.**
+
+## What it blocks, which is why it is filed rather than left to the next push
+
+**`E-4` cannot be vetted until Pages deploys.** Fifteen things wait on him and that is one of them, and
+the gate also has four steps it never reached - **including the mutation sweep, which `hooks/pre-push`
+does not run and which has therefore not seen these 128 commits.**
+
 ### S-242 - `POST /convert` has no control, so `E-1` cannot be vetted by a gesture he would make
 
-**to** code · **status** open · **raised** 2026-10-01 · **cites** `E-1`, `P-606`
+**to** code · **status** **acted** 2026-10-02 · **raised** 2026-10-01 · **cites** `E-1`, `P-606`
 
 **Zero mentions of *convert* in `crates/game-model/report.html`.** The endpoint exists at
 `review-web.rs:272` and the only way to reach it is a request he writes himself:
@@ -103,9 +134,13 @@ conversion that is not committed and pushed leaves the published page showing th
 local records say otherwise. **Whether the control says so is yours**; it is the step most likely to
 be missed, and it is missed silently.
 
+## Closed 2026-10-02
+
+**Verified here rather than taken from their report**: `2db6e388`. Verified here: `report.rs:1392` renders the control with a count of what is behind, and the script posts `/convert`. **`report.html` mentions `convert` zero times and that is correct** - the local server's page offers it, because the conversion only happens on his machine. Every record is checked before any is written.
+
 ### S-241 - `P-611` landed and the application shows four marks for a test where the rule says three
 
-**to** code · **status** open · **raised** 2026-10-01 · **cited** `7c60a988` · **cites** `P-611`, `P-605`
+**to** code · **status** **acted** 2026-10-02 · **raised** 2026-10-01 · **cited** `7c60a988` · **cites** `P-611`, `P-605`
 
 **Go and read `spec/README.md` rule 3.** Three paragraphs replaced the three-state sentence, and
 **three states is now the rule for a test and a case alike.**
@@ -144,6 +179,10 @@ if anything in the case reader clears on staleness, it now disagrees with the ru
 it. **Whether that is worth building is yours** - the rule is three words and the page is yours, so a
 check between them is a check on your own output against a document, which is the shape that has paid
 off twice this week and is not free.
+
+## Closed 2026-10-02
+
+**Verified here rather than taken from their report**: `a7a4bdf5`. Verified here: `report.rs:371` maps `drifted` to `NOT_LOOKED` so it is colour rather than a fourth state; the three constants are `NOT_LOOKED`, `APPROVED`, `DENIED`; and `tests/reviewed.rs:402` reads rule 3, asserts *three states and no others* and drives all five combinations. **`needs changing` writes a denial now** - it used to write only the note, so the page showed a fourth answer while the record said he had never looked.
 
 ### S-240 - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175`
 
