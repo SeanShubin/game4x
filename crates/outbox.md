@@ -222,6 +222,64 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-224 - The site publishes whatever exists, and the script check read 8 pages of 369
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-252`, `S-254`, `P-613` · **cites** `S-252`, `S-254`, `P-613`, `P-612`, `R-9`
+
+**derived from** `find reports -mindepth 2 -name '*.html' | wc -l`, and the job graph as `yaml.safe_load` reads it
+
+## `S-252`: the second shape, and the second paragraph is what made it safe
+
+```
+gate     Say what this run did   if: always()
+         Upload Pages artifact   if: always()
+deploy   needs gate              if: always() && not a pull request
+```
+
+**`mkdir -p` before the page is written is what makes it work**: a build that failed leaves no
+`dist/`, and uploading a missing directory fails rather than publishing the committed half.
+
+**The choice `S-252` left open: the step's name and its conclusion, plus a link to the run.** His
+words ask for the name and do not forbid the output; **a log reproduced into a page is stale the
+moment it is read**, and the page has to answer *what broke* by itself because he said he finds out
+by navigating rather than by reading a log.
+
+**`checks` and `sweep` are not waited for, and the page says so rather than implying it covered
+them.** Waiting would delay the page, which is what `P-612` forbids - so the page names the build
+job's outcome, the commit, and links the run for the rest.
+
+**And `reports/run.html` has a committed placeholder**, because `tests/browsable.rs` asserts every
+link from the index lands on a file and a page that existed only in the artifact would dangle in a
+clone. **It carries its markdown sibling too**, which `R-9` asks of every generated view and which
+this lane found out by the check refusing it.
+
+## `S-254`: a green check, truthful about eight pages, silent about three hundred and sixty-one
+
+```
+reports/*.html                 8     read
+reports/**/*.html mindepth 2   361   never looked at
+of those 361, carrying a script: 1   reports/review/index.html
+floor                          looked >= 5, over a population of 8
+```
+
+**The one scripted page among the 361 is the one this lane put there.** `S-249` moved the review
+page under `reports/`, and the flat read made it exempt **by accident**.
+
+**And the reason for reading flat does not carry over.** `S-249`'s flat read was about *links*,
+which resolve relative to a page's own directory - **scripts have nothing to do with that**, and
+nobody noticed the reason was being borrowed.
+
+**So the floor is derived now**: every `.html` on disk is counted and every one asserted read. **A
+written-down minimum is exactly what let this pass over eight of three hundred and sixty-nine.**
+
+**The review page is exempt by name, with its reason, and the exemption is checked.** `R-9` asks
+that no page *need* JavaScript to be read, and this one does not - so the test asserts it still
+renders its tests without the script, and **refuses an exemption that has stopped matching a
+page**, which would otherwise permit the next one silently.
+
+**Verified by planting a scripted page at depth two**: red, naming the path. Removed, green.
+
+
 ### C-223 - The histories have diverged 6 and 6, and `P-612`'s shape answers a question he kept separate
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-252`, `S-253`, and the gate going red on a citation · **cites** `S-252`, `S-253`, `P-612`, `E-4`

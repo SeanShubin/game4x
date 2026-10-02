@@ -895,6 +895,18 @@ pub fn write_all() -> (usize, usize) {
             beside: vec![("as markdown".to_string(), format!("{slug}.md"))],
         });
     }
+    // **What the last run made of this** - `P-613`: *what broke is reachable from the report root.
+    // I find out by navigating from the reports index rather than by reading a run's log, so a run
+    // that fails leaves a page saying what failed, linked from there.*
+    //
+    // **Written here as a placeholder the pipeline replaces**, because the link has to resolve in a
+    // clone too - `tests/browsable.rs` asserts every link from this page lands on a file, and a
+    // page that only exists in the artifact would dangle locally.
+    hub.push(Entry {
+        at: "run.html".to_string(),
+        said: "what the last run made of this tree, and what failed if anything did".to_string(),
+        beside: vec![("as markdown".to_string(), "run.md".to_string())],
+    });
     // **The review application, which is the one page he acts on rather than reads** - `S-249`.
     // Sean went looking for it and could not find it: it was published under a crate name that
     // stopped existing, and this list had twelve entries and not this one.
@@ -979,7 +991,48 @@ pub fn write_all() -> (usize, usize) {
     let style = include_str!("report.css");
     if std::fs::read_to_string(&css).unwrap_or_default() != style {
         std::fs::write(&css, style).expect("report.css");
+
         written += 1;
+    }
+
+    // **The placeholder for what a run says**, so the link from the index resolves in a clone.
+    //
+    // `P-613`: *what broke is reachable from the report root. I find out by navigating from the
+    // reports index rather than by reading a run's log, so a run that fails leaves a page saying
+    // what failed, linked from there.*
+    //
+    // **The pipeline overwrites it** with that run's own results. What is committed is the sentence
+    // saying nobody has run anything here - which is true of a clone and is what makes the link
+    // land on a file rather than dangle.
+    let run = root().join("reports").join("run.html");
+    let said = concat!(
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n",
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n",
+        "<title>This run</title>\n<link rel=\"stylesheet\" href=\"report.css\">\n</head>\n",
+        "<body>\n<h1>This run</h1>\n",
+        "<p class=\"note\">Written by the pipeline when it deploys, from that run's own job results. ",
+        "This copy is what a clone has: nobody has run anything here.</p>\n",
+        "<p><a href=\"index.html\">The index</a></p>\n</body>\n</html>\n"
+    );
+    if std::fs::read_to_string(&run).unwrap_or_default() != said {
+        std::fs::write(&run, said).expect("reports/run.html");
+    }
+    // **And the diffable sibling `R-9` asks of every generated view.** The pipeline writes both, so
+    // a run's result is readable as text and as a page, and a reader can diff two runs.
+    let beside = root().join("reports").join("run.md");
+    let text = concat!(
+        "# This run
+
+",
+        "Written by the pipeline when it deploys, from that run's own job results. This copy is ",
+        "what a clone has: nobody has run anything here.
+
+",
+        "[The index](index.md)
+"
+    );
+    if std::fs::read_to_string(&beside).unwrap_or_default() != text {
+        std::fs::write(&beside, text).expect("reports/run.md");
     }
     (written, RENDERED.load(Ordering::Relaxed))
 }

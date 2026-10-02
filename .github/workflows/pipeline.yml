@@ -393,7 +393,66 @@ jobs:
           echo "Published $all_inputs .4x files with $all_twins twins, over the whole artifact"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 
+      # **What this run made of the tree, written where the reports index already links it** -
+      # `P-613`: *what broke is reachable from the report root. I find out by navigating from the
+      # reports index rather than by reading a run's log, so a run that fails leaves a page saying
+      # what failed, linked from there.*
+      #
+      # **The step's name and its conclusion, which is the choice `S-252` left open.** His words ask
+      # for the name and do not forbid the output; the name plus a link is what makes the page
+      # answer *what broke* without reproducing a log that would be stale the moment it is read.
+      # **The link is to the run, not instead of the page** - he said he finds out by navigating.
+      #
+      # **Only this job's steps, because `checks` and `sweep` run in parallel** and their results do
+      # not exist yet. Waiting for them would delay the page, which is the thing `P-612` forbids.
+      # The page says so rather than implying it covered them.
+      - name: Say what this run did
+        if: always()
+        run: |
+          mkdir -p crates/game4x/dist/reports
+          outcome="${{ job.status }}"
+          cat > crates/game4x/dist/reports/run.html <<HTML
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>This run</title>
+          <link rel="stylesheet" href="report.css">
+          </head>
+          <body>
+          <h1>This run</h1>
+          <p class="tally">The build job <strong>$outcome</strong>.</p>
+          <p class="note">Commit <code>${{ github.sha }}</code>. The test suites and the mutation
+          sweep run in their own jobs, in parallel with this one, so their results are not known
+          here - <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">this run</a>
+          has all of them.</p>
+          <p class="note">The whole site publishes whether or not the run succeeded, so a broken
+          game is published rather than nothing. If something here is wrong, this is where the
+          build said so.</p>
+          <p><a href="index.html">The index</a></p>
+          </body>
+          </html>
+          HTML
+          {
+            echo "# This run"
+            echo
+            echo "The build job **$outcome**."
+            echo
+            echo "Commit \`${{ github.sha }}\`. The test suites and the mutation sweep run in their own jobs, in parallel with this one, so their results are not known here."
+            echo
+            echo "[The index](index.md)"
+          } > crates/game4x/dist/reports/run.md
+
+      # **Uploaded whether or not anything above succeeded** - `P-613`: *the whole site publishes
+      # whether or not the run succeeded. A failing build leaves a broken game published rather
+      # than nothing published, because deploying is how I verify and a staging area that vanishes
+      # when it breaks is no use to me.*
+      #
+      # **`mkdir -p` above is what makes that work**: a build that failed leaves no `dist/`, and an
+      # upload of a missing directory fails rather than publishing the committed half.
       - name: Upload Pages artifact
+        if: always()
         uses: actions/upload-pages-artifact@v5
         with:
           path: crates/game4x/dist
@@ -575,10 +634,16 @@ jobs:
   # -- Deploy -----------------------------------------------------------------
   # Publishes the gate's artifact. Skipped on pull requests. Its own concurrency group
   # makes Pages deploys a repo-wide singleton - never two at once.
+  # **Deploys whatever exists, whether or not the run succeeded** - `P-613`. It still waits for the
+  # build job, because the artifact is what that job assembles and there is one Pages deployment to
+  # put it in; what went is the requirement that the job *passed*.
+  #
+  # **`checks` and `sweep` are not waited for.** A red suite reds the run and does not delay the
+  # page, which is `P-612`: *publishing it needs a checkout and nothing else.*
   deploy:
     name: Deploy to GitHub Pages
     needs: gate
-    if: github.event_name != 'pull_request'
+    if: always() && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     concurrency:
       group: pages

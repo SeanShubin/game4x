@@ -124,29 +124,98 @@ fn every_page_has_a_markdown_sibling() {
 ///
 /// **A stylesheet is not a script**, which is why `report.css` is allowed and nothing here looks
 /// for it. What this refuses is a page that does something when opened.
+///
+/// # It read eight pages of three hundred and sixty-nine
+///
+/// `read_dir` does not recurse, so this looked at the top level of `reports/` and nothing below
+/// it. **Measured when `S-254` found it: 8 read, 361 never looked at** - and the floor was
+/// `looked >= 5`, over a population of 8, so it could not notice it was missing 98% of its
+/// subject.
+///
+/// **The one scripted page among the 361 is the one this lane put there.** `S-249` moved the
+/// review page under `reports/` and the flat read made it exempt by accident - and `S-249`'s
+/// reason for reading flat was about *links*, which resolve relative to a page's own directory.
+/// **That reason does not carry over to scripts**, and nobody noticed it was being borrowed.
+///
+/// **So the floor is derived now.** It counts the `.html` files on disk and asserts every one was
+/// read, which is the only version of this that cannot go quiet when the tree grows a directory.
 #[test]
 fn no_page_carries_a_script() {
-    let mut looked = 0;
-    for entry in std::fs::read_dir(reports()).expect("reports/") {
-        let path = entry.expect("an entry").path();
-        if path.extension().and_then(|it| it.to_str()) != Some("html") {
+    // **Legal under `R-9`, exempt by name, with the reason written down.** `R-9` asks that no page
+    // *need* JavaScript to be read, and the review page does not: with the `<script>` deleted it
+    // still renders every test, every case and every verdict - the script adds the controls that
+    // write, which is `E-4` and is not reading.
+    //
+    // **Named rather than skipped by shape**, so that a second scripted page is a failure and not
+    // a precedent. The assertion below refuses an exemption that has stopped being needed.
+    const ALLOWED: [&str; 1] = ["review/index.html"];
+
+    let mut pages: Vec<(String, String)> = Vec::new();
+    collect_pages(&reports(), &reports(), &mut pages);
+
+    let on_disk = pages.len();
+    let mut read = 0;
+    let mut used: Vec<&str> = Vec::new();
+    for (at, text) in &pages {
+        if let Some(one) = ALLOWED.iter().find(|it| at == *it) {
+            // **An exemption is checked, not waved through.** The page must still be readable
+            // without its script, which is what `R-9` actually asks.
+            assert!(
+                text.contains("<body") && text.contains("data-test="),
+                "`{at}` is exempt from the script rule and no longer renders its tests without \
+                 one, so the exemption has stopped being true"
+            );
+            used.push(one);
+            read += 1;
             continue;
         }
-        let name = path.file_name().and_then(|it| it.to_str()).unwrap_or("?");
-        let text = std::fs::read_to_string(&path).expect("a page");
         for forbidden in ["<script", "javascript:", " onclick=", " onload="] {
             assert!(
                 !text.contains(forbidden),
-                "`{name}` carries `{forbidden}`, and `R-9` asks that no page need JavaScript \
+                "`{at}` carries `{forbidden}`, and `R-9` asks that no page need JavaScript \
                  to be read"
             );
         }
-        looked += 1;
+        read += 1;
     }
+
+    // **Every page on disk, not a floor somebody chose.** A written-down minimum is what let this
+    // pass over eight of three hundred and sixty-nine.
+    assert_eq!(read, on_disk, "a page on disk was not read");
     assert!(
-        looked >= 5,
-        "only {looked} page(s) were read, so this refused almost nothing"
+        on_disk > 100,
+        "only {on_disk} page(s) under reports/, so this refused almost nothing"
     );
+    // **And an exemption nobody used is a stale exemption**, which would quietly permit a second
+    // page the day somebody reused the name.
+    assert_eq!(
+        used.len(),
+        ALLOWED.len(),
+        "{} of {} exemption(s) matched a page: {used:?}",
+        used.len(),
+        ALLOWED.len()
+    );
+}
+
+/// Every `.html` under `reports/`, as the path it has beneath it.
+///
+/// **Recursive, which the reading this replaced was not.** `reports/foundation/` alone holds 63
+/// pages and `reports/spec/tests/rule/` holds more; neither was ever read by the check above.
+fn collect_pages(root: &Path, at: &Path, into: &mut Vec<(String, String)>) {
+    let Ok(entries) = std::fs::read_dir(at) else {
+        return;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            collect_pages(root, &path, into);
+        } else if path.extension().and_then(|it| it.to_str()) == Some("html")
+            && let Ok(under) = path.strip_prefix(root)
+            && let Ok(text) = std::fs::read_to_string(&path)
+        {
+            into.push((under.to_string_lossy().replace('\\', "/"), text));
+        }
+    }
 }
 
 /// **The committed reports are what the generator writes**, so a stale page fails here.
