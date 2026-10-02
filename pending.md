@@ -51,8 +51,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-252** - `P-612` landed and the pipeline does not obey it yet · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
 - **S-249** - The review page publishes under a dead crate's name and nothing links to it · `docs/notes/proposals.md`

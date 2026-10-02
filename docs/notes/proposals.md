@@ -69,6 +69,38 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-253 - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine`
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `S-250`, `S-249`, `E-4` · **source** Sean approving a test from his phone and the card not changing
+
+**It worked, and that is the point: `62f16340`, *approved: a-territory-whose-biome-is-desert*, authored by him.** The bar said *is approved.* and the card went on reading *never reviewed*.
+
+```
+the bar     live - it reports what just happened
+the card    rendered at build time, so it shows what was true before the press
+```
+
+**A refresh does not help**, because the page is static and the card changes only when the next
+deploy publishes a regenerated one. **So the page cannot show its own effect.**
+
+## Two things, and the first is the same family as `S-250`
+
+**One: flip the card on success.** The handler already knows the write succeeded - it is the branch
+that writes *`{name}` is `{state}`.* **Nothing needs fetching**; the state it should now show is the
+state it just sent. `S-250` asks that the outcome appear where the press was made, and **this is the
+same sentence about the card rather than the message.**
+
+**Two: the `<h1>` still says `thin-engine`.** `S-249` moved the path and added the link and the title
+went with neither, so **the page he reviews from is still named after the crate that stopped
+existing on 2026-09-25** - `f633864a`. One mention was deliberately kept in a comment recording the
+rename; this is not that one.
+
+## Why this is worth doing rather than noting
+
+**He cannot tell a write that failed from a write that worked.** Both leave the card unchanged, and
+the bar is `class="note"` at `opacity: .7`. **That is the one distinction the review surface exists
+to make** - and on his first real use of it, having succeeded, he reported it as nothing happening.
+
 ### S-252 - `P-612` landed and the pipeline does not obey it yet
 
 **to** code · **status** open · **raised** 2026-10-02 · **cites** `P-612`, `E-4`, `S-251` · **source** the create half of `P-612`'s promotion
