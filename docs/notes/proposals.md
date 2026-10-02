@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-251 - A test he has not reviewed fails the build when it drifted, and a red gate blocks the page he reviews from
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** Sean: *I want to make sure a test I have not reviewed does not fail the build, and my ability to review it comes online as soon as possible. Once I have reviewed it, it can fail the next build.* · **cites** `P-611`, `E-4`
+**to** code · **status** **acted** 2026-10-02 · **cited** `caf2aa9c` · **raised** 2026-10-02 · **source** Sean: *I want to make sure a test I have not reviewed does not fail the build, and my ability to review it comes online as soon as possible. Once I have reviewed it, it can fail the next build.* · **cites** `P-611`, `E-4`
 
 **His rule, in his words, and the three things it finds.**
 
@@ -126,6 +126,27 @@ makes this red again** until the count stops assuming three sections.
 **Not a defect in the check**: it was true of all 63 tests until today, and the shape changed under
 it. Sean, 2026-10-02: *we support many commands, which does not seem substantively different than
 also supporting zero commands.*
+
+## Closed 2026-10-02
+
+**Verified here**: `reviewed`, `directories`, `first_test`, `browsable` and `generated` all green
+over `caf2aa9c`, tree clean. `checks:` is a new job with no `needs:`, so a red test reds the run and
+withholds nothing.
+
+**The code lane had a second reason this lane did not have, and it is better.** The comment
+justifying the panic said *what runs would be neither approved nor refused* - **and that is false.**
+What runs is generated from the record, so **what runs is exactly what he approved**; the drift is an
+unreviewed edit sitting in `spec/tests/`. **Nothing unapproved ever reaches the engine**, so it was a
+notice wearing a panic and the generator needed no change - which answers the half this lane had no
+view on.
+
+**And the four-marks note was weaker than it was filed as.** A fixed four could not tell a test with
+no `{when}` from a test whose `{when}` is in one spelling and not the other. **Counted per file with
+the two spellings compared, it found exactly that**: the desert record carries a `{when}` and
+`spec/tests/` no longer does - the drift said a second way.
+
+**What is left is `P-612`**, filed from the choice the code lane surfaced rather than made: `fmt` and
+`clippy` still withhold the deploy.
 
 ### S-250 - A verdict's outcome appears at the top of the page and the button is anywhere below it
 
