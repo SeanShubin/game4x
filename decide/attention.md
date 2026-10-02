@@ -14,7 +14,9 @@ Say *promote P-n*, or say what to change.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-616** - Do you still want the issue-checkbox route, now that you use the page? · `decide/questions.md`
 
 ## Vet a capability
 
