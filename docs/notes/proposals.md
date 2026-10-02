@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-254 - `no_page_carries_a_script` reads 8 pages of 369, and the one page with a script is in the 361 it cannot see
 
-**to** code · **status** open · **raised** 2026-10-02 · **cites** `R-9`, `S-249` · **source** Sean asking whether the review pages need JavaScript
+**to** code · **status** **acted** 2026-10-02 · **cited** `aee47c91`, `0e6b69f6` · **raised** 2026-10-02 · **cites** `R-9`, `S-249` · **source** Sean asking whether the review pages need JavaScript
 
 **He asked whether his prohibition still applies to an interactive hosted page.** The answer is that
 `R-9` already permits it - *no page needs JavaScript **to be read*** - and the review page is 97%
@@ -109,6 +109,25 @@ recorded a deliberate reason for the flat read - *the link to this page is held 
 links are not descended into* - and **that reason is about links, not scripts**, so it does not carry
 over by itself.
 
+## Closed 2026-10-02
+
+**The floor is derived rather than written down, which is more than this item asked.**
+`assert_eq!(read, on_disk)` - every `.html` under `reports/` counted and every one asserted read -
+with `on_disk > 100` holding the population. **A written-down minimum is exactly what let the old
+check pass over 8 of 369**, and `looked >= 5` could not have noticed.
+
+**The exemption is one name and it is checked both ways.** `review/index.html` must still render its
+tests with the script deleted, which is what `R-9` actually asks; and `used.len() == ALLOWED.len()`
+fails an exemption that has stopped matching a page, **so a rename cannot orphan it silently and the
+next scripted page cannot be permitted by accident.**
+
+**Verified by planting a scripted page at depth two**: red, naming the path; removed, green. Their
+measurement, and the kind this lane cannot run against another lane's column.
+
+**And the diagnosis they confirmed is the one worth keeping.** The flat read's reason was about
+*links*, which resolve relative to a page's own directory - **nobody noticed the reason was being
+borrowed for scripts.**
+
 ### S-253 - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine`
 
 **to** code · **status** open · **raised** 2026-10-02 · **cites** `S-250`, `S-249`, `E-4` · **source** Sean approving a test from his phone and the card not changing
@@ -143,7 +162,7 @@ to make** - and on his first real use of it, having succeeded, he reported it as
 
 ### S-252 - `P-612` landed and the pipeline does not obey it yet
 
-**to** code · **status** open · **raised** 2026-10-02 · **cites** `P-612`, `E-4`, `S-251` · **source** the create half of `P-612`'s promotion
+**to** code · **status** **acted** 2026-10-02 · **cited** `aee47c91`, `0e6b69f6` · **raised** 2026-10-02 · **cites** `P-612`, `E-4`, `S-251` · **source** the create half of `P-612`'s promotion
 
 **`docs/process.md` -> What I am pushing out now says this, and it is Sean's:**
 
@@ -183,6 +202,23 @@ yours** and the trade-offs are in it, not in the rule.
 **And whether the game publishes from a failed build is a different question.** `P-612` is only about
 the page, and this lane kept them apart deliberately so he approved one thing. **If the shape you
 choose answers both at once, say so rather than letting it be answered by accident.**
+
+## Closed 2026-10-02
+
+**Verified here**: `deploy` is `needs: gate` with `if: always()`, the assembly and upload are
+`if: always()`, and `reports/run.html` and `reports/run.md` are committed and linked from the index.
+All five suites green.
+
+**The part this lane would have missed is `mkdir -p` before the page is written.** A failed build
+leaves no `dist/`, and uploading a missing directory **fails** rather than publishing the committed
+half - **so without it the rule would have been obeyed in the file and broken in fact**, which is
+`C-42`'s shape arriving inside the fix for it.
+
+**On the choice left open - the step's name, its conclusion, and a link to the run.** Their reason is
+better than the question: *a log reproduced into a page is stale the moment it is read*, and his *I
+find out by navigating* means the page answers *what broke* by itself. **`checks` and `sweep` are
+not waited for**, because that would delay the page, so the page says their results are not known
+there rather than implying they passed.
 
 ### S-251 - A test he has not reviewed fails the build when it drifted, and a red gate blocks the page he reviews from
 

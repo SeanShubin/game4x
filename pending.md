@@ -30,9 +30,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-254** - `aee47c9` S-252 and S-254: the site publishes whatever exists, and the script check sees the whole tree · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
-- **S-252** - `aee47c9` S-252 and S-254: the site publishes whatever exists, and the script check sees the whole tree · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
 - **S-247** - `61491f2` A test for a territory biome, three of six, and S-247 for why not six · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
@@ -54,11 +52,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (8)
 
-- **S-254** - `no_page_carries_a_script` reads 8 pages of 369, and the one page with a script is in the 361 it cannot see · `docs/notes/proposals.md`
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
-- **S-252** - `P-612` landed and the pipeline does not obey it yet · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
 - **S-249** - The review page publishes under a dead crate's name and nothing links to it · `docs/notes/proposals.md`
 - **S-247** - A fourth `{terrain}` row is refused, and the territory it names is declared above it · `docs/notes/proposals.md`
