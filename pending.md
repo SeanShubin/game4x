@@ -30,7 +30,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-249** - `9cd1db7` S-249: the review page is at reports/review/ and the root reports page links it · still open in `docs/notes/proposals.md`
+- **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
 - **S-247** - `61491f2` A test for a territory biome, three of six, and S-247 for why not six · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`

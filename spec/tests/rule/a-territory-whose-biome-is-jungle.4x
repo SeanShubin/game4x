@@ -1,36 +1,25 @@
-# A territory whose biome is jungle, and a command that does not touch it.
+# A territory whose biome is jungle.
 #
 # **`spec/planet.md`: *Each territory has a biome*, and *a biome earns its place by being shown
-# rather than by being obeyed.*** So what there is to assert is that a terrain can be stated and
-# that no rule disturbs it - which is *shown rather than obeyed* said as a test.
+# rather than by being obeyed.*** So the whole of what there is to assert is that this is a world
+# the engine accepts - `terrain` joins a territory to a biome and nothing obeys it.
 #
-# **`terrain` is the join and `biome` is the vocabulary.** `spec/data/schema.4x`: *`biome` is
-# vocabulary and `terrain` is state, which is why only the second carries a `{state}` row - the
-# six do not change while a game runs, and which territory has which is the world.*
+# **No command, because zero is a cardinality.** Sean, 2026-10-02: *we support many commands, which
+# does not seem substantively different than also supporting zero commands.* **A rule firing here
+# would assert that one rule of sixteen leaves a terrain alone**, which is almost no evidence that
+# none of them does, and would need a place and a unit that have nothing to do with a biome.
 #
-# **One test per biome, because the vocabulary is six facts.** `spec/planet.md`: *the biomes are
-# ocean, ice, desert, grassland, jungle and mountain.* The mutation sweep found all six rows with
-# nothing referring to any of them - `C-218` - and six tests of four rows is what makes all six
-# load-bearing. **A single test naming all six is not available**: a fourth `{terrain}` row is
-# refused even with its territory declared above it, which is `S-247`.
-#
-# **The command is a refresh because it has to fire and must not be about terrain.** A test where
-# nothing happens would pass against an engine that cannot run at all; this moves a scout's
-# `moving` and leaves the terrain alone, so the `{then}` asserts rather than copies.
+# **What it holds is the vocabulary.** `spec/data/schema.4x` declares `{biome id:3 name:jungle}` and
+# `{reference id:78 column:158 to:biome}`, so `is:jungle` is refused the moment that row is deleted -
+# which is what the mutation sweep found nothing doing: all six biomes with nothing referring to any
+# of them, `C-218`. **One test per biome, because the vocabulary is six facts.**
 
 {test name:a-territory-whose-biome-is-jungle}
 
 {given}
 {territory id:1 name:territory-1}
-{place id:1 of:territory-1 layer:surface name:place-1}
 {terrain of:territory-1 is:jungle}
-{scout where:place-1 moving:0} -> 1
-
-{when}
-{refresh what:unit trait:moving}
 
 {then}
 {territory id:1 name:territory-1}
-{place id:1 of:territory-1 layer:surface name:place-1}
 {terrain of:territory-1 is:jungle}
-{scout where:place-1 moving:1} -> 1
