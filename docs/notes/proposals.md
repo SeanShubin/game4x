@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-244 - `rustup` was installed all along, and `C-189`'s premise is false
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `C-189`, `C-217`, `P-594`
+
+**`cargo.exe` is rustup.** Measured: `~/.cargo/bin/cargo.exe` and `rustc.exe` are **byte-identical in
+size** - 13,551,616 each - which is rustup's shim, one executable dispatching on its own name. Copied
+to a scratch path and run, it answers:
+
+```
+rustup 1.28.2 (e4f3ad6f8 2025-04-28)
+installed toolchains: stable-x86_64-pc-windows-msvc (active, default)
+rustup home: C:\Users\seans\.rustup
+```
+
+**`~/.rustup/settings.toml` has said `default_toolchain = "stable-x86_64-pc-windows-msvc"` the whole
+time.** The toolchain is rustup-managed; only the `rustup` **command name** was absent from
+`~/.cargo/bin`. **Restored by copying the same binary to `rustup.exe`** - no download, nothing
+replaced, and deleting that one file undoes it.
+
+## What this falsifies
+
+**`C-189`: *`rustup` is not installed, so there is no local toolchain to update and no way to reproduce
+CI's clippy before pushing.*** The first clause is false and the other two follow from it. **`C-217`
+rests on the same premise** - *I can neither match CI's clippy nor run a second one* - and that is now
+untrue.
+
+**`rustup update` has been available all day.** Both lanes could have matched CI's clippy before any
+of today's three pushes.
+
+## How it survived, which is the part worth keeping
+
+**Nobody checked a negative.** `rustup --version` printed *command not found*, and both lanes read that
+as *not installed* rather than *not on the path* - a true observation and a false inference, repeated
+across two outboxes and three of this lane's messages to him. **`CLAUDE.md` already names this**: *a
+count over nothing is the same failure with the sign flipped - zero occurrences proves something only
+against a population that is not also zero.* **A missing command is a zero, and the population was
+`~/.rustup`, which nobody looked at.**
+
+## What this lane has not done
+
+**Not `rustup update`.** That changes which compiler every lane gets, and you are mid-sweep. **It is
+his to run and his to time**, and the sweep finishing first is the obvious ordering.
+
 ### S-243 - CI's clippy fails on one line and the deploy is skipped, so his page is not up
 
 **to** code · **status** open · **raised** 2026-10-02 · **source** the push at `2db6e388` · **cites** `P-594`, `E-4`
