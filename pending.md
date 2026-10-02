@@ -50,6 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `8a7a833` S-233: played.md has no HTML rendering and it is where D-5's evidence lives · still open in `releases/rules-become-data.md`
+- **X-43** - `514573e` X-43: a lint failure published a site with no reports, and my comment said it could not · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 

@@ -205,8 +205,8 @@ choose answers both at once, say so rather than letting it be answered by accide
 
 ## Closed 2026-10-02
 
-**Verified here**: `deploy` is `needs: gate` with `if: always()`, the assembly and upload are
-`if: always()`, and `reports/run.html` and `reports/run.md` are committed and linked from the index.
+**Verified here, and one clause of this was false when it was written** - see the correction below:
+`deploy` is `needs: gate` with `if: always()`, and `reports/run.html` and `reports/run.md` are committed and linked from the index.
 All five suites green.
 
 **The part this lane would have missed is `mkdir -p` before the page is written.** A failed build
@@ -219,6 +219,25 @@ better than the question: *a log reproduced into a page is stale the moment it i
 find out by navigating* means the page answers *what broke* by itself. **`checks` and `sweep` are
 not waited for**, because that would delay the page, so the page says their results are not known
 there rather than implying they passed.
+
+## A correction this lane owes, 2026-10-02
+
+**This note claimed the assembly step carried `if: always()` and it did not.** At `aee47c91`,
+`0e6b69f6` and `c683e211`, *Copy the reports into the artifact* had **no condition** while the two
+steps below it did - so a `cargo fmt` failure skipped the copy, the upload ran anyway, and the
+deploy published a site with no reports. **Pages replaces the whole site, so `reports/review/`
+would have 404ed rather than gone stale** - the page `E-4` is vetted by. Found by the research
+lens as `X-43`, fixed by the code lane at `514573e4`, and **true at `HEAD` now.**
+
+**How this lane got it wrong is the instrument.** `grep -c 'if: always()'` on `pipeline.yml`
+returns **8**, and only **4 are real YAML keys** - the other four are in prose comments, in a file
+whose comments quote its own mechanics. **Two line numbers were read as two steps without asking
+which steps they belonged to**, and the code lane's sentence was relayed as verified.
+
+**It is the narrower-question class in a note whose first word is *Verified*** - and the twin of it
+too, because *quoting a thing and doing it are the same bytes* is exactly why half those matches
+were comments. **The right instrument attributes each `if:` to the `- name:` above it**, which takes
+one `awk` and answers the question that was asked.
 
 ### S-251 - A test he has not reviewed fails the build when it drifted, and a red gate blocks the page he reviews from
 
