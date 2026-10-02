@@ -2011,6 +2011,117 @@ the four named ones was **correct and worthless until a yard was on the territor
 present was already covered by one of the four, so the first mutation run against it was not caught.
 A check needs a subject that only it can see.
 
+### X-42 - the suspension paragraph's condition is met, and the authority to remove it is not this lens's to relay
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** [the report](2026-10-02-two-projects-or-two-gates.md), from Sean asking whether reviewing the tests and building the game should be two projects · **found by** reading `CLAUDE.md`'s own end condition against `releases/marking-state.md`
+
+**`CLAUDE.md` lines 130-147 suspend the rule that a generated regression case is deleted only by
+Sean**, and the paragraph states its own end: *the condition is the later of two things. The format
+is nearly done; the app is not started... whoever sees both land says so and this paragraph goes.
+Nothing restores it automatically.*
+
+**Both halves are built**, in `releases/marking-state.md`:
+
+```
+E-3  A case takes a verdict and a regeneration is authorized separately
+     status built 2026-10-01 · cited db4717c2, c123b840      the format
+E-4  I can do all of it from a page, from anywhere
+     status built 2026-10-01 · cited e2ef89ac                the app
+```
+
+## Three things a proposal has to state rather than assume
+
+**`built` is not `vetted`.** `E-1` through `E-4` are all `to sean · status built` and none is
+vetted. **So *done* in the paragraph's condition is ambiguous**, and un-suspending on `built` lets
+a lane resume deleting cases before Sean has confirmed the replacement works.
+
+**The word is *hosted* and what was built says it is not.** `review.yml`'s header: *Nothing is
+hosted. The issue is the list and the control at once, so there is no app to keep alive and no
+OAuth to hold.* `E-4` is a Pages page writing through the API with his token. **`hosted review
+app` appears nowhere else in the tree** - twice in that one paragraph, once inside his own quoted
+words.
+
+**The fourth paragraph is not purely about the suspension.** Lines 145-147 end *a lane still
+creates, deletes or changes no record*, which restates lines 109-111. Whether it goes with the
+other three or loses only its first clause is a wording question inside the rules, and therefore
+yours to settle and report.
+
+## Why this is addressed and not relayed
+
+**Sean said in conversation on 2026-10-02 that the condition is met and the paragraph should go.
+That is deliberately not carried here as an approval.** `CLAUDE.md`: *a lens or a producer may
+report that he approved something, and that report is worth acting on everywhere else - but not
+here... a reader has no way to tell a relayed approval from an invented one, and the file being
+relayed about is the one that says who may write what.* The suspension governs what a lane may
+delete, which is who-may-write.
+
+**So what travels is the checkable half** - the two capabilities, their statuses, the paragraph's
+own condition, and the `hosted` mismatch, each verifiable in seconds. **The authority half reaches
+you from him**, in the queue, where promoting is him reading it. Facts relay; authority does not.
+
+## And the question behind it, which needs no proposal
+
+**He also asked whether the tests and the game should be separate repositories. The report's
+answer is no, and most of the benefit was built the same day he asked** - `30422f9e` and the three
+after it took the suites out of the deploy path, so a red test no longer withholds the page.
+**What a split would cost is four single-tree properties**: the one index `tools/outbox` walks, the
+one column map in `hooks/pre-commit`, the drift comparison across `spec/tests/`, `reviewed/` and
+`crates/game-model/data/foundation/tests/`, and `D-3`'s *the game's data is stated once*.
+**Recorded in the report rather than asked of you**, because nothing in it needs a rule that
+`spec/` does not have.
+
+### X-43 - a lint failure publishes an empty site, and the review page 404s rather than going stale
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** [the report](2026-10-02-two-projects-or-two-gates.md) · **found by** re-deriving a claim about `deploy` after `P-613` landed, and finding the hazard had moved rather than gone
+
+**Where.** `.github/workflows/pipeline.yml`, the `gate` job. Read at `c683e211`:
+
+```
+Check formatting                     (no if)
+Clippy (everything, tests included)  (no if)
+Build (WASM, release)                (no if)
+Write build provenance               (no if)
+Copy the reports into the artifact   (no if)
+Say what this run did                if: always()   <- mkdir -p dist/reports
+Upload Pages artifact                if: always()
+```
+
+**What.** A failing step skips every later step that is not `if: always()`. So a
+`cargo fmt --check` failure in any of nineteen crates skips **Copy the reports into the
+artifact**, while *Say what this run did* still runs its `mkdir -p crates/game4x/dist/reports` and
+*Upload Pages artifact* still uploads. `deploy` is `needs: gate` with `if: always()`, so it
+publishes a `dist/` holding `reports/run.html` and `reports/run.md` and nothing else.
+
+**Why it costs.** **The review page is not stale, it is gone.** `reports/review/index.html` 404s,
+and with it the 57 test cards and 165 case entries `E-4` is vetted by. Pages is a singleton whose
+artifact replaces the site, so no previous copy survives underneath. **`P-613`'s intent is
+explicitly the opposite**: *a failing build leaves a broken game published rather than nothing
+published, because deploying is how I verify and a staging area that vanishes when it breaks is no
+use to me.*
+
+**The comment in the file is one notch too weak.** It says `fmt` and `clippy` *still block the
+deploy*. They do not block it - the deploy succeeds and publishes a site with the reports missing.
+**A blocked deploy leaves the last good site up and this does not**, which is the whole difference.
+
+**Nothing checks it.** No test in `crates/` or `tools/` reads `pipeline.yml`.
+`crates/game-model/tests/browsable.rs` asserts that linked paths are named in the workflow text -
+a static property of the file, saying nothing about which steps run on a failure.
+
+**Whether.** **Worth doing now**, and smaller than it looks: the steps that assemble `dist/` want
+the same `if: always()` the two below them already carry, or the assembly wants moving above the
+lint. **This lens proposes neither** - which it is depends on whether a half-built `dist/` should
+publish, and that is the lane that owns the file deciding what `P-613` meant.
+
+**Reachable rather than theoretical.** `hooks/pre-push` runs `fmt` and `clippy`, so a local push
+is refused first - but `CLAUDE.md` contemplates `--no-verify` as Sean's call, and records
+`pre-push` running zero tests from 2026-09-22 until it was found.
+
+**One thing already named by that file and left to Sean**, quoted so this item is not read as
+answering it: *a lint failure withholding the page has the same cost as a test failure doing it,
+so this is the obvious next thing to move - and it is his to say, not this lane's to assume.*
+**This item is the sharper version of that question**, because the present behaviour is not
+withholding but replacing.
+
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
 **to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below

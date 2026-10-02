@@ -52,7 +52,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
@@ -62,6 +62,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
+- **X-43** - a lint failure publishes an empty site, and the review page 404s rather than going stale · `lenses/research/outbox.md`
 
 ### To quality (2)
 
@@ -77,7 +78,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (60)
+### To spec (61)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -139,6 +140,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 - **X-33** - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong · `lenses/research/outbox.md`
 - **X-41** - a wrong explanation, marked, is a signpost away from a dead end - two cases, and no words proposed · `lenses/research/outbox.md`
+- **X-42** - the suspension paragraph's condition is met, and the authority to remove it is not this lens's to relay · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

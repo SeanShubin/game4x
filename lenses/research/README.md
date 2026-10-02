@@ -60,6 +60,18 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Two projects, or two gates](2026-10-02-two-projects-or-two-gates.md)
+  - 2026-10-02. Carries `X-42` to the specification lane and `X-43` to the code lane. From Sean
+    asking whether reviewing the tests and building the game should be separate projects. The
+    review application's whole closure is three local crates and no third-party package - 12
+    seconds cold, against 544 packages in the workspace - but `report.rs` runs the engine, so it
+    is a test runner with an approval UI rather than a separate product. Independent pipelines in
+    one repository are possible four ways and one already runs; GitHub Pages is the one true
+    singleton. **Most of the shape was built the day it was asked**, which is the correction this
+    report carries: a draft of the argument rested on `deploy` needing a green gate, and `P-613`
+    had already removed that. What is left is one paragraph of `CLAUDE.md` past its own end
+    condition, and a lint failure that publishes an empty site rather than a stale one.
+
 - [A move drawn on a sphere, and what the established practice already settles](2026-09-21-a-move-drawn-on-a-sphere.md)
   - 2026-09-21. **Addressed to `code`**, carrying `X-38`. What `goldberg-move` draws, measured:
     the route is straight chords and all 240 neighbour separations on `GP(2, 0)` put them under
