@@ -906,11 +906,35 @@ mod tests {
         // **Two controls and not three**, which is him dropping the regenerate feature. The
         // gesture survives in `reviewed/cases.4x`; what goes is the button.
         assert_eq!(hosted.matches("data-mark=\"regenerate\"").count(), 0);
+        // **Thirty-six buttons are in the markup and fifty-seven more are made by the script**,
+        // so this number is about the cases alone and says so. The specification lane counted
+        // these 72 and nearly refused the capability, reading *the rule tests have no control*
+        // off a page whose rule-test controls do not exist until it is opened.
         assert_eq!(
             hosted.matches("data-mark=\"approved\"").count(),
             36,
-            "the regression scenario is what he marks, and nothing else"
+            "the case buttons, which are the ones written into the markup"
         );
+
+        // **The selector and the markup are probed against each other**, because the half that
+        // creates a test's buttons is a string in a script and nothing else reads it. **A
+        // renamed attribute would leave fifty-seven cards with no control and every count
+        // above unchanged** - the page would be inert and green.
+        //
+        // **This is still reading the input and it says so.** What it rules out is the two
+        // halves disagreeing, which is the failure that can happen without anyone touching the
+        // script; what it cannot rule out is the script being wrong in a way the markup agrees
+        // with, and that is his observation.
+        for attribute in ["data-test", "data-record"] {
+            assert!(
+                hosted.contains(&format!("[{attribute}]")),
+                "the writer does not select on `{attribute}`, so no test gets a control"
+            );
+            assert!(
+                hosted.contains(&format!("{attribute}=")),
+                "no card carries `{attribute}`, so the writer's selector matches nothing"
+            );
+        }
     }
 
     /// **The canonical order does not depend on anything editable, and converting changes no
