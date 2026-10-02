@@ -126,6 +126,32 @@ pub fn mine() -> PathBuf {
 /// `crates/` - so `schema.4x` and `rules.4x` are the specification's, and `engine.4x`, `script.4x`
 /// and `setup.4x` name no game noun and stay here. A test's friendly side is `spec/tests/`'s, which
 /// `P-532` settled.
+/// A record's behaviour, with the verdict taken off the front.
+///
+/// **A verdict is a fact about his response and not a row of the game** - `P-605`,
+/// `spec/README.md` rule 3: *a record names its verdict and carries the behaviour that verdict is
+/// about.* **Two things in one file**, so anything reading the behaviour drops the first.
+///
+/// # Found by the first record in the new format reaching a reader that had not been told
+///
+/// **Fifty-six records predate `P-605` and carry no verdict line**, so every reader that folds a
+/// record went on working while the format changed underneath it. `drift` was taught to drop the
+/// line; `tests/generated.rs` was not, and nothing noticed because **there was no record with a
+/// verdict in it to notice with.**
+///
+/// **Sean pressed convert and the suite went red the same minute** - *the record generates 13 rows
+/// and the engine runs 12*, the thirteenth being the verdict. **A check over a population of
+/// zero**, which is the shape `CLAUDE.md` names with the sign flipped.
+pub fn behaviour_in(record: &str) -> &str {
+    match record.strip_prefix("{verdict") {
+        Some(rest) => match rest.find('\n') {
+            Some(at) => &rest[at + 1..],
+            None => "",
+        },
+        None => record,
+    }
+}
+
 /// What Sean has said about the generated cases, and what he has authorized.
 ///
 /// **`spec/README.md` rule 3**: *a case's verdict is a row in `reviewed/cases.4x` and pins no

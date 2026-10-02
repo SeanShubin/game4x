@@ -158,15 +158,19 @@ fn no_test_differs_from_what_sean_read() {
     let mut drifted: Vec<String> = Vec::new();
     let mut compared = 0;
     for stem in &tests {
-        let (status, lines) = report::review_of(stem);
-        match status {
-            "reviewed" => compared += 1,
-            "never reviewed" => unread.push(stem),
-            _ => {
+        // **Drift is the first state with colour on it, not a third branch** - `P-611`. A test
+        // whose rows changed is one he has not looked at in its present form, and `earlier` says
+        // he looked at an earlier one. **So this reports the two separately and counts them as
+        // one state**, which is the distinction the rule draws.
+        let got = report::review_of(stem);
+        match (got.state, got.earlier) {
+            (report::APPROVED, _) | (report::DENIED, _) => compared += 1,
+            (_, Some(_)) => {
                 compared += 1;
-                let said: Vec<&str> = lines.iter().map(|(_, it)| it.as_str()).collect();
+                let said: Vec<&str> = got.lines.iter().map(|(_, it)| it.as_str()).collect();
                 drifted.push(format!("{stem}\n      {}", said.join("\n      ")));
             }
+            (_, None) => unread.push(stem),
         }
     }
 
@@ -389,6 +393,173 @@ fn a_reordered_row_is_the_same_row_and_a_changed_value_is_not() {
             report::drift(Some(read), now).0,
             "drifted",
             "{what} is a different behaviour and this did not say so"
+        );
+    }
+}
+
+/// **Every state the code can reach is one of the three the rule names** - `P-611`, `S-241`.
+///
+/// `spec/README.md` rule 3: *there are three states and no others, for a test and for a case
+/// alike. I have not looked at it; I have looked and approved it; I have looked and know it is
+/// wrong.*
+///
+/// # Why this is built, when neither item asked for it
+///
+/// **A fourth state shipped and ran for days.** `review_of` returned `drifted`, the page rendered
+/// it as a badge beside the other three, and `x` wrote a note the rule no longer treats as a
+/// state. **Nothing compared what the page shows to what the rule says**, which is why it got that
+/// far - and Sean found it by counting marks by hand, having said *three states* twice.
+///
+/// **So this asks the rule rather than pinning the output.** A check asserting the exact badges the
+/// page emits today would be the strongest possible statement about what it does and would say
+/// nothing about what it owes - and `CLAUDE.md` names that distinction: *what tells the two apart
+/// is what the assertion names: the output, or the rule the output owes.*
+///
+/// # Driven, not counted
+///
+/// **Every record on disk says `approved`**, so a check that counted the states the page shows
+/// would find one of three and pass. The states are driven over the combinations that can produce
+/// them, and the count of combinations is asserted.
+#[test]
+fn every_state_the_code_can_reach_is_one_the_rule_names() {
+    let at = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("..")
+        .join("spec")
+        .join("README.md");
+    let rule = std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+    // **Collapsed on both sides**, because the rule is wrapped prose and a sentence drafted on
+    // one line matches nothing in it - `CLAUDE.md`, and the reason `tools/anchor` exists.
+    let said: String = rule.split_whitespace().collect::<Vec<_>>().join(" ");
+
+    // **The rule's own number, so promoting a fourth state turns this red.** The literal is the
+    // carrier: a sentence saying *four* no longer matches, and somebody has to look rather than
+    // discovering it from a page.
+    assert!(
+        said.contains("There are three states and no others"),
+        "rule 3 no longer says how many states there are, so this check has lost its subject"
+    );
+    assert_eq!(
+        report::STATES.len(),
+        3,
+        "the code names a number of states the rule does not"
+    );
+
+    // **The three as the rule words them**, so a renamed state is caught here and not by a page
+    // showing a word nobody recognises.
+    for said in [
+        "I have not looked at",
+        "I have looked and approved it",
+        "I have looked and know it is wrong",
+    ] {
+        assert!(said.contains(said), "rule 3 no longer says `{said}`");
+    }
+
+    // **Every combination that can produce a state**, over texts this test owns. A record is
+    // absent, approved or denied; the rows either match the test or do not.
+    let test = "{test name:x}\n\n{given}\n{place name:here}\n\n{when}\n{move}\n";
+    let moved = "{test name:x}\n\n{given}\n{place name:there}\n\n{when}\n{move}\n";
+    let approved = format!("{{verdict state:approved}}\n{test}");
+    let denied = format!("{{verdict state:denied}}\n{test}");
+
+    // **Named, because a five-tuple is a row nobody can read back.** Each is one combination
+    // that can produce a state: what the record says, and whether the rows still match.
+    struct Combination {
+        what: &'static str,
+        record: Option<String>,
+        now: &'static str,
+        state: &'static str,
+        earlier: Option<bool>,
+    }
+    let cases = [
+        Combination {
+            what: "no record",
+            record: None,
+            now: test,
+            state: report::NOT_LOOKED,
+            earlier: None,
+        },
+        Combination {
+            what: "approved, matching",
+            record: Some(approved.clone()),
+            now: test,
+            state: report::APPROVED,
+            earlier: None,
+        },
+        Combination {
+            what: "denied, matching",
+            record: Some(denied.clone()),
+            now: test,
+            state: report::DENIED,
+            earlier: None,
+        },
+        // **Drift is the first state and keeps its colour** - *a test whose rows have changed
+        // since I read it is in the first state, because somebody edited it and my approval was
+        // of what it said.*
+        Combination {
+            what: "approved, drifted",
+            record: Some(approved),
+            now: moved,
+            state: report::NOT_LOOKED,
+            earlier: Some(false),
+        },
+        Combination {
+            what: "denied, drifted",
+            record: Some(denied),
+            now: moved,
+            state: report::NOT_LOOKED,
+            earlier: Some(true),
+        },
+    ];
+    assert_eq!(
+        cases.len(),
+        5,
+        "three record states by whether the rows moved"
+    );
+
+    let mut reached = std::collections::BTreeSet::new();
+    for one in &cases {
+        let got = report::state_of(one.record.as_deref(), one.now);
+        assert!(
+            report::STATES.contains(&got.state),
+            "`{}` reached `{}`, which rule 3 does not name",
+            one.what,
+            got.state
+        );
+        assert_eq!(got.state, one.state, "`{}` is in the wrong state", one.what);
+        assert_eq!(
+            got.earlier, one.earlier,
+            "`{}` carries the wrong colour",
+            one.what
+        );
+        reached.insert(got.state);
+    }
+
+    // **All three are reachable**, or this would pass over a state nothing can produce.
+    assert_eq!(
+        reached.len(),
+        3,
+        "only {} of the three states is reachable: {reached:?}",
+        reached.len()
+    );
+
+    // **And the page renders whatever this returns**, which is the half that was wrong: the
+    // fourth state was visible as a badge. Every badge the page can show for a state is one of
+    // the three, and the drift is a separate attribute rather than a fourth word.
+    let page = report::build(true).page;
+    let shown: std::collections::BTreeSet<&str> = page
+        .split("data-mark>")
+        .skip(1)
+        .filter_map(|rest| rest.split('<').next())
+        .collect();
+    assert!(
+        !shown.is_empty(),
+        "no state is rendered, so nothing is checked"
+    );
+    for one in &shown {
+        assert!(
+            report::STATES.contains(one),
+            "the page shows `{one}`, which rule 3 does not name"
         );
     }
 }

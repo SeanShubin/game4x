@@ -338,25 +338,82 @@ fn orphaned() -> Vec<String> {
 ///
 /// **Everything above the first marker is `note`** - the prose that says what the test is for,
 /// which drifts as readily as the rows and matters as much.
-pub fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
+pub fn review_of(stem: &str) -> Review {
     let now = std::fs::read_to_string(tests_at().join(format!("{stem}.4x"))).unwrap_or_default();
     let read = std::fs::read_to_string(records_at().join(format!("{stem}.4x"))).ok();
-    let (mark, lines) = drift(read.as_deref(), &now);
-    // **A fourth status, because `P-605` made presence two facts** - `spec/README.md` rule 3: *no
-    // record means I have not looked; a record saying `approved` means the code is bound by it; a
-    // record saying `denied` means it is not.*
+    state_of(read.as_deref(), &now)
+}
+
+/// The state a record and a test are in, over the two texts rather than over the disk.
+///
+/// **Split out so a check can drive every combination.** `review_of` reads two directories that
+/// belong to other columns - `spec/tests/` is the specification's and `reviewed/` is Sean's - so a
+/// check that made a state happen by writing one of them would be writing outside this lane.
+///
+/// **And every record on disk says `approved` today**, so a check that counted the states the page
+/// shows would find one of three and pass. **That is a count over nothing wearing the other
+/// sign**: the states are driven here, and the page is asserted to render whatever this returns.
+pub fn state_of(read: Option<&str>, now: &str) -> Review {
+    let (mark, lines) = drift(read, now);
+    let denied = read.is_some_and(|it| render::verdict_of(it) == Ok(render::Verdict::Denied));
+
+    // **Three states and no others** - `spec/README.md` rule 3, from `P-611`: *I have not looked
+    // at it; I have looked and approved it; I have looked and know it is wrong.*
     //
-    // **Layered here rather than inside `drift`**, which answers *do these say the same thing* and
-    // should go on answering only that. A denial whose rows no longer match the test is still
-    // drifted, and that is the right answer: he denied something, and what is there now is not
-    // what he denied.
-    if mark == "reviewed"
-        && let Some(record) = read.as_deref()
-        && render::verdict_of(record) == Ok(render::Verdict::Denied)
-    {
-        return ("denied", lines);
+    // **`drifted` was a fourth and is not a state.** A test whose rows have changed since he read
+    // it *is in the first state*, because somebody edited it and his approval was of what it
+    // said. **So drift collapses into *not looked at* and survives as colour** - the page may say
+    // he approved an earlier version, which is worth knowing and is not a fourth answer.
+    //
+    // **A denial drifts the same way and for the same reason.** What is there now is not what he
+    // denied, so the verdict is about a test that no longer exists in that form.
+    match (mark, denied) {
+        ("drifted", _) => Review {
+            state: NOT_LOOKED,
+            earlier: Some(denied),
+            lines,
+        },
+        (_, true) => Review {
+            state: DENIED,
+            earlier: None,
+            lines,
+        },
+        ("reviewed", false) => Review {
+            state: APPROVED,
+            earlier: None,
+            lines,
+        },
+        _ => Review {
+            state: NOT_LOOKED,
+            earlier: None,
+            lines,
+        },
     }
-    (mark, lines)
+}
+
+/// The three states a test can be in, and nothing else.
+///
+/// **Named rather than written at each use**, so that
+/// `the_page_shows_the_three_states_the_rule_names` can range over them instead of carrying its
+/// own copy of the list - a check against a second copy is checking the copy.
+pub const NOT_LOOKED: &str = "never reviewed";
+/// He looked and approved it, and the code is bound where this test is concerned.
+pub const APPROVED: &str = "reviewed";
+/// He looked and knows it is wrong, which binds nothing and owes him a statement of what he wants.
+pub const DENIED: &str = "denied";
+
+/// Every state, so a check can range over them.
+pub const STATES: [&str; 3] = [NOT_LOOKED, APPROVED, DENIED];
+
+/// What he said about one test: a state, and colour that is not a state.
+///
+/// **`earlier` is the drift**, kept because it is worth seeing and separated because it is not an
+/// answer to *what do you think of this*. `Some(false)` is *you approved an earlier version*,
+/// `Some(true)` is *you denied one*, and `None` is no record or one that still matches.
+pub struct Review {
+    pub state: &'static str,
+    pub earlier: Option<bool>,
+    pub lines: Vec<(&'static str, String)>,
 }
 
 /// The same comparison over the text rather than over the disk.
@@ -1013,9 +1070,13 @@ not as expected
             }
         });
 
-        let (mark, drift) = review_of(&stem);
+        let Review {
+            state: mark,
+            earlier,
+            lines: drift,
+        } = review_of(&stem);
         let seen = match mark {
-            "reviewed" => {
+            APPROVED => {
                 reviewed += 1;
                 String::new()
             }
@@ -1208,9 +1269,21 @@ not as expected
         // Showing it as unread would ask him to read it again, which is the one thing a denial
         // says he has already done.
         let seen_class = match mark {
-            "reviewed" => "seen",
-            "denied" => "denied",
+            APPROVED => "seen",
+            DENIED => "denied",
             _ => "unseen",
+        };
+        // **The drift is colour beside the state, not a state of its own** - `P-611`. A test whose
+        // rows changed is in the first state, and *you approved an earlier version* is worth
+        // seeing while he is deciding whether to read it again.
+        let was = match earlier {
+            Some(true) => {
+                " <span class=\"badge earlier\" data-earlier>you denied an earlier version</span>"
+            }
+            Some(false) => {
+                " <span class=\"badge earlier\" data-earlier>you approved an earlier version</span>"
+            }
+            None => "",
         };
         // **The controls exist only when something is listening**, which is why `build` is told.
         let acts = if live {
@@ -1244,7 +1317,7 @@ not as expected
             .map(|body| format!(" data-record=\"{}\"", encoded(&body)))
             .unwrap_or_default();
         cards.push_str(&format!(
-            "<details class=\"test {class}\"{open} data-test=\"{stem}\"{would_write}>\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span> <span class=\"badge {seen_class}\" data-mark>{mark}</span>{chip}{acts}</summary>\n{raw}{said}{noted}<pre>{body}{seen}</pre>\n</details>\n"
+            "<details class=\"test {class}\"{open} data-test=\"{stem}\"{would_write}>\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span> <span class=\"badge {seen_class}\" data-mark>{mark}</span>{was}{chip}{acts}</summary>\n{raw}{said}{noted}<pre>{body}{seen}</pre>\n</details>\n"
         ));
     }
 
@@ -1287,11 +1360,47 @@ not as expected
         .and_then(|text| render::cases_in(&text).ok())
         .unwrap_or_default();
     let cases = cases_section(&marks, live);
+    // **`S-242`: the conversion was a verb, a port and a path he had to know.** Every other
+    // gesture in this application is a key or a button, and this one asked him to write a `curl` -
+    // so `E-1` was built and unvettable at once.
+    //
+    // **It says he has to commit what it writes**, because the published page is generated from
+    // `reviewed/` and an uncommitted conversion leaves the hosted page showing the old order with
+    // nothing saying so.
+    let convert = if live {
+        // **A record is behind if rewriting it from its test, with its own verdict, differs.**
+        // One question, asked once - the verdict is read off the record because carrying it over
+        // is the thing a conversion may not lose.
+        let behind = every_test()
+            .iter()
+            .filter(|file| {
+                let name = file.trim_end_matches(".4x");
+                let Ok(was) = std::fs::read_to_string(records_at().join(file)) else {
+                    return false;
+                };
+                let Ok(text) = std::fs::read_to_string(tests_at().join(file)) else {
+                    return false;
+                };
+                let verdict = match render::verdict_of(&was) {
+                    Ok(render::Verdict::Denied) => "denied",
+                    Ok(render::Verdict::Approved) => "approved",
+                    Err(_) => return false,
+                };
+                render::record_for(name, &text, verdict).is_ok_and(|now| now != was)
+            })
+            .count();
+        match behind {
+            0 => "<p class=\"note\" data-convert=\"none\">Every record is in the canonical column order.</p>\n".to_string(),
+            n => format!("<p class=\"note\" data-convert=\"{n}\"><strong>{n}</strong> record(s) are in the schema's column order rather than the canonical one. Converting changes the order and not what any record says, and stops without writing anything if it would. <button data-do=\"convert\">convert {n}</button> <b>Commit what it writes</b> - the published page is generated from <code>reviewed/</code>, so an uncommitted conversion leaves that page showing the old order and saying nothing.</p>\n"),
+        }
+    } else {
+        String::new()
+    };
     let case_count: usize = every_case().iter().map(|(_, it)| it.len()).sum();
     let rows = total + case_count;
 
     let page = format!(
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{rows}</strong> rows &middot; <strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{lost}{cards}{cases}{script}</body>\n</html>\n"
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{rows}</strong> rows &middot; <strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{convert}{lost}{cards}{cases}{script}</body>\n</html>\n"
     );
     Built {
         page,
@@ -1591,6 +1700,18 @@ const SCRIPT: &str = r#"
     const button = e.target.closest('button[data-do]');
     if (!button) return;
     e.preventDefault();
+    // **The conversion is not about one test**, so it is the one gesture with no card - `S-242`.
+    if (button.dataset.do === 'convert') {
+      button.disabled = true;
+      button.textContent = 'converting';
+      fetch('/convert', { method: 'POST' })
+        .then((r) => r.text())
+        .then((said) => {
+          button.replaceWith(said + ' - now commit what it wrote, or the published page keeps the old order');
+        })
+        .catch((why) => { button.disabled = false; button.textContent = 'convert failed: ' + why.message; });
+      return;
+    }
     const card = button.closest('details[data-test]');
     here = cards.indexOf(card);
     show();

@@ -670,6 +670,32 @@ fn a_case_verdict_stands_and_an_authorization_is_a_different_row() {
     let both = cases_in("{verdict case:x state:denied}\n{regenerate case:x}\n").expect("two rows");
     assert!(both.denied.contains("x") && both.authorized.contains("x"));
 
+    // **A case's verdict survives its rows changing, and a test's does not.** `spec/README.md`
+    // rule 3, from `P-611`: *a test whose rows have changed since I read it is in the first state...
+    // a case whose rows have changed is not - the game changed rather than the file, and I looked
+    // at this and said it was wrong is worth most at exactly the moment it changes again. The suite
+    // reports a stale case; it does not clear my verdict on one.*
+    //
+    // **So the reader is asserted to take no account of the case at all.** It is given a verdict
+    // for a case whose text it never sees, and for one that is not on disk, and answers the same
+    // either way - which is what makes clearing on staleness impossible rather than merely absent.
+    let stale = cases_in(
+        "{verdict case:scenario/01/02-gather state:denied}
+",
+    )
+    .expect("a row");
+    assert!(stale.denied.contains("scenario/01/02-gather"));
+    let gone = cases_in(
+        "{verdict case:no/such/case state:denied}
+",
+    )
+    .expect("a row");
+    assert!(
+        gone.denied.contains("no/such/case"),
+        "the reader consulted the case, so a stale one could lose its verdict"
+    );
+    assert_eq!(stale.denied.len(), gone.denied.len());
+
     // **No file is no verdict on anything**, which is the state today and is not an error.
     assert_eq!(cases_in("").expect("nothing"), render::Cases::default());
 

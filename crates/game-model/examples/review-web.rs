@@ -270,7 +270,15 @@ fn answer(
         // **Idempotent, so running it twice is running it once.** A record already canonical is
         // left alone and counted as such, which is what lets him press it without checking first.
         ("POST", "/convert") => {
-            let mut converted = Vec::new();
+            // **Every record is checked before any is written** - `S-242`: *one press for all 57,
+            // stopping on any whose meaning would change rather than reporting partial success.*
+            //
+            // **It used to write as it went**, so a record that tripped the check left the ones
+            // before it converted and the ones after it not - a mixed directory and a line of
+            // output, which is the state he asked not to be left in. **Nothing trips it today**,
+            // which is exactly why the order mattered: the safe version and the unsafe one are
+            // indistinguishable until the day one does.
+            let mut writing = Vec::new();
             let mut already = 0;
             for file in report::every_test() {
                 let at = report::records_at().join(&file);
@@ -306,17 +314,22 @@ fn answer(
                     return (
                         "500".to_string(),
                         PLAIN,
-                        format!("{file}: converting would change what it says"),
+                        format!(
+                            "{file}: converting would change what it says; nothing was written"
+                        ),
                     );
                 }
+                writing.push((at, now));
+            }
+            let converting = writing.len();
+            for (at, now) in writing {
                 if let Err(why) = std::fs::write(&at, &now) {
-                    return ("500".to_string(), PLAIN, format!("{file}: {why}"));
+                    return ("500".to_string(), PLAIN, format!("{}: {why}", at.display()));
                 }
-                converted.push(name.to_string());
             }
             ok(
                 PLAIN,
-                format!("converted {}, already canonical {already}", converted.len()),
+                format!("converted {converting}, already canonical {already}"),
             )
         }
         ("GET", "/data") => ok(HTML, index(browsable)),
@@ -404,14 +417,36 @@ fn answer(
                     let _ = std::fs::remove_file(at);
                     ok(PLAIN, "never reviewed".to_string())
                 }
+                // **A note is an annotation on `denied`, not a state of its own** - `P-611`, and
+                // `spec/README.md` rule 3: *denied is where I say what I want instead, when I have
+                // words for it. That is the same state whether I have said it or not: this is
+                // wrong and this needs changing are one thing.*
+                //
+                // **So this writes the verdict and then the words.** It used to write only the
+                // words, which left *needs changing* reading as a fourth answer on the page while
+                // the record said he had never looked.
                 _ => {
                     let note = field(body, "note").unwrap_or_default();
                     let note = note.trim();
                     if note.is_empty() {
                         return ("400 Bad Request".to_string(), PLAIN, "no note".to_string());
                     }
+                    let from = report::tests_at().join(format!("{name}.4x"));
+                    let text = match std::fs::read_to_string(&from) {
+                        Ok(text) => text,
+                        Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
+                    };
+                    let said = match report::render::record_for(&name, &text, "denied") {
+                        Ok(said) => said,
+                        Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
+                    };
+                    let into = report::records_at();
+                    let _ = std::fs::create_dir_all(&into);
+                    if let Err(why) = std::fs::write(into.join(format!("{name}.4x")), said) {
+                        return ("500".to_string(), PLAIN, format!("{name}: {why}"));
+                    }
                     file(&name, note);
-                    ok(PLAIN, "noted".to_string())
+                    ok(PLAIN, "denied".to_string())
                 }
             }
         }

@@ -141,6 +141,124 @@ engine goes where its consumer is - is correct under rule 18 and is the same act
 would move 399 lines into a prototype that is itself in breach**, which is why it waits on the
 ordering rather than on the question.
 
+### C-214 - Three states, and the check that would have caught the fourth
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-241` · **cites** `S-241`, `P-611`
+
+**derived from** *there are three states and no others, for a test and for a case alike* - `spec/README.md` rule 3
+
+`drifted` is gone as a state and survives as colour.
+
+```
+review_of -> Review { state, earlier, lines }
+state      never reviewed | reviewed | denied
+earlier    Some(false) you approved an earlier version · Some(true) you denied one · None
+```
+
+**A test whose rows changed is in the first state**, which is the rule's own sentence, and the
+page says *you approved an earlier version* beside it rather than instead of it.
+
+**And `needs changing` writes a denial now.** It used to write only the note, so the page read
+*needs changing* as a fourth answer while the record said he had never looked. A note is an
+annotation on `denied`, which is what the rule says and what the button now does.
+
+## The case half is the opposite, and nothing clears it
+
+**Asserted by giving the reader a verdict for a case it never sees**, and one that is not on disk.
+It answers the same either way - **so clearing on staleness is impossible rather than merely
+absent**, which is a stronger statement than *I looked and there is no such code*.
+
+## The check he left to this lane, and why it is worth it
+
+**Built.** `every_state_the_code_can_reach_is_one_the_rule_names` reads rule 3, asserts it still
+says *three states and no others*, asserts the three as he words them, then drives all five
+combinations of what a record says against whether the rows moved.
+
+**Driven rather than counted, because every record on disk says `approved`** - a check counting
+the states the page shows would find one of three and pass.
+
+**Verified by putting the bug back**: `drifted` as a state turns it red with *`approved, drifted`
+reached `drifted`, which rule 3 does not name*. **Reverted, and the diff is empty.**
+
+**What makes it worth the file is that it asks the rule rather than pinning the output.** A check
+asserting the badges the page emits today would be the strongest possible statement about what it
+does and would say nothing about what it owes.
+
+
+### C-215 - Convert is a button, checks every record before writing any, and says to commit
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-242` · **cites** `S-242`, `E-1`
+
+**derived from** *every other gesture in that application is a key or a button and this one asks me to know a verb, a port and a path*
+
+**The served page counts what is behind and offers one press.** It is absent when nothing is
+behind, and absent from the file copy, which has no server to press against.
+
+```
+n record(s) are in the schema's column order rather than the canonical one.
+[convert n]   Commit what it writes - the published page is generated from reviewed/,
+              so an uncommitted conversion leaves that page showing the old order
+              and saying nothing.
+```
+
+## Every record is checked before any is written
+
+**It used to write as it went.** A record that tripped the meaning check left the ones before it
+converted and the ones after it not - **a mixed directory and a line of output**, which is the
+state `S-242` asked not to be left in.
+
+**Nothing trips it today - measured, 0 of 57 would change meaning** - which is exactly why the
+order mattered. **The safe version and the unsafe one are indistinguishable until the day one
+does.**
+
+## What the press is not, because this lane nearly reported it as something it was not
+
+**One record was already in the new format**, and this lane's first reading was that a partial
+conversion had happened. **It had not.** Measured: 0 of 57 would be refused, so a conversion would
+have written all 57 or none.
+
+**He approved that test in the running application**, and the writer - which `P-605` changed -
+wrote it in the new format. **An ordinary approval, not a half-finished pass**, and reporting the
+latter would have sent somebody looking for a bug in the thing that works.
+
+
+### C-216 - A reader counted the verdict as a game row, and nothing could notice until the first record had one
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** the gate going red while `S-241` was being built · **cites** `P-605`
+
+**derived from** *a record names its verdict and carries the behaviour that verdict is about* - `spec/README.md` rule 3
+
+**`tests/generated.rs` folded a whole record**, verdict line included, so the foundation it
+generated carried a thirteenth row the engine does not run.
+
+```
+a-bin-cannot-be-built-where-the-capacity-is-taken.4x:
+  the record generates 13 rows and the engine runs 12
+```
+
+**Fixed by `render::behaviour_in`**, which takes the verdict off the front, used at both places a
+record is folded.
+
+## Why it ran green for as long as the format has existed
+
+**Fifty-six of the fifty-seven records predate `P-605` and carry no verdict line.** So every
+reader that folds a record went on working while the format changed underneath it: `drift` was
+taught to drop the line and this one was not, and **there was no record with a verdict in it to
+notice with.**
+
+**The reader was wrong from the day it was written and could not fail.** A count over a population
+of zero, which `CLAUDE.md` names with the sign flipped - *zero occurrences proves something only
+against a population that is not also zero.*
+
+**It surfaced the minute he approved one test**, which is the population going from zero to one.
+
+## The floor, asserted
+
+`what_the_engine_runs_is_what_the_record_generates` now refuses to pass unless at least one record
+carries a verdict. **Without it the fix is checked over nothing**, and the next format change
+repeats this exactly.
+
+
 ### C-213 - the counts were right and this lane was wrong; the fourth suite survives the correction
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** re-deriving a number before building to it · **cites** `E-3`, `E-4`

@@ -178,12 +178,32 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         add(
-            fold(&text, &schema).unwrap_or_else(|why| panic!("reviewed/{name}: {why}")),
+            fold(render::behaviour_in(&text), &schema)
+                .unwrap_or_else(|why| panic!("reviewed/{name}: {why}")),
             false,
         );
     }
     let of_game = Names::of(&of_game);
     let of_script = Names::of(&of_script);
+
+    // **At least one record is in the format the readers are written for**, or every reader that
+    // drops the verdict line is exercised over nothing and passes for the wrong reason.
+    //
+    // **This is the floor the bug walked under.** Fifty-six records predate `P-605` and carry no
+    // verdict, so `fold` over a record never met one - and the day the first did, the suite said
+    // *the record generates 13 rows and the engine runs 12*, the thirteenth being the verdict.
+    // **Nothing was wrong with the reader until there was something for it to read.**
+    let carrying = records
+        .iter()
+        .filter(|name| {
+            std::fs::read_to_string(records_at().join(name))
+                .is_ok_and(|it| it.starts_with("{verdict"))
+        })
+        .count();
+    assert!(
+        carrying > 0,
+        "no record carries a verdict, so dropping one is checked over nothing"
+    );
 
     let mut compared = 0;
     let mut wrong: Vec<String> = Vec::new();
@@ -191,7 +211,8 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         let at = records_at().join(name);
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
-        let friendly = fold(&text, &schema).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
+        let friendly = fold(render::behaviour_in(&text), &schema)
+            .unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         let sections = in_a_section(&friendly);
 
         let generated: Vec<Row> = friendly
