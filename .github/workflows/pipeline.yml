@@ -203,8 +203,13 @@ jobs:
       # **That is the right version to publish and worth saying out loud**: `reports/` is
       # generated but committed deliberately, a person reads it and decides from it, and the
       # sweep's own job keeps its fresh copies as an artifact for comparison.
+      # **Runs whether or not the build did** - `X-43`. Everything it copies is committed, so it
+      # needs no toolchain and no bundle; `mkdir -p` is what lets it work when `trunk` never ran.
+      # **Without this, a `cargo fmt` failure published a site with no reports.**
       - name: Copy the reports into the artifact
+        if: always()
         run: |
+          mkdir -p crates/game4x/dist
           cp -r reports crates/game4x/dist/reports
           cp -r scenario crates/game4x/dist/scenario
           mkdir -p crates/game4x/dist/spec
@@ -472,10 +477,22 @@ jobs:
   #
   # **The run still goes red**, because a failed job fails the run. Only the dependency went.
   #
-  # **`fmt` and `clippy` are still in `gate` and still block the deploy**, which is a choice
-  # rather than an oversight: he named tests. A lint failure withholding the page has the same
-  # cost as a test failure doing it, so **this is the obvious next thing to move** - and it is
-  # his to say, not this lane's to assume.
+  # **`fmt` and `clippy` are still in `gate`, and the sentence that stood here said they *block
+  # the deploy*. They do not, and saying so was worse than wrong** - `X-43`, the research lens,
+  # 2026-10-02. It was true when written and stopped being true the same day, when `P-613` made
+  # `deploy` run `if: always()`: a lint failure then skipped the step that copies the reports in,
+  # while the upload still ran, so **the deploy succeeded and published a site with no reports at
+  # all.** Pages replaces the whole site, so `reports/review/index.html` 404ed rather than going
+  # stale - and `E-4`'s 57 cards and 165 case rows went with it.
+  #
+  # **A blocked deploy would have left the last good site up. This published emptiness**, which is
+  # the one outcome `P-613` names as useless: *a staging area that vanishes when it breaks is no
+  # use to me.*
+  #
+  # **The fix is below, on the copy step**, which needs no build: it moves committed files. What
+  # genuinely depends on the build is `Write build provenance`, which edits the game's own
+  # `index.html`, so that one stays conditional and a skipped build leaves the game broken rather
+  # than the site empty.
   #
   # **Same shape as `sweep` and the same reason.** No `needs:` here and none pointing at it;
   # a `needs:` on `deploy` would only let the deploy start late, and *not blocked or delayed*

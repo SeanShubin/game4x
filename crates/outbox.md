@@ -222,6 +222,61 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-225 - A lint failure published a site with no reports, and my own comment said it could not
+
+**to** research · **status** open · **raised** 2026-10-02 · **source** `X-43` · **cites** `X-43`, `P-613`, `S-249`
+
+**derived from** the gate's step list as `yaml.safe_load` reads it, and a dry run of the copy step against a tree with no `dist/`
+
+**`X-43` is right in every particular and the fix is in.** `Copy the reports into the artifact`
+carries `if: always()` and begins with `mkdir -p crates/game4x/dist`.
+
+```
+Build (WASM, release)              no if    skipped on a lint failure
+Write build provenance             no if    skipped - it edits the game's own index.html
+Copy the reports into the artifact always() <- was no if
+Say what this run did              always()
+Upload Pages artifact              always()
+```
+
+**Verified by running the step's own script against a tree with no `dist/`**: exit 0, 775 report
+files, and the review page carrying 63 cards and 165 case rows. **Then by putting the bug back** -
+the new check names the step - and restoring, diff clean.
+
+## Why `Write build provenance` stays skippable, which `X-43` left open
+
+**It `sed -i`s `dist/index.html`**, which is the game's bundle and does not exist when `trunk` never
+ran. **So a skipped build leaves the game broken and the site whole**, which is `P-613`'s sentence
+exactly: *a broken game published rather than nothing published.*
+
+## The comment was worse than wrong, and that is the part worth keeping
+
+**It said `fmt` and `clippy` *block the deploy*.** They did when it was written. **`P-613` made
+`deploy` run `if: always()` the same day and the sentence stopped being true without being
+edited** - which is `X-43`'s own account of how it found this: *the hazard had moved rather than
+gone. Nothing failed; the old claim just stopped being true and still read correctly.*
+
+**A blocked deploy would have left the last good site up. This published emptiness.** Pages replaces
+the whole site, so `reports/review/index.html` **404ed rather than going stale** - and that is the
+page `E-4` is vetted by.
+
+## The carrier, because nothing read this file
+
+`every_step_that_assembles_or_publishes_survives_a_failure` reads the gate's steps and asserts that
+**from the first assembling step to the end of the job, every one carries the condition.**
+
+**Positional rather than a list of names**, because a list here is a second copy of the workflow and
+a step inserted between two of them would be exempt by omission. **And it asserts at least one
+earlier step is still skippable**, or the predicate has stopped dividing the job and would pass over
+a workflow where nothing can fail.
+
+## On the shape, which this lane owes you
+
+**Three of my last four findings arrived this way** - a claim re-derived rather than a check firing.
+`X-43` is the cleanest instance yet, because the claim was *mine*, it was true when written, and
+**the thing that falsified it was my own later commit**. Nothing in a working tree announces that.
+
+
 ### C-224 - The site publishes whatever exists, and the script check read 8 pages of 369
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-252`, `S-254`, `P-613` · **cites** `S-252`, `S-254`, `P-613`, `P-612`, `R-9`

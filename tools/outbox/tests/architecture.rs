@@ -730,3 +730,102 @@ fn every_rust_file(under: &Path) -> Vec<PathBuf> {
     found.sort();
     found
 }
+
+/// **Once the gate starts assembling the site, every step survives a failure** - `X-43`, `P-613`.
+///
+/// `docs/process.md`: *the whole site publishes whether or not the run succeeded. A failing build
+/// leaves a broken game published rather than nothing published, because deploying is how I verify
+/// and a staging area that vanishes when it breaks is no use to me.*
+///
+/// # The failure this is written from, which nothing could have caught
+///
+/// **`deploy` became `if: always()` and the step that copies the reports in did not.** A `cargo fmt`
+/// failure then skipped that step while the upload still ran, so **the deploy succeeded and
+/// published a site with no reports** - and because Pages replaces the whole site,
+/// `reports/review/index.html` 404ed rather than going stale. **A blocked deploy would have left
+/// the last good site up; this published emptiness**, which is the one outcome `P-613` calls
+/// useless.
+///
+/// **Nothing read this file.** Found by the research lens re-deriving a claim it had made an hour
+/// earlier and finding the coupling had moved rather than gone - *nothing failed; the old claim just
+/// stopped being true and still read correctly.*
+///
+/// # Positional rather than a list of names
+///
+/// **A list of step names here would be a second copy of the workflow**, and a step inserted
+/// between two of them would be exempt by omission. So this takes the first assembling step and
+/// asserts **every step from there to the end of the job** carries the condition - which is the
+/// rule *from here on, nothing may be skipped* said as a predicate.
+#[test]
+fn every_step_that_assembles_or_publishes_survives_a_failure() {
+    let text = std::fs::read_to_string(root().join(".github/workflows/pipeline.yml"))
+        .expect(".github/workflows/pipeline.yml");
+
+    // The `gate` job, up to the next job at the same indent.
+    let from = text.find("\n  gate:\n").expect("a gate job") + 1;
+    let rest = &text[from..];
+    let to = rest
+        .find("\n  checks:\n")
+        .or_else(|| rest.find("\n  sweep:\n"))
+        .or_else(|| rest.find("\n  deploy:\n"))
+        .expect("a job after gate");
+    let job = &rest[..to];
+
+    // Each step is a `- name:` or a `- uses:` at the steps' indent, with whatever follows it.
+    let mut steps: Vec<(String, bool)> = Vec::new();
+    let mut at: Option<(String, bool)> = None;
+    for line in job.lines() {
+        let bare = line.trim();
+        if bare.starts_with("- name:") || bare.starts_with("- uses:") {
+            if let Some(one) = at.take() {
+                steps.push(one);
+            }
+            let named = bare
+                .trim_start_matches("- name:")
+                .trim_start_matches("- uses:")
+                .trim()
+                .to_string();
+            at = Some((named, false));
+        } else if bare == "if: always()"
+            && let Some(one) = at.as_mut()
+        {
+            one.1 = true;
+        }
+    }
+    if let Some(one) = at.take() {
+        steps.push(one);
+    }
+
+    assert!(
+        steps.len() > 8,
+        "only {} step(s) read from the gate job, so this said almost nothing",
+        steps.len()
+    );
+
+    // **The first assembling step, found by what it does rather than by its name.** Everything from
+    // here on puts committed files into the artifact or publishes it, and none of it needs a
+    // toolchain.
+    let first = steps
+        .iter()
+        .position(|(name, _)| name.contains("Copy the reports into the artifact"))
+        .expect("the step that copies the reports in");
+
+    let skippable: Vec<&String> = steps[first..]
+        .iter()
+        .filter(|(_, always)| !*always)
+        .map(|(name, _)| name)
+        .collect();
+    assert!(
+        skippable.is_empty(),
+        "from `{}` on, every step must carry `if: always()` or a failing lint publishes a site \
+         without it: {skippable:?}",
+        steps[first].0
+    );
+
+    // **And at least one step before it must be skippable**, or the predicate has stopped dividing
+    // the job and would pass over a workflow where nothing can fail.
+    assert!(
+        steps[..first].iter().any(|(_, always)| !*always),
+        "no step before the assembly can be skipped, so this check divides nothing"
+    );
+}
