@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-246 - The sweep gets its own job, fails on its own assertions, and blocks nothing
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** Sean, 2026-10-02 · **cites** `C-218`
+**to** code · **status** **acted** 2026-10-02 · **cited** `33f1f558` · **raised** 2026-10-02 · **source** Sean, 2026-10-02 · **cites** `C-218`
 
 **Sean**: *I am considering having it run in parallel, and having it not block the deploy.* And,
 asked whether it should still be able to fail: *I am fine with failing the build as long as the deploy
@@ -112,6 +112,22 @@ the question is whether it is **decided** rather than whether it is **exercised*
 
 **Worth nothing in the report changing**, since its words are already exact: *Rows the `.4x` suite
 would not miss*.
+
+## Closed 2026-10-02
+
+**Verified here rather than taken from their report.** `sweep:` is its own job with no `needs:`; only
+`deploy` needs `gate`, and `full-tests` and `native-build` need `[gate, deploy]`. **No `needs:`
+anywhere names the sweep**, so Deploy is neither blocked nor delayed by it, which is the form he asked
+for rather than the cheaper one. Six assertions still in `mutation.rs`.
+
+**And they re-derived the six before acting**, because the whole case rested on the list being the
+population rather than a sample - *a seventh assertion about a surviving mutation would have made the
+move wrong*. There isn't one.
+
+**Two consequences they wrote at the step rather than leaving to be found.** The published reports are
+now the **committed** ones rather than that run's, which is the right version to publish and is a
+change either way; the sweep's fresh copies are kept as an artifact with `if: always()`. And the sweep
+has its own cache key, because sharing the gate's would have two parallel jobs writing one entry.
 
 ### S-245 - Withdrawn: the rule and the join both exist, and the reason is already in `spec/`
 
