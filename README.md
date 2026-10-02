@@ -33,21 +33,23 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 
 ## Start here
 
-| Document                                  | What it covers                                                                                      |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| [Specification](spec/README.md)           | What the game **is**, stated normatively. A rule is decided there; the game's data in its data file |
-| [Vision](docs/vision.md)                  | What the game is, the design constraints, and the non-negotiables                                   |
-| [Architecture](docs/architecture.md)      | Module boundaries, the composition root, dependency rules                                           |
-| [Layers](docs/layers.md)                  | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel            |
-| [Prototypes](docs/prototypes/README.md)   | Standalone programs demonstrating one aspect of the game each                                       |
-| [Theory](docs/theory/README.md)           | Background research the design leans on                                                             |
-| [Documentation map](docs/README.md)       | Every document in the repo, and the rules for adding one                                            |
-| [Scripts](scripts/README.md)              | How to run each prototype                                                                           |
-| [Decide](decide/README.md)                | **Everything waiting on Sean, and nothing else**: proposals to approve, questions to answer         |
-| [Notes](docs/notes/README.md)             | Derived records of analysis. Not binding                                                            |
-| [Postmortems](docs/postmortems/README.md) | How a failure happened, and what would have caught it                                               |
-| [Foundation forms](reports/foundation/)   | Every test I have reviewed, in the form the engine runs. **Generated**                              |
-| [Pending](pending.md)                     | What every outbox has open and who it waits on. **Generated**                                       |
+| Document                                   | What it covers                                                                                      |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| [Specification](spec/README.md)            | What the game **is**, stated normatively. A rule is decided there; the game's data in its data file |
+| [Vision](docs/vision.md)                   | What the game is, the design constraints, and the non-negotiables                                   |
+| [Architecture](docs/architecture.md)       | Module boundaries, the composition root, dependency rules                                           |
+| [Layers](docs/layers.md)                   | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel            |
+| [Prototypes](docs/prototypes/README.md)    | Standalone programs demonstrating one aspect of the game each                                       |
+| [Theory](docs/theory/README.md)            | Background research the design leans on                                                             |
+| [Documentation map](docs/README.md)        | Every document in the repo, and the rules for adding one                                            |
+| [Scripts](scripts/README.md)               | How to run each prototype                                                                           |
+| [Decide](decide/README.md)                 | **Everything waiting on Sean, and nothing else**: proposals to approve, questions to answer         |
+| [Notes](docs/notes/README.md)              | Derived records of analysis. Not binding                                                            |
+| [Postmortems](docs/postmortems/README.md)  | How a failure happened, and what would have caught it                                               |
+| [Foundation forms](reports/foundation/)    | Every test I have reviewed, in the form the engine runs. **Generated**                              |
+| [Pending](pending.md)                      | What every outbox has open and who it waits on. **Generated**                                       |
+| [Quality lens](lenses/quality/README.md)   | What one perspective finds reviewing all of it, and ships nothing                                   |
+| [Research lens](lenses/research/README.md) | Questions explored before they are decisions. Not binding                                           |
 
 ## The short version
 
