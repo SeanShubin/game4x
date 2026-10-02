@@ -30,6 +30,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-242** - `a7a4bdf` S-241 and S-242: three states, and convert is a button that checks before it writes · still open in `docs/notes/proposals.md`
+- **S-241** - `a7a4bdf` S-241 and S-242: three states, and convert is a button that checks before it writes · still open in `docs/notes/proposals.md`
 - **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
 - **P-610** - `43a123a` P-610: two ways the page can write, and they want different reach on his token · still open in `docs/notes/decisions.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
