@@ -1,24 +1,25 @@
 # == Rows the `.4x` suite would not miss ==
 
-1616 mutations tried; 80 of them nothing noticed - 43 in the ruleset, 37 in the machinery and vocabulary around it.
+1660 mutations tried; 86 of them nothing noticed - 49 in the ruleset, 37 in the machinery and vocabulary around it.
 
-## Ruleset rows no reviewed behaviour depends on  (43 row(s))
+## Ruleset rows no reviewed behaviour depends on  (49 row(s))
 
 This is the one that goes to zero, and each row goes one of two ways: a test of the behaviour that needs it, or the row deleted because nothing needs it.
 
-### 8 row(s) - nothing a reviewed test asserts depends on this part of `gather`
+### 9 row(s) - nothing a reviewed test asserts depends on this part of `breed`
 
 (1 of a kind no earlier run saw)
 
 ```text
-  rules.4x:534  {binding id:52 clause:39 column:51 input:19}
-  rules.4x:536  {binding id:49 clause:36 column:142 input:19}
-  rules.4x:537  {binding id:50 clause:37 column:142 input:19}
-  rules.4x:541  {literal id:50 clause:36 column:144 value:1}
-  rules.4x:542  {literal id:51 clause:36 column:145 value:1}
-  rules.4x:544  {literal id:53 clause:37 column:145 value:1}
-  rules.4x:545  {literal id:55 clause:39 column:52 value:50}
-* rules.4x:547  {reading id:8 clause:37 column:143 of:35 takes:143}
+  rules.4x:424  {binding id:39 clause:26 column:82 input:17}
+  rules.4x:425  {binding id:40 clause:27 column:130 input:17}
+  rules.4x:426  {binding id:66 clause:59 column:130 input:17}
+  rules.4x:428  {literal id:29 clause:25 column:131 value:0}
+  rules.4x:429  {literal id:30 clause:25 column:133 value:1}
+  rules.4x:432  {literal id:33 clause:27 column:131 value:0}
+  rules.4x:435  {literal id:84 clause:59 column:131 value:0}
+  rules.4x:436  {literal id:85 clause:59 column:133 value:1}
+* rules.4x:440  {reading id:17 clause:27 column:137 of:25 takes:137}
 ```
 
 ### 8 row(s) - nothing a reviewed test asserts depends on this part of `launch`
@@ -26,14 +27,27 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:592  {binding id:53 clause:40 column:134 input:20}
-  rules.4x:593  {binding id:54 clause:42 column:78 input:20}
-  rules.4x:594  {binding id:55 clause:43 column:80 input:20}
-  rules.4x:595  {binding id:56 clause:44 column:140 input:20}
-  rules.4x:598  {literal id:56 clause:40 column:136 value:surface}
-  rules.4x:600  {literal id:58 clause:42 column:79 value:1}
-  rules.4x:601  {literal id:59 clause:43 column:81 value:1}
-  rules.4x:602  {literal id:60 clause:44 column:141 value:1}
+  rules.4x:597  {binding id:53 clause:40 column:134 input:20}
+  rules.4x:598  {binding id:54 clause:42 column:78 input:20}
+  rules.4x:599  {binding id:55 clause:43 column:80 input:20}
+  rules.4x:600  {binding id:56 clause:44 column:140 input:20}
+  rules.4x:603  {literal id:56 clause:40 column:136 value:surface}
+  rules.4x:605  {literal id:58 clause:42 column:79 value:1}
+  rules.4x:606  {literal id:59 clause:43 column:81 value:1}
+  rules.4x:607  {literal id:60 clause:44 column:141 value:1}
+```
+
+### 6 row(s) - nothing a reviewed test asserts depends on this part of `gather`
+
+(1 of a kind no earlier run saw)
+
+```text
+  rules.4x:542  {binding id:49 clause:36 column:142 input:19}
+  rules.4x:543  {binding id:50 clause:37 column:142 input:19}
+  rules.4x:547  {literal id:50 clause:36 column:144 value:1}
+  rules.4x:548  {literal id:51 clause:36 column:145 value:1}
+  rules.4x:550  {literal id:53 clause:37 column:145 value:1}
+* rules.4x:552  {reading id:8 clause:37 column:143 of:35 takes:143}
 ```
 
 ### 4 row(s) - nothing a reviewed test asserts depends on this part of `build-bin`
@@ -52,10 +66,10 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:698  {binding id:59 clause:52 column:78 input:23}
-  rules.4x:699  {binding id:60 clause:53 column:80 input:23}
-  rules.4x:702  {literal id:77 clause:52 column:79 value:1}
-  rules.4x:703  {literal id:78 clause:53 column:81 value:1}
+  rules.4x:703  {binding id:59 clause:52 column:78 input:23}
+  rules.4x:704  {binding id:60 clause:53 column:80 input:23}
+  rules.4x:707  {literal id:77 clause:52 column:79 value:1}
+  rules.4x:708  {literal id:78 clause:53 column:81 value:1}
 ```
 
 ### 4 row(s) - nothing a reviewed test asserts depends on this part of `build-yard`
@@ -63,20 +77,10 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:727  {binding id:62 clause:55 column:78 input:24}
-  rules.4x:728  {binding id:63 clause:56 column:80 input:24}
-  rules.4x:731  {literal id:81 clause:55 column:79 value:1}
-  rules.4x:732  {literal id:82 clause:56 column:81 value:1}
-```
-
-### 3 row(s) - nothing a reviewed test asserts depends on this part of `breed`
-
-(an earlier run saw rows of each of these kinds)
-
-```text
-  rules.4x:423  {binding id:39 clause:26 column:82 input:17}
-  rules.4x:426  {literal id:29 clause:25 column:131 value:0}
-  rules.4x:427  {literal id:30 clause:25 column:133 value:1}
+  rules.4x:732  {binding id:62 clause:55 column:78 input:24}
+  rules.4x:733  {binding id:63 clause:56 column:80 input:24}
+  rules.4x:736  {literal id:81 clause:55 column:79 value:1}
+  rules.4x:737  {literal id:82 clause:56 column:81 value:1}
 ```
 
 ### 3 row(s) - nothing a reviewed test asserts depends on this part of `build-extractor`
@@ -94,9 +98,9 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (2 of a kind no earlier run saw)
 
 ```text
-  rules.4x:469  {binding id:46 clause:33 column:130 input:18}
-* rules.4x:479  {reading id:5 clause:33 column:131 of:31 takes:131}
-* rules.4x:480  {reading id:6 clause:33 column:133 of:31 takes:133}
+  rules.4x:476  {binding id:46 clause:33 column:130 input:18}
+* rules.4x:486  {reading id:5 clause:33 column:131 of:31 takes:131}
+* rules.4x:487  {reading id:6 clause:33 column:133 of:31 takes:133}
 ```
 
 ### 3 row(s) - nothing a reviewed test asserts depends on this part of `upkeep`
@@ -109,21 +113,23 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 * rules.4x:339  {reading id:7 clause:23 column:137 of:28 takes:137}
 ```
 
-### 2 row(s) - nothing a reviewed test asserts depends on this part of `deploy`
-
-(an earlier run saw rows of each of these kinds)
-
-```text
-  rules.4x:651  {binding id:58 clause:48 column:153 input:21}
-  rules.4x:654  {literal id:66 clause:48 column:154 value:1}
-```
-
-### 1 row(s) - nothing a reviewed test asserts depends on this part of `work`
+### 3 row(s) - nothing a reviewed test asserts depends on this part of `work`
 
 (an earlier run saw rows of each of these kinds)
 
 ```text
   rules.4x:120  {binding id:17 clause:10 column:51 input:8}
+  rules.4x:128  {binding id:28 clause:14 column:55 input:8}
+  rules.4x:129  {binding id:29 clause:14 column:56 input:9}
+```
+
+### 2 row(s) - nothing a reviewed test asserts depends on this part of `deploy`
+
+(an earlier run saw rows of each of these kinds)
+
+```text
+  rules.4x:656  {binding id:58 clause:48 column:153 input:21}
+  rules.4x:659  {literal id:66 clause:48 column:154 value:1}
 ```
 
 ## The machinery and vocabulary around them  (37 row(s))
@@ -184,7 +190,7 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
   tests/one-extractors-readiness-is-not-anothers.4x:20  {extractor where:1 what:30 working:1 quantity:1}
 ```
 
-### 3 row(s) - no `.4x` test reads it and no rule here says why (the word `attribute` appears in isolation.rs, structure.rs)
+### 3 row(s) - no `.4x` test reads it and no rule here says why (the word `attribute` appears in isolation.rs, petri.rs, reviewed.rs, structure.rs)
 
 (an earlier run saw rows of each of these kinds)
 
@@ -231,7 +237,7 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
   tests/nothing-moves-between-the-layers.4x:26  {scout where:1 moving:1 quantity:1}
 ```
 
-### 2 row(s) - no `.4x` test reads it and no rule here says why (the word `member` appears in browsable.rs, engine.rs, isolation.rs, structure.rs)
+### 2 row(s) - no `.4x` test reads it and no rule here says why (the word `member` appears in browsable.rs, engine.rs, isolation.rs, nogain.rs, regression.rs, structure.rs)
 
 (an earlier run saw rows of each of these kinds)
 

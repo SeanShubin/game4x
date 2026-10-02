@@ -30,6 +30,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`
 - **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
 - **P-610** - `43a123a` P-610: two ways the page can write, and they want different reach on his token · still open in `docs/notes/decisions.md`

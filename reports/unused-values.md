@@ -1,6 +1,6 @@
 # == Values the `.4x` suite would not miss ==
 
-7307 mutations tried; 143 of them nothing noticed - 78 in the ruleset, 65 in the machinery and vocabulary around it.
+7458 mutations tried; 144 of them nothing noticed - 78 in the ruleset, 66 in the machinery and vocabulary around it.
 
 ## Ruleset rows no reviewed behaviour depends on  (78 row(s))
 
@@ -11,13 +11,13 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:635  {input id:21 rule:14 seq:1 name:where of:48}
-  rules.4x:636  {input id:22 rule:14 seq:2 name:what of:55}
-  rules.4x:641  {clause id:47 rule:14 seq:2 role:1 relation:48}
-  rules.4x:642  {clause id:48 rule:14 seq:3 role:2 relation:55}
-  rules.4x:643  {clause id:49 rule:14 seq:4 role:3 relation:19}
-  rules.4x:644  {clause id:50 rule:14 seq:5 role:3 relation:19}
-  rules.4x:645  {clause id:51 rule:14 seq:6 role:3 relation:47}
+  rules.4x:640  {input id:21 rule:14 seq:1 name:where of:48}
+  rules.4x:641  {input id:22 rule:14 seq:2 name:what of:55}
+  rules.4x:646  {clause id:47 rule:14 seq:2 role:1 relation:48}
+  rules.4x:647  {clause id:48 rule:14 seq:3 role:2 relation:55}
+  rules.4x:648  {clause id:49 rule:14 seq:4 role:3 relation:19}
+  rules.4x:649  {clause id:50 rule:14 seq:5 role:3 relation:19}
+  rules.4x:650  {clause id:51 rule:14 seq:6 role:3 relation:47}
 ```
 
 ### 7 row(s) - nothing a reviewed test asserts depends on this part of `work`
@@ -34,17 +34,30 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
   rules.4x:116  {clause id:12 rule:3 seq:5 role:3 relation:27}
 ```
 
+### 6 row(s) - nothing a reviewed test asserts depends on this part of `breed`
+
+(an earlier run saw rows of each of these kinds)
+
+```text
+  rules.4x:413  {input id:17 rule:10 seq:1 name:where of:48}
+  rules.4x:413  {input id:17 rule:10 seq:1 name:where of:48}
+  rules.4x:418  {clause id:25 rule:10 seq:1 role:2 relation:47}
+  rules.4x:419  {clause id:26 rule:10 seq:2 role:2 relation:31}
+  rules.4x:420  {clause id:27 rule:10 seq:3 role:3 relation:47}
+  rules.4x:421  {clause id:59 rule:10 seq:4 role:3 relation:47}
+```
+
 ### 6 row(s) - nothing a reviewed test asserts depends on this part of `gather`
 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:526  {input id:19 rule:12 seq:1 name:where of:48}
-  rules.4x:528  {clause id:39 rule:12 seq:1 role:1 relation:18}
-  rules.4x:529  {clause id:35 rule:12 seq:2 role:1 relation:51}
-  rules.4x:530  {clause id:36 rule:12 seq:3 role:2 relation:51}
-  rules.4x:531  {clause id:37 rule:12 seq:4 role:3 relation:51}
-  rules.4x:532  {clause id:38 rule:12 seq:5 role:3 relation:50}
+  rules.4x:533  {input id:19 rule:12 seq:1 name:where of:48}
+  rules.4x:535  {clause id:39 rule:12 seq:1 role:1 relation:59}
+  rules.4x:536  {clause id:35 rule:12 seq:2 role:1 relation:51}
+  rules.4x:537  {clause id:36 rule:12 seq:3 role:2 relation:51}
+  rules.4x:538  {clause id:37 rule:12 seq:4 role:3 relation:51}
+  rules.4x:539  {clause id:38 rule:12 seq:5 role:3 relation:50}
 ```
 
 ### 6 row(s) - nothing a reviewed test asserts depends on this part of `upkeep`
@@ -58,18 +71,6 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
   rules.4x:322  {clause id:21 rule:8 seq:2 role:2 relation:47}
   rules.4x:323  {clause id:22 rule:8 seq:3 role:2 relation:31}
   rules.4x:324  {clause id:23 rule:8 seq:4 role:3 relation:47}
-```
-
-### 5 row(s) - nothing a reviewed test asserts depends on this part of `breed`
-
-(an earlier run saw rows of each of these kinds)
-
-```text
-  rules.4x:413  {input id:17 rule:10 seq:1 name:where of:48}
-  rules.4x:413  {input id:17 rule:10 seq:1 name:where of:48}
-  rules.4x:418  {clause id:25 rule:10 seq:1 role:2 relation:47}
-  rules.4x:419  {clause id:26 rule:10 seq:2 role:2 relation:31}
-  rules.4x:420  {clause id:27 rule:10 seq:3 role:3 relation:47}
 ```
 
 ### 5 row(s) - nothing a reviewed test asserts depends on this part of `build-bin`
@@ -96,28 +97,16 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
   rules.4x:94  {clause id:7 rule:2 seq:3 role:3 relation:19}
 ```
 
-### 5 row(s) - nothing a reviewed test asserts depends on this part of `end-turn`
-
-(an earlier run saw rows of each of these kinds)
-
-```text
-  rules.4x:211  {part id:1 of:5 is:4 seq:5}
-  rules.4x:212  {part id:2 of:5 is:4 seq:6}
-  rules.4x:214  {part id:8 of:5 is:4 seq:8}
-  rules.4x:215  {part id:9 of:5 is:4 seq:9}
-  rules.4x:216  {part id:10 of:5 is:4 seq:10}
-```
-
 ### 5 row(s) - nothing a reviewed test asserts depends on this part of `launch`
 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:582  {input id:20 rule:13 seq:1 name:where of:48}
-  rules.4x:587  {clause id:42 rule:13 seq:4 role:2 relation:29}
-  rules.4x:588  {clause id:43 rule:13 seq:5 role:2 relation:30}
-  rules.4x:589  {clause id:44 rule:13 seq:6 role:2 relation:50}
-  rules.4x:590  {clause id:45 rule:13 seq:7 role:3 relation:51}
+  rules.4x:587  {input id:20 rule:13 seq:1 name:where of:48}
+  rules.4x:592  {clause id:42 rule:13 seq:4 role:2 relation:29}
+  rules.4x:593  {clause id:43 rule:13 seq:5 role:2 relation:30}
+  rules.4x:594  {clause id:44 rule:13 seq:6 role:2 relation:50}
+  rules.4x:595  {clause id:45 rule:13 seq:7 role:3 relation:51}
 ```
 
 ### 5 row(s) - nothing a reviewed test asserts depends on this part of `move`
@@ -137,11 +126,11 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:458  {input id:18 rule:11 seq:1 name:where of:48}
-  rules.4x:462  {clause id:31 rule:11 seq:1 role:1 relation:47}
-  rules.4x:463  {clause id:32 rule:11 seq:2 role:2 relation:47}
-  rules.4x:464  {clause id:33 rule:11 seq:3 role:3 relation:47}
-  rules.4x:465  {clause id:34 rule:11 seq:4 role:3 relation:29}
+  rules.4x:465  {input id:18 rule:11 seq:1 name:where of:48}
+  rules.4x:469  {clause id:31 rule:11 seq:1 role:1 relation:47}
+  rules.4x:470  {clause id:32 rule:11 seq:2 role:2 relation:47}
+  rules.4x:471  {clause id:33 rule:11 seq:3 role:3 relation:47}
+  rules.4x:472  {clause id:34 rule:11 seq:4 role:3 relation:29}
 ```
 
 ### 4 row(s) - no test's `when` fires `perish` at all
@@ -160,10 +149,10 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:692  {input id:23 rule:15 seq:1 name:where of:48}
-  rules.4x:694  {clause id:52 rule:15 seq:1 role:2 relation:29}
-  rules.4x:695  {clause id:53 rule:15 seq:2 role:2 relation:30}
-  rules.4x:696  {clause id:54 rule:15 seq:3 role:3 relation:54}
+  rules.4x:697  {input id:23 rule:15 seq:1 name:where of:48}
+  rules.4x:699  {clause id:52 rule:15 seq:1 role:2 relation:29}
+  rules.4x:700  {clause id:53 rule:15 seq:2 role:2 relation:30}
+  rules.4x:701  {clause id:54 rule:15 seq:3 role:3 relation:54}
 ```
 
 ### 4 row(s) - nothing a reviewed test asserts depends on this part of `build-yard`
@@ -171,10 +160,21 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
 (an earlier run saw rows of each of these kinds)
 
 ```text
-  rules.4x:721  {input id:24 rule:16 seq:1 name:where of:48}
-  rules.4x:723  {clause id:55 rule:16 seq:1 role:2 relation:29}
-  rules.4x:724  {clause id:56 rule:16 seq:2 role:2 relation:30}
-  rules.4x:725  {clause id:57 rule:16 seq:3 role:3 relation:58}
+  rules.4x:726  {input id:24 rule:16 seq:1 name:where of:48}
+  rules.4x:728  {clause id:55 rule:16 seq:1 role:2 relation:29}
+  rules.4x:729  {clause id:56 rule:16 seq:2 role:2 relation:30}
+  rules.4x:730  {clause id:57 rule:16 seq:3 role:3 relation:58}
+```
+
+### 4 row(s) - nothing a reviewed test asserts depends on this part of `end-turn`
+
+(an earlier run saw rows of each of these kinds)
+
+```text
+  rules.4x:211  {part id:1 of:5 is:4 seq:5}
+  rules.4x:212  {part id:2 of:5 is:4 seq:6}
+  rules.4x:215  {part id:9 of:5 is:4 seq:9}
+  rules.4x:216  {part id:10 of:5 is:4 seq:10}
 ```
 
 ### 4 row(s) - nothing a reviewed test asserts depends on this part of `refresh`
@@ -196,7 +196,7 @@ This is the one that goes to zero, and each row goes one of two ways: a test of 
   rules.4x:290  {clause id:20 rule:7 seq:1 role:5 relation:49}
 ```
 
-## The machinery and vocabulary around them  (65 row(s))
+## The machinery and vocabulary around them  (66 row(s))
 
 Reported rather than enforced. A vocabulary row wants a test of whatever reads it: a territory of each biome would pin all six at once.
 
@@ -251,11 +251,11 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
 
 ### 4 row(s) - `the-sun-reaches-an-ark-once-a-turn` reaches its ending without it
 
-(an earlier run saw rows of each of these kinds)
+(2 of a kind no earlier run saw)
 
 ```text
-  tests/the-sun-reaches-an-ark-once-a-turn.4x:20  {deposit where:1 what:50 density:3 quantity:1}
-  tests/the-sun-reaches-an-ark-once-a-turn.4x:20  {deposit where:1 what:50 density:3 quantity:1}
+* tests/the-sun-reaches-an-ark-once-a-turn.4x:20  {planet id:1 energy:3}
+* tests/the-sun-reaches-an-ark-once-a-turn.4x:20  {planet id:1 energy:3}
   tests/the-sun-reaches-an-ark-once-a-turn.4x:21  {ark where:1 moving:1 gathering:1 quantity:1}
   tests/the-sun-reaches-an-ark-once-a-turn.4x:21  {ark where:1 moving:1 gathering:1 quantity:1}
 ```
@@ -399,6 +399,14 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
   tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x:20  {place id:1 of:1 layer:surface}
 ```
 
+### 1 row(s) - `a-citizen-breeds-once-and-its-bearing-is-spent` reaches its ending without it
+
+(no earlier run saw rows of these kinds)
+
+```text
+* tests/a-citizen-breeds-once-and-its-bearing-is-spent.4x:31  {breed where:1}
+```
+
 ### 1 row(s) - `a-pioneer-settles-the-ground-it-is-standing-on` reaches its ending without it
 
 (an earlier run saw rows of each of these kinds)
@@ -415,12 +423,12 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
   tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x:22  {scout where:2 moving:0 quantity:1}
 ```
 
-### 1 row(s) - `breeding-does-not-reach-the-citizens-it-just-made` reaches its ending without it
+### 1 row(s) - `breeding-does-not-give-a-citizen-its-labor-back` reaches its ending without it
 
-(an earlier run saw rows of each of these kinds)
+(no earlier run saw rows of these kinds)
 
 ```text
-  tests/breeding-does-not-reach-the-citizens-it-just-made.4x:27  {citizen where:1 hungry:0 bearing:1 laboring:1 quantity:2}
+* tests/breeding-does-not-give-a-citizen-its-labor-back.4x:27  {breed where:1}
 ```
 
 ### 1 row(s) - `breeding-stops-when-the-food-does` reaches its ending without it
@@ -439,7 +447,7 @@ Reported rather than enforced. A vocabulary row wants a test of whatever reads i
   tests/three-citizens-and-ten-food-become-six.4x:28  {citizen where:1 hungry:1 bearing:1 laboring:1 quantity:3}
 ```
 
-### 1 row(s) - no `.4x` test reads it and no rule here says why (the word `supply.name` appears in isolation.rs, structure.rs)
+### 1 row(s) - no `.4x` test reads it and no rule here says why (the word `supply.name` appears in isolation.rs, petri.rs, structure.rs)
 
 (an earlier run saw rows of each of these kinds)
 
