@@ -50,8 +50,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
 - **S-249** - The review page publishes under a dead crate's name and nothing links to it · `docs/notes/proposals.md`
 - **S-247** - A fourth `{terrain}` row is refused, and the territory it names is declared above it · `docs/notes/proposals.md`
 - **S-244** - `rustup` was installed all along, and `C-189`'s premise is false · `docs/notes/proposals.md`

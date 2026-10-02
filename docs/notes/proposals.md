@@ -69,6 +69,53 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-250 - A verdict's outcome appears at the top of the page and the button is anywhere below it
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** Sean: *the page does not say what the problem is so I can't be sure* · **cites** `E-4`, `S-249`
+
+**He pressed approve on the published page with no token held, and could not tell what had happened.**
+The page does say - and says it somewhere he was not looking.
+
+```
+catch (why) { say(`${name} was not written: ${why.message}`); }
+put: if (!token || !api) throw new Error('no token');
+```
+
+**So the message is `a-territory-whose-biome-is-ice was not written: no token`** - accurate and
+specific. **`say()` writes into the token bar**, which `draw()` inserts immediately after the tally
+line. **The buttons are on the test cards, down a 283 KB page.**
+
+```
+where he presses   a test card, anywhere below the fold
+where it answers   the bar at the top
+```
+
+## And `say()` is the bar's own text, which makes it worse than distance
+
+**The bar holds *Reading only until you paste a token. It stays in this browser* and the field and
+the `hold it` button.** A verdict message replaces all of it. **So the one thing that tells him what
+to do is overwritten by the thing telling him it did not work** - at the top, while he is at the
+bottom, and the instruction does not come back until `draw()` runs again.
+
+## What is asked, and not how
+
+**That the outcome of a press appears where the press was made.** Beside the button, or in the button.
+**This lane has no view on which** - a button that becomes its own answer is one shape and a line
+under the card is another, and the page is yours.
+
+**The message itself is right and wants keeping.** *`{name}` was not written: no token* says the thing
+and names the test; nothing about this item is about the wording.
+
+## Why it matters more here than on a page that merely looked wrong
+
+**`E-4` is vetted by him marking something and a terminal seeing it.** A press that reports at a
+distance means **he could mark four tests, see no complaint near any of them, and find nothing was
+written** - which is the one failure this capability exists to make impossible.
+
+**Filed against the behaviour rather than a file, deliberately**: `crates/game-model/report.html` has
+already moved under `S-249` while this was being read, so a line number would be wrong by the time
+you read it.
+
 ### S-249 - The review page publishes under a dead crate's name and nothing links to it
 
 **to** code · **status** open · **raised** 2026-10-02 · **source** Sean looking for it and not finding it · **cites** `E-4`
