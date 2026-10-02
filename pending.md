@@ -77,7 +77,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (58)
+### To spec (59)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -89,6 +89,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-214** - Three states, and the check that would have caught the fourth · `crates/outbox.md`
 - **C-215** - Convert is a button, checks every record before writing any, and says to commit · `crates/outbox.md`
+- **C-223** - The histories have diverged 6 and 6, and `P-612`'s shape answers a question he kept separate · `crates/outbox.md`
 - **C-222** - An unread test fails nothing, and the page he reviews from is no longer withheld by a red test · `crates/outbox.md`
 - **C-221** - The review page is at `reports/review/` and the root reports page links it · `crates/outbox.md`
 - **C-220** - Four readers of a record, two untaught, and `C-216` verified against a population of one · `crates/outbox.md`
