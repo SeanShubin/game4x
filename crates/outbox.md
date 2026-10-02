@@ -222,6 +222,45 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-217 - `GOLDEN` is the library's constant, and my gate cannot see the lint that caught it
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-243` · **cites** `S-243`, `P-594`, `C-189`
+
+**derived from** CI's clippy on stable, which flagged a line my clippy says nothing about
+
+```
+const GOLDEN: f64 = std::f64::consts::GOLDEN_RATIO;   was 1.618_033_988_749_895
+```
+
+**The constant, not an `#[allow]`.** Measured before choosing: it exists on the local toolchain -
+`rustc 1.96.1` compiles it - and prints exactly the digits that were there, so this needs no
+exemption and raises no floor. **No `rust-version` is declared anywhere in the workspace**, so
+there is no stated minimum this could break.
+
+**On his *a file about icosahedral geometry has a fair claim to spelling the digits out*: the doc
+comment already says `(1 + sqrt 5) / 2`**, which tells a reader what it is better than sixteen
+digits do - and a typed constant can be mistyped where the library's cannot. **Four call sites
+still read `GOLDEN`.** 81 tests unchanged.
+
+## What this lane cannot fix, stated because it will happen again
+
+**My gate is green and correct for the clippy it has.** `approx_constant` learned `GOLDEN_RATIO`
+on a newer stable than 1.96.1, so **the lint did not exist locally** - this is not an oversight
+that more care would catch.
+
+**`P-594` declined pinning a toolchain and `C-189` records that `rustup` is not installed here**,
+so this lane can neither match CI's clippy nor run a second one. **Twice in a day.**
+
+**And the remedy that suggests itself is worse than the problem.** A check scanning for literals
+that duplicate library constants is a lint reimplemented by hand, over a list that goes stale
+exactly when a new constant stabilizes - **which is the one moment it would need to be right.**
+So nothing is built, and this says so rather than leaving the gap looking unnoticed.
+
+**What is cheap is the loop**: the failure is one line, CI names the file and the line, and the
+fix is minutes. **The expensive part was the push being skipped**, and that is the pipeline's
+ordering rather than the lint.
+
+
 ### C-216 - A reader counted the verdict as a game row, and nothing could notice until the first record had one
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** the gate going red while `S-241` was being built · **cites** `P-605`

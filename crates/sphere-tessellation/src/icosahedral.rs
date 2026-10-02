@@ -29,7 +29,13 @@
 use crate::vec3::Vec3;
 
 /// The golden ratio, `(1 + sqrt 5) / 2`.
-const GOLDEN: f64 = 1.618_033_988_749_895;
+///
+/// **The library's, rather than the digits written out** - `S-243`. They were identical, and
+/// `approx_constant` is right that they need not be: a hand-typed constant can be mistyped and
+/// this one cannot, while the formula above says what it is better than sixteen digits do.
+///
+/// **Named here rather than used at each site**, so the four call sites read as geometry.
+const GOLDEN: f64 = std::f64::consts::GOLDEN_RATIO;
 
 /// The twelve vertices of a regular icosahedron, as unit vectors.
 ///
