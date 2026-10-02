@@ -88,11 +88,16 @@ shows an empty set rather than a missing one - which is the state it is in rathe
   shown only      16 rules · 53 types · 60 primitives                     = 129
   ```
 
-  **The two statements fix each other's reading.** *The regression tests* alone could have meant all
-  four suites; the earlier instruction already made two of them informational, so it cannot - and
-  `rules/` falls in *everything else* rather than being singled out. **`regression/scenario/` is the
-  one he has been reading all along**, command by command, which is what he has called *the
-  regression scenario*.
+    **He said which suite he meant**, asked nothing and volunteering it: *by regression test I was
+  referring to the scenario test that was broken down by turns.* **So `regression/scenario/` is the
+  one**, and `rules/` falls in *everything else*.
+
+  **It was an inference for one message and is his words now**, which is worth the distinction: the
+  derivation was that *the regression tests* alone could have meant all four suites, and the earlier
+  instruction had already made two of them informational, so it could not. **That reasoning was
+  sound and it was still a reading** - a record saying *he said so* and one saying *this is what it
+  must have meant* are not the same warrant, and only the first survives somebody disagreeing.
+
 
 - **That is the interface declining to offer a control, not the notation forbidding one.**
   `spec/README.md` rule 3 says *no suite is privileged* and `reviewed/cases.4x` will take a verdict
