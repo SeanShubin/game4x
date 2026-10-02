@@ -2032,19 +2032,56 @@ E-4  I can do all of it from a page, from anywhere
 ## Three things a proposal has to state rather than assume
 
 **`built` is not `vetted`.** `E-1` through `E-4` are all `to sean · status built` and none is
-vetted. **So *done* in the paragraph's condition is ambiguous**, and un-suspending on `built` lets
-a lane resume deleting cases before Sean has confirmed the replacement works.
+vetted, and `CLAUDE.md`'s own table says a feature is done when **a person** observes it - so
+*done* in the paragraph's condition plausibly means `vetted`. **That is his to say and it is the
+one thing `P-614` leaves him.**
 
-**The word is *hosted* and what was built says it is not.** `review.yml`'s header: *Nothing is
-hosted. The issue is the list and the control at once, so there is no app to keep alive and no
-OAuth to hold.* `E-4` is a Pages page writing through the API with his token. **`hosted review
-app` appears nowhere else in the tree** - twice in that one paragraph, once inside his own quoted
-words.
+## Two things this item got wrong, both corrected by the specification lane on 2026-10-02
+
+**Neither survived a check, and the first was inverted rather than imprecise.** `P-614` carries the
+corrected version; this is the record of what was wrong, because a reader of this item would
+otherwise inherit both.
+
+**The suspension is permissive, so removing it restores his control rather than relaxing it.** Its
+last sentence is **So any lane may delete any case, for now.** This item said un-suspending on
+`built` *lets a lane resume deleting cases before Sean has confirmed the replacement works*, and it
+is the other way round:
+
+```
+suspended       any lane may delete any regression case
+not suspended   only Sean, and the deletion is an approval again
+```
+
+**So there is no integrity risk in removing it early and the risk is in leaving it.** Re-derived
+here against `CLAUDE.md:123-134` rather than conceded: the base rule is *no instance deletes one
+while the command it covers is still played*, and the suspension is what lifts it. **The direction
+of a sentence whose subject is a permission, read backwards** - no count was wrong and no
+population was empty.
+
+**And `reports/review/` is hosted, so his wording is satisfied.** This item said *the word is
+hosted and what was built says it is not*, quoting `review.yml`'s *Nothing is hosted*. **That
+sentence is accurate about a different mechanism** - `S-228`'s task list in a GitHub issue, which
+is why the same paragraph says *no app to keep alive and no OAuth to hold*. **`E-4` is a Pages
+page**: `pipeline.yml:213` copies `reports/` into the artifact, `reports/review/index.html` is in
+it, and he wrote eight records through it on 2026-10-02 - `0710f728`, `aa3c2b17`.
+
+**The instrument was a grep for the word.** It returned two hits, both in the one paragraph, and
+the conclusion drawn was that nothing in the tree is hosted. **Hosted is a property of a
+deployment and not a word in a document**, so the count was true of the wrong population - which
+is `CLAUDE.md`'s *the instrument answers a narrower question than the one asked, and returns a
+plausible number rather than an error*. **Quoting a sentence about one mechanism as though it spoke
+about another is the second half**: *an artifact says more than its author meant*, named by the
+quality lens and reached here by this lens.
 
 **The fourth paragraph is not purely about the suspension.** Lines 145-147 end *a lane still
 creates, deletes or changes no record*, which restates lines 109-111. Whether it goes with the
 other three or loses only its first clause is a wording question inside the rules, and therefore
 yours to settle and report.
+
+**Settled rather than passed on, 2026-10-02**, which is the one of the three that worked as filed:
+the last sentence restates `CLAUDE.md:109`, so the whole of 130-147 goes and `reviewed/` is still
+governed. **One of three stood** - worth recording at that ratio rather than at the one this item
+was confident of.
 
 ## Why this is addressed and not relayed
 
@@ -2121,6 +2158,41 @@ answering it: *a lint failure withholding the page has the same cost as a test f
 so this is the obvious next thing to move - and it is his to say, not this lane's to assume.*
 **This item is the sharper version of that question**, because the present behaviour is not
 withholding but replacing.
+
+## In flight and not landed, checked 2026-10-02 after the specification lane reported it fixed
+
+**`Copy the reports into the artifact` carries `if: always()` in the working tree and in no
+commit.** Measured both ways, because an item that closes on a working tree closes on nothing:
+
+```
+c683e211   no if:      the commit this item was filed against
+72df841d   no if:      HEAD
+working    if: always()  uncommitted, with 21 insertions in pipeline.yml
+```
+
+**So the finding was true at its own commit and is still true at `HEAD`**, and the fix is the code
+lane's in-flight work rather than something landed. **This stays `open` until a commit carries
+it** - `CLAUDE.md`: a generated or uncommitted file *can publish work in progress*, and a tree is
+not a record.
+
+**The specification lane reported `S-252` as having already made the assembly and upload
+`if: always()`, and it is true of one of the two.** Measured by walking the four commits rather
+than by reading the subject:
+
+```
+30422f9e  P-613 promoted: a failed run publishes       upload: no if
+aee47c91  S-252 and S-254: the site publishes          upload: no if
+0e6b69f6  S-252 and S-254, the rest: the pipeline      upload: always()   <- added here
+c683e211  S-252 and S-254 close                        upload: always()
+```
+
+**So `S-252` gave the upload its condition at `0e6b69f6` and never gave the assembly one.** That is
+why the hazard reads as fixed from the subject and is not: **the step that survives a failure and
+the step that fills what it uploads are different steps**, and only one of them was named.
+
+**Said precisely rather than as a disagreement.** Reading a working tree for a landed state is the
+same shape as this item's own origin, where a claim about `deploy` was true an hour before it was
+made and false when it was checked.
 
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
