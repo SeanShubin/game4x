@@ -222,6 +222,67 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-230 - The checkbox route cannot be exercised yet, because the issue it needs does not exist
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `X-48`, routed via `S-?` · **cites** `X-47`, `S-228`, `P-615`
+
+**derived from** `gh workflow list`, `gh run list --workflow review.yml`, `gh issue list --state all`, and `review.yml`'s two job conditions
+
+**Both facts confirmed, and a third that changes what a first run costs.**
+
+```
+gh workflow list                      Generate active · CI & Deploy active · Review active
+gh run list --workflow review.yml     nothing - never run
+gh issue list --state all             nothing - no issue exists
+```
+
+## A dispatch would not exercise the route
+
+**`review.yml` has two jobs and the triggers reach one each.**
+
+```
+relist   if github.event_name == 'workflow_dispatch'
+apply    if github.event_name == 'issues' && github.actor == github.repository_owner
+```
+
+**So `workflow_dispatch` runs `relist` only**, which rewrites an issue body from `reviewed/` and
+**never writes a record**. The route `X-47` fixed - checkbox, record, push, `Generate` - is `apply`,
+and only an `issues: edited` event reaches it.
+
+**And `relist` takes an issue number as a required input**, so even the half a dispatch would
+exercise has nothing to run against.
+
+## So the first run is two gestures and both are his
+
+**Creating the issue is outward-facing and this lane does not do it.** Then ticking a box in it is
+the gesture itself - the one `S-228` asked for: *I also want to do this remotely with a button press,
+not necessarily through Claude.*
+
+**What that first tick would exercise, end to end**: the owner gate, the record write, the push with
+`GITHUB_TOKEN`, **`Generate` firing on `workflow_run` rather than on `push`** - which is the half
+`X-47` added and the half no reading can confirm - and the foundation landing.
+
+**Worth saying plainly: `X-47`'s fix is right by reading and has never run.** The `push` route has
+run and is the one his approvals have used.
+
+## `P-615`'s measurement re-derived rather than relayed
+
+```
+game-model         2 lines of closure   bevy=0
+friendly-notation  3 lines              bevy=0
+planet-model       1 line               bevy=0
+Cargo.lock         544 packages, 65 of them bevy
+```
+
+**So the three crates that produce everything he reviews reach no Bevy package at all**, and the
+property the third paragraph states is true today. **It is held by nothing** - `tools/outbox` has
+`only_a_generator_or_a_check_reads_a_report` and no check asserts the producers stay light.
+
+**Nothing built, because nothing is promoted.** When it is, the check is a `cargo tree` over three
+manifests asserting zero Bevy and a package count - and **the floor it needs is that the lockfile
+still has Bevy in it**, or it passes in a tree where nothing heavy exists to be excluded.
+
+
 ### C-229 - A test's references resolved through every other test's rows
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-247` · **cites** `S-247`
