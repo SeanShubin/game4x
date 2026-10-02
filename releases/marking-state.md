@@ -65,10 +65,35 @@ shows an empty set rather than a missing one - which is the state it is in rathe
   and a terminal here sees both without my touching git. **A page that lists 222 rows flat is not
   this capability met** - the rule tests, the interface tests and the four regression suites are
   distinguishable without my counting
-- **Shown without a control.** Sean, 2026-10-01, asked whether `types/` and `primitives/` belong on
-  the page at all: *let's show them, but these are informational only, no vetting capability need be
-  implemented. We can even link to them if it helps with comprehensibility.* **So the 113 cases in
-  those two suites are listed and linked and offer nothing to press.**
+- **The page writes and does not dispatch.** Sean, 2026-10-01: *I can drop the regenerate feature
+  for now, does that make it simpler.* **It does, and the saving is reach rather than code**: a
+  verdict is a file write, so the token needs `Contents: write` and not `Actions: write`, and the
+  page can commit records and start nothing. **One of the three shapes `P-610` offered, and the
+  narrowest.**
+- **`{regenerate}` is not dropped, only unoffered.** `E-3` is built and the row still works -
+  authorizing a regeneration means writing it where he already is, and the next run spends it.
+  **What goes is the button and the workflow job**, not the gesture
+
+- **Shown without a control, and that is three suites rather than two.** Sean, 2026-10-01, asked
+  whether `types/` and `primitives/` belong on the page: *let's show them, but these are
+  informational only, no vetting capability need be implemented. We can even link to them if it
+  helps with comprehensibility.* And asked where `regression/rules/`'s sixteen fall: *I was
+  expecting to review 3 things. The tests I was reviewing before. The new user interface tests. And
+  the regression tests. Everything else was to be informational only.*
+- **So the three he reviews are the rule tests, the interface tests and `regression/scenario/`**, and
+  everything else is informational.
+
+  ```
+  markable        57 rule tests · 0 interface tests · 36 scenario cases   = 93
+  shown only      16 rules · 53 types · 60 primitives                     = 129
+  ```
+
+  **The two statements fix each other's reading.** *The regression tests* alone could have meant all
+  four suites; the earlier instruction already made two of them informational, so it cannot - and
+  `rules/` falls in *everything else* rather than being singled out. **`regression/scenario/` is the
+  one he has been reading all along**, command by command, which is what he has called *the
+  regression scenario*.
+
 - **That is the interface declining to offer a control, not the notation forbidding one.**
   `spec/README.md` rule 3 says *no suite is privileged* and `reviewed/cases.4x` will take a verdict
   for any case, including one of those 113. **A reader comparing the page to the rule would see a

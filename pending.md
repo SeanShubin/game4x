@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-610** - Two ways the page can write, and they want different reach on your token · `decide/questions.md`
-- **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `decide/questions.md`
+- **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
+- **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -29,6 +29,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
+- **P-610** - `43a123a` P-610: two ways the page can write, and they want different reach on his token · still open in `docs/notes/decisions.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `a642a12` S-229: C-189 is answered, the pin is declined, and process.md says why · still open in `crates/outbox.md`
 - **C-188** - `7e00f3c` Publish pending.md: C-188 joins the list of items a commit cites and nobody closed · still open in `crates/outbox.md`

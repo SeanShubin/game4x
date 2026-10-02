@@ -12,10 +12,7 @@ Nothing.
 
 ## Answer a question
 
-No wording can be final until you do.
-
-- **P-610** - Two ways the page can write, and they want different reach on your token · `decide/questions.md`
-- **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `decide/questions.md`
+Nothing.
 
 ## Vet a capability
 
@@ -33,6 +30,13 @@ Look at the running game and say whether it held. It stays in the release that s
 - **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **D-6** - I can accept one type of thing at a time · `releases/rules-become-data.md`
+
+## Addressed to you from somewhere else
+
+Not one of the three kinds above. **That is worth a look at whatever filed it** - this lane knows of three gestures and this is a fourth.
+
+- **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
+- **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
 
 ## Read a test
 
