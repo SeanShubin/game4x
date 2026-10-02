@@ -997,21 +997,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:desert}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1029,11 +1023,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:desert}
     - territory
@@ -1062,21 +1054,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:grassland}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1094,11 +1080,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:grassland}
     - territory
@@ -1127,21 +1111,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:ice}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1159,11 +1137,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:ice}
     - territory
@@ -1192,21 +1168,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:jungle}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1224,11 +1194,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:jungle}
     - territory
@@ -1257,21 +1225,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:mountain}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1289,11 +1251,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:mountain}
     - territory
@@ -1322,21 +1282,15 @@ old state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:0} -> 1
     - terrain
       - {terrain of:territory-1 is:ocean}
     - territory
       - {territory id:1 name:territory-1}
     - transport
     - yard
-
-command  {refresh what:unit trait:moving}
-  took   {scout where:place-1 moving:0} -> 1
-  made   {scout where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1354,11 +1308,9 @@ new state
     - metal
     - pioneer
     - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
     - planet
     - provides
     - scout
-      - {scout where:place-1 moving:1} -> 1
     - terrain
       - {terrain of:territory-1 is:ocean}
     - territory
