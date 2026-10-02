@@ -731,31 +731,39 @@ fn every_rust_file(under: &Path) -> Vec<PathBuf> {
     found
 }
 
-/// **Once the gate starts assembling the site, every step survives a failure** - `X-43`, `P-613`.
+/// **Every step that puts committed files into the artifact survives a failure, and so does
+/// everything after the first one** - `X-43`, `X-44`, `P-613`.
 ///
 /// `docs/process.md`: *the whole site publishes whether or not the run succeeded. A failing build
 /// leaves a broken game published rather than nothing published, because deploying is how I verify
 /// and a staging area that vanishes when it breaks is no use to me.*
 ///
-/// # The failure this is written from, which nothing could have caught
+/// # The failure this is written from
 ///
 /// **`deploy` became `if: always()` and the step that copies the reports in did not.** A `cargo fmt`
 /// failure then skipped that step while the upload still ran, so **the deploy succeeded and
 /// published a site with no reports** - and because Pages replaces the whole site,
-/// `reports/review/index.html` 404ed rather than going stale. **A blocked deploy would have left
-/// the last good site up; this published emptiness**, which is the one outcome `P-613` calls
-/// useless.
+/// `reports/review/index.html` 404ed rather than going stale.
 ///
-/// **Nothing read this file.** Found by the research lens re-deriving a claim it had made an hour
-/// earlier and finding the coupling had moved rather than gone - *nothing failed; the old claim just
-/// stopped being true and still read correctly.*
+/// # And the first version of this check said it read what a step does
 ///
-/// # Positional rather than a list of names
+/// **It did not: the anchor was `name.contains("Copy the reports into the artifact")`.** `X-44`
+/// probed it - a second assembling step placed *above* the anchor, with no condition, and the check
+/// passed. **A lint failure would then publish the reports and no `scenario/`**, which is `S-230`'s
+/// outward-link 404 rather than a new failure mode.
 ///
-/// **A list of step names here would be a second copy of the workflow**, and a step inserted
-/// between two of them would be exempt by omission. So this takes the first assembling step and
-/// asserts **every step from there to the end of the job** carries the condition - which is the
-/// rule *from here on, nothing may be skipped* said as a predicate.
+/// **The sharper half of that finding is what the old floor did.** It asserted *at least one step
+/// before the anchor is skippable* - and the inserted step satisfied it, so **the guard read as
+/// healthier at the moment it stopped holding.**
+///
+/// **So the predicate reads the script now**: a step is assembling if it copies something into
+/// `crates/game4x/dist`. **`mentions dist` would have been wrong** and this file holds the
+/// counter-example - `Write build provenance` writes `dist/build-info.json` and `sed -i`s
+/// `dist/index.html`, and **must not survive**, because `index.html` is the game's bundle and does
+/// not exist when `trunk` never ran.
+///
+/// **Live rather than hypothetical**: that one step does nine copies into seven destinations, and
+/// `X-44` notes that splitting it is the natural next edit.
 #[test]
 fn every_step_that_assembles_or_publishes_survives_a_failure() {
     let text = std::fs::read_to_string(root().join(".github/workflows/pipeline.yml"))
@@ -771,29 +779,33 @@ fn every_step_that_assembles_or_publishes_survives_a_failure() {
         .expect("a job after gate");
     let job = &rest[..to];
 
-    // Each step is a `- name:` or a `- uses:` at the steps' indent, with whatever follows it.
-    let mut steps: Vec<(String, bool)> = Vec::new();
-    let mut at: Option<(String, bool)> = None;
+    // Each step is a `- name:` or `- uses:` at the steps' indent, with whatever follows it: whether
+    // it carries the condition, and the script it runs.
+    struct Step {
+        named: String,
+        always: bool,
+        script: String,
+    }
+    let mut steps: Vec<Step> = Vec::new();
     for line in job.lines() {
         let bare = line.trim();
         if bare.starts_with("- name:") || bare.starts_with("- uses:") {
-            if let Some(one) = at.take() {
-                steps.push(one);
+            steps.push(Step {
+                named: bare
+                    .trim_start_matches("- name:")
+                    .trim_start_matches("- uses:")
+                    .trim()
+                    .to_string(),
+                always: false,
+                script: String::new(),
+            });
+        } else if let Some(one) = steps.last_mut() {
+            if bare == "if: always()" {
+                one.always = true;
             }
-            let named = bare
-                .trim_start_matches("- name:")
-                .trim_start_matches("- uses:")
-                .trim()
-                .to_string();
-            at = Some((named, false));
-        } else if bare == "if: always()"
-            && let Some(one) = at.as_mut()
-        {
-            one.1 = true;
+            one.script.push_str(bare);
+            one.script.push('\n');
         }
-    }
-    if let Some(one) = at.take() {
-        steps.push(one);
     }
 
     assert!(
@@ -802,30 +814,43 @@ fn every_step_that_assembles_or_publishes_survives_a_failure() {
         steps.len()
     );
 
-    // **The first assembling step, found by what it does rather than by its name.** Everything from
-    // here on puts committed files into the artifact or publishes it, and none of it needs a
-    // toolchain.
-    let first = steps
-        .iter()
-        .position(|(name, _)| name.contains("Copy the reports into the artifact"))
-        .expect("the step that copies the reports in");
+    // **Assembling means it copies something into the artifact**, which is what makes it need no
+    // toolchain and makes it mandatory when one failed.
+    let assembles = |it: &Step| {
+        it.script
+            .lines()
+            .any(|line| line.starts_with("cp ") && line.contains("crates/game4x/dist"))
+    };
 
-    let skippable: Vec<&String> = steps[first..]
+    let building: Vec<&Step> = steps.iter().filter(|it| assembles(it)).collect();
+    // **The population, or the assertion below is about nothing.** A workflow that stopped copying
+    // committed files into the artifact would pass this vacuously.
+    assert!(
+        !building.is_empty(),
+        "no step copies committed files into the artifact, so this checked nothing"
+    );
+    let skippable: Vec<&String> = building
         .iter()
-        .filter(|(_, always)| !*always)
-        .map(|(name, _)| name)
+        .filter(|it| !it.always)
+        .map(|it| &it.named)
         .collect();
     assert!(
         skippable.is_empty(),
-        "from `{}` on, every step must carry `if: always()` or a failing lint publishes a site \
-         without it: {skippable:?}",
-        steps[first].0
+        "these steps put committed files into the artifact and would be skipped by a failing \
+         lint, publishing a site without them: {skippable:?}"
     );
 
-    // **And at least one step before it must be skippable**, or the predicate has stopped dividing
-    // the job and would pass over a workflow where nothing can fail.
+    // **And everything from the first one on**, which covers the status page and the upload - they
+    // assemble nothing and must still run.
+    let first = steps.iter().position(assembles).expect("one of them");
+    let after: Vec<&String> = steps[first..]
+        .iter()
+        .filter(|it| !it.always)
+        .map(|it| &it.named)
+        .collect();
     assert!(
-        steps[..first].iter().any(|(_, always)| !*always),
-        "no step before the assembly can be skipped, so this check divides nothing"
+        after.is_empty(),
+        "from `{}` on, every step must carry `if: always()`: {after:?}",
+        steps[first].named
     );
 }

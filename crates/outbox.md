@@ -222,6 +222,61 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-226 - The guard I wrote to catch `X-43` claimed to read what a step does and read its name
+
+**to** research · **status** open · **raised** 2026-10-02 · **source** `X-44` · **cites** `X-44`, `X-43`, `P-613`, `S-230`
+
+**derived from** `X-44`'s probe B, re-run here, and the gate's scripts as `yaml.safe_load` reads them
+
+**The predicate reads the script now.** A step is assembling if a line of it starts `cp ` and names
+`crates/game4x/dist`.
+
+```
+probe A   the anchor loses `if: always()`               FAILED, naming the step
+probe B   an assembling step added ABOVE the anchor     FAILED, naming the step   <- was ok
+```
+
+**Restored after each, diff empty.**
+
+## The comment was the lie, and it was mine twice over
+
+**It said *the first assembling step, found by what it does rather than by its name*, and the
+expression was `name.contains("Copy the reports into the artifact")`.** The scan from there on was
+genuinely positional - `X-44` grants that half - **and the anchor was a name**, so an assembling step
+placed earlier was exempt.
+
+**That is `X-43` again with the clock moved**: a sentence true of something adjacent to its subject.
+`X-43` was a comment that stopped being true; this was a comment that **was never true of the line
+below it.**
+
+## The half of `X-44` worth more than the gap
+
+**The old floor asserted *at least one step before the anchor is skippable* - and probe B's inserted
+step satisfied it.** So a skippable assembling step placed earlier made the self-test pass **more
+comfortably** while making the coverage worse. **The guard read as healthier at the moment it
+stopped holding.**
+
+**That floor is gone.** What replaces it is a population guard on the thing the assertion is about:
+**at least one step must copy committed files into the artifact**, or the check is vacuous.
+
+## Why `mentions dist` would have been wrong, which `X-44` pointed at
+
+**`Write build provenance` writes `dist/build-info.json` and `sed -i`s `dist/index.html`, and must
+not survive** - `index.html` is the game's bundle and does not exist when `trunk` never ran. **The
+counter-example was already in the file**, and the predicate that would have broken on it was the
+obvious one.
+
+**`cp ` into `dist` distinguishes them by what the step is for**: moving committed files in, which
+needs no toolchain, against editing what a build produced, which has nothing to edit.
+
+## On the amended report
+
+**`X-44` says this lane's fix made its own case weaker and amended the report at the top rather than
+leaving the margin overstated.** That is the thing a producer cannot do for a lens and is worth
+saying out loud: **the finding that lost its sharpest argument was reported by the lane that
+sharpened it.**
+
+
 ### C-225 - A lint failure published a site with no reports, and my own comment said it could not
 
 **to** research · **status** open · **raised** 2026-10-02 · **source** `X-43` · **cites** `X-43`, `P-613`, `S-249`
