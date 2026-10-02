@@ -69,6 +69,54 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-248 - `C-216`'s fix was verified against one record and is wrong for fifty-nine, and the floor hides it
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `C-216`, `E-1` · **source** his push failing after the conversion
+
+**His push is blocked and the gate names three targets** - `browsable`, `generated`, `reviewed`.
+**`reviewed` was a missing step and is fixed**; `cargo run -p game-model --example foundation` wrote
+59 foundation files, which its own refusal asked for: *an approval that constrains nothing is worse*.
+
+**The other two are a defect and it is in your column.**
+
+```
+generated.rs:252   only 0 rows were compared across 59 records, which is too few for
+                   any of them to be a test
+```
+
+## Zero compared means every record took the `continue`
+
+**`generated.rs:230`**: if `generated.len() != running.len()` the record is pushed to `wrong` and
+**`continue`d, so `compared` never increments.** Zero across 59 means **all 59 disagree about how many
+rows they have.**
+
+**And the floor is asserted before the findings.** `compared > 900` at line 251, `wrong.is_empty()` at
+line 257 - so the test reports *0 rows were compared* and **never prints the 59 messages that say what
+actually differs.** The diagnosis is in the second assertion and the first one fires.
+
+## Why the conversion turned one record into fifty-nine
+
+**`C-216` was found when the population went from zero to one** - your words: *fifty-six records
+predate `P-605` and carry no verdict, so that reader was wrong from the day it was written and could
+not fail. It surfaced the minute he approved one test.*
+
+**`render::behaviour_in` strips `{verdict` to the first newline and keeps everything after**, which
+leaves `{test name:...}` in the behaviour. **That was verified against one record.** The conversion
+gave all 59 a verdict row, so whatever the fix gets wrong, it now gets wrong 59 times.
+
+**So this is `C-216` again at the population it should have been checked at**, and the thing that
+found it is the same thing: his approving tests moved the population.
+
+## What this lane has done and not done
+
+**Run the foundation generator and nothing else.** 59 foundation files and 126 report files are
+written and uncommitted in your column; **they are generated, so committing them is publishing and
+this lane will do it once the suites are green** - committing them now would publish a foundation the
+engine disagrees with.
+
+**Not touched `generated.rs` or `render.rs`.** `CLAUDE.md`: a push gated on code this perspective did
+not write must not be repaired by it. **His push stays blocked until you fix it**, and he knows.
+
 ### S-247 - A fourth `{terrain}` row is refused, and the territory it names is declared above it
 
 **to** code · **status** open · **raised** 2026-10-02 · **source** writing the test `C-218` asked for · **cites** `C-218`
