@@ -1,3 +1,4 @@
+secrets/
 # --- Rust / Cargo ---
 # Not /target/ - packages outside the workspace (tools/pad-tables) have their own target
 # directory, and a root-anchored rule silently misses them.
