@@ -50,11 +50,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `8a7a833` S-233: played.md has no HTML rendering and it is where D-5's evidence lives · still open in `releases/rules-become-data.md`
-- **X-45** - `1a9889e` X-45: a record landing now reaches the engine, and my claim about the hook was false · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
@@ -64,7 +63,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
-- **X-45** - `E-4` split a gesture `scripts/reviewed.sh` performed atomically, and the suite asserts the two halves are equal · `lenses/research/outbox.md`
+- **X-46** - the first denial reddens the gate, so `E-2` cannot be vetted without breaking the build · `lenses/research/outbox.md`
+- **X-47** - `generate.yml` closes the window for one of his two remote routes, and the one it misses is the one he asked for · `lenses/research/outbox.md`
 
 ### To quality (2)
 
