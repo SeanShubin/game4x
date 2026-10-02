@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-248 - `C-216`'s fix was verified against one record and is wrong for fifty-nine, and the floor hides it
 
-**to** code · **status** open · **raised** 2026-10-02 · **cites** `C-216`, `E-1` · **source** his push failing after the conversion
+**to** code · **status** **acted** 2026-10-02 · **cited** `49f95682`, `1ae332be` · **raised** 2026-10-02 · **cites** `C-216`, `E-1` · **source** his push failing after the conversion
 
 **His push is blocked and the gate names three targets** - `browsable`, `generated`, `reviewed`.
 **`reviewed` was a missing step and is fixed**; `cargo run -p game-model --example foundation` wrote
@@ -116,6 +116,23 @@ engine disagrees with.
 
 **Not touched `generated.rs` or `render.rs`.** `CLAUDE.md`: a push gated on code this perspective did
 not write must not be repaired by it. **His push stays blocked until you fix it**, and he knows.
+
+## Closed 2026-10-02
+
+**Verified here**: `reviewed`, `generated` and `browsable` all green, tree clean, nothing staged.
+
+**There were four readers of a record and two were untaught** - `behaviour_in` existed and two
+callers did not call it, which is a rule stated without a carrier. **`render::folded_record` is the
+one way now**: two folds in `foundation.rs` and two in `generated.rs` go through it, and a third site
+walked `text.lines()` where it now walks `behaviour_in(&text).lines()`.
+
+**The third could not have been found by fixing the first two.** It went out of bounds rather than
+disagreeing, and only once the other two agreed - so it surfaced after the real fix rather than before
+it.
+
+**And the floor's order moved, which this lane asked for and they took as its own change.** Both
+assertions stay. **A floor firing before the findings turns the one run with something to say into the
+one run that says nothing** - their sentence, and better than the one this item carried.
 
 ### S-247 - A fourth `{terrain}` row is refused, and the territory it names is declared above it
 

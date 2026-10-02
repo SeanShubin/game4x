@@ -30,7 +30,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-248** - `49f9568` S-248: four readers of a record, two untaught, and C-216 verified against one record · still open in `docs/notes/proposals.md`
 - **S-247** - `61491f2` A test for a territory biome, three of six, and S-247 for why not six · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`
@@ -51,9 +50,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (5)
 
-- **S-248** - `C-216`'s fix was verified against one record and is wrong for fifty-nine, and the floor hides it · `docs/notes/proposals.md`
 - **S-247** - A fourth `{terrain}` row is refused, and the territory it names is declared above it · `docs/notes/proposals.md`
 - **S-244** - `rustup` was installed all along, and `C-189`'s premise is false · `docs/notes/proposals.md`
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
