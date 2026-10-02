@@ -69,9 +69,53 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
-### S-245 - The six biomes survive because they were promoted ahead of any rule that reads them
+### S-246 - The sweep gets its own job, fails on its own assertions, and blocks nothing
 
-**to** code · **status** open · **raised** 2026-10-02 · **cites** `P-578`, `C-218` · **source** the mutation sweep's 86 unnoticed, up from 80
+**to** code · **status** open · **raised** 2026-10-02 · **source** Sean, 2026-10-02 · **cites** `C-218`
+
+**Sean**: *I am considering having it run in parallel, and having it not block the deploy.* And,
+asked whether it should still be able to fail: *I am fine with failing the build as long as the deploy
+is not blocked or delayed.*
+
+**The argument is that nothing the sweep can say is about the artifact.** Its six assertions, measured:
+
+```
+mutation.rs:71    five shared files                      the sweep's own shape
+mutation.rs:72    tests > 0, "mutating proves nothing"   the sweep's own floor
+mutation.rs:81    no file the sweep did not reach        the sweep's own coverage
+mutation.rs:85    three files are the foundation         the sweep's own shape
+mutation.rs:1068  enough rows deleted                    the sweep's own floor
+mutation.rs:1305  enough values changed                  the sweep's own floor
+```
+
+**Every one is about the sweep rather than the game.** None fails because a mutation survived - the
+lists are knowledge rather than assertions. **So a red sweep means *this check stopped checking*,
+which is worth a red mark and is not a reason to withhold a page.**
+
+## What is asked
+
+```
+its own job, parallel     the gate drops roughly 17 of its 20 minutes
+all six assertions kept   a sweep that quietly stops checking is this
+                          repository's recurring defect
+Deploy depends on         the gate, not the sweep - neither blocked nor delayed
+```
+
+**He said *not blocked or delayed***, which rules out a `needs:` that merely lets Deploy start late.
+
+## And the oracle stays the reviewed tests
+
+**Sean, 2026-10-02**: *I am fine relying only on the reviewed tests, not the scenario.* **So the
+second oracle this lane floated is declined** - a row the scenario exercises and no test decides will
+go on surviving, and that is the correct reading of *no reviewed behaviour depends on this*, because
+the question is whether it is **decided** rather than whether it is **exercised**.
+
+**Worth nothing in the report changing**, since its words are already exact: *Rows the `.4x` suite
+would not miss*.
+
+### S-245 - Withdrawn: the rule and the join both exist, and the reason is already in `spec/`
+
+**to** code · **status** **withdrawn** 2026-10-02, its premise false · **raised** 2026-10-02 · **cites** `P-578`, `C-218` · **source** the mutation sweep's 86 unnoticed, up from 80
 
 **`docs/architecture.md` rule 13 asks for a reason, not for the survivor to go.** *Anything that
 survives with the suite still green is a finding, and is written down with the reason it survived.*
@@ -109,6 +153,36 @@ number going 80 to 86 is the sweep noticing data that arrived rather than covera
 **This lane is not asking for the reason to be recorded in your list in these words** - where a
 survivor's reason lives is yours. **What it is asking is that the six are not read as a regression**,
 because the count moved the wrong way and nothing about the checks changed.
+
+## Withdrawn 2026-10-02 - every part of the reason was already promoted
+
+**Sean asked whether the rule was *a territory must state its biome*, and it is.**
+
+```
+spec/planet.md:55                    - Each territory has a biome.
+spec/data/schema.4x  {relation id:57 name:terrain}
+                     {column id:157 relation:terrain seq:1 name:of}  -> territory
+                     {column id:158 relation:terrain seq:2 name:is}  -> biome
+                     {state id:22 relation:terrain}
+```
+
+**`terrain` is the join** - *of* a territory, *is* a biome - and the schema says why it carries a
+`{state}` row where `biome` does not: *`biome` is vocabulary and `terrain` is state.* **So the rule
+is promoted and the mechanism is promoted**, and this item said neither existed.
+
+**And the sweep question was answered before either lane asked it.** `spec/planet.md`: *A biome earns
+its place by being shown rather than by being obeyed... which is a reason to keep a fact that nothing
+else in this specification has, **and the reason a sweep for data no rule reads must not remove it.***
+**That clause was written for this finding.**
+
+## What this lane did wrong, which is the same shape as the `rustup` one
+
+**It measured that nothing refers to the six biome rows and concluded the rule did not exist.**
+`{reference id:78 column:158 to:biome}` is the reference. **A true measurement and a false inference**
+- the second in a day, and both times the population nobody looked at was one directory or one
+section away.
+
+**What is actually missing is a test**, which is `S-246`.
 
 ### S-244 - `rustup` was installed all along, and `C-189`'s premise is false
 

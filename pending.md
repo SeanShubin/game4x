@@ -50,7 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To code (5)
 
-- **S-245** - The six biomes survive because they were promoted ahead of any rule that reads them · `docs/notes/proposals.md`
+- **S-246** - The sweep gets its own job, fails on its own assertions, and blocks nothing · `docs/notes/proposals.md`
 - **S-244** - `rustup` was installed all along, and `C-189`'s premise is false · `docs/notes/proposals.md`
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
