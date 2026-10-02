@@ -2196,7 +2196,7 @@ made and false when it was checked.
 
 ### X-44 - the new check is positional after a name, and an assembling step placed earlier is exempt
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** verifying `X-43`'s fix at `514573e4` rather than accepting it · **found by** driving the check against a modified copy of the workflow, after noticing its comment claims an anchor the code does not have
+**to** code · **status** **acted** 2026-10-02 · `963def1f` — the predicate reads the script now, `cp ` into `crates/game4x/dist`, and the floor this item criticised is replaced by a population guard over the set the assertion ranges over. **Verified by four probes rather than accepted, and one of them refuted a prediction of this lens's** — see the closing note · **raised** 2026-10-02 · **source** verifying `X-43`'s fix at `514573e4` rather than accepting it · **found by** driving the check against a modified copy of the workflow, after noticing its comment claims an anchor the code does not have
 
 **`X-43` is fixed and this is not a reopening.** `514573e4` is right in every particular and the
 check it brought earns its place - **demonstrated here, not taken on trust**: with the original bug
@@ -2275,6 +2275,51 @@ instrument rather than by reading it.
 *Nothing is hosted* as though it spoke about `E-4`, and the code lane's own comment about `fmt`
 blocking the deploy outliving the commit that falsified it. **Three instances, one day, all three
 a sentence that was true of something adjacent to its subject.**
+
+## Closed 2026-10-02 at `963def1f`, and one probe refuted this lens rather than the fix
+
+**Four probes against the replaced predicate, baselined on the real workflow first** so that a pass
+is evidence about the predicate rather than about a broken harness:
+
+```
+baseline  the workflow as committed                              ok
+probe A   the anchor loses `if: always()`                         FAILED, names the step
+probe B   an assembling step added ABOVE the anchor               FAILED, names the step
+probe C   the nine copies rewritten as a shell loop               FAILED, names the step
+probe D   every copy into dist neutralised                        FAILED, "checked nothing"
+```
+
+**Probe C was this lens's prediction and it was wrong.** The reasoning was that
+`line.starts_with("cp ")` reads a line shape, so tidying nine repetitive copies into a
+`for d in ...; do cp -r ...; done` would escape it - a plausible next edit on a nine-line step.
+**It does not escape**: the `cp` inside the loop body is itself a line starting with `cp ` once
+trimmed, so the predicate sees it. **The instrument was stronger than the prediction**, and the
+prediction was the kind this lens files against other lanes - a guess about an implementation,
+offered with a reason, and checked only because checking was cheap.
+
+**Probe D is the one that matters about the floor.** The old assertion - *at least one step before
+the anchor is skippable* - was **satisfied by probe B's defect**, which is what this item reported.
+The replacement asserts over **the same population the main assertion ranges over**: at least one
+step must copy committed files in. **So a defective step now enlarges the set the main assertion
+tests rather than satisfying a side condition** - the guard cannot be made more comfortable by the
+bug it exists to catch, which is the structural difference rather than a stricter number.
+
+## And one thing noted rather than filed: two files carry the same lint list
+
+**`hooks/pre-push:4` says it *mirrors the gate job in `.github/workflows/pipeline.yml` minus the
+WASM build*.** So `fmt` and clippy are stated twice, in two files, and **moving them out of the CI
+gate would leave the hook exactly as it is** - a push of a record in `reviewed/` would still need
+the Bevy workspace green.
+
+**Recorded because the code lane offered the hook as the reason the gate question still matters**,
+and they are two decisions in two files rather than one. **The claim it was offered for is true on
+other grounds** - the latency this lens named - so this is a refinement of `C-222`'s scope and not a
+finding against it.
+
+**Checked before it was written, which is why it is not an item.** `C-222` is `open` `to spec` and
+carries that sentence, so the question is filed and on the designed route to Sean rather than
+living in a comment. **This lens looked for it expecting to find nothing**, which would have been a
+false alarm of the expensive kind.
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
 **to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below
