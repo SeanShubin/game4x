@@ -8,7 +8,9 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-613** - A failed run publishes, and the report root says what failed · `decide/proposals.md`
 
 ## Answer a question
 
