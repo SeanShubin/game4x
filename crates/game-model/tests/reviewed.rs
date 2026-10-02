@@ -293,6 +293,27 @@ fn every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read() {
     let records = stems(&report::records_at());
     let running = stems(&report::foundation_tests_at());
 
+    // **The verdict, because a reading is no longer one thing** - `P-605`, and `X-46`. This compared
+    // *every* record against the generated forms, which was right while a record meant *this
+    // binds*; **a denied record is read and deliberately not run**, so the set that must reach the
+    // suite is the approved one.
+    //
+    // **The assertion predated there being a third state and nothing re-read it.** The verdict had
+    // reached every other reader in this file - `report::state_of`, the drift notice, the record
+    // writer - and `E-2` could not be vetted without reddening the gate: *denying a test* was the
+    // gesture, and denying a test broke the build the gesture is observed in.
+    let mut approved: BTreeSet<String> = BTreeSet::new();
+    let mut denied: BTreeSet<String> = BTreeSet::new();
+    for name in &records {
+        let at = report::records_at().join(format!("{name}.4x"));
+        let said = std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{name}: {why}"));
+        match report::render::verdict_of(&said) {
+            Ok(report::render::Verdict::Approved) => approved.insert(name.clone()),
+            Ok(report::render::Verdict::Denied) => denied.insert(name.clone()),
+            Err(why) => panic!("reviewed/{name}: {why}"),
+        };
+    }
+
     assert!(
         records.len() > 40,
         "only {} records were found, so this is not about the reading",
@@ -303,15 +324,34 @@ fn every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read() {
         "only {} tests are generated, so this is not about the suite",
         running.len()
     );
+    assert_eq!(
+        approved.len() + denied.len(),
+        records.len(),
+        "a record carried neither verdict"
+    );
 
-    let not_running: Vec<&String> = records.difference(&running).collect();
+    // **An approval that does not reach the suite.** This is the half the old assertion was right
+    // about, said over the population it was always meant to be about.
+    let not_running: Vec<&String> = approved.difference(&running).collect();
     assert!(
         not_running.is_empty(),
-        "{} test(s) have been read and the suite does not run them: {not_running:?}\n\
+        "{} approved test(s) the suite does not run: {not_running:?}\n\
          Run `cargo run -p game-model --example foundation` to generate their foundation form. \
          An approval that constrains nothing is worse than no approval, because the record says \
          it does.",
         not_running.len()
+    );
+
+    // **A denial that still runs, which nothing checked and is the worse of the two.** `P-605`: a
+    // test he has denied constrains nothing - so a generated form for one means **the engine is
+    // held to something he has looked at and rejected**, which is further from his intent than
+    // running something he never saw.
+    let still_running: Vec<&String> = denied.intersection(&running).collect();
+    assert!(
+        still_running.is_empty(),
+        "{} denied test(s) the suite still runs: {still_running:?} - the engine is held to \
+         something he looked at and refused. Run the generator; it removes their forms.",
+        still_running.len()
     );
 
     let unread: Vec<&String> = running.difference(&records).collect();
@@ -322,12 +362,13 @@ fn every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read() {
         unread.len()
     );
 
-    // **The count, so the two sets being equal is equality of a population rather than of two
-    // empties** - and the floors above are what stop it being short rather than absent.
+    // **The count over the approved population**, so the sets being equal is equality of a
+    // population rather than of two empties - and the floors above are what stop it being short
+    // rather than absent. **It was `records.len()` and that is what a denial broke.**
     assert_eq!(
-        records.len(),
+        approved.len(),
         running.len(),
-        "the readings and the suite are different sizes and neither difference named it"
+        "the approvals and the suite are different sizes and neither difference named it"
     );
 }
 

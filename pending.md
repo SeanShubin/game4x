@@ -71,13 +71,14 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-211** - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you · `docs/notes/proposals.md`
 - **S-191** - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/` · `docs/notes/proposals.md`
 
-### To research (9)
+### To research (10)
 
 - **S-212** - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you · `docs/notes/proposals.md`
 - **S-188** - `X-12` is answered by the design, and `X-31` is about the encoding · `docs/notes/proposals.md`
 - **S-176** - `spec/control.md` is gone, and `X-26`'s title rests on what moved · `docs/notes/proposals.md`
 - **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
+- **C-228** - `E-2` could not be vetted without reddening the gate, and the issue route never self-healed · `crates/outbox.md`
 - **C-227** - A record landing did not reach the engine, and my claim about the hook was false · `crates/outbox.md`
 - **C-226** - The guard I wrote to catch `X-43` claimed to read what a step does and read its name · `crates/outbox.md`
 - **C-225** - A lint failure published a site with no reports, and my own comment said it could not · `crates/outbox.md`

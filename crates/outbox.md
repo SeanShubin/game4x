@@ -222,6 +222,69 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-228 - `E-2` could not be vetted without reddening the gate, and the issue route never self-healed
+
+**to** research · **status** open · **raised** 2026-10-02 · **source** `X-46`, `X-47` · **cites** `X-46`, `X-47`, `E-2`, `P-605`, `S-228`, `P-610`
+
+**derived from** denying a record in a throwaway copy of the working tree, and `review.yml`'s checkout carrying no `token:`
+
+## `X-46`: the assertion was about every record and should always have been about the approved ones
+
+```
+baseline, nothing denied          records 63  approved 63  running 63   ok
+one denied, generator run         records 63  approved 62  running 62   ok    <- was FAILED
+a form put back for the denied one                                      FAILED, naming it
+```
+
+**Baselined with the fix in place before denying anything**, so a pass after the denial is the
+predicate's answer and not a harness that stopped testing.
+
+**Three assertions, and `X-46`'s reading of which were wrong is exact.** *Read but not run* and the
+count were about every record; both are now about the approved set. *Run but not read* was right and
+is untouched.
+
+**And there was a fourth nobody had written: a denial that still runs.** `P-605` says a denied test
+constrains nothing, so a generated form for one means **the engine is held to something he looked at
+and refused** - which is further from his intent than running something he never saw. It is asserted
+now, and the probe above shows it firing.
+
+**Why it mattered more than an ordinary red test.** `E-2` is *I can deny a test, not only approve
+one*, built and waiting on him. **Vetting it meant denying a test, and denying a test reddened the
+gate** - so the capability could not be observed without breaking the build it is observed in. And
+`generate.yml` ran that exact test as its last step, **so the workflow filed an hour earlier would
+have gone red on the first denial, immediately after correctly not writing the form.**
+
+**The sentence was mine and I said it about the wrong thing.** *A denied record generates no
+foundation form, so the two are not simply equal* was offered as why a bash reimplementation was
+thrown away. **It was also a defect report about the committed test, and I did not read it as one.**
+
+## `X-47`: the route he asked for was the route that did not self-heal
+
+**`review.yml` checks out with no `token:`, so its `git push` uses `GITHUB_TOKEN` - and a push made
+with `GITHUB_TOKEN` creates no workflow run, by design, as the recursion guard.** So ticking a box
+left the record ahead of the form.
+
+**`generate.yml` gains `workflow_run: [Review]`**, which fires on a workflow finishing rather than on
+what it pushed - **so it reaches that route without anything being given a wider token.** `P-610`
+narrowed his credential on purpose, and a `token:` on that checkout is the cheapest repair and spends
+exactly what he narrowed. **`X-47` was right to leave that trade to him; this one costs him
+nothing.**
+
+**And an `actor` guard would have been the trap.** `review.yml` runs as him, so filtering by actor to
+avoid a loop would have filtered out the very route this is for. **What stops the recursion is the
+same guard that hid the route**: this job's own push uses `GITHUB_TOKEN` and creates no run.
+
+## The shape, and why reproducing the table could not have found it
+
+**`X-47` is `X-45` one level out, and the reason it hid is that my reproduction was faithful.** The
+six-commit table was measured over commits a lane pushed by hand, **so it is silent about which token
+pushes** - and reproducing it exactly confirmed the finding while preserving the blind spot.
+
+**`actions/checkout` with no `token:` is a decision that looks like an absence**, which is the
+sharpest statement of this class yet: not a stale sentence, not an adjacent one, but **a default
+nobody chose and nobody can see.**
+
+
 ### C-227 - A record landing did not reach the engine, and my claim about the hook was false
 
 **to** research · **status** open · **raised** 2026-10-02 · **source** `X-45` · **cites** `X-45`, `E-4`, `S-222`, `C-222`

@@ -43,10 +43,29 @@
 name: Generate
 
 on:
+  # **The page's route.** It writes through the API with his own token, so that commit is an
+  # ordinary push event and this fires.
   push:
     paths:
       - 'reviewed/**'
       - 'spec/tests/**'
+
+  # **The issue's route, which `push` cannot see** - `X-47`. `review.yml` checks out with no
+  # `token:` override, so its `git push` uses `GITHUB_TOKEN` - and **a push made with
+  # `GITHUB_TOKEN` creates no workflow run, by design, as the recursion guard.** So ticking a box
+  # left the record ahead of the form, which is the state the six-commit table measured.
+  #
+  # **`workflow_run` fires on a workflow finishing rather than on what it pushed**, so it reaches
+  # that route without anything being given a wider token. `P-610` narrowed his credential on
+  # purpose; **a `token:` on `review.yml`'s checkout would be the cheapest repair and would spend
+  # exactly what he narrowed**, so it is not the one taken here.
+  #
+  # **And the route this covers is the one he asked for.** `S-228`: *I also want to do this remotely
+  # with a button press, not necessarily through Claude* - the gesture with no app and no token to
+  # hold. **The cheaper gesture was the one that did not self-heal.**
+  workflow_run:
+    workflows: [Review]
+    types: [completed]
 
 permissions:
   contents: write
@@ -60,9 +79,12 @@ concurrency:
 jobs:
   foundation:
     name: Generate the foundation from the records
-    # **Not on its own pushes.** The commit below touches `crates/` only, so the path filter above
-    # already excludes it - this says so rather than relying on a reader working it out.
-    if: github.actor != 'github-actions[bot]'
+    # **Nothing excludes it here, and that is deliberate.** The commit below touches `crates/`
+    # only, so the `push` filter already skips it; and its push uses `GITHUB_TOKEN`, which creates
+    # no run at all - **the same guard that hid the issue route is what stops this recursing.**
+    #
+    # **An `actor` guard would have been wrong.** `review.yml` runs as him, so filtering by actor
+    # to avoid a loop would have filtered out the route `X-47` is about.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
