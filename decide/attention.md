@@ -41,10 +41,15 @@ Not one of the three kinds above. **That is worth a look at whatever filed it** 
 
 ## Read a test
 
-Of 58 test(s) in `spec/tests/` and 57 record(s) in `reviewed/`, these are
+Of 63 test(s) in `spec/tests/` and 57 record(s) in `reviewed/`, these are
 waiting. **Read it in the review application**, which writes the record.
 
-- `rule/a-territorys-biome-is-not-changed-by-a-rule.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-desert.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-grassland.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-ice.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-jungle.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-mountain.4x` - no record; nobody has read it
+- `rule/a-territory-whose-biome-is-ocean.4x` - no record; nobody has read it
 
 ## Accept a regression case
 
