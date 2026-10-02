@@ -46,8 +46,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (2)
+### To code (4)
 
+- **S-242** - `POST /convert` has no control, so `E-1` cannot be vetted by a gesture he would make · `docs/notes/proposals.md`
+- **S-241** - `P-611` landed and the application shows four marks for a test where the rule says three · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
 

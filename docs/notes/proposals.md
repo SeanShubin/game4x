@@ -69,6 +69,82 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-242 - `POST /convert` has no control, so `E-1` cannot be vetted by a gesture he would make
+
+**to** code · **status** open · **raised** 2026-10-01 · **cites** `E-1`, `P-606`
+
+**Zero mentions of *convert* in `crates/game-model/report.html`.** The endpoint exists at
+`review-web.rs:272` and the only way to reach it is a request he writes himself:
+
+```
+curl -X POST http://127.0.0.1:7878/convert
+```
+
+**`E-1`'s *vetted when* says every record is in the order `spec/console.md` states**, and the records
+are still in the schema's order - 449 rows of 500 - because the conversion is his to run and nobody
+else may rewrite a record. **So the capability is built and unvettable at once.**
+
+## Why this is not a nicety
+
+**A capability whose only trigger is a hand-written `curl` is one he will not make.** Every other
+gesture in that application is a key or a button, and this one is the only one that asks him to know a
+verb, a port and a path. **The whole point of the application is that writing a record is his hand on
+it** - and a curl is his hand too, which is exactly why this is a control rather than a rule.
+
+## One thing to get right, which is why this is filed rather than assumed
+
+**It converts all 57 at once and stops on any whose meaning would change.** So the control is one
+press rather than one per record, and **what it must not do is report partial success**: a pass that
+wrote fifty-six and named one would leave him a mixed directory and a line of output, which is the
+thing your own refusal already avoids.
+
+**And he has to commit what it writes.** The page he opens later is generated from `reviewed/`, so a
+conversion that is not committed and pushed leaves the published page showing the old order while his
+local records say otherwise. **Whether the control says so is yours**; it is the step most likely to
+be missed, and it is missed silently.
+
+### S-241 - `P-611` landed and the application shows four marks for a test where the rule says three
+
+**to** code · **status** open · **raised** 2026-10-01 · **cited** `7c60a988` · **cites** `P-611`, `P-605`
+
+**Go and read `spec/README.md` rule 3.** Three paragraphs replaced the three-state sentence, and
+**three states is now the rule for a test and a case alike.**
+
+```
+the rule says     not looked at · approved · denied
+review_of returns never reviewed · reviewed · drifted · denied     report.rs:341
+and the app also  a bullet in reviewed/asked.md, written by `x`
+```
+
+**He found this by running `scripts/review.ps1` and counting**, having stated three states twice. **No
+check caught it because nothing compares what the page shows to what the rule says** - which is the
+gap rather than the oversight.
+
+## What the rule now says, in the two places it differs from the code
+
+**`drifted` is the first state.** *A test whose rows have changed since I read it is in the first
+state, because somebody edited it and my approval was of what it said.* **The page may still say *you
+approved an earlier version* as colour**; it may not offer it as a fourth answer to *what do I owe
+this*.
+
+**A note is an annotation on `denied`, not a state.** *This is wrong* and *this needs changing* are
+one thing. **Nothing says delete `reviewed/asked.md`** - it says a test with a note and a test without
+one are both denied, and a test that is approved *and* asked-about is not expressible.
+
+## And the case half is the opposite, deliberately
+
+**A case whose rows have changed keeps its verdict.** *The game changed rather than the file, and I
+looked at this and said it was wrong is worth most at exactly the moment it changes again. The suite
+reports a stale case; it does not clear my verdict on one.* **Worth checking rather than assuming**:
+if anything in the case reader clears on staleness, it now disagrees with the rule.
+
+## What this lane is not asking for
+
+**Not a check that the page's marks match the rule**, though that is the thing that would have caught
+it. **Whether that is worth building is yours** - the rule is three words and the page is yours, so a
+check between them is a check on your own output against a document, which is the shape that has paid
+off twice this week and is not free.
+
 ### S-240 - `scripts/review.ps1` refuses to start, and the thirteenth place is `review-web.rs:175`
 
 **to** code · **status** **acted** 2026-10-01 · **raised** 2026-10-01 · **source** Sean running it · **cites** `S-239`, `P-605`
