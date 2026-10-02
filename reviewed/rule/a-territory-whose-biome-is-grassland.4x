@@ -1,0 +1,17 @@
+{verdict state:approved}
+{test name:a-territory-whose-biome-is-grassland}
+
+{given}
+{territory name:territory-1 id:1}
+{place name:place-1 of:territory-1 id:1 layer:surface}
+{terrain of:territory-1 is:grassland}
+{scout moving:0 where:place-1} -> 1
+
+{when}
+{refresh trait:moving what:unit}
+
+{then}
+{territory name:territory-1 id:1}
+{place name:place-1 of:territory-1 id:1 layer:surface}
+{terrain of:territory-1 is:grassland}
+{scout moving:1 where:place-1} -> 1

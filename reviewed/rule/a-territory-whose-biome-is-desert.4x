@@ -1,16 +1,17 @@
 {verdict state:approved}
-{test name:refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one}
+{test name:a-territory-whose-biome-is-desert}
 
 {given}
 {territory name:territory-1 id:1}
 {place name:place-1 of:territory-1 id:1 layer:surface}
-{scout moving:1 where:place-1} -> 2
-{scout moving:0 where:place-1} -> 3
+{terrain of:territory-1 is:desert}
+{scout moving:0 where:place-1} -> 1
 
 {when}
-{refresh trait:moving what:scout}
+{refresh trait:moving what:unit}
 
 {then}
 {territory name:territory-1 id:1}
 {place name:place-1 of:territory-1 id:1 layer:surface}
-{scout moving:1 where:place-1} -> 5
+{terrain of:territory-1 is:desert}
+{scout moving:1 where:place-1} -> 1

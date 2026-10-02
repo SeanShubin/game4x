@@ -1,45 +1,18 @@
-# Two fed citizens and five food, breeding fired on its own: four citizens and three food.
-#
-# **It stops at two with three food standing, and the food is the evidence.** Were the newborns
-# reached, five food would have gone rather than two. **What stops it is `repeats`**, which holds
-# what a firing made aside - measured on 2026-09-20 by setting the newborns' `bearing` the other way
-# and finding the same four citizens and the same three food.
-#
-# **The two parents come back spent and the two newborns arrive whole**, which is `P-587`: `breed`
-# puts the parent back at `bearing:0` the way `toil` puts a citizen back at `laboring:0`, and
-# everything made arrives at full capability. **So the `then` tells them apart now**, and the pair at
-# `bearing:1` is exactly the pair the rule did not reach.
-#
-# **This header said both things before `P-587` and the rows said neither.** One paragraph had the
-# newborns arriving spent and another had them arriving at `bearing:1`; the rows had all four alike,
-# so what ran was a game where nothing was ever spent and `bearing` told nothing apart. **The
-# comment described the game Sean meant and the rows described the game there was** - which is
-# `spec/README.md` rule 3 from the inside: where prose and a test disagree the test is right, and
-# here the test was right about a thing nobody wanted.
-#
-# **This is what `bearing` is for**, and it is the same shape as `hungry` one trait along: one stops
-# a citizen eating all the food, the other stops one breeding with all the surplus. Sean,
-# 2026-09-19: *Bearing is their capacity to reproduce.* Sean, 2026-09-28: *that is a limiter so that
-# one citizen can't have multiple children.*
-#
-# **Fired on its own, so the refreshes do not hide it.** In a whole turn the last two steps restore
-# both traits and every citizen looks alike again; here the world is left as `breed` left it, which
-# is the only place the spent `bearing` can be read.
-
+{verdict state:approved}
 {test name:breeding-does-not-reach-the-citizens-it-just-made}
 
 {given}
-{territory id:1 name:territory-1}
-{place id:1 of:territory-1 layer:surface name:place-1}
-{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{territory name:territory-1 id:1}
+{place name:place-1 of:territory-1 id:1 layer:surface}
+{citizen bearing:1 hungry:0 laboring:1 where:place-1} -> 2
 {food where:place-1} -> 5
 
 {when}
 {breed}
 
 {then}
-{territory id:1 name:territory-1}
-{place id:1 of:territory-1 layer:surface name:place-1}
-{citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
-{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{territory name:territory-1 id:1}
+{place name:place-1 of:territory-1 id:1 layer:surface}
+{citizen bearing:0 hungry:0 laboring:1 where:place-1} -> 2
+{citizen bearing:1 hungry:0 laboring:1 where:place-1} -> 2
 {food where:place-1} -> 3
