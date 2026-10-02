@@ -69,6 +69,64 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-251 - A test he has not reviewed fails the build when it drifted, and a red gate blocks the page he reviews from
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** Sean: *I want to make sure a test I have not reviewed does not fail the build, and my ability to review it comes online as soon as possible. Once I have reviewed it, it can fail the next build.* · **cites** `P-611`, `E-4`
+
+**His rule, in his words, and the three things it finds.**
+
+```
+reviewed     no_test_differs_from_what_sean_read      2 drifted - PANICS
+directories  the_friendly_source_is_what_the...       the same 2 - PANICS
+first_test   a_test_sets_its_sections_apart           counts 4 marks; a test with no {when} has 3
+deploy       needs: gate                              any red gate means no page to review from
+```
+
+## A test with no record is already right
+
+**`reviewed.rs` prints `4 of 63 tests have no record and constrain nothing` and does not assert it.**
+So an unread test is a notice, which is **exactly what he asked for and it is already true.** Nothing
+to change, and worth saying so rather than leaving it to be rediscovered.
+
+## A test that drifted is treated as a failure, and `P-611` says it is unread
+
+**The panic is `2 of 59 tests changed after they were read, so the engine is held to bytes that are
+not the bytes that were approved`.** The concern is real - the foundation is generated from the
+record, so the engine runs the bytes he approved while `spec/tests/` says something else.
+
+**But `P-611` already says what a drifted test is**: *a test's verdict clears when its rows change.*
+**A cleared verdict is not-looked-at, and not-looked-at constrains nothing** - so the same sentence
+that makes the four a notice makes these two a notice.
+
+**And the review application already agrees.** `report.rs` maps `("drifted", _)` to `NOT_LOOKED`,
+which is `P-611` collapsing five displayed states into three. **So the page calls it unread and the
+suite calls it a failure**, and the promoted rule settles it in the page's favour.
+
+**What follows is that the foundation skips a drifted test the way it skips an unread one**, and
+then nothing is held to stale bytes and nothing is red. **This lane does not say how** - whether the
+generator skips it or the suite does is yours.
+
+## And a red gate takes away the thing he reviews from
+
+**`deploy` needs `gate`.** So a reviewed test going red - which is the gate working, and which he
+wants - **also means no deploy, and no deploy means the review page does not update.** He cannot read
+the four waiting tests until somebody fixes the code that made the gate red.
+
+**That is the same shape he settled for the sweep on 2026-10-01**: *I am fine with failing the build
+as long as the deploy is not blocked or delayed.* **`sweep` has no `needs:` for that reason**, and
+`deploy` still does.
+
+## One consequence of his new test shape, which is not a defect
+
+**`a_test_sets_its_sections_apart` counts four marks per test per directory** - the `{test name:}`
+line and three section marks. **A test with no `{when}` has three**, so the count is short by one per
+directory. Six tests are in that shape as of `77aac86e`, and **approving any of the four unread ones
+makes this red again** until the count stops assuming three sections.
+
+**Not a defect in the check**: it was true of all 63 tests until today, and the shape changed under
+it. Sean, 2026-10-02: *we support many commands, which does not seem substantively different than
+also supporting zero commands.*
+
 ### S-250 - A verdict's outcome appears at the top of the page and the button is anywhere below it
 
 **to** code · **status** open · **raised** 2026-10-02 · **source** Sean: *the page does not say what the problem is so I can't be sure* · **cites** `E-4`, `S-249`
