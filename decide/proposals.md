@@ -15,7 +15,7 @@ of it needs you.
 
 **to** sean · **status** open · **raised** 2026-10-02 · **kind** his requirement, with the research lens's measurements behind it · **shape** text · **asks** approval · **into** `docs/process.md` -> What I am pushing out
 
-**Four paragraphs, each added to the end of that section, in this order.** `X-48` is the lens's
+**Five paragraphs, each added to the end of that section, in this order.** `X-48` is the lens's
 item; the words below are this lane's draft of your requirement.
 
 > **Approving a test does not deploy the app.** A push that touches only what I review runs what
@@ -35,6 +35,9 @@ item; the words below are this lane's draft of your requirement.
 > and any analysis of the game or of the tests that takes a long time, belong somewhere that is not
 > between me and a page I am reading.
 
+> **One site is enough.** The app at the root and what I read below it, as long as I can navigate
+> from the root to either - so nothing here asks for a second publisher.
+
 ## It is violated now, and your own approvals are the evidence
 
 **`pipeline.yml` has no `paths:` filter.** So a commit touching nothing but `reviewed/` runs clippy
@@ -53,26 +56,27 @@ the deploy itself        9s · 11s · 28s
 library would not build.** You approved a test about a territory's biome and the run went red over a
 graphics dependency.
 
+## Half of the first paragraph is already built, which you may not know
+
+**`generate.yml` already carries the filter this asks for** - `on: push: paths: reviewed/**,
+spec/tests/**` - and it runs `cargo run --example foundation`, commits, pushes, and verifies with
+`every_reading_reaches_the_suite`. **That is the step this lane has done by hand four times today.**
+
+**It has never run**, because it reached `origin` in the same push that carried your last approval.
+**So your next approval fires it.** What is missing is the other half: `pipeline.yml` has no filter,
+so it runs too.
+
 ## Why the third paragraph is the one that matters
 
 **Everything you review is produced by three crates** - `game-model`, `friendly-notation`,
-`planet-model` - measured by walking every crate for writers of `reports/`, `reviewed/`,
-`spec/tests/` and `regression/`. **The partition is clean today and nothing holds it.**
+`planet-model` - and the code lane re-derived the closure rather than taking it: **2, 3 and 1 lines
+of `cargo tree`, `bevy=0` in each**, against 544 packages and 65 Bevy in the lockfile.
 
 **`tools/outbox` already checks who may *read* a report** - `only_a_generator_or_a_check_reads_a_report` -
 **and nothing checks that the producers of your review surface stay light.** So the property is
 true, load-bearing, and held by nothing, which is the state this repository treats as worst.
 
-## One cost you should know before approving the fourth
-
-**GitHub Pages is one site per repository and `actions/deploy-pages` replaces the whole site.**
-Two genuinely independent publishers out of one repository means branch-based publishing, which
-carries a ten-builds-an-hour soft limit. **If *a different deployment* has to mean a second Pages
-publisher, that limit is the price**; if it can mean a different job on the same publisher, there is
-no price. **This lane does not know which you mean and has not assumed.**
-
 ## What this proposal does not say
 
 **Nothing about the engine-against-presentation split.** You placed that as a code module question
 rather than a pipeline one, so it is the quality lens's and the code lane's, and it is not here.
-
