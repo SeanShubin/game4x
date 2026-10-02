@@ -1577,7 +1577,7 @@ The isolation is checked rather than promised, by `tests/isolation.rs`:
 ```
 cd crates/game-model
 cargo test --no-fail-fast      # every binary, not just up to the first that fails
-cargo run --example report     # report.html: every test, whole, failures marked
+cargo run --example report     # reports/review/: every test, whole, failures marked
 cargo run --example render     # data/friendly/ from data/foundation/
 cargo run --example tree       # tree.txt: every rule, and the tree its parts make
 
@@ -1618,7 +1618,7 @@ than anything a fresh build has to produce.
 `pre-commit` runs rustfmt and `pad-tables` and builds nothing here, and `pre-push`'s gate is
 `--workspace`, which this crate is deliberately outside of.
 
-## `report.html`, which is where a red is read
+## `reports/review/index.html`, which is where a red is read
 
 **Sean, 2026-09-16**: *I want an aesthetically pleasing and informative test report. [...] Make sure
 I can see the entirety of the test and the failures are highlighted somehow.*
@@ -1671,7 +1671,7 @@ copies when they change.*
 
 **The copy is the marker, so there is nothing to hand-maintain.**
 `cargo run --example review -- <name>` puts the current `data/friendly/tests/<name>.4x` into
-`reviewed/`, and that act is the review. `report.html` then says one of three things per test:
+`reviewed/`, and that act is the review. The page then says one of three things per test:
 **never reviewed**, **reviewed**, or **drifted**, with the lines that differ shown under the test.
 
 **Whole file, whitespace collapsed.** A reworded comment counts and a re-indented row does not.
@@ -1736,7 +1736,7 @@ file exists to make visible. A count in the summary fixed it.
 
 ## What the page is, and what the file on disk still is
 
-**`report.html` has no script in it and never gains one.** `build(live)` is told whether anything
+**The written page has no script in it and never gains one.** `build(live)` is told whether anything
 is listening: served, the page carries the controls; written to disk, it is exactly what it was.
 **A button that writes to the disk would be a lie in a file opened from the disk**, and that is the
 reason rather than tidiness.

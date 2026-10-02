@@ -330,7 +330,7 @@ jobs:
           # **The engine's tests, served where they are asked for.** Sean, 2026-09-21:
           # *can I render the tests from somewhere under
           # https://seanshubin.github.io/game4x/reports/*. They land at
-          # `/game4x/reports/thin-engine/`, and the data beside the page so that every link in
+          # `/game4x/reports/review/`, and the data beside the page so that every link in
           # it is relative and resolves at any subpath - the same property the other reports
           # already turn on.
           #
@@ -349,32 +349,46 @@ jobs:
           # are copied under it. **Copying only `data/` published a page whose every *on disk*
           # link was dead**, which is what this step looked like between the move and now.
           #
-          # **The published path keeps the name `thin-engine` and the crate no longer has
-          # it.** The engine moved into `crates/game-model` on 2026-09-25 and that crate is
-          # gone; this is a URL Sean asked for and has, so renaming it would break a link
-          # he holds in exchange for tidiness. **The source paths below follow the move and
-          # the destination does not**, which is the difference between a file and an
-          # address.
-          mkdir -p crates/game4x/dist/reports/thin-engine/spec
-          cp crates/game-model/report.html crates/game4x/dist/reports/thin-engine/index.html
-          cp -r crates/game-model/data crates/game4x/dist/reports/thin-engine/data
-          cp -r spec/tests crates/game4x/dist/reports/thin-engine/spec/tests
-          find crates/game4x/dist/reports/thin-engine -name '*.4x' \
+          # **It was published at `thin-engine` until 2026-10-02, and the reason given for
+          # keeping that name was false.** The comment here said it was *a URL Sean asked for
+          # and has, so renaming it would break a link he holds* - and on 2026-10-02 he went
+          # looking for this page, could not find it, and `S-249` found why: **nothing in the
+          # tree linked it**, `reports/index.md` listed twelve pages and not this one, and the
+          # last thing still carrying that name was the address of a crate that stopped
+          # existing on 2026-09-25.
+          #
+          # **So the link he held did not exist**, and the trade the comment described was
+          # tidiness against nothing. Sean, asked where it should be: *reports review is good*,
+          # and *it should be reachable from the root reports page.*
+          #
+          # **The old path does not keep answering**, which is this lane's call and he left it
+          # here. Nothing links it, he holds no working link to lose - that is what `S-249`
+          # established - and two addresses for one page, one named after a crate that is gone,
+          # is how a wrong name survives a rename. **A stale URL that still works is what
+          # stopped anyone noticing this one.**
+          mkdir -p crates/game4x/dist/reports/review/spec
+          # **Already there from `cp -r reports` above**, since `S-249` moved the generator's
+          # output under `reports/`. Kept as an assertion rather than a copy: if it is missing,
+          # the page nobody can find is the page nobody published.
+          test -f crates/game4x/dist/reports/review/index.html
+          cp -r crates/game-model/data crates/game4x/dist/reports/review/data
+          cp -r spec/tests crates/game4x/dist/reports/review/spec/tests
+          find crates/game4x/dist/reports/review -name '*.4x' \
             -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
           # **Every twin against every input**, so a copy that made none fails here rather than
           # on the site - the same count the twenty above are held by.
-          thin=$(find crates/game4x/dist/reports/thin-engine -name '*.4x' | wc -l)
-          thin_twins=$(find crates/game4x/dist/reports/thin-engine -name '*.4x.txt' | wc -l)
-          test "$thin" -gt 100
-          test "$thin_twins" -eq "$thin"
+          review=$(find crates/game4x/dist/reports/review -name '*.4x' | wc -l)
+          review_twins=$(find crates/game4x/dist/reports/review -name '*.4x.txt' | wc -l)
+          test "$review" -gt 100
+          test "$review_twins" -eq "$review"
           # **The tests counted against the repository rather than against a number**, so a root
           # that failed to copy fails here even if the other one grew enough to cover it. The
           # total above could not tell those apart: it was `-gt 100` while `data/` alone was 118,
           # and the move took it to 64 without anyone editing this file.
-          published=$(find crates/game4x/dist/reports/thin-engine/spec/tests -name '*.4x' | wc -l)
+          published=$(find crates/game4x/dist/reports/review/spec/tests -name '*.4x' | wc -l)
           test "$published" -eq "$(find spec/tests -name '*.4x' | wc -l)"
           test "$published" -gt 40
-          test -f crates/game4x/dist/reports/thin-engine/index.html
+          test -f crates/game4x/dist/reports/review/index.html
           # **And a twin for every `.4x` anywhere under the artifact, because naming the roots
           # is what went wrong.** The two passes above each name a pair of directories, and
           # `R-12` added `reports/foundation/` - 54 generated files - which neither covers. They
@@ -418,7 +432,7 @@ jobs:
           test "$reached" -gt 100
           test "$dead" -eq 0
           echo "Resolved $reached distinct outward link(s) from the reports, none dead"
-          echo "Published $thin thin-engine inputs with $thin_twins twins, $published of them tests"
+          echo "Published $review review-app inputs with $review_twins twins, $published of them tests"
           echo "Published $all_inputs .4x files with $all_twins twins, over the whole artifact"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 

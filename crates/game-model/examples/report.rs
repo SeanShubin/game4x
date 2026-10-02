@@ -1,4 +1,4 @@
-//! Write `report.html`: every test, whole, with whatever failed marked in it.
+//! Write `reports/review/index.html`: every test, whole, with whatever failed marked in it.
 //!
 //! **Sean, 2026-09-16**: *I want an aesthetically pleasing and informative test report. [...] Make
 //! sure I can see the entirety of the test and the failures are highlighted somehow.*
@@ -615,6 +615,11 @@ enum Outcome {
 ///
 /// **A case is generated and a test is approved**, which is why they sit apart: `spec/tests/`
 /// holds what Sean has read and `regression/` holds what the suite writes.
+/// Where the generated reports live, which is beside `spec/` rather than inside this crate.
+fn reports_at() -> PathBuf {
+    mine().join("..").join("..").join("reports")
+}
+
 pub fn cases_at() -> PathBuf {
     mine().join("..").join("..").join("regression")
 }
@@ -848,7 +853,7 @@ pub struct Built {
 /// Run every test and render it.
 ///
 /// **`live` says whether anything is listening.** Served by `review-web` it is true and the page
-/// carries the reviewing controls; written to `report.html` it is false and the page is what it
+/// carries the reviewing controls; written to `reports/review/` it is false and the page is what it
 /// has always been - a button that writes to disk would be a lie in a file opened from disk.
 pub fn build(live: bool) -> Built {
     let notes = asked();
@@ -1415,12 +1420,30 @@ not as expected
 
 fn main() {
     let built = build(false);
-    std::fs::write(mine().join("report.html"), &built.page).expect("report.html");
-    std::fs::write(mine().join("report.txt"), &built.log).expect("report.txt");
+    // **Written under `reports/` so the root reports page can link it** - `S-249`. Sean went
+    // looking for the page `E-4` is vetted against and could not find it: it was published at
+    // `reports/thin-engine/`, named after a crate that stopped existing on 2026-09-25, and
+    // `reports/index.md` linked twelve pages and not this one.
+    //
+    // **`reports/review/index.html`, which is the address he chose**: *reports review is good*,
+    // and *it should be reachable from the root reports page.*
+    //
+    // **One level down, which is what makes the link checkable.** `tests/browsable.rs` reads the
+    // top level of `reports/` and checks that every link resolves - so the link to this page is
+    // held, and this page's own links are not descended into. **That is the right split**: its
+    // links point at `data/` and `spec/tests/`, which the pipeline copies beside it in the
+    // artifact and a clone does not have.
+    //
+    // **`review-web` is how it is read locally** and serves the page live with working links, so
+    // nothing is lost by the committed copy being the deployed one.
+    let into = reports_at().join("review");
+    std::fs::create_dir_all(&into).expect("reports/review");
+    std::fs::write(into.join("index.html"), &built.page).expect("index.html");
+    std::fs::write(into.join("index.txt"), &built.log).expect("index.txt");
     let (total, passed, red) = (built.total, built.passed, built.red);
     let (seen, unseen) = (built.reviewed, built.unreviewed);
     println!(
-        "report.html, report.txt: {total} tests, {passed} as expected, {red} red, {seen} reviewed, {unseen} to read"
+        "reports/review/: {total} tests, {passed} as expected, {red} red, {seen} reviewed, {unseen} to read"
     );
 }
 

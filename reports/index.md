@@ -4,7 +4,7 @@ Generated. Every reference is a link, every page has a markdown sibling to diff,
 
 [The index](index.md)
 
-## Pages  (9)
+## Pages  (10)
 
 - [tests.html](tests.html) - [as markdown](tests.md)
   every test, its foundation form, and whether he has read it
@@ -16,6 +16,8 @@ Generated. Every reference is a link, every page has a markdown sibling to diff,
   one case per relation the game declares
 - [primitives.html](primitives.html) - [as markdown](primitives.md)
   one case per word the engine implements
+- [review/index.html](review/index.html) - [as text](review/index.txt)
+  every test with a control beside it, and every regression case - the page a                verdict is pressed on
 - [nogain.html](nogain.html) - [as markdown](nogain.md)
   whether any sequence of rules can come back round with more - solved for, not declared
 - [petri.html](petri.html) - [as markdown](petri.md)

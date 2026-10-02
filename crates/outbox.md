@@ -222,6 +222,56 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-221 - The review page is at `reports/review/` and the root reports page links it
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-249` · **cites** `S-249`, `E-4`
+
+**derived from** him going looking for the page `E-4` is vetted against and not finding it
+
+```
+was   crates/game-model/report.html  ->  published at reports/thin-engine/
+now   reports/review/index.html      ->  published where it sits, and linked from reports/index
+```
+
+**The old path does not keep answering**, which `S-249` left to this lane. Nothing linked it, he
+held no working link to lose - that is what the item established - and two addresses for one page,
+one named after a crate that is gone, is how a wrong name survives a rename. **A stale URL that
+still works is what stopped anyone noticing this one.**
+
+## The reason the old name was kept was false on its own terms
+
+The comment in `pipeline.yml` said the name stayed because it was *a URL Sean asked for and has, so
+renaming it would break a link he holds*. **He held no such link.** `reports/index.md` listed
+twelve pages and not this one, nothing in the tree referred to the path, and the trade the comment
+described was tidiness against nothing.
+
+**`thin-engine` was the last thing in the tree carrying that name**, nine days after `f633864a`
+said the crate was gone. **One mention is left, in the comment that records this.**
+
+## Why the generator's output moved rather than being copied
+
+**One committed copy, not two.** The page is 280K; writing it in both places would commit the same
+bytes twice on every run.
+
+**And one level down is what makes the link checkable.** `tests/browsable.rs` reads the top level of
+`reports/` and asserts every link resolves - so **the link to this page is held, and this page's own
+links are not descended into.** That split is exactly right: its links point at `data/` and
+`spec/tests/`, which the pipeline copies beside it in the artifact and a clone does not have.
+
+**What a clone loses is clicking through from the committed HTML**, and `review-web` covers that
+properly - it serves the page live with working links, and it is how the page is read locally
+anyway.
+
+**The pipeline asserts rather than copies now**, since `cp -r reports` already carries it: *if it is
+missing, the page nobody can find is the page nobody published.*
+
+## Why this was worth a rename and not a redirect
+
+**`E-4`'s *vetted when* is *I open a page away from this machine*.** A page he cannot find is a
+capability he cannot vet, however well it works - which is `S-249`'s argument and the reason it was
+filed rather than called cosmetic.
+
+
 ### C-220 - Four readers of a record, two untaught, and `C-216` verified against a population of one
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-248` · **cites** `S-248`, `C-216`, `P-605`

@@ -30,6 +30,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-249** - `9cd1db7` S-249: the review page is at reports/review/ and the root reports page links it · still open in `docs/notes/proposals.md`
 - **S-247** - `61491f2` A test for a territory biome, three of six, and S-247 for why not six · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`
@@ -74,7 +75,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (56)
+### To spec (57)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -86,6 +87,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-214** - Three states, and the check that would have caught the fourth · `crates/outbox.md`
 - **C-215** - Convert is a button, checks every record before writing any, and says to commit · `crates/outbox.md`
+- **C-221** - The review page is at `reports/review/` and the root reports page links it · `crates/outbox.md`
 - **C-220** - Four readers of a record, two untaught, and `C-216` verified against a population of one · `crates/outbox.md`
 - **C-219** - The sweep is its own job, nothing depends on it, and a red sweep still reds the run · `crates/outbox.md`
 - **C-218** - `rustup` was installed all along, and three of this lane's items said otherwise · `crates/outbox.md`

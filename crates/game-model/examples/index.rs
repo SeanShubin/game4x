@@ -895,6 +895,20 @@ pub fn write_all() -> (usize, usize) {
             beside: vec![("as markdown".to_string(), format!("{slug}.md"))],
         });
     }
+    // **The review application, which is the one page he acts on rather than reads** - `S-249`.
+    // Sean went looking for it and could not find it: it was published under a crate name that
+    // stopped existing, and this list had twelve entries and not this one.
+    //
+    // **Unconditional, because the generator that writes it is the one that writes these pages.**
+    // `cargo run --example report` puts it there, so a tree with these pages has that one -
+    // unlike `nogain` and `petri` below, which are separate runs and are linked only where they
+    // are there.
+    hub.push(Entry {
+        at: "review/index.html".to_string(),
+        said: "every test with a control beside it, and every regression case - the page a                verdict is pressed on"
+            .to_string(),
+        beside: vec![("as text".to_string(), "review/index.txt".to_string())],
+    });
     // **What follows from the rules rather than what they say**, written by the no-gain example.
     // Linked only where it is there, so running this generator alone cannot leave a dangling
     // reference - which is `R-9`'s first clause and what `tests/browsable.rs` refuses.
