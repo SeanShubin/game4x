@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-245 - The six biomes survive because they were promoted ahead of any rule that reads them
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `P-578`, `C-218` · **source** the mutation sweep's 86 unnoticed, up from 80
+
+**`docs/architecture.md` rule 13 asks for a reason, not for the survivor to go.** *Anything that
+survives with the suite still green is a finding, and is written down with the reason it survived.*
+**Here is the reason for six of the eighty-six.**
+
+```
+{biome ...} rows in spec/data/schema.4x                  6
+test rows in reviewed/rule/ naming any of them           0
+```
+
+**Measured with word boundaries over rows only** - thirteen files match `ocean|ice|desert|grassland|
+jungle|mountain|biome` somewhere, and every one of those matches is in a comment.
+
+## The reason
+
+**`P-578` promoted the biome and terrain section into `spec/data/schema.4x` on 2026-09-28**, and
+`spec/` is the destination rather than the schedule - `CLAUDE.md`: *the spec is the destination and
+most of it is not buildable when it lands. Of the thirteen proposals promoted on 2026-08-29 and 30,
+four changed what the code should build and nine described a rule system nothing can name a condition
+for yet.*
+
+**So the six biomes are data with no rule yet.** Nothing reads them because nothing has been written
+that could, and your check was right that this is **new data rather than lost coverage** - the rows
+arrived with `02403401` and no test ever depended on them.
+
+**That is a coverage gap waiting on rules that do not exist**, which rule 13 calls a finding and
+writes down. **It is not a defect and nothing should be deleted to make the sweep quiet.**
+
+## What would change it, and it is not a check
+
+**A rule that reads a biome.** When one lands, the six stop surviving on their own and the tests that
+cover that rule cover them. **Until then the honest state is a written-down survivor**, and the
+number going 80 to 86 is the sweep noticing data that arrived rather than coverage that left.
+
+**This lane is not asking for the reason to be recorded in your list in these words** - where a
+survivor's reason lives is yours. **What it is asking is that the six are not read as a regression**,
+because the count moved the wrong way and nothing about the checks changed.
+
 ### S-244 - `rustup` was installed all along, and `C-189`'s premise is false
 
 **to** code · **status** open · **raised** 2026-10-02 · **cites** `C-189`, `C-217`, `P-594`
