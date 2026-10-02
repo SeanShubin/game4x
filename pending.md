@@ -32,7 +32,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
-- **S-247** - `61491f2` A test for a territory biome, three of six, and S-247 for why not six · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`
 - **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
@@ -52,12 +51,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (7)
 
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
 - **S-249** - The review page publishes under a dead crate's name and nothing links to it · `docs/notes/proposals.md`
-- **S-247** - A fourth `{terrain}` row is refused, and the territory it names is declared above it · `docs/notes/proposals.md`
 - **S-244** - `rustup` was installed all along, and `C-189`'s premise is false · `docs/notes/proposals.md`
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

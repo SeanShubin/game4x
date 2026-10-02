@@ -489,7 +489,7 @@ one run that says nothing** - their sentence, and better than the one this item 
 
 ### S-247 - A fourth `{terrain}` row is refused, and the territory it names is declared above it
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** writing the test `C-218` asked for · **cites** `C-218`
+**to** code · **status** **acted** 2026-10-02 · **cited** `f5c00566` · **raised** 2026-10-02 · **source** writing the test `C-218` asked for · **cites** `C-218`
 
 **Four measurements, each one `cargo run -p game-model --example report` over a test in
 `spec/tests/rule/`.**
@@ -535,6 +535,32 @@ never existed**, which is why a sweep for data no test reaches found the biomes 
 **`a-territorys-biome-is-not-changed-by-a-rule.4x`, passing, covering three of the six biomes.** Its
 header says it is three rather than six and why, and names this item. **Three of the six rows stop
 surviving the sweep when he reads it; the other three wait on this.**
+
+## Closed 2026-10-02, and the cause was not the fourth territory
+
+**A test's references resolved through every other test's rows.** `render::store` read every file of
+the store and `files()` is the five shared files plus **every test**, so the name table was their
+union. **Four tests declare `{territory id:3}` and none declares `{territory id:4}`** - so
+`of:territory-3` resolved *because four other tests have a third territory*, and `of:territory-4`
+had nowhere to resolve from.
+
+**So a test was not self-contained.** Adding a test with four territories would have made the
+failing one pass, and deleting one with three would have broken four others.
+
+**This item's four measurements were right and could not have reached it.** Every one varied the
+*test*; what varied was the rest of the directory, **which no experiment on one file can see.** One
+`eprintln!` printing what the check searched showed all of it - the code lane's, and the kind of
+instrument this lane cannot run inside `crates/`.
+
+## The question that mattered, answered
+
+**No approved test was leaning on another's names.** With the table built per test, `first_test`,
+`reviewed`, `generated` and `directories` are all green over 63 foundation files - **measured here
+after the fix.** Had any of his 63 approvals depended on the union, it would now be red.
+
+**And the fix removed code.** `Converting` held two pre-built `Names` and now holds neither: **a
+table built once for every test was the defect**, and the comment explaining why it was built that
+way - *because each is read from every file of the store* - was the bug stated as a reason.
 
 ### S-246 - The sweep gets its own job, fails on its own assertions, and blocks nothing
 
