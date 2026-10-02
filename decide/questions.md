@@ -11,49 +11,37 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-612 - What may withhold the deploy
+### P-612 - Nothing withholds the review page
 
-**to** sean · **status** open · **raised** 2026-10-02 · **kind** a choice the code lane surfaced rather than made · **shape** text · **asks** a decision · **into** `docs/process.md` -> What I am pushing out
+**to** sean · **status** open · **raised** 2026-10-02 · **kind** his instruction, with the words offered for reading · **shape** text · **asks** approval · **into** `docs/process.md` -> What I am pushing out
 
-**`caf2aa9c` moved the test suites out of `gate` on your rule.** `gate` is now three things, and
-`deploy` still waits for all three.
+**Sean, 2026-10-02**: *can we structure the build so that the review capability is published as soon
+as possible, regardless of whether the build succeeds or fails as a whole?*
 
-| What `gate` runs                          | If it fails                        | Withholds the page? |
-| ----------------------------------------- | ---------------------------------- | ------------------- |
-| `cargo fmt --all -- --check`              | the code is correct and ill-spaced | **yes, today**      |
-| `cargo clippy --workspace -- -D warnings` | the code is correct and inelegant  | **yes, today**      |
-| the WASM build                            | **there is no artifact**           | yes                 |
+**Yes, and it is cheaper than it sounds.** The review page is **440 committed files under
+`reports/`** - `reports/review/index.html` and its data are in the repository, and the pipeline
+copies them. **So publishing it needs a checkout and nothing else**: no toolchain, no lint, no
+tests, no WASM build. Measured by `git ls-files reports`.
 
-**The code lane left this rather than deciding it**, in its words: *a lint failure withholding the
-page costs exactly what a test failure did.*
+The sentence offered, for *What I am pushing out*:
 
-## Three answers, and the middle one is this lane's reading of what you already wrote
+> **Nothing withholds the review page.** It is committed rather than built, so publishing it needs
+> a checkout and nothing else - no lint, no test, no build. **A run that fails says so and the page
+> publishes anyway**, because the page is where I find out what is waiting on me, and a failing
+> build is exactly when I most need to be able to look.
 
-```
-one     nothing withholds the deploy; a red run reports and publishes anyway
-two     only a failure that means there is no artifact withholds it - the WASM build
-three   as today; fmt and clippy keep blocking
-```
+## What it replaces, and why this one asks approval
 
-**Two, said as a sentence for the section:**
+**`P-612` asked a decision until now** - whether `fmt` and `clippy` might withhold the page, the
+choice the code lane surfaced rather than made. **Your instruction answers it and goes further**, so
+this is the rewrite that answer turns it into: the question is closed and the words are offered.
 
-> **Nothing withholds the deploy except not having built.** A check that fails says so and the
-> deploy proceeds, because deploying is how I verify and a deploy that waits for correctness has
-> the order backwards. **The one exception is a build that produced no artifact**, where there is
-> nothing to publish rather than a decision not to.
+## What it implies for the pipeline, which is the code lane's to build
 
-## Why this is a decision and not an approval
+**Today the page is copied into the artifact inside `gate`, after the WASM build**, and `deploy`
+needs `gate` - so lint, the build, and until `caf2aa9c` the whole test suite each withheld it.
+**Nothing about the page requires any of that.**
 
-**Your section already implies two**: *I deploy it so that I can verify correctness on something
-concrete*, and *what is out there is closer to a staging area, or a prototype, than to a product.*
-
-**But it does not settle whether a lint failure is different from a test failure**, and there is a
-real argument that it is: **a lint failure means nobody has looked**, where a test failure means
-something was looked at and disagreed. **This lane will not resolve that quietly.**
-
-## What the page costs when it is withheld
-
-**It is the one surface that tells you what is waiting on you.** Six tests are unread as of
-`77aac86e`, and until today a red gate meant you could not read any of them - **the thing that tells
-you to look was withheld by the thing you were meant to look at.** That is already fixed for tests
-and is still true for `fmt`.
+**One thing a reader should not take from this.** It says nothing about whether the *game* publishes
+from a failed build - that is a separate question with a real answer either way, and **this lane is
+not folding it in.**

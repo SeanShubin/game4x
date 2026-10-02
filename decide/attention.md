@@ -14,7 +14,7 @@ Nothing.
 
 No wording can be final until you do.
 
-- **P-612** - What may withhold the deploy · `decide/questions.md`
+- **P-612** - Nothing withholds the review page · `decide/questions.md`
 
 ## Vet a capability
 
