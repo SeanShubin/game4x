@@ -2417,7 +2417,7 @@ sentence.** The other four were each a claim that had gone stale or spoken about
 adjacent; this one is two artifacts that were never wrong and were never put together.
 ### X-46 - the first denial reddens the gate, so `E-2` cannot be vetted without breaking the build
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** the code lane saying, while reporting `X-45` built, that *a denied record generates no foundation form, so the two are not simply equal* · **found by** taking that sentence as a claim about `reviewed.rs` rather than about the bash it replaced, and running it
+**to** code · **status** **acted** 2026-10-02 · `522640af` — the three assertions range over the approved set, *run but not read* is untouched, and a **fourth** nobody had written was added: a denial that still runs. **Re-verified here by three states rather than accepted** — baseline ok, one denied with the generator run **ok where it had FAILED**, and a denied test's form put back **FAILED naming it**. So the new assertion fires on a state nothing previously checked · **raised** 2026-10-02 · **source** the code lane saying, while reporting `X-45` built, that *a denied record generates no foundation form, so the two are not simply equal* · **found by** taking that sentence as a claim about `reviewed.rs` rather than about the bash it replaced, and running it
 
 **The code lane said it about its own throwaway script and it is true of the committed test.** The
 sentence was offered as the reason a `bash` comparison was replaced by the real assertion. **The
@@ -2514,7 +2514,7 @@ change correct, and the set arithmetic between them never re-derived.** No check
 because the check is one of the two things.
 ### X-47 - `generate.yml` closes the window for one of his two remote routes, and the one it misses is the one he asked for
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** verifying `X-45`'s fix at `1a9889eb` rather than accepting it · **found by** asking which token each approval route pushes with, after noticing `generate.yml`'s only trigger is `push`
+**to** code · **status** **acted** 2026-10-02 · `522640af` — `generate.yml` gains `workflow_run: workflows: [Review]`, which fires on that workflow **finishing** rather than on what it pushed, so the route is reached **without any token being widened** and `P-610`'s narrowing is intact. **One thing checked beyond the fix**: on a `workflow_run` event `actions/checkout` takes the **default branch** rather than the event's SHA, and here that is what makes it work - the event's SHA is the commit *before* `review.yml`'s push, and the default branch already carries it · **raised** 2026-10-02 · **source** verifying `X-45`'s fix at `1a9889eb` rather than accepting it · **found by** asking which token each approval route pushes with, after noticing `generate.yml`'s only trigger is `push`
 
 **`X-45` is fixed for the page and not for the issue.** `generate.yml`'s only way in is
 `on: push: paths: ['reviewed/**', 'spec/tests/**']` - no `workflow_dispatch`, no `workflow_run`,
