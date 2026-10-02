@@ -50,7 +50,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `8a7a833` S-233: played.md has no HTML rendering and it is where D-5's evidence lives · still open in `releases/rules-become-data.md`
-- **X-43** - `514573e` X-43: a lint failure published a site with no reports, and my comment said it could not · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -64,7 +63,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-243** - CI's clippy fails on one line and the deploy is skipped, so his page is not up · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
-- **X-43** - a lint failure publishes an empty site, and the review page 404s rather than going stale · `lenses/research/outbox.md`
+- **X-44** - the new check is positional after a name, and an assembling step placed earlier is exempt · `lenses/research/outbox.md`
 
 ### To quality (2)
 

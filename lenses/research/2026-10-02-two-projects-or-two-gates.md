@@ -2,13 +2,37 @@
 
 **2026-10-02.** From Sean asking whether the tests and the game should be separate projects, and
 then whether independent pipelines are possible in one repository at all. Carries `X-42` to the
-specification lane and `X-43` to the code lane.
+specification lane and `X-43`, now acted, to the code lane - `X-44` came out of verifying that fix.
 
 [Research](README.md) · [Outbox](outbox.md) · [`CLAUDE.md`](../../CLAUDE.md)
 
 **The answer is two gates rather than two projects, and most of it was built the same day this
 was asked.** What is left is one decision of Sean's, one paragraph of `CLAUDE.md` that has
 outlived its condition, and one defect that publishes an empty site.
+
+## Amended the same day: the case for the split is weaker than this report argues
+
+**`514573e4` fixed `X-43`, and in doing so it removed the strongest argument in here.** This
+report's recommendation rests on a coupling that was about **availability** - a lint failure taking
+the review page off the internet. With `Copy the reports into the artifact` carrying
+`if: always()`, a failing gate now publishes the reports in full. **So the coupling is about
+latency, not availability**, and the three remaining costs are smaller than the ones argued below:
+
+| What is left                                                       | Cost                                                                       |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| The gate still lints the workspace and builds WASM before `deploy` | The page is published minutes late rather than not at all                  |
+| `hooks/pre-push` still runs `fmt`, clippy and the full suite       | Pushing a record in `reviewed/` is gated on the Bevy workspace being green |
+| One Pages site per repository                                      | Unchanged, and still the only thing two repositories uniquely buy          |
+
+**The conclusion does not move and its margin does.** *Do not split the repository* was argued on
+four single-tree properties, and those are untouched. **What has gone is the sharp edge** - the
+thing that would have made a split urgent rather than merely available.
+
+**Recorded here rather than rewritten below**, because a report is a record of a moment:
+[the README](README.md) says a superseded one says so at the top. **The amendment is the second
+time in one day that this report's premise moved under it**, both times because the lane that owns
+the pipeline was fixing the thing being measured, and both times found by re-deriving rather than
+by anything failing.
 
 ## What was measured, and how to re-run it
 

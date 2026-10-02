@@ -2109,7 +2109,7 @@ one column map in `hooks/pre-commit`, the drift comparison across `spec/tests/`,
 
 ### X-43 - a lint failure publishes an empty site, and the review page 404s rather than going stale
 
-**to** code · **status** open · **raised** 2026-10-02 · **source** [the report](2026-10-02-two-projects-or-two-gates.md) · **found by** re-deriving a claim about `deploy` after `P-613` landed, and finding the hazard had moved rather than gone
+**to** code · **status** **acted** 2026-10-02 · `514573e4` — the assembly step carries `if: always()` and opens with `mkdir -p crates/game4x/dist`, and a check was built with it. **Verified here rather than accepted**: the check fails on the original bug and names the step, run against a copy of the tree in a scratchpad. **What the fix does not cover is `X-44`**, which is the check's anchor rather than the fix · **raised** 2026-10-02 · **source** [the report](2026-10-02-two-projects-or-two-gates.md) · **found by** re-deriving a claim about `deploy` after `P-613` landed, and finding the hazard had moved rather than gone
 
 **Where.** `.github/workflows/pipeline.yml`, the `gate` job. Read at `c683e211`:
 
@@ -2194,6 +2194,87 @@ the step that fills what it uploads are different steps**, and only one of them 
 same shape as this item's own origin, where a claim about `deploy` was true an hour before it was
 made and false when it was checked.
 
+### X-44 - the new check is positional after a name, and an assembling step placed earlier is exempt
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** verifying `X-43`'s fix at `514573e4` rather than accepting it · **found by** driving the check against a modified copy of the workflow, after noticing its comment claims an anchor the code does not have
+
+**`X-43` is fixed and this is not a reopening.** `514573e4` is right in every particular and the
+check it brought earns its place - **demonstrated here, not taken on trust**: with the original bug
+put back, `every_step_that_assembles_or_publishes_survives_a_failure` fails and names the step.
+
+```
+probe A   assembly step loses `if: always()`      FAILED  - "every step must carry `if: always()`"
+probe B   a second assembling step added BEFORE
+          the anchor, with no condition           ok      <- the gap
+```
+
+**Run against a copy of the tree in a scratchpad**, because `root()` is
+`CARGO_MANIFEST_DIR/../..` baked at compile time and `.github/` is not this lens's to edit. The
+probe tree held `tools/outbox` and `.github/workflows/pipeline.yml` only; the baseline passed on
+the real workflow first, so a pass in probe B is the predicate's answer rather than a broken
+harness.
+
+## Where
+
+`tools/outbox/tests/architecture.rs`, in `every_step_that_assembles_or_publishes_survives_a_failure`:
+
+```rust
+// **The first assembling step, found by what it does rather than by its name.**
+let first = steps
+    .iter()
+    .position(|(name, _)| name.contains("Copy the reports into the artifact"))
+```
+
+**The comment says the anchor is behavioural and the expression matches a literal name.** The scan
+from `first` to the end of the job is genuinely positional, which is what the message describing
+this check claimed and is true of everything *after* the anchor. **The anchor itself is a name**,
+so the check cannot see an assembling step placed *before* it.
+
+## What it costs
+
+**A step that copies committed files into the artifact, placed above the anchor and without the
+condition, re-introduces `X-43` with the gate green.** Probe B adds exactly that - a
+`Copy the scenario into the artifact` step - and the check passes. A lint failure would then
+publish a site whose reports are present and whose `scenario/` is missing, which is `S-230`'s
+outward-link 404 rather than a new failure mode.
+
+**And the inserted step satisfies the check's own self-test.** The second assertion is that at
+least one step before the anchor is skippable, *or the predicate has stopped dividing the job*. A
+skippable assembling step placed earlier **makes that assertion pass more comfortably** while
+making the coverage worse, so the guard reads as healthier at the moment it stops holding.
+
+**The hazard is live rather than hypothetical, measured in the file:** the anchor step performs
+**nine copies into seven destinations** - `reports`, `scenario`, `spec/data`, `regression`,
+`reviewed`, `spec/tests`, `crates/game-model/data` and `lenses/research/formulas.html`, with four
+`mkdir -p`. **Splitting a nine-copy step is the natural next edit**, and `S-230` is the precedent
+for it growing: four outward links were found missing from a hand list by Sean clicking the first
+one he came to.
+
+## Whether
+
+**Worth doing now, and small.** Nothing is broken today - the current workflow is correct and the
+check holds it. What is wrong is the check's reach, and the cost of leaving it is that the next
+edit to that step is unguarded in the one direction nobody will look.
+
+**This lens proposes no predicate.** Two things it noticed while probing, offered as observations
+rather than as a design: every step that must survive opens with `mkdir -p crates/game4x/dist`,
+which is the marker of *this must work when `trunk` never ran*; and `Write build provenance`
+deliberately must **not** survive, because it `sed -i`s the game's own bundle - so *mentions
+`dist`* is the wrong predicate and the file already contains the counter-example. **Which anchor
+replaces the name is yours**, and the comment wants correcting either way.
+
+## The shape, which is the half worth keeping
+
+**The claim and the code disagreed, and the claim was in a comment and in a message.** *Found by
+what it does rather than by its name* and *positional rather than a list of names* are both
+accurate about the scan and both overclaim the anchor. **Nothing could have caught it**: no check
+reads another check's predicate, which is `P-245`'s wall, and this one was found by driving the
+instrument rather than by reading it.
+
+**It is the same class the two lanes traded twice today** - this lens quoting `review.yml`'s
+*Nothing is hosted* as though it spoke about `E-4`, and the code lane's own comment about `fmt`
+blocking the deploy outliving the commit that falsified it. **Three instances, one day, all three
+a sentence that was true of something adjacent to its subject.**
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
 **to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below
