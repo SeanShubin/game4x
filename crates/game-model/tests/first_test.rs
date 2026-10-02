@@ -16,6 +16,13 @@ use game_model::script::{Files, Report, run_test};
 
 mod common;
 use common::{every_read_test, every_test, mine, rows};
+
+// **For the state a record and a test are in** - `S-251`. A drifted test's two spellings disagree
+// by definition, because `spec/tests/` holds an edit nobody has read, and an unread test must not
+// fail the build.
+#[path = "../examples/render.rs"]
+#[allow(dead_code)]
+mod render;
 use game_model::notation::Row;
 
 /// The foundation, as something the engine can ask for a file by name.
@@ -203,7 +210,12 @@ fn a_test_sets_its_sections_apart() {
     // three directories were one population and took the suite down when they stopped being -
     // which said nothing this file is about, and hid what it is about behind a file-not-found.
     let mut skipped = 0;
-    for directory in ["data/foundation/tests", "../../spec/tests/rule"] {
+    let mut marks: std::collections::BTreeMap<String, [usize; 2]> =
+        std::collections::BTreeMap::new();
+    for (which, directory) in ["data/foundation/tests", "../../spec/tests/rule"]
+        .into_iter()
+        .enumerate()
+    {
         for file in every_test() {
             let named = file.replace("data/foundation/tests", directory);
             let Ok(text) = std::fs::read_to_string(mine().join(&named)) else {
@@ -220,6 +232,7 @@ fn a_test_sets_its_sections_apart() {
                         "{named}: `{line}` wants a blank line before it"
                     );
                     checked += 1;
+                    marks.entry(file.clone()).or_default()[which] += 1;
                 }
                 if names {
                     assert!(
@@ -230,18 +243,78 @@ fn a_test_sets_its_sections_apart() {
                         "{named}: `{line}` wants a blank line after it"
                     );
                     checked += 1;
+                    marks.entry(file.clone()).or_default()[which] += 1;
                 }
             }
         }
     }
-    // **Four a file and two directories**, so a test file that stated no sections at all would
-    // pass every assertion above and be caught here. **Less what was skipped**, so the count
-    // still says every file present was read and a skip cannot hide an unchecked one.
+    // **Counted per file rather than fixed at four, and the two spellings are compared against
+    // each other.** `77aac86e` cut the six biome tests to `{given}` and `{then}`, so they carry
+    // three marks where every other test carries four - Sean: *we support many commands, which
+    // does not seem substantively different than also supporting zero commands.*
+    //
+    // **A fixed four was the weaker check as well as the wrong one.** It could not tell a test
+    // with no `{when}` from a test whose `{when}` is in one directory and not the other; this
+    // can, because it asks whether the two forms of the same test agree.
+    //
+    // **The floor is that every file names itself and opens at least two sections**, which is
+    // what stops a file stating nothing from passing.
+    let mut cleared: Vec<String> = Vec::new();
+    for (file, counts) in &marks {
+        // **A drifted test's two spellings are allowed to differ** - `P-611` clears its verdict, so
+        // `spec/tests/` holds an unread edit and the foundation still holds what he approved.
+        // Sean, 2026-10-02: *a test I have not reviewed does not fail the build.*
+        let bare = file.rsplit('/').next().unwrap_or(file).to_string();
+        let approved = render::state_of(
+            std::fs::read_to_string(mine().join("../../reviewed/rule").join(&bare))
+                .ok()
+                .as_deref(),
+            &std::fs::read_to_string(mine().join("../../spec/tests/rule").join(&bare))
+                .unwrap_or_default(),
+        )
+        .state
+            == render::APPROVED;
+        if !approved {
+            cleared.push(bare);
+            continue;
+        }
+        let present: Vec<usize> = counts.iter().filter(|it| **it > 0).copied().collect();
+        if present.len() < 2 {
+            // One spelling only, which `skipped` already accounts for and two other checks name.
+            continue;
+        }
+        assert_eq!(
+            present[0], present[1],
+            "{file}: the two spellings open a different number of sections, so one has a section \
+             the other does not"
+        );
+        assert!(
+            present[0] >= 3,
+            "{file}: {} mark(s), and a test names itself and opens at least two sections",
+            present[0]
+        );
+    }
+    if !cleared.is_empty() {
+        println!(
+            "{} test(s) have no verdict, so their two spellings were not compared: {cleared:?}",
+            cleared.len()
+        );
+    }
+    assert!(
+        cleared.len() * 4 < marks.len(),
+        "{} of {} tests have no verdict, which is too many for this to say anything",
+        cleared.len(),
+        marks.len()
+    );
     assert_eq!(
-        checked + skipped * 4,
-        every_test().len() * 8,
-        "four marks in each test, in each of the two directories; {skipped} file(s) were in one \
-         spelling and not the other"
+        checked,
+        marks.values().flatten().sum::<usize>(),
+        "every mark counted was a mark asserted"
+    );
+    assert!(
+        marks.len() >= 40,
+        "only {} test(s), so this said almost nothing",
+        marks.len()
     );
     // **And a skip is a state, not a condition to live in.** Every one is an orphaned record or
     // an unread test, and both have a check that names them - so this only refuses the case where

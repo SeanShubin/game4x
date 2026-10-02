@@ -40,9 +40,42 @@ use render::{files, foundation_at, friendly_at, friendly_rows, mine, rows};
 /// per file*, and a total written by hand is a line every new test would have to move. **The floor
 /// is what keeps it honest** - a derived total compared against itself passes over an empty
 /// directory, which is `CLAUDE.md`'s count over nothing.
+/// Whether a file is one this comparison can hold, which a drifted test is not.
+///
+/// **`P-611`**: *a test whose rows have changed since I read it is in the first state.* So its
+/// verdict is cleared and `spec/tests/` holds an edit nobody has read - and comparing the
+/// foundation against that edit fails by definition, for a test the build must not fail over.
+///
+/// **Sean, 2026-10-02**: *I want to make sure a test I have not reviewed does not fail the build.*
+///
+/// **What runs is still what he approved**, because the foundation comes from the record. This
+/// skips the comparison, not the test.
+fn is_compared(file: &str) -> bool {
+    let shared = [
+        "schema.4x",
+        "engine.4x",
+        "rules.4x",
+        "script.4x",
+        "setup.4x",
+    ];
+    if shared.contains(&file) {
+        return true;
+    }
+    render::state_of(
+        std::fs::read_to_string(mine().join("../../reviewed/rule").join(file))
+            .ok()
+            .as_deref(),
+        &std::fs::read_to_string(mine().join("../../spec/tests/rule").join(file))
+            .unwrap_or_default(),
+    )
+    .state
+        == render::APPROVED
+}
+
 fn every_row() -> usize {
     let total: usize = files()
         .iter()
+        .filter(|(file, _)| is_compared(file))
         .map(|(file, _)| rows(&foundation_at(file)).len())
         .sum();
     assert!(total > 150, "only {total} rows, so a total proves nothing");
@@ -137,7 +170,12 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
     let mut checked = 0;
     let of_game = Names::of(&store(true, "foundation"));
     let of_script = Names::of(&store(false, "foundation"));
+    let mut skipped: Vec<String> = Vec::new();
     for (file, game) in files() {
+        if !is_compared(&file) {
+            skipped.push(file.clone());
+            continue;
+        }
         let friendly = of("friendly", &file);
         let foundation = rows(&foundation_at(&file));
         let mine = friendly::in_a_section(&foundation);
@@ -164,6 +202,12 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             );
             checked += 1;
         }
+    }
+    if !skipped.is_empty() {
+        println!(
+            "{} test(s) were not compared because their verdict is cleared: {skipped:?}",
+            skipped.len()
+        );
     }
     assert_eq!(
         checked,

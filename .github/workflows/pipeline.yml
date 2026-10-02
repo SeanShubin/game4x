@@ -133,49 +133,6 @@ jobs:
       - name: Clippy (everything, tests included)
         run: cargo clippy --workspace --all-targets -- -D warnings
 
-      # The rules and the geometry are where correctness lives: the whole first-release
-      # command script runs here, and the geometry tests run with it.
-      # The geometry part: the solid must close up, every polygon
-      # must have one side per neighbour, and every Goldberg count must come out with
-      # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
-      # Selected by exclusion, deliberately. A list of crates to *include* goes stale
-      # silently every time a crate is added or split: planet-terrain was missing from it
-      # when it landed, and splitting planet-bevy moved seven tests into planet-flat, which
-      # nothing named - so they ran only in the verify job, after the page was already
-      # published, and nothing failed to say so.
-      #
-      # Excluding makes coverage the default. The list is wrong only when somebody
-      # deliberately removes a name, and it names one fact: does the crate link an engine.
-      - name: Test (everything that does not link an engine, release)
-        run: cargo test --release --workspace --exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view --exclude goldberg-move
-
-      # Debug for the engine-facing ones: clippy above has just compiled them unoptimized,
-      # so this reuses that build rather than paying for a release build of Bevy. They used
-      # to run only in the verify job, which reports after the page is already published -
-      # a strange place to keep a regression test for a bug that shipped once.
-      # tools/ is outside the workspace, so --workspace does not reach it and these ran only
-      # when somebody typed the path. One checks that every crate has a row in
-      # docs/architecture.md, and while it was unwired the table went stale twice with
-      # nothing to say so - C-12. A check nobody runs has no answer, and no answer looks
-      # exactly like a right one.
-      # Found rather than listed - `Q-46`. A name list goes stale the moment a fourth tool
-      # exists, and one had: `tools/spec` was reached by nothing here or in the hook.
-      - name: Test (the documentation tools)
-        run: |
-          for manifest in tools/*/Cargo.toml; do
-            echo "== $manifest"
-            cargo fmt --manifest-path "$manifest" -- --check
-            cargo test --manifest-path "$manifest"
-            # tools/spec is the specification lane's own; it has a live warning this lane
-            # may not fix. Q-46. The exclusion goes when they do.
-            if [ "$manifest" != "tools/spec/Cargo.toml" ]; then
-              cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings
-            fi
-          done
-
-      - name: Test (the engine-facing crates)
-        run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view -p goldberg-move
-
 
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
@@ -441,6 +398,101 @@ jobs:
         with:
           path: crates/game4x/dist
 
+
+  # -- Checks -----------------------------------------------------------------
+  # The test suites, in parallel, and nothing depends on this job.
+  #
+  # **Sean, 2026-10-02**: *I want to make sure a test I have not reviewed does not fail the
+  # build, and my ability to review it comes online as soon as possible. Once I have
+  # reviewed it, it can fail the next build.*
+  #
+  # **Both halves of that need the tests out of the deploy path.** A reviewed test going red
+  # *should* fail the build - that is the gate working - but while it sat in `gate`, a red
+  # test also meant no page, and **the page is where he reads the tests waiting on him.** So
+  # the one thing that tells him to look was withheld by the thing he was meant to look at.
+  #
+  # **The run still goes red**, because a failed job fails the run. Only the dependency went.
+  #
+  # **`fmt` and `clippy` are still in `gate` and still block the deploy**, which is a choice
+  # rather than an oversight: he named tests. A lint failure withholding the page has the same
+  # cost as a test failure doing it, so **this is the obvious next thing to move** - and it is
+  # his to say, not this lane's to assume.
+  #
+  # **Same shape as `sweep` and the same reason.** No `needs:` here and none pointing at it;
+  # a `needs:` on `deploy` would only let the deploy start late, and *not blocked or delayed*
+  # rules that out.
+  checks:
+    name: Checks (every test suite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # The engine-facing crates link Bevy, so this job needs what `gate` needs.
+      - name: Install Bevy Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libudev-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Say which toolchain this run is holding
+        run: |
+          rustc --version
+          cargo clippy --version
+
+      # **Its own cache key**, because sharing `gate`'s would have two jobs writing one entry
+      # in parallel.
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: checks
+
+
+      # The rules and the geometry are where correctness lives: the whole first-release
+      # command script runs here, and the geometry tests run with it.
+      # The geometry part: the solid must close up, every polygon
+      # must have one side per neighbour, and every Goldberg count must come out with
+      # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
+      # Selected by exclusion, deliberately. A list of crates to *include* goes stale
+      # silently every time a crate is added or split: planet-terrain was missing from it
+      # when it landed, and splitting planet-bevy moved seven tests into planet-flat, which
+      # nothing named - so they ran only in the verify job, after the page was already
+      # published, and nothing failed to say so.
+      #
+      # Excluding makes coverage the default. The list is wrong only when somebody
+      # deliberately removes a name, and it names one fact: does the crate link an engine.
+      - name: Test (everything that does not link an engine, release)
+        run: cargo test --release --workspace --exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view --exclude goldberg-move
+
+      # Debug for the engine-facing ones: clippy above has just compiled them unoptimized,
+      # so this reuses that build rather than paying for a release build of Bevy. They used
+      # to run only in the verify job, which reports after the page is already published -
+      # a strange place to keep a regression test for a bug that shipped once.
+      # tools/ is outside the workspace, so --workspace does not reach it and these ran only
+      # when somebody typed the path. One checks that every crate has a row in
+      # docs/architecture.md, and while it was unwired the table went stale twice with
+      # nothing to say so - C-12. A check nobody runs has no answer, and no answer looks
+      # exactly like a right one.
+      # Found rather than listed - `Q-46`. A name list goes stale the moment a fourth tool
+      # exists, and one had: `tools/spec` was reached by nothing here or in the hook.
+      - name: Test (the documentation tools)
+        run: |
+          for manifest in tools/*/Cargo.toml; do
+            echo "== $manifest"
+            cargo fmt --manifest-path "$manifest" -- --check
+            cargo test --manifest-path "$manifest"
+            # tools/spec is the specification lane's own; it has a live warning this lane
+            # may not fix. Q-46. The exclusion goes when they do.
+            if [ "$manifest" != "tools/spec/Cargo.toml" ]; then
+              cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings
+            fi
+          done
+
+      - name: Test (the engine-facing crates)
+        run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view -p goldberg-move
 
   # -- Sweep ------------------------------------------------------------------
   # The mutation sweep: it deletes each row of the game's data and changes each value,

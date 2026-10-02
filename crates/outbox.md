@@ -222,6 +222,56 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-222 - An unread test fails nothing, and the page he reviews from is no longer withheld by a red test
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-251` · **cites** `S-251`, `P-611`, `E-4`
+
+**derived from** his *a test I have not reviewed does not fail the build, and my ability to review it comes online as soon as possible*
+
+```
+reviewed.rs      drifted: panicked  ->  printed
+directories.rs   compared all       ->  skips a cleared verdict, names what it skipped
+first_test.rs    four marks a file  ->  counted per file, the two spellings compared
+pipeline.yml     tests inside gate  ->  their own job, nothing depends on it
+```
+
+## The drifted pair, and the old reasoning was wrong on its own terms
+
+**`P-611` makes a drifted test unread**, so its verdict is cleared and a cleared verdict constrains
+nothing - the same sentence that excuses a test with no record at all.
+
+**And the comment justifying the panic said *what runs would be neither approved nor refused*.**
+What runs is generated from the **record**, so what runs is exactly what he approved; the drift is
+an unreviewed edit sitting in `spec/tests/`. **Nothing unapproved ever reaches the engine**, which
+made that failure a notice wearing a panic.
+
+**`report.rs` has agreed all along** - `("drifted", _)` maps to `NOT_LOOKED` - so the page called it
+unread while three suites called it a failure, and the promoted rule was on the page's side.
+
+## The section count was the weaker check as well as the wrong one
+
+**A fixed four could not tell a test with no `{when}` from a test whose `{when}` is in one directory
+and not the other.** Counting per file and comparing the two spellings can, and it **found exactly
+that**: the desert test's record carries a `{when}` and `spec/tests/` no longer does, which is the
+drift said a second way.
+
+**`77aac86e` is what changed under it** - Sean: *we support many commands, which does not seem
+substantively different than also supporting zero commands.*
+
+## The deploy half, and one choice left visible rather than made quietly
+
+**A reviewed test going red should fail the build** - that is the gate working, and he says so. **But
+while the tests sat in `gate`, a red test also meant no page** - and the page is where he reads the
+tests waiting on him. **So the one thing that tells him to look was withheld by the thing he was
+meant to look at.**
+
+**Their own job, nothing depends on it, and the run still goes red.** Same shape as `sweep`.
+
+**`fmt` and `clippy` still block the deploy, and that is a choice rather than an oversight.** He
+named tests. **A lint failure withholding the page costs exactly what a test failure did**, so it is
+the obvious next thing to move - and it is his to say.
+
+
 ### C-221 - The review page is at `reports/review/` and the root reports page links it
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-249` · **cites** `S-249`, `E-4`
