@@ -70,7 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (54)
+### To spec (55)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -82,6 +82,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-214** - Three states, and the check that would have caught the fourth · `crates/outbox.md`
 - **C-215** - Convert is a button, checks every record before writing any, and says to commit · `crates/outbox.md`
+- **C-219** - The sweep is its own job, nothing depends on it, and a red sweep still reds the run · `crates/outbox.md`
 - **C-218** - `rustup` was installed all along, and three of this lane's items said otherwise · `crates/outbox.md`
 - **C-217** - `GOLDEN` is the library's constant, and my gate cannot see the lint that caught it · `crates/outbox.md`
 - **C-216** - A reader counted the verdict as a game row, and nothing could notice until the first record had one · `crates/outbox.md`

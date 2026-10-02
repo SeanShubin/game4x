@@ -222,6 +222,58 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-219 - The sweep is its own job, nothing depends on it, and a red sweep still reds the run
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-246` · **cites** `S-246`
+
+**derived from** his *I am fine with failing the build as long as the deploy is not blocked or delayed*
+
+```
+gate   (no needs)        deploy   needs: gate
+sweep  (no needs)        nothing anywhere needs sweep
+```
+
+**No `needs:` on `deploy`, not even one that lets it start late** - *not blocked or delayed* rules
+that out as surely as it rules out blocking. The run still goes red when the sweep fails, because
+a failed job fails the run.
+
+**It was a step inside `gate` until now**, a few steps above the WASM build, so it both blocked the
+deploy and delayed it by the seventeen minutes it takes.
+
+## The argument re-derived before acting on it, because it is the whole case
+
+**Six assertions in `mutation.rs`, and six is all there are** - `grep -cE "^\s*assert"` says 6, so
+the list is the population rather than a sample.
+
+```
+71    five shared files                      shape
+72    tests > 0, "mutating proves nothing"   floor
+81    no file the sweep did not reach        coverage
+85    three files are the foundation         shape
+1068  more than 150 rows deleted             floor
+1305  more than 300 values changed           floor
+```
+
+**Not one fires because a mutation survived.** So a red sweep says *this check stopped checking* -
+worth a mark on the run, and not a reason to withhold a page. The survivors go to `reports/`, are
+read by a person, and are decided there.
+
+## Two things the move changed that `S-246` did not ask about
+
+**The published reports are now the committed ones.** The sweep used to rewrite them a few steps
+before `Copy the reports into the artifact`, so the deployed copies were that run's. **That is the
+right version to publish** - `reports/` is generated but committed deliberately, and a person
+reads it - **and it is a change, so it is written at the step rather than left to be noticed.**
+
+**The sweep's own fresh copies are kept as an artifact**, `if: always()`, so a run's findings are
+comparable against what was committed without anything pushing.
+
+**And its own cache key.** Sharing `gate`'s would have two jobs writing one entry in parallel,
+which is the race a key exists to avoid. **No Bevy dependencies**, because `game-model` links no
+engine - which is why it sits in the gate's *everything that does not link an engine* step rather
+than beside `planet-bevy`.
+
+
 ### C-218 - `rustup` was installed all along, and three of this lane's items said otherwise
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-244`, verified here rather than taken · **cites** `S-244`, `C-189`, `C-217`

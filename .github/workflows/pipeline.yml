@@ -176,20 +176,6 @@ jobs:
       - name: Test (the engine-facing crates)
         run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view -p goldberg-move
 
-      # The mutation sweep, which is `#[ignore]`d for the push gate and not for this.
-      #
-      # **It is about twenty minutes and it is the strongest check in the tree**: it deletes
-      # each row of the game's data and changes each value, re-runs the suite, and compares the
-      # survivors against a written-down list. `docs/architecture.md` rule 13 is what it
-      # enforces - every row and every value in the game's data is load-bearing.
-      #
-      # **Sean chose this split on 2026-09-22**, when the engine joined the workspace and the
-      # sweep would otherwise have been paid by every lane on every push. Here is where it is
-      # paid instead, so the guarantee is kept and nobody waits for it.
-      #
-      # Release, because twenty minutes is the debug figure and this is the same work.
-      - name: Test (the mutation sweep, which the push gate skips)
-        run: cargo test --release -p game-model -- --ignored
 
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
@@ -253,6 +239,13 @@ jobs:
       # `tests/browsable.rs` reads this file and fails if a linked path is not named in it.
       # That check can see the name and not the copy, so every copy asserts its own result
       # below - `cp` of a moved file is loud, but a `cp -r` of a moved directory is not.
+      # **The reports as committed, which is a change the sweep moving out made.** They used
+      # to be whatever the sweep had just rewritten in this job, because it ran a few steps
+      # above; now it runs elsewhere and these are the copies the last local run committed.
+      #
+      # **That is the right version to publish and worth saying out loud**: `reports/` is
+      # generated but committed deliberately, a person reads it and decides from it, and the
+      # sweep's own job keeps its fresh copies as an artifact for comparison.
       - name: Copy the reports into the artifact
         run: |
           cp -r reports crates/game4x/dist/reports
@@ -434,6 +427,84 @@ jobs:
         with:
           path: crates/game4x/dist
 
+
+  # -- Sweep ------------------------------------------------------------------
+  # The mutation sweep: it deletes each row of the game's data and changes each value,
+  # re-runs the suite, and reports which mutations nothing noticed.
+  # `docs/architecture.md` rule 13 is what it is about - every row and every value in
+  # the game's data is load-bearing.
+  #
+  # **Its own job, in parallel, and nothing depends on it.** Sean, 2026-10-01: *I am
+  # considering having it run in parallel, and having it not block the deploy* - and,
+  # asked whether it should still fail the build: *I am fine with failing the build as
+  # long as the deploy is not blocked or delayed.*
+  #
+  # **So there is no `needs:` here and none anywhere pointing at this job.** A `needs:`
+  # on `deploy` would only let the deploy start late, and *not blocked or delayed* rules
+  # that out as surely as it rules out blocking. The workflow still goes red when this
+  # job fails, because a failed job fails the run.
+  #
+  # **What makes that safe is that nothing the sweep asserts is about the artifact.**
+  # All six of its assertions are about the sweep itself - its shape, its floor, and
+  # which files it reached - and **not one of them fires because a mutation survived**:
+  #
+  #     mutation.rs:71    five shared files                   shape
+  #     mutation.rs:72    tests > 0, "mutating proves nothing" floor
+  #     mutation.rs:81    no file the sweep did not reach      coverage
+  #     mutation.rs:85    three files are the foundation       shape
+  #     mutation.rs:1068  more than 150 rows deleted           floor
+  #     mutation.rs:1305  more than 300 values changed         floor
+  #
+  # **So a red sweep means *this check stopped checking***, which is worth a red mark on
+  # the run and is not a reason to withhold a page. The survivors are written to
+  # `reports/`, read by a person, and decided there.
+  #
+  # **It was a step inside `gate` until 2026-10-02**, which both blocked the deploy and
+  # delayed it by the seventeen minutes the sweep takes.
+  sweep:
+    name: Sweep (every row deleted, every value changed)
+    runs-on: ubuntu-latest
+    steps:
+      # The whole history, for the same reason `gate` takes it: `tools/outbox` checks that
+      # every commit an outbox cites exists, and a shallow clone has one commit.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # No Bevy dependencies: `game-model` links no engine, which is why it is in the
+      # gate's *everything that does not link an engine* step rather than beside
+      # `planet-bevy`.
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Say which toolchain this run is holding
+        run: |
+          rustc --version
+          cargo clippy --version
+
+      # **Its own cache key.** Sharing `gate`'s would have two jobs writing one entry in
+      # parallel, which is the race the key exists to avoid.
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: sweep
+
+      # Release, because seventeen minutes is the release figure and the debug one is
+      # worse. `--ignored` is what selects the two sweep tests; they carry `#[ignore]`
+      # so that `hooks/pre-push` does not pay for them.
+      - name: Test (the mutation sweep)
+        run: cargo test --release -p game-model -- --ignored
+
+      # **The reports the sweep rewrites, kept as an artifact rather than committed.**
+      # A run that changes them says so here; nothing in CI pushes, and the copies in
+      # `reports/` are whatever the last local run left.
+      - name: Keep what the sweep found
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweep-reports
+          path: reports/
+          if-no-files-found: error
 
   # -- Deploy -----------------------------------------------------------------
   # Publishes the gate's artifact. Skipped on pull requests. Its own concurrency group
