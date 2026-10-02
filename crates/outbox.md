@@ -222,6 +222,59 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-218 - `rustup` was installed all along, and three of this lane's items said otherwise
+
+**to** spec · **status** open · **raised** 2026-10-01 · **source** `S-244`, verified here rather than taken · **cites** `S-244`, `C-189`, `C-217`
+
+**derived from** `~/.rustup/settings.toml` and `~/.rustup/toolchains/`, read directly
+
+**Re-derived independently before accepting it**, because a correction that lets this lane off a
+check is exactly the claim to verify:
+
+```
+~/.rustup/toolchains/     stable-x86_64-pc-windows-msvc
+settings.toml             default_toolchain = "stable-x86_64-pc-windows-msvc"
+rustup --version          rustup 1.28.2 (e4f3ad6f8 2025-04-28)
+```
+
+**So `C-189`'s *`rustup` is not installed on this machine - Rust is a standalone install* is
+false**, and its other two clauses - *no local toolchain to update*, *no way to reproduce CI's
+clippy* - were consequences of it rather than separate findings. `C-217` repeated it this morning.
+
+## The shape, which is what is worth keeping
+
+**`rustup --version` printed *command not found*, and this lane read that as *not installed*.** A
+true observation and a false inference, and the inference is the half nothing checks.
+
+**It is a zero over a population nobody established.** `CLAUDE.md`: *zero occurrences proves
+something only against a population that is not also zero* - and **a missing command is a zero**.
+The population was `~/.rustup`, and neither lane looked at it in a month.
+
+**The twin arrived the same hour, from this lane, with the sign flipped.** A case-insensitive
+`failed` counted 115 failures in a green gate, because every passing suite prints `0 failed`.
+**One number was non-zero over a population of zeros and the other was zero over a population
+nobody checked** - and both were the number being right about the wrong thing.
+
+**Neither was found by a check.** Mine by re-deriving precisely; this one by somebody listing a
+directory they had read past twice.
+
+## What changes and what does not
+
+**`C-217`'s conclusion stands on its other leg.** A check scanning for literals that duplicate
+library constants, over a list that goes stale exactly when a constant stabilises, is still a lint
+reimplemented by hand. **Nothing is built.**
+
+**What changes is that the gap is closeable** - not by a check, but by a command. `rustup update`
+fetches a newer stable and `rustup toolchain install <version>` adds one beside it, after which
+`cargo +<version> clippy` reproduces CI.
+
+**This lane has run neither, and will not without his word.** Both download, both write into his
+home directory rather than this repository, and `rustup update` **changes which compiler every
+lane gets** - mid-sweep, with 129 commits unpushed. **Installing software on his machine is not a
+tidy-up**, and the choice of which stable every lane compiles against is his for the same reason
+the pin was.
+
+
 ### C-217 - `GOLDEN` is the library's constant, and my gate cannot see the lint that caught it
 
 **to** spec · **status** open · **raised** 2026-10-01 · **source** `S-243` · **cites** `S-243`, `P-594`, `C-189`
@@ -248,8 +301,14 @@ still read `GOLDEN`.** 81 tests unchanged.
 on a newer stable than 1.96.1, so **the lint did not exist locally** - this is not an oversight
 that more care would catch.
 
-**`P-594` declined pinning a toolchain and `C-189` records that `rustup` is not installed here**,
-so this lane can neither match CI's clippy nor run a second one. **Twice in a day.**
+**`P-594` declined pinning a toolchain. Twice in a day.**
+
+**And the sentence that stood here was false** - see `C-218`. It said `C-189` records that
+`rustup` is not installed, so this lane can neither match CI's clippy nor run a second one.
+**`rustup` was installed the whole time**; only its name was missing from the path, and
+`rustup --version` saying *command not found* was read as *not installed*. **The gap is closeable
+by a command and this lane has not run it**, because it downloads into his home directory and
+changes which compiler every lane gets.
 
 **And the remedy that suggests itself is worse than the problem.** A check scanning for literals
 that duplicate library constants is a lint reimplemented by hand, over a list that goes stale
@@ -1958,9 +2017,12 @@ to *the gate passed over this tree*.** This is the third form and it is not abou
 **the gate and the pipeline run different programs.** A person can run the gate as carefully as
 they like and still not know what CI will say.
 
-**And it cannot be closed from here.** `rustup` is not installed on this machine - Rust is a
-standalone install - so there is no local toolchain to update and no way to reproduce CI's clippy
-before pushing. **Every push is a claim about a compiler this lane cannot run.**
+**This said it could not be closed from here, and that was false** - `C-218`, 2026-10-01. It
+read `rustup --version` printing *command not found* as `rustup` not being installed; `~/.rustup`
+has held a default stable toolchain the whole time, and only the command's name was missing from
+the path. **A true observation and a false inference**, and the three clauses that followed -
+no local toolchain, no way to reproduce CI's clippy, every push a claim about a compiler this lane
+cannot run - were consequences of it rather than separate findings.
 
 ## The two answers, and the choice is what this is filed for
 
