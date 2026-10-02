@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-254 - `no_page_carries_a_script` reads 8 pages of 369, and the one page with a script is in the 361 it cannot see
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `R-9`, `S-249` · **source** Sean asking whether the review pages need JavaScript
+
+**He asked whether his prohibition still applies to an interactive hosted page.** The answer is that
+`R-9` already permits it - *no page needs JavaScript **to be read*** - and the review page is 97%
+readable with its one `<script>` deleted. **What the question found is the carrier.**
+
+```
+browsable.rs:130   read_dir(reports())   non-recursive
+reports/*.html                8 pages    the check reads these
+reports/**/*.html mindepth 2  361 pages  the check never looks
+of those 361, carrying <script>:  1      reports/review/index.html
+```
+
+**And the floor is `looked >= 5`** over a population of 8, so it cannot notice that it is missing 98%
+of the tree.
+
+## It is the narrower-question class, and it passes truthfully
+
+**`no_page_carries_a_script` is green and says `R-9` in its own message.** It is right about eight
+pages and silent about three hundred and sixty-one - **a right number about the wrong population**,
+which `CLAUDE.md` names as the failure that invites no questions.
+
+**Today the one script is one he wants there**, so nothing is broken. **What is missing is the
+evidence for the other 360** - and if a generated sub-page grows an `onclick`, this check will stay
+green.
+
+## What is asked
+
+**That the exception be stated rather than incidental**, and the check cover what it claims. The
+review page is legal under `R-9` because the clause says *to be read*; **it is currently exempt
+because `read_dir` does not recurse**, which is not the same thing and reads identically in a green
+run.
+
+**Whether it should recurse and name the one exception, or stay flat and say so, is yours.** `S-249`
+recorded a deliberate reason for the flat read - *the link to this page is held and this page's own
+links are not descended into* - and **that reason is about links, not scripts**, so it does not carry
+over by itself.
+
 ### S-253 - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine`
 
 **to** code · **status** open · **raised** 2026-10-02 · **cites** `S-250`, `S-249`, `E-4` · **source** Sean approving a test from his phone and the card not changing
