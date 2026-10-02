@@ -1,0 +1,16 @@
+{test name:a-territory-whose-biome-is-grassland}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{terrain of:1 is:4}
+{scout where:1 moving:0 quantity:1}
+
+{when}
+{refresh trait:1 what:26}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{terrain of:1 is:4}
+{scout where:1 moving:1 quantity:1}

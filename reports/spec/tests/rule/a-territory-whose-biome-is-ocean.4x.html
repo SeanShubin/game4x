@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/rule/a-territory-whose-biome-is-ocean.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/rule/a-territory-whose-biome-is-ocean.4x</code></h1>
+<p class="note">A territory whose biome is ocean, and a command that does not touch it.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/rule/a-territory-whose-biome-is-ocean.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/rule/a-territory-whose-biome-is-ocean.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose">A territory whose biome is ocean, and a command that does not touch it.</span>
+<span class="prose"></span>
+<span class="prose"><em></em><code>spec/planet.md</code>: <em>Each territory has a biome</em>, and *a biome earns its place by being shown</span>
+<span class="prose">rather than by being obeyed.<em></em>* So what there is to assert is that a terrain can be stated and</span>
+<span class="prose">that no rule disturbs it - which is <em>shown rather than obeyed</em> said as a test.</span>
+<span class="prose"></span>
+<span class="prose"><strong><code>terrain</code> is the join and <code>biome</code> is the vocabulary.</strong> <code>spec/data/schema.4x</code>: *<code>biome</code> is</span>
+<span class="prose">vocabulary and <code>terrain</code> is state, which is why only the second carries a <code>{state}</code> row - the</span>
+<span class="prose">six do not change while a game runs, and which territory has which is the world.*</span>
+<span class="prose"></span>
+<span class="prose"><strong>One test per biome, because the vocabulary is six facts.</strong> <code>spec/planet.md</code>: *the biomes are</span>
+<span class="prose">ocean, ice, desert, grassland, jungle and mountain.* The mutation sweep found all six rows with</span>
+<span class="prose">nothing referring to any of them - <code>C-218</code> - and six tests of four rows is what makes all six</span>
+<span class="prose">load-bearing. <strong>A single test naming all six is not available</strong>: a fourth <code>{terrain}</code> row is</span>
+<span class="prose">refused even with its territory declared above it, which is <code>S-247</code>.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The command is a refresh because it has to fire and must not be about terrain.</strong> A test where</span>
+<span class="prose">nothing happens would pass against an engine that cannot run at all; this moves a scout's</span>
+<span class="prose"><code>moving</code> and leaves the terrain alone, so the <code>{then}</code> asserts rather than copies.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">a-territory-whose-biome-is-ocean</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">terrain</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">is</span><span class="colon">:</span><span class="value">ocean</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">refresh</span> <span class="key">what</span><span class="colon">:</span><span class="value">unit</span> <span class="key">trait</span><span class="colon">:</span><span class="value">moving</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">territory</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">name</span><span class="colon">:</span><span class="value">territory-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">place</span> <span class="key">id</span><span class="colon">:</span><span class="value">1</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">layer</span><span class="colon">:</span><span class="value">surface</span> <span class="key">name</span><span class="colon">:</span><span class="value">place-1</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">terrain</span> <span class="key">of</span><span class="colon">:</span><span class="value">territory-1</span> <span class="key">is</span><span class="colon">:</span><span class="value">ocean</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">scout</span> <span class="key">where</span><span class="colon">:</span><span class="value">place-1</span> <span class="key">moving</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+</pre>
+</body>
+</html>
