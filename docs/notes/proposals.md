@@ -238,6 +238,21 @@ written** - which is the one failure this capability exists to make impossible.
 already moved under `S-249` while this was being read, so a line number would be wrong by the time
 you read it.
 
+## It cost him a second time, 2026-10-02
+
+**At the new address, with the rename landed**: *when I click approve at
+`.../reports/review/index.html` nothing happens.* **Measured against the live page rather than
+guessed**: `class="tally"` once, `paste a token` once, 64 `data-record`, 100 `data-mark`,
+`press.onclick` twice, one `<script>`. **So the script ran and the button was bound** - the click
+did something and reported it where he was not looking.
+
+**`api` was the other candidate and it is fine.** `location.hostname.match(/^([^.]+)\.github\.io$/)`
+gives `seanshubin` and `pathname.split('/').filter(Boolean)[0]` gives `game4x`, both unchanged by the
+move from `reports/thin-engine/` to `reports/review/`.
+
+**And the bar is `class="note"`, which is `opacity: .7; font-size: .85rem`** - so the one place the
+page answers is also the faintest text on it. **Worth knowing when choosing where the outcome goes.**
+
 ### S-249 - The review page publishes under a dead crate's name and nothing links to it
 
 **to** code · **status** open · **raised** 2026-10-02 · **source** Sean looking for it and not finding it · **cites** `E-4`
