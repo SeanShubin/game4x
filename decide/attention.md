@@ -8,7 +8,9 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-614** - The suspension of the deletion rule goes, and removing it tightens rather than loosens · `decide/proposals.md`
 
 ## Answer a question
 
