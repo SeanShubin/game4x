@@ -1,0 +1,108 @@
+# The second half of his gesture, which `E-4` separated from the first.
+#
+# **A record landing does not make the engine obey it.** `reviewed/` says what he has read and
+# `crates/game-model/data/foundation/tests/` is what the engine runs, generated from it;
+# `every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read` asserts the two are
+# equal populations. **Only the generator closes that gap, and no workflow ran it** - `X-45`.
+#
+# **Measured over the commits of 2026-10-02**, by `git ls-tree -r --name-only` on both directories:
+#
+#     724644ed  records=60  foundation=59  RED
+#     cf263ac4  records=61  foundation=59  RED
+#     d9118df8  records=61  foundation=59  RED
+#     62f16340  records=61  foundation=59  RED
+#     a0b37dca  records=61  foundation=61  green
+#     aa3c2b17  records=62  foundation=61  RED
+#     0710f728  records=63  foundation=61  RED
+#     72df841d  records=63  foundation=63  green
+#
+# **Two windows, twenty minutes and sixteen, each closed by a lane sitting down at the
+# repository.** His approval arrived from anywhere; the thing that completes it ran nowhere.
+#
+# **This is `E-4` working rather than a defect in it.** `scripts/reviewed.sh` did both halves as one
+# gesture, seconds apart, by whoever ran it - and its own comment says a test he has just approved
+# constrains nothing until the generator has run. **What was not carried across is the half the old
+# path did for free.**
+#
+# # Why it generates rather than refusing
+#
+# **`X-45` left the choice open: run the generator, or check for the mismatch and go red.** The
+# second leaves his approval red until a person acts, and that is the thing `E-4` exists to remove -
+# Sean: *my ability to review it comes online as soon as possible.* **An approval that needs somebody
+# else to finish it is not an approval he can make from a phone.**
+#
+# # Why this is not `review.yml`
+#
+# **It writes `crates/`, which is the code lane's and is generated in full.** `reviewed/` is his and
+# only the review application writes it, which is why `review.yml` carries an owner gate; **nothing
+# here writes a record**, so that gate is not the reason this exists and the two jobs stay apart.
+#
+# **And a record can land by three routes** - the page writing through the API, `review.yml`
+# pushing, or a lane committing one. A `push` trigger on the path catches all three; a step inside
+# `review.yml` would catch one.
+name: Generate
+
+on:
+  push:
+    paths:
+      - 'reviewed/**'
+      - 'spec/tests/**'
+
+permissions:
+  contents: write
+
+# **One at a time, and the later one wins.** Two approvals in quick succession would otherwise race
+# to push the same generated directory.
+concurrency:
+  group: generate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  foundation:
+    name: Generate the foundation from the records
+    # **Not on its own pushes.** The commit below touches `crates/` only, so the path filter above
+    # already excludes it - this says so rather than relying on a reader working it out.
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # **Stable Rust and nothing else.** Measured cold into an empty target directory: 8 seconds
+      # and 3 packages - no Bevy, no WASM, no lockfile beyond this crate's own closure. That is why
+      # this can sit on the record-landing path at all.
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: generate
+
+      - name: Generate the foundation form of every approved test
+        run: cargo run --manifest-path crates/game-model/Cargo.toml --example foundation
+
+      # **Committed as this workflow, not as him.** The record is his and carries his name;
+      # the generated form is written by a program from what he approved, and attributing it to
+      # him would say he had read bytes nobody showed him.
+      - name: Commit what the generator wrote
+        run: |
+          if git diff --quiet -- crates/game-model/data/foundation; then
+            echo "the foundation already agrees with the records; nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- crates/game-model/data/foundation
+          git commit -m "Generated: the foundation follows ${{ github.sha }}"
+          git push
+
+      # **The suite's own assertion, run rather than re-derived.** This first counted the two
+      # directories in `bash` and compared them - a second copy of a predicate that is already a
+      # test, and one that would have been wrong: a denied record generates no foundation form, so
+      # the two are not simply equal.
+      #
+      # **It is 0.3 seconds**, and it is the thing that would be red if the generator had written
+      # nothing - so a run that fixes nothing fails here instead of leaving a green run and a red
+      # suite.
+      - name: The reading reaches the suite
+        run: cargo test -p game-model --test reviewed every_reading_reaches_the_suite
