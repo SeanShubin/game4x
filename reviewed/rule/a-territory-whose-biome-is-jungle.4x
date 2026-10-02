@@ -1,0 +1,10 @@
+{verdict state:approved}
+{test name:a-territory-whose-biome-is-jungle}
+
+{given}
+{territory name:territory-1 id:1}
+{terrain of:territory-1 is:jungle}
+
+{then}
+{territory name:territory-1 id:1}
+{terrain of:territory-1 is:jungle}
