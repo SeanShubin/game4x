@@ -24,6 +24,7 @@ Look at the running game and say whether it held. It stays in the release that s
 - **E-1** - The comparison normalizes, and no approval rests on an editable number · `releases/marking-state.md`
 - **E-2** - I can deny a test, not only approve one · `releases/marking-state.md`
 - **E-3** - A case takes a verdict and a regeneration is authorized separately · `releases/marking-state.md`
+- **E-4** - I can do all of it from a page, from anywhere · `releases/marking-state.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`

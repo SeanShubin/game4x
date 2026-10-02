@@ -16,6 +16,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **E-1** - The comparison normalizes, and no approval rests on an editable number · `releases/marking-state.md`
 - **E-2** - I can deny a test, not only approve one · `releases/marking-state.md`
 - **E-3** - A case takes a verdict and a regeneration is authorized separately · `releases/marking-state.md`
+- **E-4** - I can do all of it from a page, from anywhere · `releases/marking-state.md`
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
@@ -45,10 +46,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (3)
+### To code (2)
 
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **E-4** - I can do all of it from a page, from anywhere · `releases/marking-state.md`
 - **E-5** - Nothing but me can write what I said · `releases/marking-state.md`
 
 ### To quality (2)

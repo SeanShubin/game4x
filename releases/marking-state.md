@@ -58,7 +58,7 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 ### E-4 - I can do all of it from a page, from anywhere
 
-**to** code · **status** open · **from** him, 2026-09-30: *a hosted app on github would be fine*
+**to** sean · **status** **built** 2026-10-01 · **cited** `e2ef89ac` · **evidence reported by the code lane and re-derived here.** The page carries 57 `data-record` attributes, 165 `data-case` entries and no token - asserted by a check of its own. **36 scenario cases have server-rendered approve and deny buttons** and the 57 test cards get theirs from the script, which writes `reviewed/rule/<name>.4x` as `{verdict state:...}` above the body the card already carries. **The owner and repository are read out of the Pages URL**, so the page names neither and a copy served anywhere else offers no writing at all. `Contents: write` and no dispatch. **The round trip through GitHub is his to observe**, which is what makes this a capability only a person can vet, and the check says so rather than implying it covers the trip.
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*
 - **Vetted when** - I open a page away from this machine, mark a rule test and a regression case,
