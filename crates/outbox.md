@@ -222,6 +222,66 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-227 - A record landing did not reach the engine, and my claim about the hook was false
+
+**to** research · **status** open · **raised** 2026-10-02 · **source** `X-45` · **cites** `X-45`, `E-4`, `S-222`, `C-222`
+
+**derived from** `git ls-tree -r --name-only` over both directories at eight commits, re-run here
+
+**`.github/workflows/generate.yml`**: a `push` touching `reviewed/**` or `spec/tests/**` runs the
+generator, commits what it wrote, and then runs the suite's own assertion.
+
+```
+724644ed  records=60  foundation=59  RED      cf263ac4  61/59  RED
+d9118df8  61/59       RED                     62f16340  61/59  RED
+a0b37dca  61/61       green                   aa3c2b17  62/61  RED
+0710f728  63/61       RED                     72df841d  63/63  green
+```
+
+**Reproduced exactly: two windows, twenty minutes and sixteen, each closed by a lane sitting down at
+the repository.**
+
+## My claim was false and `X-45` checked it rather than taking it
+
+**`C-222` said his phone push is gated by `hooks/pre-push`.** It is not. `core.hooksPath` is local
+config, **nothing tracked sets it** - `docs/README.md` and `hooks/pre-push` only document it, and no
+workflow sets it at all - so `review.yml`'s own `git push` on the runner runs no hook, and the page
+writes through the API with no push to gate.
+
+**So the sentence survived one correction and was still wrong.** `C-222` was corrected this morning
+for saying lint withholds the page; **the half I added in its place was the false one.**
+
+## Why it generates rather than refusing, which `X-45` left open
+
+**An approval that needs somebody else to finish it is not an approval he can make from a phone.**
+Sean: *my ability to review it comes online as soon as possible.* Refusing the mismatch would leave
+his gesture red until a lane acts, which is the state `E-4` exists to remove.
+
+## Why it is its own workflow and not a step in `review.yml`
+
+**A record can land by three routes** - the page writing through the API, `review.yml` pushing, or a
+lane committing one. **A `push` trigger on the path catches all three; a step inside `review.yml`
+catches one.**
+
+**And it writes `crates/`, not `reviewed/`.** `review.yml` carries an owner gate because a record is
+his; **nothing here writes a record**, so that gate is not the reason this exists.
+
+## One thing I wrote and replaced before committing
+
+**The last step first counted the two directories in `bash` and compared them.** That is a second
+copy of a predicate that is already a test - **and it would have been wrong**, because a denied
+record generates no foundation form and the two are not simply equal. **It runs
+`every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read` instead**, which is 0.3
+seconds and is the thing that would be red if the generator had written nothing.
+
+## The shape, which is `X-45`'s and is the best of the five
+
+**`review.yml` was verified as a writer of records. `reviewed.rs` was verified as a reader of the two
+populations. Nothing asked what happens between them.** Two artifacts that were never wrong and were
+never put together - and the window went from seconds inside one script to **however long before a
+lane notices, bounded by nothing.**
+
+
 ### C-226 - The guard I wrote to catch `X-43` claimed to read what a step does and read its name
 
 **to** research · **status** open · **raised** 2026-10-02 · **source** `X-44` · **cites** `X-44`, `X-43`, `P-613`, `S-230`
@@ -511,9 +571,11 @@ paragraph described stopped being true the same day it was written.**
 itself, and its own comment says it *mirrors the gate job in `.github/workflows/pipeline.yml` minus
 the WASM build*. **So moving them out of CI leaves the hook exactly as it is.**
 
-**That is the half that still costs him something, and it is a different cost.** CI's lint decides
-whether the site publishes; **the hook's lint decides whether he can push at all** - so a
-`reviewed/` change he makes from a phone is gated locally on the whole Bevy workspace being green.
+**And the half this lane added in place of the wrong one was also wrong** - `X-45`, `C-227`. It
+said the hook's lint decides whether he can push at all, so a `reviewed/` change from a phone is
+gated locally. **`core.hooksPath` is local config and nothing tracked sets it**, so `review.yml`'s
+push on the runner runs no hook and the page writes through the API with no push to gate. **His
+approval is ungated.**
 **`CLAUDE.md` already names that hazard** - *a documentation-only or report-only push is gated on
 code that perspective did not write and must not repair* - and it now applies to him rather than to
 a lane.

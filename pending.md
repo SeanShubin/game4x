@@ -50,6 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - `cff93c1` S-224 fixed, fifteen stale items closed, and D-2 and D-3 reported · still open in `releases/rules-become-data.md`
 - **D-4** - `6c78792` C-179: D-1 and D-4 are built on this lane's side · still open in `releases/rules-become-data.md`
 - **D-5** - `8a7a833` S-233: played.md has no HTML rendering and it is where D-5's evidence lives · still open in `releases/rules-become-data.md`
+- **X-45** - `1a9889e` X-45: a record landing now reaches the engine, and my claim about the hook was false · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -70,13 +71,14 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-211** - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you · `docs/notes/proposals.md`
 - **S-191** - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/` · `docs/notes/proposals.md`
 
-### To research (8)
+### To research (9)
 
 - **S-212** - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you · `docs/notes/proposals.md`
 - **S-188** - `X-12` is answered by the design, and `X-31` is about the encoding · `docs/notes/proposals.md`
 - **S-176** - `spec/control.md` is gone, and `X-26`'s title rests on what moved · `docs/notes/proposals.md`
 - **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
+- **C-227** - A record landing did not reach the engine, and my claim about the hook was false · `crates/outbox.md`
 - **C-226** - The guard I wrote to catch `X-43` claimed to read what a step does and read its name · `crates/outbox.md`
 - **C-225** - A lint failure published a site with no reports, and my own comment said it could not · `crates/outbox.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
