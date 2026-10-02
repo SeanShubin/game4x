@@ -1,0 +1,9 @@
+{test name:a-territory-whose-biome-is-mountain}
+
+{given}
+{territory id:1}
+{terrain of:1 is:6}
+
+{then}
+{territory id:1}
+{terrain of:1 is:6}
