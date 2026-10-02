@@ -130,26 +130,32 @@ pub fn every_test() -> Vec<String> {
 
 /// What converting a test's source needs: the two name tables and the schema that folds it.
 ///
-/// **Built once rather than per test**, because each is read from every file of the store.
+/// **The shared rows are read once; the name tables are built per test** - `S-247`. The comment here
+/// said *built once rather than per test, because each is read from every file of the store*, and
+/// **that was the defect stated as a reason**: every file of the store is every test, so a
+/// reference resolved through rows belonging to tests other than the one being folded.
 struct Converting {
-    game: Names,
-    script: Names,
     schema: game_model::schema::Schema,
+    /// The shared rows the per-test tables are built on top of - `S-247`. Kept rather than re-read,
+    /// because a name table is rebuilt for every test and the shared half of it never changes.
+    ///
+    /// **This replaced two pre-built `Names`**, which is the fix simplifying rather than adding: a
+    /// table built once for every test was the defect, so there is nothing left for it to be.
+    of_game: Vec<Row>,
+    of_script: Vec<Row>,
 }
 
 impl Converting {
     fn ready() -> Self {
-        let (game, _) = render::table(true);
-        let (script, _) = render::table(false);
         let at = render::mine().join(render::friendly_at("schema.4x"));
         let said =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
         let rows = read(&said).unwrap_or_else(|why| panic!("spec/data/schema.4x: {why}"));
         let schema = game_model::schema::Schema::of(&rows).expect("a schema");
         Converting {
-            game,
-            script,
             schema,
+            of_game: render::store(true),
+            of_script: render::store(false),
         }
     }
 
@@ -173,13 +179,33 @@ impl Converting {
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
         let parsed = friendly::fold(&said, &self.schema).map_err(|why| why.to_string())?;
         let of_the_game = friendly::in_a_section(&parsed);
+
+        // **The name table includes this test's own rows** - `S-247`. It did not, and the tables
+        // built in `ready()` are read from **every file of the store, which is every test** - so a
+        // reference resolved only if some test, anywhere, happened to declare a row with that id.
+        //
+        // **Measured: four tests declare `{territory id:3}` and none declares `{territory id:4}`.**
+        // So `of:territory-3` resolved because four *other* tests have a third territory, and
+        // `of:territory-4` stayed a name, failed the reference check, and the test was refused with
+        // *no `territory` has that key* three lines under the row that declares it.
+        //
+        // **A test was not self-contained**, which is the defect rather than the fourth territory:
+        // adding a test with four territories would have made this one pass, and deleting one with
+        // three would have broken four others.
+        let mut here = self.of_game.clone();
+        let mut there = self.of_script.clone();
+        for (at, row) in parsed.iter().enumerate() {
+            match of_the_game[at] {
+                true => here.push(row.clone()),
+                false => there.push(row.clone()),
+            }
+        }
+        let here = Names::of(&here);
+        let there = Names::of(&there);
+
         let mut out = Vec::new();
         for (at, row) in parsed.iter().enumerate() {
-            let names = if of_the_game[at] {
-                &self.game
-            } else {
-                &self.script
-            };
+            let names = if of_the_game[at] { &here } else { &there };
             out.push(names.foundation(row).map_err(|why| why.to_string())?);
         }
         Ok(out)

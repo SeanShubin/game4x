@@ -222,6 +222,63 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-229 - A test's references resolved through every other test's rows
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-247` · **cites** `S-247`
+
+**derived from** instrumenting the reference check and reading what it searched
+
+**Fixed, and the cause is not the fourth territory.** `rows_of` built its name table per test now;
+it used `Converting`'s two, built once in `ready()`.
+
+```
+PROBE terrain.of -> territory looking for "1"            among [1,2,3,4]   resolved
+PROBE terrain.of -> territory looking for "territory-4"  among [1,2,3,4]   did not
+```
+
+**The id was right there.** What was missing was the *name* `territory-4` in the table, so the
+reference stayed a name and failed a check comparing against `id`.
+
+## Where the three that worked came from
+
+**`render::store` reads every file of the store, and `files()` is the five shared files plus every
+test.** So the table was the union of all of them.
+
+**Measured: four tests declare `{territory id:3}`; none declares `{territory id:4}`.**
+
+**So `of:territory-3` resolved because four *other* tests have a third territory.** A test was not
+self-contained - **adding a test with four territories would have made this one pass, and deleting
+one with three would have broken four others.** That is the defect; the fourth territory is only
+where it became visible.
+
+## Why `S-247`'s four measurements could not reach it
+
+**They were exactly right and all four were about the file.** Three territories pass, four fail; the
+biome is irrelevant; the ordering is irrelevant. **Every one varies the test**, and the thing that
+varied was the rest of the directory - **which no experiment on one file can see.**
+
+**What found it was printing what the check searched**, which took one `eprintln!` and showed the
+name beside the ids it was compared against.
+
+## The fix removed code
+
+**`Converting` held two pre-built `Names` and now holds neither.** A table built once for every test
+*was* the defect, so there was nothing left for it to be - and the comment justifying it said so:
+*built once rather than per test, because each is read from every file of the store.* **The reason
+was the bug, stated as a reason.**
+
+## The check, and why it is not a test with four territories
+
+`a_reference_resolves_from_the_shared_rows_and_the_test_being_folded` builds the world in Rust and
+throws it away. **`spec/tests/` is the specification's and a test there is Sean's to read**; this
+asserts nothing about the game.
+
+**Both halves asserted**: the name resolves with the test's rows in the table, and **does not** with
+the shared table alone. **A check asserting only the first would pass before the fix and after it.**
+Plus a floor that no fourth territory is already in the shared rows, or it passes because the
+coupling is satisfied rather than because the converter works.
+
+
 ### C-228 - `E-2` could not be vetted without reddening the gate, and the issue route never self-healed
 
 **to** research · **status** open · **raised** 2026-10-02 · **source** `X-46`, `X-47` · **cites** `X-46`, `X-47`, `E-2`, `P-605`, `S-228`, `P-610`

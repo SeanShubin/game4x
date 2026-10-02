@@ -305,3 +305,88 @@ fn a_name_the_foundation_cannot_keep_is_refused() {
         "{territory id:1}"
     );
 }
+
+/// **A test's references resolve from the shared rows and its own, and from nothing else** -
+/// `S-247`.
+///
+/// # The coupling this refuses
+///
+/// **`render::store` reads every file of the store, which is every test.** So the name table
+/// `report.rs` converted with was built from the union of all of them, and a reference resolved only
+/// if some test *anywhere* happened to declare a row with that id.
+///
+/// **Measured when `S-247` was fixed: four tests declare `{territory id:3}` and none declares
+/// `{territory id:4}`.** So `of:territory-3` resolved because four *other* tests have a third
+/// territory, and `of:territory-4` stayed a name and was refused with *no `territory` has that key* -
+/// three lines under the row that declares it.
+///
+/// **A test was not self-contained, which is the defect rather than the fourth territory.** Adding a
+/// test with four territories would have made that one pass; deleting one with three would have
+/// broken four others.
+///
+/// # Why this is built rather than a test with four territories
+///
+/// **`spec/tests/` is the specification's and a test there is Sean's to read.** This needs no
+/// approval and asserts nothing about the game: it is a world built here, converted here, and
+/// thrown away - **the question is whether the converter resolves a name the shared rows have never
+/// seen.**
+#[test]
+fn a_reference_resolves_from_the_shared_rows_and_the_test_being_folded() {
+    let shared = render::store(true);
+    // **The floor: a fourth territory must be absent from the shared rows**, or this passes because
+    // the coupling it refuses is satisfied rather than because the converter works.
+    let declared = |id: &str| {
+        shared
+            .iter()
+            .any(|it| it.relation == "territory" && it.value("id") == Some(id))
+    };
+    assert!(
+        !declared("4"),
+        "the shared rows already declare a fourth territory, so this no longer tests the coupling"
+    );
+    assert!(
+        declared("1"),
+        "the shared rows declare no territory at all, so there is nothing to be self-contained \
+         against"
+    );
+
+    // A world the shared rows have never seen: four territories, each with a terrain.
+    let own =
+        friendly_rows_of("{territory id:4 name:territory-4}\n{terrain of:territory-4 is:desert}\n");
+    assert_eq!(own.len(), 2);
+
+    let mut whole = shared.clone();
+    whole.extend(own.clone());
+    let names = Names::of(&whole);
+
+    let terrain = own
+        .iter()
+        .find(|it| it.relation == "terrain")
+        .expect("the terrain row");
+    let converted = names
+        .foundation(terrain)
+        .unwrap_or_else(|why| panic!("{terrain:?}: {why}"));
+    assert_eq!(
+        converted.value("of"),
+        Some("4"),
+        "`of:territory-4` did not resolve, so the name table does not hold the rows being folded"
+    );
+
+    // **And the same row against the shared table alone fails**, which is what the fix changed. A
+    // check that only asserted the first half would pass before the fix and after it.
+    let without = Names::of(&shared);
+    let stale = without
+        .foundation(terrain)
+        .unwrap_or_else(|why| panic!("{terrain:?}: {why}"));
+    assert_eq!(
+        stale.value("of"),
+        Some("territory-4"),
+        "the shared table resolved a name it has never seen, so this comparison says nothing"
+    );
+}
+
+/// Fold a snippet of the friendly form, for a test that owns the text.
+fn friendly_rows_of(said: &str) -> Vec<Row> {
+    let (_, schema) = render::table(true);
+    friendly::fold(said, &schema).expect("the snippet folds")
+}
