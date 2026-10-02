@@ -294,3 +294,19 @@ measured*, pointed at somebody else's code** - and it is the direction nobody au
 over-generous account of another lane's reasoning is the one no reader checks. **Found only because
 its author said so.** Eighth of the class, first in the praise direction, and the only one that
 needed the subject to volunteer the correction.
+
+**The code lane's statement of the rule is sharper than this lens's and is the one to keep**, given
+on 2026-10-02 after volunteering the correction: **attributing reasoning to another lane is an
+inference about a mind, which is the least checkable thing there is.** And the carrier it suggests
+is a form of words rather than a reminder: **say *this holds, and I do not know whether it was
+meant*, not *they wrote it because*.**
+
+**Checked in the other direction, because a self-review in the flattering direction is exactly what
+this finding says nobody audits.** Over six messages the code lane's claims about this lens were
+about artifacts it had run or read - which probe tests the floor, what the baseline ordering buys,
+that the checkout default is load-bearing - and its judgements were labelled as judgements. **One
+candidate, and it is weaker than the instance above**: *I verified it the way you would want*, which
+is a predicted preference rather than an invented reason. **It was right, and it was refutable by
+this lens in one sentence** - which is the distinction the rule draws, since what made the praise
+instance expensive was that only its subject could check it. **Not filed, and recorded so the check
+is not mistaken for a courtesy.**
