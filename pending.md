@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-614** - The suspension of the deletion rule goes, and removing it tightens rather than loosens · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -154,7 +153,7 @@ it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-431, P-495, P-492, P-400
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448, P-451, P-452, P-454, P-460, P-462, P-464, P-479, P-481, P-482, P-484, P-504, P-506, P-519, P-540, P-543
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488, P-531, P-533, P-534, P-537, P-538, P-548, P-572, P-582
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488, P-531, P-533, P-534, P-537, P-538, P-548, P-572, P-582, P-614
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407, P-434, P-461
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433, P-487, P-505, P-509, P-525, P-568

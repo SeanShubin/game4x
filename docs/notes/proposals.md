@@ -12155,6 +12155,7 @@ work the release exists to order.
 | P-611, Three states, one vocabulary, and only one of the two kinds clears on change                                          | `spec/README.md` -> rule 3                                                                                                                                                                               | 2026-10-02 |
 | P-612, Nothing withholds the review page                                                                                     | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
 | P-613, A failed run publishes, and the report root says what failed                                                          | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
+| P-614, The suspension of the deletion rule goes, and removing it tightens rather than loosens                                | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-10-02 |
 
 ## Forecast cleanups that were checked and not filed
 
