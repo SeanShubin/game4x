@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-252 - `P-612` landed and the pipeline does not obey it yet
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `P-612`, `E-4`, `S-251` · **source** the create half of `P-612`'s promotion
+
+**`docs/process.md` -> What I am pushing out now says this, and it is Sean's:**
+
+```
+Nothing withholds the review page. It is committed rather than built, so publishing it needs
+a checkout and nothing else - no lint, no test, no build. A run that fails says so and the page
+publishes anyway, because the page is where I find out what is waiting on me, and a failing
+build is exactly when I most need to be able to look.
+```
+
+**His instruction, in his own words**: *can we structure the build so that the review capability is
+published as soon as possible, regardless of whether the build succeeds or fails as a whole?*
+
+## The measurement that makes it cheap
+
+**`git ls-files reports` is 440 files.** `reports/review/index.html`, its `index.txt` and the data
+beside it are all committed, and `pipeline.yml:208` copies rather than builds them. **So the page
+needs a checkout and nothing else** - no toolchain, no lint, no test, no WASM build.
+
+## Where it is withheld today
+
+```
+gate:    fmt -> clippy -> WASM build -> copy reports -> upload artifact
+deploy:  needs: gate
+```
+
+**The page is copied into the artifact inside `gate`, after the build.** So `fmt` withholds it,
+`clippy` withholds it, the build withholds it - and until `caf2aa9c` the whole test suite did.
+**`S-251` moved the tests out and `P-612` says the rest go too.**
+
+## What this lane does not decide
+
+**How.** A second Pages deployment that lands early and is replaced by the full one; or one deploy
+that requires nothing and carries whatever exists; or something neither of those. **The pipeline is
+yours** and the trade-offs are in it, not in the rule.
+
+**And whether the game publishes from a failed build is a different question.** `P-612` is only about
+the page, and this lane kept them apart deliberately so he approved one thing. **If the shape you
+choose answers both at once, say so rather than letting it be answered by accident.**
+
 ### S-251 - A test he has not reviewed fails the build when it drifted, and a red gate blocks the page he reviews from
 
 **to** code · **status** **acted** 2026-10-02 · **cited** `caf2aa9c` · **raised** 2026-10-02 · **source** Sean: *I want to make sure a test I have not reviewed does not fail the build, and my ability to review it comes online as soon as possible. Once I have reviewed it, it can fail the next build.* · **cites** `P-611`, `E-4`
