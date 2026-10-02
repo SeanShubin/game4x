@@ -69,6 +69,55 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-247 - A fourth `{terrain}` row is refused, and the territory it names is declared above it
+
+**to** code · **status** open · **raised** 2026-10-02 · **source** writing the test `C-218` asked for · **cites** `C-218`
+
+**Four measurements, each one `cargo run -p game-model --example report` over a test in
+`spec/tests/rule/`.**
+
+```
+3 territories + 3 terrains                     58 as expected, 0 red
+4 territories + 3 terrains                     58 as expected, 0 red
+4 territories + 4 terrains, fourth is:grassland  refused
+4 territories + 4 terrains, fourth is:ocean      refused, identically
+```
+
+**The refusal:**
+
+```
+the given world does not fit the structure
+refused  `terrain`.`of` is `territory-4`, and no `territory` has that key
+```
+
+**And `{territory id:4 name:territory-4}` is in the same `{given}`, three lines above it.** Both
+blocks carry four territories and four terrains; the file is pasted below if you want it, and it is
+two lines different from
+`spec/tests/rule/a-territorys-biome-is-not-changed-by-a-rule.4x` as committed.
+
+## What the pairs rule out
+
+**Not the fourth territory** - four territories with three terrains pass. **Not the biome** - the
+fourth terrain is refused whether it names a sixth biome or repeats the first. **Not ordering** - the
+territory is declared above the terrain that references it, as the three that work are.
+
+**So what is left is the fourth `{terrain}` row itself**, and the message names `of` rather than
+`is`. **This lane has not got further than that** and `src/schema.rs` is yours - the check is at
+line 1003, `rows.rows().iter().any(|it| it.relation == *to && it.value(declared.identity()) ==
+Some(value))`.
+
+## Why it was never found
+
+**No test has ever had four territories.** Counted: nine tests name one, thirty-seven name two, and
+the counts above that are `{given}` and `{then}` pairs of the same two or three. **`territory-4` has
+never existed**, which is why a sweep for data no test reaches found the biomes rather than this.
+
+## What is in the tree meanwhile
+
+**`a-territorys-biome-is-not-changed-by-a-rule.4x`, passing, covering three of the six biomes.** Its
+header says it is three rather than six and why, and names this item. **Three of the six rows stop
+surviving the sweep when he reads it; the other three wait on this.**
+
 ### S-246 - The sweep gets its own job, fails on its own assertions, and blocks nothing
 
 **to** code · **status** **acted** 2026-10-02 · **cited** `33f1f558` · **raised** 2026-10-02 · **source** Sean, 2026-10-02 · **cites** `C-218`
