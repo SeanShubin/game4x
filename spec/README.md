@@ -56,9 +56,20 @@ Add a file when a topic firms up. Add its row here first.
 
    **A test is written in `spec/tests/`, and `reviewed/` holds what I thought of it.** A record
    names its verdict and carries the behaviour that verdict is about - the rows, canonical, without
-   the prose. **No record means I have not looked**; a record saying `approved` means the code is
-   bound by it; a record saying `denied` means it is not, and that I owe the specification a
-   statement of what I want instead.
+   the prose. **There are three states and no others, for a test and for a case alike.** I have not looked at
+   it; I have looked and approved it; I have looked and know it is wrong. **No record and no row are
+   the first**, `approved` is the second and means the code is bound where a test is concerned, and
+   `denied` is the third.
+
+   **Denied is where I say what I want instead**, when I have words for it. That is the same state
+   whether I have said it or not: *this is wrong* and *this needs changing* are one thing, and the
+   words are an annotation rather than a state of their own.
+
+   **A test whose rows have changed since I read it is in the first state**, because somebody edited
+   it and my approval was of what it said. **A case whose rows have changed is not** - the game
+   changed rather than the file, and *I looked at this and said it was wrong* is worth most at
+   exactly the moment it changes again. **The suite reports a stale case; it does not clear my
+   verdict on one.**
 
    **The review application writes a record and removes one, acting as me; nothing else puts a file
    there.** A denied test stays in `spec/tests/` - the verdict is a fact about my response, not
@@ -107,7 +118,6 @@ Add a file when a topic firms up. Add its row here first.
    this specification already states for an entry**, which depends on names. **An order taken from
    the schema's `seq:` would mean renumbering those cleared every approval I have given**, and
    renumbering is a tidy-up nobody thinks twice about.
-
 
    **An approval survives a change that does not change the behaviour** - a reworded comment, a
    reordered state, a repadded row. **It is cleared by any change that does**, including a `{load}`

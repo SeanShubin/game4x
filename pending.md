@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-611** - Three states, one vocabulary, and only one of the two kinds clears on change · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -159,6 +158,7 @@ it exists to ask.
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
+- `spec/README.md` -> rule 3 - P-605, P-606, P-611
 - `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
 - `spec/planet.md` -> Distance - P-24, P-349, P-574
 - `spec/units.md` -> What a unit is - P-66, P-486, P-524
@@ -177,7 +177,6 @@ it exists to ask.
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
 - `releases/rules-become-data.md` -> `D-5` - P-566, P-569
 - `spec/README.md` -> Rules for this directory, rule 3 - P-558, P-584
-- `spec/README.md` -> rule 3 - P-605, P-606
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
