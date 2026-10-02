@@ -178,7 +178,7 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         add(
-            fold(render::behaviour_in(&text), &schema)
+            render::folded_record(&text, &schema)
                 .unwrap_or_else(|why| panic!("reviewed/{name}: {why}")),
             false,
         );
@@ -211,7 +211,7 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         let at = records_at().join(name);
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
-        let friendly = fold(render::behaviour_in(&text), &schema)
+        let friendly = render::folded_record(&text, &schema)
             .unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         let sections = in_a_section(&friendly);
 
@@ -247,6 +247,22 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         }
     }
 
+    // **The findings before the floor**, because the floor masked the thing it was added to
+    // protect. On 2026-10-02 every one of fifty-nine records disagreed with its generated
+    // foundation, every comparison took the `continue` above, and the test said **only 0 rows
+    // were compared** - a sentence about itself - while the fifty-nine messages saying *what*
+    // differed sat in the assertion underneath and never printed.
+    //
+    // **A floor that fires first turns a diagnosis into a silence.** Both are still asserted
+    // and only the order moved: a reader learns what disagrees, then whether there was enough
+    // to disagree about.
+    assert!(
+        wrong.is_empty(),
+        "{} row(s) the engine runs are not what the record generates:\n  {}",
+        wrong.len(),
+        wrong.join("\n  ")
+    );
+
     // **Both populations**, so a record set that generated nothing could not pass by having
     // nothing to disagree with.
     assert!(
@@ -254,12 +270,6 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         "only {compared} rows were compared across {} records, which is too few for any of them \
          to be a test",
         records.len()
-    );
-    assert!(
-        wrong.is_empty(),
-        "{} row(s) the engine runs are not what the record generates:\n  {}",
-        wrong.len(),
-        wrong.join("\n  ")
     );
 }
 

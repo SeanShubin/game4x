@@ -152,6 +152,30 @@ pub fn behaviour_in(record: &str) -> &str {
     }
 }
 
+/// A record's rows, folded - the one way to read a record's behaviour.
+///
+/// **Four places folded a record and two of them folded the verdict row too**, so the foundation
+/// the generator wrote carried a row the engine does not run and the suite that compares them
+/// disagreed about every one of the fifty-nine. **`behaviour_in` existed and two callers did not
+/// call it**, which is a rule stated without a carrier.
+///
+/// **So this is the carrier.** A caller that wants a record's rows asks for them, and there is no
+/// raw `fold` of a record left to copy.
+///
+/// # Why it was one record and then fifty-nine
+///
+/// **Fifty-six records predated `P-605` and carried no verdict line**, so for as long as the
+/// format has existed there was nothing for either reader to get wrong. The first approval made it
+/// one; **his conversion made it fifty-nine**, and whatever the readers disagreed about they now
+/// disagreed about everywhere.
+///
+/// **Both times the population moved and nothing was wrong with the code in between.** `C-216`
+/// fixed one reader against one record - the only one there was - and verifying against a
+/// population of one is what left the other reader unexamined.
+pub fn folded_record(text: &str, schema: &Schema) -> Result<Vec<Row>, String> {
+    friendly::fold(behaviour_in(text), schema).map_err(|why| why.to_string())
+}
+
 /// What Sean has said about the generated cases, and what he has authorized.
 ///
 /// **`spec/README.md` rule 3**: *a case's verdict is a row in `reviewed/cases.4x` and pins no

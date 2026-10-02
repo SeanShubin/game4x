@@ -13,7 +13,7 @@ Each rule links to its generated case, which holds the lines of `spec/data/rules
 - [regression/rules/work.4x.html](regression/rules/work.4x.html) - [as text](../regression/rules/work.4x) · [in the ruleset](spec/data/rules.4x.html)
   the rule `work` - 10 reviewed test(s) command it
 - [regression/rules/refresh.4x.html](regression/rules/refresh.4x.html) - [as text](../regression/rules/refresh.4x) · [in the ruleset](spec/data/rules.4x.html)
-  the rule `refresh` - 3 test(s) command it, 9 more reach it through a part
+  the rule `refresh` - 5 test(s) command it, 9 more reach it through a part
 - [regression/rules/end-turn.4x.html](regression/rules/end-turn.4x.html) - [as text](../regression/rules/end-turn.4x) · [in the ruleset](spec/data/rules.4x.html)
   the rule `end-turn` - 9 reviewed test(s) command it
 - [regression/rules/build-bin.4x.html](regression/rules/build-bin.4x.html) - [as text](../regression/rules/build-bin.4x) · [in the ruleset](spec/data/rules.4x.html)

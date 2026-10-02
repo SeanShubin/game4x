@@ -1,28 +1,3 @@
-# An ark in orbit, a metal deposit and a food deposit on the ground below, and the ark spent on a
-# settlement.
-#
-# **Sean, 2026-09-20**, whole: *ark can deploy to the surface, which entails destruction of the ark,
-# along with creation of 1 metal extractor, 1 food extractor, and 2 citizens.*
-#
-# **The ground is found by matching, the same way the orbit is when an ark launches.** The command
-# names the orbit the ark is in; the rule reads that place's territory and asks for the one place
-# that has it and is a surface. **What would be an equality test is a pattern**, which is the move
-# this engine makes everywhere a comparison would do.
-#
-# **Nothing crossed a layer.** The ark was removed from orbit and what it became was added to the
-# ground - a transformation rather than a journey, which is what lets
-# `nothing-moves-between-the-layers` forbid crossing without forbidding this.
-#
-# **The two extractors fit because there is a deposit for each.** They are soft lines, and a soft
-# line that has room takes all of it - so this test says nothing about softness that
-# `a-deployment-with-nowhere-to-mine-still-costs-the-ark` does not say better.
-#
-# **The citizens arrive at full capability** - `bearing:1`, `laboring:1`, and `hungry:0`, which is
-# the same thing said backwards because a citizen that owes no meal is a citizen that has eaten.
-# Sean, 2026-09-20: *Generally i want things created with full capability.*
-#
-# **So do the extractors**, at `working:1`, and either may be worked the turn the ark comes down.
-
 {test name:an-ark-deploys-and-becomes-a-settlement}
 
 {given}
@@ -35,7 +10,7 @@
 {ark where:2 moving:1 gathering:1 quantity:1}
 
 {when}
-{deploy where:2 what:51}
+{deploy what:51 where:2}
 
 {then}
 {territory id:1}

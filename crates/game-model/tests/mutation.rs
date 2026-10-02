@@ -360,13 +360,16 @@ const REFERENCES: usize = 70;
 /// world, which is the strongest thing this can say; keeping the constant is what makes the next
 /// unreachable one arrive as a failure rather than as a silence.
 ///
-/// **`P-578` is that next one, and it arrived as the failure this was kept for.** `terrain` joins
-/// a territory to a biome and **not one territory has been given one**, so no test world holds a
-/// `terrain` row and neither of its references has anything to be violated by. `S-205` says so of
-/// the promotion: the join's form is stated, no rule reads a biome, and writing those rows is
-/// `S-200`'s world-making rather than this. **So these two go when a world states a terrain**, and
-/// until then they are named rather than counted.
-const UNREACHABLE: [&str; 2] = ["terrain.of", "terrain.is"];
+/// **`P-578` was that next one, it arrived as the failure this was kept for, and on 2026-10-02 it
+/// went.** `terrain` joins a territory to a biome, and the sentence here used to end *so these two
+/// go when a world states a terrain*. Sean approved `a-territory-whose-biome-is-desert` and
+/// `a-territory-whose-biome-is-grassland`, those worlds state a terrain, and both references now
+/// have something to be violated by.
+///
+/// **The list is empty and the constant stays**, which is the paragraph above being right twice: it
+/// arrived as a failure rather than a silence, and it leaves as one too - the control test went red
+/// the moment the last entry stopped being true, rather than going quietly green over a stale list.
+const UNREACHABLE: [&str; 0] = [];
 
 fn every_reference_forbids_something_in(
     files: &InMemory,

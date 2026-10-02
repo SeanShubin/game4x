@@ -4,7 +4,7 @@ One file per test, in the form it is written in. The foundation form beside each
 
 [The index](index.md)
 
-## Tests  (57)
+## Tests  (63)
 
 - [spec/tests/rule/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html](spec/tests/rule/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html) - [as text](../spec/tests/rule/a-bin-cannot-be-built-where-the-capacity-is-taken.4x) · [foundation form](foundation/a-bin-cannot-be-built-where-the-capacity-is-taken.4x.html) · [the record he read it, as text](../reviewed/rule/a-bin-cannot-be-built-where-the-capacity-is-taken.4x)
   a-bin-cannot-be-built-where-the-capacity-is-taken - Two metal bins in a territory with room for two, and a third has nowhere to stand.
@@ -36,6 +36,18 @@ One file per test, in the form it is written in. The foundation form beside each
   a-scout-moves-where-there-is-a-berth-to-spare - Five berths of six are taken and a scout moves in, which is the sixth.
 - [spec/tests/rule/a-scout-that-has-moved-cannot-move-again.4x.html](spec/tests/rule/a-scout-that-has-moved-cannot-move-again.4x.html) - [as text](../spec/tests/rule/a-scout-that-has-moved-cannot-move-again.4x) · [foundation form](foundation/a-scout-that-has-moved-cannot-move-again.4x.html) · [the record he read it, as text](../reviewed/rule/a-scout-that-has-moved-cannot-move-again.4x)
   a-scout-that-has-moved-cannot-move-again - A scout with one move in it, moved, and then asked to move back.
+- [spec/tests/rule/a-territory-whose-biome-is-desert.4x.html](spec/tests/rule/a-territory-whose-biome-is-desert.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-desert.4x) · [foundation form](foundation/a-territory-whose-biome-is-desert.4x.html) · [the record he read it, as text](../reviewed/rule/a-territory-whose-biome-is-desert.4x)
+  a-territory-whose-biome-is-desert - A territory whose biome is desert, and a command that does not touch it.
+- [spec/tests/rule/a-territory-whose-biome-is-grassland.4x.html](spec/tests/rule/a-territory-whose-biome-is-grassland.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-grassland.4x) · [foundation form](foundation/a-territory-whose-biome-is-grassland.4x.html) · [the record he read it, as text](../reviewed/rule/a-territory-whose-biome-is-grassland.4x)
+  a-territory-whose-biome-is-grassland - A territory whose biome is grassland, and a command that does not touch it.
+- [spec/tests/rule/a-territory-whose-biome-is-ice.4x.html](spec/tests/rule/a-territory-whose-biome-is-ice.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-ice.4x) · [foundation form](foundation/a-territory-whose-biome-is-ice.4x.html) · [not read yet](tests.html)
+  a-territory-whose-biome-is-ice - A territory whose biome is ice, and a command that does not touch it.
+- [spec/tests/rule/a-territory-whose-biome-is-jungle.4x.html](spec/tests/rule/a-territory-whose-biome-is-jungle.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-jungle.4x) · [foundation form](foundation/a-territory-whose-biome-is-jungle.4x.html) · [not read yet](tests.html)
+  a-territory-whose-biome-is-jungle - A territory whose biome is jungle, and a command that does not touch it.
+- [spec/tests/rule/a-territory-whose-biome-is-mountain.4x.html](spec/tests/rule/a-territory-whose-biome-is-mountain.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-mountain.4x) · [foundation form](foundation/a-territory-whose-biome-is-mountain.4x.html) · [not read yet](tests.html)
+  a-territory-whose-biome-is-mountain - A territory whose biome is mountain, and a command that does not touch it.
+- [spec/tests/rule/a-territory-whose-biome-is-ocean.4x.html](spec/tests/rule/a-territory-whose-biome-is-ocean.4x.html) - [as text](../spec/tests/rule/a-territory-whose-biome-is-ocean.4x) · [foundation form](foundation/a-territory-whose-biome-is-ocean.4x.html) · [not read yet](tests.html)
+  a-territory-whose-biome-is-ocean - A territory whose biome is ocean, and a command that does not touch it.
 - [spec/tests/rule/a-territory-with-no-orbit-cannot-launch.4x.html](spec/tests/rule/a-territory-with-no-orbit-cannot-launch.4x.html) - [as text](../spec/tests/rule/a-territory-with-no-orbit-cannot-launch.4x) · [foundation form](foundation/a-territory-with-no-orbit-cannot-launch.4x.html) · [the record he read it, as text](../reviewed/rule/a-territory-with-no-orbit-cannot-launch.4x)
   a-territory-with-no-orbit-cannot-launch - Everything an ark costs, standing on a territory with no orbit above it, and the launch refused.
 - [spec/tests/rule/a-transport-and-a-bin-give-room-together.4x.html](spec/tests/rule/a-transport-and-a-bin-give-room-together.4x.html) - [as text](../spec/tests/rule/a-transport-and-a-bin-give-room-together.4x) · [foundation form](foundation/a-transport-and-a-bin-give-room-together.4x.html) · [the record he read it, as text](../reviewed/rule/a-transport-and-a-bin-give-room-together.4x)

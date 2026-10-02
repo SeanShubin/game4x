@@ -1,16 +1,3 @@
-# The scout moves twice, one step at a time, because territory 1 does not touch territory 3.
-#
-# **A second test, added by adding a file.** Nothing in `tests/` or `src/` names it.
-#
-# **The turn between them is not decoration.** A scout has one move, so crossing two borders in
-# one go is exactly what the allowance forbids - and this test would have been the first casualty
-# of that rule. **It now says what crossing twice costs, and the cost is a turn.**
-#
-# **This is the multi-turn shape.** Sean, 2026-09-18: *it will make it easier to read tests across
-# multiple turns if i see an end turn command.* It said `{refresh ...}` here while refresh was
-# something a player could choose; a player cannot, so what stands between the two moves is the
-# thing that actually stands between them.
-
 {test name:the-scout-crosses-two-borders}
 
 {given}
@@ -25,9 +12,9 @@
 {scout where:1 moving:1 quantity:1}
 
 {when}
-{move what:28 from:1 to:2}
+{move from:1 to:2 what:28}
 {end-turn}
-{move what:28 from:2 to:3}
+{move from:2 to:3 what:28}
 
 {then}
 {territory id:1}

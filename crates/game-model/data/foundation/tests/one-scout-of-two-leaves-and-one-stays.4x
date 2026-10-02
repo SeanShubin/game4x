@@ -1,8 +1,3 @@
-# Moving one scout of two takes one, and the other stays where it was.
-#
-# **This is the `remove` half on its own.** The destination is empty, so what lands there is right
-# either way - what this asks is whether leaving took one or took the row.
-
 {test name:one-scout-of-two-leaves-and-one-stays}
 
 {given}
@@ -14,7 +9,7 @@
 {scout where:1 moving:1 quantity:2}
 
 {when}
-{move what:28 from:1 to:2}
+{move from:1 to:2 what:28}
 
 {then}
 {territory id:1}

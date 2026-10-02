@@ -1,9 +1,3 @@
-# Building an extractor spends a labor and a metal, and puts the extractor in a deposit.
-#
-# **The deposit is untouched.** It is not spent - it is what holds the extractor, and holding one
-# is what it goes on doing. What changes is that one of its three is now occupied, which the world
-# says by there being an extractor row rather than by the deposit counting down.
-
 {test name:an-extractor-is-built-from-labor-and-metal}
 
 {given}
@@ -15,7 +9,7 @@
 {metal where:1 quantity:1}
 
 {when}
-{build-extractor where:1 what:31}
+{build-extractor what:31 where:1}
 
 {then}
 {territory id:1}

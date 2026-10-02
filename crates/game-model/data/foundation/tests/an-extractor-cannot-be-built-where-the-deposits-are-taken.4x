@@ -1,11 +1,3 @@
-# One deposit, already holding an extractor, and a second extractor has nowhere to stand.
-#
-# **No rule refuses this.** `build-extractor` adds the extractor and the world it would leave does
-# not fit, which is where the refusal comes from - so the limit holds for every rule that makes an
-# extractor, including ones not written yet.
-#
-# **The refusal names what would have had to be there**: a deposit with room for two.
-
 {test name:an-extractor-cannot-be-built-where-the-deposits-are-taken}
 
 {given}
@@ -18,7 +10,7 @@
 {metal where:1 quantity:1}
 
 {when}
-{build-extractor where:1 what:31}
+{build-extractor what:31 where:1}
 
 {refused}
 {deposit where:1 what:31 quantity:2}

@@ -222,6 +222,66 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-220 - Four readers of a record, two untaught, and `C-216` verified against a population of one
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-248` · **cites** `S-248`, `C-216`, `P-605`
+
+**derived from** `generated.rs` reporting all fifty-nine records disagreeing with their foundation
+
+**`render::folded_record` is the one way to read a record's rows now**, and there is no raw fold of
+a record left to copy.
+
+```
+foundation.rs:256   folded the whole record     -> folded_record
+foundation.rs:361   folded the whole record     -> folded_record
+foundation.rs:420   walked text.lines()         -> behaviour_in(&text).lines()
+generated.rs:181    behaviour_in, from C-216    -> folded_record
+generated.rs:214    behaviour_in, from C-216    -> folded_record
+```
+
+**`behaviour_in` existed and two callers did not call it**, which is a rule stated without a
+carrier - the shape `CLAUDE.md` records `tools/anchor` being reimplemented by hand for.
+
+## Why `C-216` did not find this, and the answer is the population again
+
+**`C-216` fixed one reader against one record, because one record was all there was.** Fifty-six
+predated `P-605`; the first approval made it one, and **his conversion made it fifty-nine.**
+
+**Verifying a fix against a population of one is what left the other reader unexamined**, and the
+third site - a loop walking the record's lines against the folded rows - **could not have been
+found by the fix at all**: it went out of bounds rather than disagreeing, and only once the first
+two agreed.
+
+**So the thing that found it is the thing that found it the first time: him approving tests.** Not
+a check.
+
+## The floor that hid its own finding
+
+```
+generated.rs   assert compared > 900   fired first, printing "only 0 rows were compared"
+               assert wrong.is_empty() held the fifty-nine messages saying what differed
+```
+
+**Every comparison took the `continue` above, so nothing was compared, so the floor fired and the
+diagnosis never printed.** A sentence about the test instead of about its subject.
+
+**Both are still asserted and only the order moved.** `S-248` is right that this is worth changing
+on its own: a floor exists to stop a vacuous pass, and firing before the findings turns the one
+run that has something to say into the one run that says nothing.
+
+## Two lists that moved with the population, both correctly
+
+**`UNREACHABLE` is empty and still a list.** Its own comment said *these two go when a world states
+a terrain*; `a-territory-whose-biome-is-desert` and `-grassland` state one, so `terrain.of` and
+`terrain.is` are violated somewhere now. **It arrived as a failure and it left as one**, which is
+the paragraph above it being right twice.
+
+**And `review.rs` compared the issue's rows to the records.** The body renders a row per **test**,
+because a test with no record still needs a line he can tick - so 63 rows against 59 records read
+as a defect the moment he left two biome tests unread. **The guarantee is the equality beside it**,
+ticks against records, which passed throughout. The unread are now named rather than counted.
+
+
 ### C-219 - The sweep is its own job, nothing depends on it, and a red sweep still reds the run
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-246` · **cites** `S-246`

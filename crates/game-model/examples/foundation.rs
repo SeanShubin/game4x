@@ -253,7 +253,11 @@ fn main() {
         // to read a test before the rule it is about exists, so this is an ordinary state and not
         // a corruption - and the message says which of the two files has to move, because *line
         // 35: `yard` has no quantity* on its own sends a reader to the test he just approved.
-        let these = fold(&text, &schema).unwrap_or_else(|why| {
+        // **A record's rows come from one place** - `render::folded_record`, which drops the
+        // verdict row. This folded the whole record, so what it wrote carried a row the engine
+        // does not run; `C-216` taught the suite and left this untaught, and the disagreement
+        // was invisible while only one record had a verdict to disagree about.
+        let these = render::folded_record(&text, &schema).unwrap_or_else(|why| {
             panic!(
                 "reviewed/{name}: {why}\n\
                  This test has been read and `spec/data/` cannot express it yet, so its \
@@ -358,7 +362,8 @@ fn main() {
         let at = records_at().join(name);
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
-        let friendly = fold(&text, &schema).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
+        let friendly = render::folded_record(&text, &schema)
+            .unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         let sections = in_a_section(&friendly);
 
         let mut lines = Vec::new();
@@ -410,9 +415,13 @@ fn main() {
         // **The comments are carried across**, which is the whole difference from the page above:
         // a test explains itself in its own words and the form the engine reads keeps them, the
         // same way `render::converted` keeps them for the five shared files.
+        // **Walked over the behaviour, not the whole record.** `lines` comes from
+        // `render::folded_record`, which drops the verdict row - so walking `text` here put one
+        // more non-comment line on the left than there were rows on the right, and the assertion
+        // below caught it as *a line was read as prose*. **Both sides take the verdict off.**
         let mut carried = String::new();
         let mut row_at = 0;
-        for line in text.lines() {
+        for line in render::behaviour_in(&text).lines() {
             let bare = line.trim();
             if bare.is_empty() || bare.starts_with('#') {
                 carried.push_str(line);

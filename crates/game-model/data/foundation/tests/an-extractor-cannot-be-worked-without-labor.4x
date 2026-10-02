@@ -1,11 +1,3 @@
-# A ready extractor over a deposit, and no labor to work it.
-#
-# **Sean, 2026-09-17**: *I do want to make sure the extractors consume labor as well.* They always
-# did - `work` has removed a labor since it was written - and nothing said so, which is the same
-# shape of gap as the readiness one: a cost no test spends is a cost no test would notice losing.
-#
-# **The readiness is there**, which is what makes this about the labor.
-
 {test name:an-extractor-cannot-be-worked-without-labor}
 
 {given}
@@ -16,7 +8,7 @@
 {extractor where:1 what:31 working:1 quantity:1}
 
 {when}
-{work where:1 what:31}
+{work what:31 where:1}
 
 {refused}
 {labor where:1 quantity:1}

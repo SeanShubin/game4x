@@ -1,16 +1,3 @@
-# The same territory, the same full metal capacity, and a food bin goes up anyway.
-#
-# **This is the whole point of the increment.** Sean, 2026-09-17: *Each territory will have a limit
-# of how many storage structures of each type it can hold.* **Of each type** is what this says and
-# what `a-bin-cannot-be-built-where-the-capacity-is-taken` cannot say on its own - a cap that was
-# counted per territory would refuse this too, and the pair is what tells the two apart.
-#
-# **It needed no mechanism.** A capacity names a `what`, so the metal bins and the food ones are
-# counted against different questions without anything being said about resources.
-#
-# **The metal is spent on a food bin**, which is what a bin costs rather than what it holds:
-# building is one labor and one metal whatever the bin is for.
-
 {test name:the-same-territory-has-room-for-a-bin-of-another-resource}
 
 {given}
@@ -23,7 +10,7 @@
 {metal where:1 quantity:1}
 
 {when}
-{build-bin where:1 what:31}
+{build-bin what:31 where:1}
 
 {then}
 {territory id:1}

@@ -1,8 +1,3 @@
-# Five berths of six are taken and a scout moves in, which is the sixth.
-#
-# **Every number is on the page.** A territory provides six; territory-2 holds two transports at
-# two and a scout at one, which is five; the scout arriving makes six.
-
 {test name:a-scout-moves-where-there-is-a-berth-to-spare}
 
 {given}
@@ -19,7 +14,7 @@
 {scout where:2 moving:0 quantity:1}
 
 {when}
-{move what:28 from:1 to:2}
+{move from:1 to:2 what:28}
 
 {then}
 {provides kind:48 what:1 quantity:6}

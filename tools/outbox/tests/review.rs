@@ -81,12 +81,42 @@ fn the_issue_round_trips_against_the_records() {
         read_back, records,
         "the body and `reviewed/` disagree about what has been read"
     );
-    // And the rows are there to be read, which the equality above does not say on its own.
+    // **A row per test, not per record**, which is the point of the issue: a test he has not read
+    // has no record and still needs a line he can tick.
+    //
+    // **This compared the rows to the records and passed only while every test had one.** On
+    // 2026-10-02 he approved two of the four biome tests and left two; the body rendered its
+    // correct 63 and `reviewed/` held 59, and the assertion read that as a defect. **The thing it
+    // was for is the equality above** - the ticks and the records agree - and this half was
+    // counting the wrong population.
+    let mut tests: BTreeSet<String> = BTreeSet::new();
+    for suite in std::fs::read_dir(root.join("spec/tests"))
+        .expect("spec/tests/")
+        .flatten()
+    {
+        if !suite.path().is_dir() {
+            continue;
+        }
+        for file in std::fs::read_dir(suite.path()).expect("a suite").flatten() {
+            let name = file.file_name().to_string_lossy().to_string();
+            if name.ends_with(".4x") {
+                tests.insert(name);
+            }
+        }
+    }
+    assert!(tests.len() >= records.len(), "more records than tests");
     assert_eq!(
         body.lines().filter(|l| l.starts_with("- [")).count(),
-        records.len(),
-        "a row per test"
+        tests.len(),
+        "a row per test, so a test he has not read still has a line to tick"
     );
+    // **And the unread are named rather than counted**, because *four of sixty-three* sends a
+    // reader looking for which.
+    let unread: Vec<&String> = tests
+        .iter()
+        .filter(|name| !records.contains(*name))
+        .collect();
+    println!("{} test(s) have no record: {unread:?}", unread.len());
 }
 
 /// **A tick with no record approves, an untick with one withdraws, and agreement does nothing.**

@@ -1,8 +1,3 @@
-# The scout moves to an adjacent territory.
-#
-# **One test, one file, and one line of it is not the test.** `{test name:...}` says which test
-# this is; everything else is `{given}`, `{when}` and `{then}`.
-
 {test name:the-scout-moves-to-an-adjacent-place}
 
 {given}
@@ -17,7 +12,7 @@
 {scout where:1 moving:1 quantity:1}
 
 {when}
-{move what:28 from:1 to:2}
+{move from:1 to:2 what:28}
 
 {then}
 {territory id:1}

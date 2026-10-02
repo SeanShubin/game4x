@@ -1,9 +1,3 @@
-# An extractor works its deposit and produces the deposit's density, not one.
-#
-# **This is the whole point of a deposit.** Every other rule produces a number written into the
-# rule; this one produces a number read out of the world, which is what `spec/data/line.4x` writes
-# as `$where`'s density for that resource.
-
 {test name:an-extractor-pulls-its-deposits-density}
 
 {given}
@@ -15,7 +9,7 @@
 {labor where:1 quantity:1}
 
 {when}
-{work where:1 what:31}
+{work what:31 where:1}
 
 {then}
 {territory id:1}

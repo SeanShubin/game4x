@@ -1,18 +1,3 @@
-# A citizen that has spent its labour still has it spent after it breeds.
-#
-# **This is the twin of the bearing defect and was found by following Sean's own analogy.** Before
-# `P-587`, `breed`'s one `add` asserted `laboring:1` for both citizens while its `remove` did not
-# constrain `laboring` at all - so a citizen that had already toiled bred and came back able to toil
-# again. **Free labour, once per food.**
-#
-# **It was never an infinite-resource glitch**, which `reports/nogain.md` decides rather than
-# assumes: the solver found a weighting with that rule in place. **It was a behaviour nobody
-# asserted**, which is the other thing a rule nothing depends on can be.
-#
-# **The parent's labour is read rather than stated now** - `{reading id:17 clause:clause-27
-# column:137 of:clause-25 takes:137}` - which is how `upkeep` has always carried a value through.
-# **The child is stated at `1`**, because everything made arrives at full capability.
-
 {test name:breeding-does-not-give-a-citizen-its-labor-back}
 
 {given}

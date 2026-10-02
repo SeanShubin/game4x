@@ -1,26 +1,3 @@
-# A sun of density three and one ark: three energy.
-#
-# **Sean, 2026-09-20**: *think of the sun as providing unlimited capacity for extractors, and the
-# ark as an extractor for solar energy.* **The sun's density is the planet's own** - `P-589`, and
-# Sean, 2026-09-29: *the sun is per planet, not per territory* - so `gather` reads it off the planet
-# where `work` reads a deposit's off the ground. What an ark takes is what the sun gives, and the
-# number is the world's rather than the rule's.
-#
-# **It was a deposit in an orbit until 2026-09-29**, one row per orbit, and two orbits could
-# disagree about one star - which `scenario/main.4x` did: three above one territory and nothing
-# above the other. **Stated once on the planet, they cannot.**
-#
-# **An ark is not an extractor.** `{capacity of:deposit for:extractor ...}` counts extractors
-# against deposits and an ark counts against nothing, which is where *unlimited capacity for
-# extractors* comes from: not a number, but the ark not being one of them.
-#
-# **Three is gathered and three is still standing**, because nothing here ends a turn. What an ark
-# can keep is a different question and `an-ark-holds-one-energy-and-the-rest-is-lost` is where it is
-# asked - the two numbers are not the same and that is the point.
-#
-# **Its `moving` is read back rather than stated.** An `add` must name every column, and writing
-# `moving:1` would hand a spent move back for free to an ark that had already crossed.
-
 {test name:an-ark-gathers-what-the-sun-gives}
 
 {given}
