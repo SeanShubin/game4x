@@ -1,0 +1,10 @@
+{verdict state:approved}
+{test name:a-territory-whose-biome-is-ice}
+
+{given}
+{territory name:territory-1 id:1}
+{terrain of:territory-1 is:ice}
+
+{then}
+{territory name:territory-1 id:1}
+{terrain of:territory-1 is:ice}
