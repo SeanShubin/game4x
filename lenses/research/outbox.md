@@ -2575,6 +2575,128 @@ and reproducing it exactly could not have surfaced this.**
 adjacent, or two artifacts with nothing between them. **This one is two artifacts, one event
 system, and a default nobody stated** - `actions/checkout` with no `token:` is a decision that
 looks like an absence.
+### X-48 - approving a test deploys the app, and Sean has said it should not
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** Sean, correcting this lens's axis twice: *I am not as concerned about the engine/presentation split as I am with the code/stuff-i-review split*, then stating the requirement · **found by** measuring his side of his own split, then asking what his approvals actually triggered
+
+**His words, 2026-10-02, and they are the requirement rather than a preference:**
+
+> **The engine/presentation split makes more sense as a code module split, I don't need it to be a
+> build pipeline split. Build pipeline should allow me to approve tests independently of deploying
+> the app. There may be other tests in the code, and those are fine to be with the code.**
+
+**Two things that withdraws.** The engine-against-presentation line this lens recommended is **not
+a pipeline proposal** and he has placed it where it belongs - a code module question, which is the
+quality lens's and the code lane's. And **the tests do not all have to move**: a test about the
+code stays with the code. **What has to be independent is his approval gesture, not the test
+suite.**
+
+## It is violated now, and his own approvals are the evidence
+
+**`.github/workflows/pipeline.yml` has no `paths:` filter** - `on: push: branches: [master]`. So a
+commit touching nothing but `reviewed/` runs clippy over nineteen crates, builds a release WASM
+bundle and deploys the game.
+
+**Seven of the last eight pipeline runs are titled `approved: <test name>`:**
+
+```
+failure    approved: a-territory-whose-biome-is-ocean
+cancelled  approved: a-territory-whose-biome-is-mountain
+cancelled  S-252 and S-254 close: the site publishes whatever exists
+cancelled  approved: a-territory-whose-biome-is-desert   (x3)
+cancelled  approved: a-territory-whose-biome-is-grassland
+cancelled  approved: a-territory-whose-biome-is-jungle
+```
+
+**Six cancelled each other** - `cancel-in-progress: true` keyed on the ref - so a burst of
+approvals discards its own runs and the page waits for the last. **The one that completed failed**,
+and the cause is the sharpest statement of the requirement available:
+
+```
+Checks (every test suite)     FAILED   wayland-sys-0.31.11/build.rs:10 panicked
+Verify - full test suite      FAILED   every_committed_report_is_what_the_generator_writes
+```
+
+**He approved a test about a territory's biome and the run went red because a Wayland system
+library would not build.** That is not an argument for independence; it is independence being
+absent, in the run sitting on `origin` now.
+
+## Measured, both sides
+
+**His surface, cold into an empty target directory** - every generator and page he uses, the index
+tools, and the whole suite that guards them:
+
+```
+cargo build -p game-model --examples          16s   3 packages
+  plus tools/outbox and tools/spec            20s   total
+cargo test -p game-model                      34s
+                                              ---
+                                              54s   zero Bevy crates
+```
+
+**The gate that currently stands between an approval and the page he reads it on**, from the run
+history:
+
+```
+run 37063611186   gate  9m 35s    deploy 11s
+run 37046068594   gate 14m 07s    deploy  9s
+run 36970799267   gate 70m 15s    deploy 28s   (cold cache)
+```
+
+**544 packages in the workspace lockfile, 65 of them Bevy.** None of them is reachable from
+anything he reads.
+
+## The partition is clean today and nothing holds it
+
+**Everything he reviews is produced by three local crates** - `game-model`, `friendly-notation`,
+`planet-model` - checked by walking every crate for writers of `reports/`, `reviewed/`,
+`spec/tests/` and `regression/`. **One thing on the code side touches his surface and it is a
+reader**: `crates/game-console/tests/quotations.rs:264` excludes `reports/review/index.html` from
+quotation checking. **A check may live anywhere; a producer may not.**
+
+**`tools/outbox/tests/architecture.rs` has a check for who may *read* a report** -
+`only_a_generator_or_a_check_reads_a_report` - **and none for the producers of his review surface
+staying in the light closure.** So the property is true, is what makes a 54-second gate possible,
+and would break the first time `game-model` acquired a convenient dependency. **A rule that is
+true, load-bearing and held by nothing** is the state this repository treats as worst.
+
+## What this asks of the specification lane
+
+**A rule, in his words, that the code lane can be measured against.** The shape of the question,
+not the wording, which is his:
+
+- **His approval does not deploy the app**, and a push touching only what he reviews does not run
+  the app's gate
+- **A test about the code stays with the code**, so this is about which pushes run which jobs and
+  not about moving tests
+- **What produces something he reads stays in the light closure** - the half nothing checks, and
+  the half that makes the first two cheap rather than merely desirable
+
+**And the mechanisms are available, so nothing here waits on a question of fact.** A `paths:`
+filter at the **job** level rather than the workflow level, because a workflow skipped by a
+workflow-level filter reports nothing and leaves a required check pending while a skipped job
+reports success. Separate `concurrency:` groups so his pushes and the app's do not cancel each
+other. GitHub Pages is one site per repository and `actions/deploy-pages` replaces the whole site,
+which is the only true singleton - branch-based publishing is the one way to get two independent
+publishers out of one repository, at the cost of a ten-builds-an-hour soft limit.
+
+## Two things to carry into whatever is filed
+
+**`generate.yml` is not live.** Twenty-six commits sit unpushed, including it and `P-614`'s
+`CLAUDE.md` change, and `gh workflow list` shows only *CI & Deploy* and *Review*. **So the
+record-landing path that closes `X-45` is correct and not running**, and any statement about what
+happens when he approves a test describes a tree nobody has pushed.
+
+**`review.yml` has zero runs, ever.** The issue-checkbox route - the one `S-228` asked for - has
+never been exercised, so `X-47`'s fix is right by reading and untested in practice.
+
+## And one thing this lens needs from that lane
+
+**`lenses/` is linked from no README in the repository root.** `docs/README.md`: *if a document is
+not reachable by following links from there, it does not exist as far as the project is concerned.*
+**So by the project's own rule the argument behind this item does not exist.** `README.md` is the
+specification lane's column, so the link is theirs to add or to refuse - and this lens has made the
+report reachable everywhere inside `lenses/research/`, which is all it can do.
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
 **to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below

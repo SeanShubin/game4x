@@ -79,7 +79,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-225** - A lint failure published a site with no reports, and my own comment said it could not · `crates/outbox.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (62)
+### To spec (63)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -143,6 +143,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-33** - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong · `lenses/research/outbox.md`
 - **X-41** - a wrong explanation, marked, is a signpost away from a dead end - two cases, and no words proposed · `lenses/research/outbox.md`
 - **X-42** - the suspension paragraph's condition is met, and the authority to remove it is not this lens's to relay · `lenses/research/outbox.md`
+- **X-48** - approving a test deploys the app, and Sean has said it should not · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
