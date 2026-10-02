@@ -87,6 +87,24 @@ jobs:
     # to avoid a loop would have filtered out the route `X-47` is about.
     runs-on: ubuntu-latest
     steps:
+      # **No `ref:`, and that is load-bearing in both directions.** Verified by the research lens
+      # while checking `X-47`'s fix, and written down because it is the thing a later tidy-up would
+      # break silently.
+      #
+      # `actions/checkout` takes `github.ref`, which differs by trigger and is right both times:
+      #
+      #     push          the branch that was pushed      -> the commit carrying the record
+      #     workflow_run  the default branch              -> its tip, which holds `review.yml`'s push
+      #
+      # **An event-SHA checkout would generate nothing on the issue route.** A `workflow_run`
+      # event's `head_sha` is the commit that triggered *`Review`* - the default branch tip *before*
+      # `review.yml` pushed the record - so checking that out would report *the foundation already
+      # agrees* and leave the record ahead of the form. **Which is exactly the bug this workflow was
+      # added to fix**, reintroduced by an edit that looks like a correction.
+      #
+      # **And no `token:`, for the reason `X-47` is about.** This job's push must *not* create a
+      # workflow run; `GITHUB_TOKEN` is what guarantees that, and a wider token here would make this
+      # trigger itself.
       - uses: actions/checkout@v7
 
       # **Stable Rust and nothing else.** Measured cold into an empty target directory: 8 seconds

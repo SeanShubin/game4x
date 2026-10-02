@@ -284,6 +284,27 @@ pushes** - and reproducing it exactly confirmed the finding while preserving the
 sharpest statement of this class yet: not a stale sentence, not an adjacent one, but **a default
 nobody chose and nobody can see.**
 
+## And the same class falls the right way in the fix, which is now written down
+
+**`actions/checkout` takes `github.ref`, which differs by trigger and is right both times** - the
+pushed branch on `push`, the default branch on `workflow_run`. **Verified by the lens while checking
+the fix, not by this lane while writing it.**
+
+```
+push          the branch that was pushed   -> the commit carrying the record
+workflow_run  the default branch           -> its tip, which holds review.yml's push
+```
+
+**An event-SHA checkout would generate nothing on the issue route.** A `workflow_run` event's
+`head_sha` is the commit that triggered *`Review`* - the default branch tip **before** `review.yml`
+pushed - so checking it out would report *the foundation already agrees* and leave the record ahead
+of the form. **Which is the bug this workflow exists to fix, reintroduced by an edit that looks like
+a correction.**
+
+**So the comment is the carrier.** The defence against a default nobody chose is not to choose it -
+`push` and `workflow_run` want different refs and the default serves both - **it is to make the
+absence say why it is there.**
+
 
 ### C-227 - A record landing did not reach the engine, and my claim about the hook was false
 
