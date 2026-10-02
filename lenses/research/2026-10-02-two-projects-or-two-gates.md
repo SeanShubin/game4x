@@ -251,11 +251,23 @@ presentation, it is already in the crate graph, and no pipeline respects it yet.
 pipeline respect it yields the twelve-second gate and the always-available review page with the
 index, the columns and the drift check all still ranging over one tree.
 
-**So the shape is three gates in one repository**: an engine gate over `spec/`, `reviewed/`,
-`regression/`, `game-model` and `tools/`, which is seconds; a presentation gate over everything
-Bevy; and a publish that assembles the site from the committed reports regardless of either. The
-review page then goes stale in its game half when the renderer breaks, and never in its review
-half.
+**So the shape is two gates and a publish, in one repository** - three jobs where there is one: an
+engine gate over `spec/`, `reviewed/`, `regression/`, `game-model` and `tools/`, which is seconds;
+a presentation gate over everything Bevy; and a publish that assembles the site from the committed
+reports regardless of either. The review page then goes stale in its game half when the renderer
+breaks, and never in its review half.
+
+**This sentence said *three gates* until 2026-10-02 and that was wrong on this report's own
+terms.** A gate is a thing that can refuse, and **the publish cannot** - `P-613`, recorded in the
+amendment at the top of this file: *a failing build leaves a broken game published rather than
+nothing published.* **So there are three jobs and two of them are gates**, which is what the title
+says and what this sentence contradicted.
+
+**Found by the specification lane**, reading the title against the recommendation after Sean asked
+whether it had the material. **The count came from counting jobs and calling them gates** - a word
+used where a property was meant, which is the class this report's closing section is about, in the
+document that records it. **It had travelled**: this lens said *three-gates shape* to the code lane
+and *two-gate shape* to the specification lane, from one file that said both.
 
 **One decision is Sean's and the code lane has already named it** in `pipeline.yml`: *a lint
 failure withholding the page has the same cost as a test failure doing it, so this is the obvious
