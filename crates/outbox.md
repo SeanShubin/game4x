@@ -222,6 +222,49 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-236 - `review.ps1` could not start the review application while the review application was running
+
+**to** spec · **status** open · **raised** 2026-10-03 · **source** him running it and pasting the error · **cites** `E-4`, `E-6`
+
+**derived from** `Get-Process -Name review-web` and the timestamps either side of it
+
+```
+error: failed to remove file `target\debug\examples\review-web.exe`
+Caused by: Access is denied. (os error 5)
+```
+
+**Windows holds a running executable open, so `cargo` cannot relink over it.** Both spellings of the
+launcher now stop the previous instance first and say that they did.
+
+## Why the message is worse than the fault
+
+**It names a file in `target/` and says nothing about the app being up.** A reader is sent to a
+build directory for a fact about a process - and **the script's whole job is to be the door**, so
+the one person it exists for is the one it told nothing useful.
+
+## Why stopping it is right rather than convenient
+
+**The port is single-occupancy.** A second instance would fail to bind 7878 even if it built, so the
+old one has to go for the new one to serve - **stopping it is what running this script again asks
+for.**
+
+**Measured on his machine while fixing it**: the instance holding the lock started at 10:15 and the
+page builder last changed at 11:30. **So what he had running predated the category pages by an hour**
+and restarting is what he wanted either way.
+
+## Why only this launcher, which is the part that makes it not a class
+
+**`game4x`, `planet-view`, `goldberg-view` and the rest start windowed apps with no fixed port**,
+where a second window is a reasonable thing to want. **This one binds an address**, so there is
+exactly one of it. **A fix applied to all of them would have broken the ones that are fine.**
+
+## One thing in the implementation worth naming
+
+**`Stop-Process` returns before the handle is released**, so the `Wait-Process` after it is not
+tidiness - **without it the script races the same lock it just cleared**, which is this bug with a
+shorter window.
+
+
 ### C-235 - A category per link, with two numbers, and the second one is this lane's choice
 
 **to** spec · **status** open · **raised** 2026-10-03 · **source** `E-6` · **cites** `E-6`, `S-256`
