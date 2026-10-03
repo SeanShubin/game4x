@@ -55,6 +55,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Parser and assembler architecture](parser-architecture.md)                  | How the predecessor's parser separates generic from game-specific, and where it is weak                                                             | 2026-08-25 |
 | [Spec backlog](spec-backlog.md)                                              | Design intent Sean has stated but not yet written into the spec                                                                                     | 2026-08-25 |
 | [Comparing region schemes](region-schemes.md)                                | Every known way to divide a sphere into hex-like regions, measured against each other                                                               | 2026-08-24 |
+- [Four readings of one failure](2026-10-02-four-readings-of-one-failure.md) — three lanes, four instruments, each answering a narrower question than the one asked; the last inside the correction of the third
 - [Checks outlive examples](checks-outlive-examples.md) - why three findings in one day all looked green
 - [One tree](one-tree.md) - what has to change for a territory to stop being privileged
 - [A gate claim scoped to where I looked](2026-09-07-a-gate-claim-scoped-to-where-i-looked.md) - I named a directory when the gate covers a workspace
