@@ -30,6 +30,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-255** - `35dd1f0` S-255: the issue-checkbox route is removed, and the dead trigger with it · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
 - **S-244** - `be2543e` S-244: rustup was installed all along, and three of my items said otherwise · still open in `docs/notes/proposals.md`

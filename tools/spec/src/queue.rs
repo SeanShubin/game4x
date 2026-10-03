@@ -35,13 +35,18 @@ fn problem<T>(message: impl Into<String>) -> Result<T, Problem> {
 /// item ends. Nothing in the text distinguishes the two, so the file's own sections are
 /// named and everything else at that level belongs to whatever item it sits under.
 /// The record's own top-level sections - everything that is not the open queue.
-pub const RECORD_SECTIONS: [&str; 8] = [
+pub const RECORD_SECTIONS: [&str; 9] = [
     "## The files that need you",
     "## How this works",
     "## Where the open queue is",
     "## Addressed to other perspectives",
     "## Accepted",
     "## Forecast cleanups that were checked and not filed",
+    // **A question he answered, which is neither accepted nor rejected.** A proposal that asks a
+    // decision cannot be promoted and offers no text, so an answer to one lands nowhere and has
+    // to be recorded as itself. Added 2026-10-02 with `P-616`, and the gate went red for one
+    // commit because this list was not updated with the section - which is the list working.
+    "## Answered",
     "## Rejected",
     "## Withdrawn",
 ];
