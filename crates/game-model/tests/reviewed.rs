@@ -590,7 +590,18 @@ fn every_state_the_code_can_reach_is_one_the_rule_names() {
     // **And the page renders whatever this returns**, which is the half that was wrong: the
     // fourth state was visible as a badge. Every badge the page can show for a state is one of
     // the three, and the drift is a separate attribute rather than a fourth word.
-    let page = report::build(true).page;
+    // **Every page the application writes, not just the index** - `E-6` moved the cards onto a
+    // page per category, so the index carries category lines and no marks at all. **The check said
+    // *no state is rendered* and was right**, which is the floor doing its job rather than the
+    // restructure breaking it.
+    let built = report::build(true);
+    let page: String = std::iter::once(built.page)
+        .chain(built.pages.into_iter().map(|(_, it)| it))
+        .collect::<Vec<String>>()
+        .join(
+            "
+",
+        );
     let shown: std::collections::BTreeSet<&str> = page
         .split("data-mark>")
         .skip(1)

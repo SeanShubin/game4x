@@ -259,6 +259,24 @@ fn answer(
     let ok = |kind, said| ("200 OK".to_string(), kind, said);
     match (method, path) {
         ("GET", "/") => ok(HTML, report::build(true).page),
+        // **A page per category** - `E-6`. The index links `<slug>.html`, so the server answers
+        // the same addresses the written copies have: a link that works on the published page
+        // works here, and the one page he opens is the one category he picked.
+        ("GET", at) if at.ends_with(".html") => {
+            let slug = at.trim_start_matches('/').trim_end_matches(".html");
+            match report::build(true)
+                .pages
+                .into_iter()
+                .find(|(named, _)| named == slug)
+            {
+                Some((_, page)) => ok(HTML, page),
+                None => (
+                    "404 Not Found".to_string(),
+                    PLAIN,
+                    format!("no category `{slug}`"),
+                ),
+            }
+        }
         // **The conversion `E-1` asks for, run by him through the application** - which is what
         // makes it his hand on the records. `CLAUDE.md`: *a record is created and deleted only by
         // the review application, acting as Sean.*

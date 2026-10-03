@@ -557,7 +557,10 @@ pub const SHOWN_ONLY: [&str; 3] = ["primitives", "rules", "types"];
 /// **A case he has denied says so whether or not its suite offers a control**, because
 /// `reviewed/cases.4x` takes a verdict for any case and the page would otherwise hide one he had
 /// made elsewhere - *no suite is privileged* is about what may be recorded.
-fn cases_section(marks: &render::Cases, live: bool) -> String {
+fn cases_section(marks: &render::Cases, live: bool) -> BTreeMap<String, String> {
+    // **One entry per suite** - `E-6`, which wants a page per category. It was one string holding
+    // every suite's fold, which is what a single page needed.
+    let mut by_suite: BTreeMap<String, String> = BTreeMap::new();
     let mut out = String::new();
     let suites = every_case();
     let total: usize = suites.iter().map(|(_, cases)| cases.len()).sum();
@@ -627,6 +630,61 @@ fn cases_section(marks: &render::Cases, live: bool) -> String {
             "</ul></details>
 ",
         );
+        by_suite.insert(suite.clone(), std::mem::take(&mut out));
+    }
+    by_suite
+}
+
+/// How many rows of data a file holds, which is what `E-6`'s second number counts.
+///
+/// **The section markers and the test's own name are not rows of data.** A test carries `{given}`,
+/// `{when}`, `{then}` and `{test name:}`; a regression case carries none of them, because a case is
+/// declarations. **So counting every line that opens with a brace made the same number mean two
+/// things** - a test looked four rows heavier than a case holding the same content, in a line whose
+/// whole job is to let him compare one category against another.
+///
+/// **Measured against the specification lane's own table**: primitives 60, rules 268, types 342 -
+/// identical, because a case has no markers to disagree about. **The interface test is where the
+/// two methods part**, and it is the one item waiting on him.
+fn data_rows(text: &str) -> usize {
+    text.lines()
+        .map(str::trim)
+        .filter(|line| line.starts_with('{'))
+        .filter(|line| {
+            !matches!(*line, "{given}" | "{when}" | "{then}" | "{refused}")
+                && !line.starts_with("{test ")
+        })
+        .count()
+}
+
+/// One page, with the head, the style and the script every page shares.
+///
+/// **Factored when `E-6` split the one page into seven** - an index and a page per category. It was
+/// one `format!` of a whole document, which is fine for one document.
+fn dressed(title: &str, tally: &str, body: &str, script: &str, attribute: &str) -> String {
+    format!(
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n\
+         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\
+         <title>{title}</title>\n<style>{STYLE}</style>\n</head>\n<body{attribute}>\n\
+         <h1>{title}</h1>\n{tally}{body}{script}</body>\n</html>\n"
+    )
+}
+
+/// The categories, in the order he reads them: the tests he approves, then the generated cases.
+///
+/// **A category is a suite**, and the two kinds differ only in what their page holds - test cards
+/// for `spec/tests/` and case rows for `regression/`. **The slug is the suite's own name**, so a
+/// third suite needs no entry here.
+fn categories(
+    cards: &BTreeMap<String, String>,
+    cases: &BTreeMap<String, String>,
+) -> Vec<(String, String, String)> {
+    let mut out: Vec<(String, String, String)> = Vec::new();
+    for (slug, body) in cards {
+        out.push((slug.clone(), format!("{slug} tests"), body.clone()));
+    }
+    for (slug, body) in cases {
+        out.push((slug.clone(), format!("{slug} cases"), body.clone()));
     }
     out
 }
@@ -642,6 +700,8 @@ pub struct Built {
     pub reviewed: usize,
     /// How many are drifted or were never read, which is what `scripts/reviewed` is for.
     pub unreviewed: usize,
+    /// One page per category, by slug - `E-6`. The index is `page`; these are what it links.
+    pub pages: Vec<(String, String)>,
 }
 
 /// Run every test and render it.
@@ -661,7 +721,13 @@ pub fn build(live: bool) -> Built {
         shared.extend(rows(&format!("data/foundation/{file}")));
     }
 
-    let mut cards = String::new();
+    // **Keyed by suite, because `E-6` wants a page per category** - his words: *a link for each
+    // category of tests, each summarizing with enough information for me to know which needs
+    // attention and how much attention it needs.* A test's stem is `rule/x` or `interface/y`, so
+    // the suite is already on it.
+    let mut cards: BTreeMap<String, String> = BTreeMap::new();
+    // **What each category is worth reading**, per suite: items, how many wait on him, and rows.
+    let mut weight: BTreeMap<String, (usize, usize, usize)> = BTreeMap::new();
     // **The diffable sibling** - `R-9`: every generated view has one. It is also the log:
     // (old state, commands) -> (new state, effects), written out per test.
     let mut log = String::from(
@@ -1115,7 +1181,20 @@ not as expected
             .and_then(|it| it.split_once('\n').map(|(_, rest)| rest.to_string()))
             .map(|body| format!(" data-record=\"{}\"", encoded(&body)))
             .unwrap_or_default();
-        cards.push_str(&format!(
+        let suite = stem.split('/').next().unwrap_or("rule").to_string();
+        let counted = weight.entry(suite.clone()).or_default();
+        counted.0 += 1;
+        if mark != APPROVED {
+            counted.1 += 1;
+        }
+        // **Counted from the file, not from the fold** - `E-6`. A test whose relations no schema
+        // declares folds to nothing, so the interface test reported **0 rows to read** while being
+        // the one item waiting on him. **The number that was wrong was the one his decision turns
+        // on**, and it was wrong in the direction that says *this is free*.
+        counted.2 += std::fs::read_to_string(tests_at().join(&file))
+            .map(|text| data_rows(&text))
+            .unwrap_or(0);
+        cards.entry(suite).or_default().push_str(&format!(
             "<details class=\"test {class}\"{open} data-test=\"{stem}\"{would_write}>\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span> <span class=\"badge {seen_class}\" data-mark>{mark}</span>{was}{chip}{acts}</summary>\n{raw}{said}{noted}<pre>{body}{seen}</pre>\n</details>\n"
         ));
     }
@@ -1195,14 +1274,99 @@ not as expected
     } else {
         String::new()
     };
+    // **What each regression suite is worth reading.** A case has no record today -
+    // `reviewed/cases.4x` does not exist - so every one of them waits on him.
+    for (suite, cases) in every_case() {
+        let rows: usize = cases
+            .iter()
+            .map(|case| {
+                std::fs::read_to_string(cases_at().join(&suite).join(case))
+                    .map(|text| data_rows(&text))
+                    .unwrap_or(0)
+            })
+            .sum();
+        let waiting = cases
+            .iter()
+            .filter(|case| {
+                let named = format!("{suite}/{}", case.trim_end_matches(".4x"));
+                !marks.denied.contains(&named) && !marks.approved.contains(&named)
+            })
+            .count();
+        weight.insert(suite, (cases.len(), waiting, rows));
+    }
+
+    // **One page per category, and an index that summarises them** - `E-6`. His words: *I am
+    // expecting to see a link for each category of tests, each summarizing with enough information
+    // for me to know which needs attention and how much attention it needs.*
+    //
+    // **Two numbers, because one does not answer it.** Sixty primitives cases against thirty-seven
+    // scenario cases: a count puts primitives ahead and the reading puts scenario ahead by a factor
+    // of fourteen. **So a line carrying only a count says which category has the most items and
+    // not which will take the evening**, which is the half he named explicitly.
+    //
+    // **The second number is rows, and that is this lane's choice rather than his.** His words say
+    // *how much reading that is* without naming a unit. Rows is what the page is made of and is
+    // measurable today; **minutes would be a model of his reading invented here**, and a 3-row
+    // interface test in a form he has never seen may cost more than a 23-row scenario case he has
+    // been walked through. **So the page says it is rows and he corrects it by using it.**
+    let mut pages: Vec<(String, String)> = Vec::new();
+    let mut lines = String::new();
+    for (slug, title, body) in categories(&cards, &cases) {
+        let (items, waiting, rows) = weight.get(&slug).copied().unwrap_or_default();
+        let how = match waiting {
+            0 => "<span class=\"ok\">nothing waiting</span>".to_string(),
+            n => format!(
+                "<span class=\"unseen\"><strong>{n}</strong> waiting</span> &middot; \
+                 <strong>{rows}</strong> rows to read"
+            ),
+        };
+        // **A category with nothing waiting is linked anyway and says so.** `E-6`: *a category with
+        // nothing waiting says so and does not need opening at all* - which is about not needing
+        // to open it, not about having nowhere to go.
+        lines.push_str(&format!(
+            "<li data-category=\"{slug}\"><a href=\"{slug}.html\">{title}</a> &middot; \
+             {items} item(s) &middot; {how}</li>\n"
+        ));
+        pages.push((
+            slug.clone(),
+            dressed(
+                &title,
+                &format!(
+                    "<p class=\"tally\"><strong>{items}</strong> item(s) &middot; {how}</p>\n\
+                     <p class=\"note\"><a href=\"index.html\">Every category</a></p>\n"
+                ),
+                &body,
+                &script,
+                body_attribute,
+            ),
+        ));
+    }
+
     let case_count: usize = every_case().iter().map(|(_, it)| it.len()).sum();
     let rows = total + case_count;
+    let waiting: usize = weight.values().map(|(_, it, _)| it).sum();
+    let reading: usize = weight.values().map(|(_, _, it)| it).sum();
 
-    let page = format!(
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Review</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>Review</h1>\n<p class=\"tally\"><strong>{rows}</strong> rows &middot; <strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{convert}{lost}{cards}{cases}{script}</body>\n</html>\n"
+    let page = dressed(
+        "Review",
+        &format!(
+            "<p class=\"tally\"><strong>{rows}</strong> rows &middot; <strong>{total}</strong> \
+             tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; \
+             <span class=\"red\">{red} red</span> &middot; \
+             <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; \
+             <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n\
+             <p class=\"note\">Generated by <code>cargo run --example report</code>.{browse} \
+             <strong>{waiting}</strong> item(s) wait on you, which is <strong>{reading}</strong> \
+             rows of reading. <b>Rows is what this counts</b> - not minutes, which would be a guess \
+             about how you read.</p>\n"
+        ),
+        &format!("{convert}{lost}<ul class=\"categories\">\n{lines}</ul>\n"),
+        &script,
+        body_attribute,
     );
     Built {
         page,
+        pages,
         log,
         total,
         passed,
@@ -1234,10 +1398,17 @@ fn main() {
     std::fs::create_dir_all(&into).expect("reports/review");
     std::fs::write(into.join("index.html"), &built.page).expect("index.html");
     std::fs::write(into.join("index.txt"), &built.log).expect("index.txt");
+    // **One page per category** - `E-6`. The index summarises and links; these hold the items, so
+    // **picking a category does not mean opening every other one.**
+    for (slug, page) in &built.pages {
+        std::fs::write(into.join(format!("{slug}.html")), page)
+            .unwrap_or_else(|why| panic!("{slug}.html: {why}"));
+    }
     let (total, passed, red) = (built.total, built.passed, built.red);
     let (seen, unseen) = (built.reviewed, built.unreviewed);
     println!(
-        "reports/review/: {total} tests, {passed} as expected, {red} red, {seen} reviewed, {unseen} to read"
+        "reports/review/: {total} tests, {passed} as expected, {red} red, {seen} reviewed, {unseen} to read, {} categories",
+        built.pages.len()
     );
 }
 

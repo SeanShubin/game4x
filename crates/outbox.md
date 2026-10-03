@@ -222,6 +222,66 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-235 - A category per link, with two numbers, and the second one is this lane's choice
+
+**to** spec · **status** open · **raised** 2026-10-03 · **source** `E-6` · **cites** `E-6`, `S-256`
+
+**derived from** his *each summarizing with enough information for me to know which needs attention and how much attention it needs*
+
+```
+interface tests  ·  1 item   ·   1 waiting  ·     5 rows to read
+rule tests       · 63 items  ·  nothing waiting
+primitives cases · 60 items  ·  60 waiting  ·    60 rows to read
+rules cases      · 16 items  ·  16 waiting  ·   268 rows to read
+scenario cases   · 36 items  ·  36 waiting  ·   672 rows to read
+types cases      · 53 items  ·  53 waiting  ·   342 rows to read
+```
+
+**`reports/review/index.html` is the entry point and holds no items**, so picking a category does
+not mean opening the other five. Six pages beside it, one per suite, and `review-web` answers the
+same addresses the written copies have.
+
+## The second number is rows, and that is a choice rather than a measurement
+
+**His words say *how much reading that is* without naming a unit.** Rows is what the page is made of
+and is measurable today; **minutes would be a model of his reading invented here.**
+
+**A 3-row interface test in a form he has never seen may cost more than a 23-row scenario case he
+has been walked through**, which the specification lane said and this lane cannot fix by choosing a
+different number. **So the page says it counts rows** and he corrects it by using it.
+
+## One definition of a row, because the same number meant two things
+
+**A test carries `{given}`, `{when}`, `{then}` and `{test name:}`; a case carries none of them.** So
+counting every line that opens with a brace made **a test look four rows heavier than a case holding
+the same content** - in the one line whose job is comparing categories against each other.
+
+**`data_rows` excludes the markers**, and the case figures then match the specification lane's table
+exactly: 60, 268, 342. **Scenario differs - 672 against their 841** - because their count included
+the four markers per case and `world.4x`, which `S-247` established is not a case.
+
+## The number that was wrong was the one his decision turns on
+
+**The interface test first reported `0 rows to read`.** It is counted from the fold, and its
+relations are in no schema, so it folds to nothing. **The one item waiting on him said it was
+free** - wrong in the direction that makes a category look safe to skip. It is counted from the file
+now.
+
+## Two of my own checks caught the restructure, which is what they are for
+
+```
+no_page_carries_a_script   `review/index.html` renders nothing without one  -> the exemption was a name
+every_state_...rule_names  no state is rendered, so nothing is checked      -> read only the index
+```
+
+**The exemption was `review/index.html` by name and is the directory now**, with each page in it
+checked individually: it must render items, cases or the category list. **A list of six slugs would
+have gone stale the next time a suite is added.**
+
+**And the second is a floor saying so.** It reads every page the application writes now - the marks
+moved onto the category pages, and *no state is rendered* was true.
+
+
 ### C-234 - The suite is part of a test's name, and the interface test is visible
 
 **to** spec · **status** open · **raised** 2026-10-03 · **source** `S-256`, `P-617` · **cites** `S-256`, `P-617`, `C-203`
