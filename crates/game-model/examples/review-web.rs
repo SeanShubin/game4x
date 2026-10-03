@@ -69,7 +69,11 @@ use std::path::PathBuf;
 /// trimmed `spec/tests/` off an address and compared the remainder to a bare stem, so with the
 /// first repaired it would have left `rule/name` and reported every test as unlisted - the half
 /// `S-214` added, failing for the opposite reason.
-const UNDER: &str = "spec/tests/rule/";
+// **The suite is part of a test's name** - `S-256`. This was `spec/tests/rule/`, so an address
+// came out `spec/tests/rule/rule/x.4x` and the startup check refused all sixty-four: *no address,
+// so the page would link at nothing.* **It refused correctly and nothing in the gate had said so** -
+// see `C-237`.
+const UNDER: &str = "spec/tests/";
 
 /// A record: the verdict, and the behaviour that verdict is about.
 ///
@@ -527,14 +531,29 @@ fn browsable() -> Vec<String> {
         let Ok(entries) = std::fs::read_dir(root.join(under)) else {
             continue;
         };
+        // **One level down as well, because `spec/tests/` and `data/foundation/tests/` are
+        // directories of suites** - `S-256`. A flat walk found the five shared files and none of
+        // the sixty-four tests.
         for entry in entries.filter_map(|it| it.ok()) {
             let path = entry.path();
-            if path.extension().and_then(|it| it.to_str()) != Some("4x") {
-                continue;
-            }
             let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
                 continue;
             };
+            if path.is_dir() {
+                for inside in std::fs::read_dir(&path).into_iter().flatten().flatten() {
+                    let at = inside.path();
+                    if at.extension().and_then(|it| it.to_str()) != Some("4x") {
+                        continue;
+                    }
+                    if let Some(leaf) = at.file_name().and_then(|it| it.to_str()) {
+                        found.push(format!("{under}/{name}/{leaf}"));
+                    }
+                }
+                continue;
+            }
+            if path.extension().and_then(|it| it.to_str()) != Some("4x") {
+                continue;
+            }
             found.push(format!("{under}/{name}"));
         }
     }
@@ -651,11 +670,7 @@ mod tests {
         // **The first version joined `.4x` onto a name that already had it**, and the panic named
         // `...taken.4x.4x` - which would also have put the extension inside the `{test name:}`
         // row, so the identifier the rename check turns on would have been wrong.
-        for file in report::every_test() {
-            let name = file.trim_end_matches(".4x").to_string();
-            let from = report::tests_at().join(&file);
-            let text = std::fs::read_to_string(&from)
-                .unwrap_or_else(|why| panic!("{}: {why}", from.display()));
+        for (name, text) in foldable() {
             let said = report::render::record_for(&name, &text, "approved")
                 .unwrap_or_else(|why| panic!("{name}: {why}"));
 
@@ -677,8 +692,13 @@ mod tests {
             assert!(prose.is_empty(), "`{name}` carries prose: {prose:?}");
             // **And the behaviour is there**, which the three above do not say between them: a
             // record of a verdict and a name and nothing else would pass all of them.
+            // **`{when}` is optional and `{then}` or `{refused}` is not.** This required a
+            // `{when}`, and `77aac86e` cut the six biome tests to `{given}` and `{then}` - Sean:
+            // *we support many commands, which does not seem substantively different than also
+            // supporting zero commands.* **So this has been false since those landed and nothing
+            // ran it**, which is `C-237`.
             assert!(
-                said.contains("{given}") && said.contains("{when}"),
+                said.contains("{given}") && (said.contains("{then}") || said.contains("{refused}")),
                 "`{name}` has no behaviour in it:\n{said}"
             );
             built += 1;
@@ -732,10 +752,7 @@ mod tests {
     #[test]
     fn a_record_the_writer_writes_agrees_with_its_test() {
         let mut agreed = 0;
-        for file in report::every_test() {
-            let name = file.trim_end_matches(".4x").to_string();
-            let text = std::fs::read_to_string(report::tests_at().join(&file))
-                .unwrap_or_else(|why| panic!("{file}: {why}"));
+        for (name, text) in foldable() {
             let said = report::render::record_for(&name, &text, "approved")
                 .unwrap_or_else(|why| panic!("{name}: {why}"));
             let (status, lines) = report::drift(Some(&said), &text);
@@ -771,9 +788,10 @@ mod tests {
     /// writer dropped prose, the comparison compared prose, and neither test noticed.
     #[test]
     fn denying_writes_a_record_that_binds_nothing() {
-        let file = report::every_test().into_iter().next().expect("a test");
-        let name = file.trim_end_matches(".4x").to_string();
-        let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
+        // **The first test the data can express**, not the first test. `every_test` sorts, and
+        // `interface/` sorts before `rule/` - so this took the one test in a form `spec/data/`
+        // cannot express yet and failed on the fold.
+        let (name, text) = foldable().into_iter().next().expect("a test that folds");
 
         let denied = report::render::record_for(&name, &text, "denied").expect("a denial");
         let approved = report::render::record_for(&name, &text, "approved").expect("an approval");
@@ -820,7 +838,7 @@ mod tests {
     /// vacuously true of a suite with no cases, and *markable* is vacuously true of no suites.
     #[test]
     fn every_case_is_on_the_page_once_and_its_suite_says_what_it_offers() {
-        let built = report::build(true).page;
+        let built = every_page(true);
         let suites = report::every_case();
         assert_eq!(suites.len(), 4, "four regression suites");
 
@@ -938,8 +956,8 @@ mod tests {
     /// so rather than implying it covers the rest.
     #[test]
     fn the_page_that_has_no_server_writes_through_the_api_and_holds_no_secret() {
-        let hosted = report::build(false).page;
-        let served = report::build(true).page;
+        let hosted = every_page(false);
+        let served = every_page(true);
 
         // **One script or the other, never both** - two writers would re-send what the first
         // already wrote.
@@ -954,7 +972,10 @@ mod tests {
 
         // **Every markable test carries the bytes it would commit**, because there is no server
         // to ask for them. The body is the record without its verdict line.
-        let tests = report::every_test().len();
+        // **The tests the page can carry a record for** - a test the data cannot express yet has
+        // no record to carry, which is `P-615`'s *a test I have not read yet fails nothing* said
+        // about the page rather than the build.
+        let tests = foldable().len();
         assert!(
             tests > 0,
             "no tests, so carrying their records proves nothing"
@@ -1021,10 +1042,7 @@ mod tests {
     fn converting_changes_the_order_and_not_what_a_record_says() {
         let mut moved = 0;
         let mut compared = 0;
-        for file in report::every_test() {
-            let name = file.trim_end_matches(".4x").to_string();
-            let text = std::fs::read_to_string(report::tests_at().join(&file))
-                .unwrap_or_else(|why| panic!("{file}: {why}"));
+        for (name, text) in foldable() {
             let now = report::render::record_for(&name, &text, "approved")
                 .unwrap_or_else(|why| panic!("{name}: {why}"));
 
@@ -1054,7 +1072,8 @@ mod tests {
                     );
                 }
             }
-            if let Some(record) = std::fs::read_to_string(report::records_at().join(&file)).ok()
+            if let Ok(record) =
+                std::fs::read_to_string(report::records_at().join(format!("{name}.4x")))
                 && record != now
             {
                 moved += 1;
@@ -1066,6 +1085,68 @@ mod tests {
         println!("{moved} of {compared} record(s) would move");
     }
 
+    /// Every page the application writes, as one string.
+    ///
+    /// **`E-6` split the one page into an index and a page per category**, so a test that read
+    /// `build(live).page` was reading the index - which carries the category lines and no items at
+    /// all. **Four tests here then said the page had no cards and no case folds, and they were
+    /// right about the page they read.**
+    ///
+    /// **The index is included**, because what it says about the categories is part of what the
+    /// application writes.
+    fn every_page(live: bool) -> String {
+        let built = report::build(live);
+        std::iter::once(built.page)
+            .chain(built.pages.into_iter().map(|(_, it)| it))
+            .collect::<Vec<String>>()
+            .join(
+                "
+",
+            )
+    }
+
+    /// Every test the data can express, with its text - and the ones it cannot, named.
+    ///
+    /// **A test whose relations no schema declares cannot be folded**, so nothing below can ask
+    /// what a record for it would say. `spec/tests/interface/the-starting-menu-offers-new-game-and-exit`
+    /// is the first: `{saves}`, `{open-menu}`, `{item}` and `{attention}` are in no schema, and
+    /// `P-617` settled its form before anything reads it.
+    ///
+    /// **Five tests here panicked on it**, because each folded every test and unwrapped. **That is
+    /// the normal state of this repository** - `P-615`: *a test I have not read yet fails nothing;
+    /// it is a notice that something is waiting on me* - so a test the data cannot express is
+    /// skipped here and reported by `foundation.rs`, which is whose job it is.
+    ///
+    /// **The floor is what stops the skip swallowing the subject.** If the data stopped expressing
+    /// everything, these tests would pass over nothing.
+    fn foldable() -> Vec<(String, String)> {
+        let mut out = Vec::new();
+        let mut waiting: Vec<String> = Vec::new();
+        for file in report::every_test() {
+            let name = file.trim_end_matches(".4x").to_string();
+            let at = report::tests_at().join(&file);
+            let Ok(text) = std::fs::read_to_string(&at) else {
+                continue;
+            };
+            match report::render::record_for(&name, &text, "approved") {
+                Ok(_) => out.push((name, text)),
+                Err(_) => waiting.push(name),
+            }
+        }
+        if !waiting.is_empty() {
+            println!(
+                "{} test(s) are in a form `spec/data/` cannot express yet: {waiting:?}",
+                waiting.len()
+            );
+        }
+        assert!(
+            out.len() > 40,
+            "only {} test(s) fold, so these say almost nothing",
+            out.len()
+        );
+        out
+    }
+
     /// **What the writer produces reads as approved**, which is the one thing the readers need of
     /// it.
     ///
@@ -1075,12 +1156,9 @@ mod tests {
     /// approval**, which is the expensive way.
     #[test]
     fn the_suite_reads_what_the_writer_writes() {
-        let file = report::every_test()
-            .into_iter()
-            .next()
-            .expect("a test to record");
-        let name = file.trim_end_matches(".4x").to_string();
-        let text = std::fs::read_to_string(report::tests_at().join(&file)).expect("the test");
+        // **The first test the data can express** - `every_test` sorts and `interface/` sorts
+        // first, so this took the one test in a form `spec/data/` cannot express yet.
+        let (name, text) = foldable().into_iter().next().expect("a test that folds");
         let said = report::render::record_for(&name, &text, "approved").expect("a record");
         assert_eq!(
             report::render::verdict_of(&said),

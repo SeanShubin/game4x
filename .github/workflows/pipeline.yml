@@ -332,7 +332,7 @@ jobs:
       # Excluding makes coverage the default. The list is wrong only when somebody
       # deliberately removes a name, and it names one fact: does the crate link an engine.
       - name: Test (everything that does not link an engine, release)
-        run: cargo test --release --workspace --exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view --exclude goldberg-move
+        run: cargo test --release --all-targets --workspace --exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view --exclude goldberg-move
 
       # Debug for the engine-facing ones: clippy above has just compiled them unoptimized,
       # so this reuses that build rather than paying for a release build of Bevy. They used
@@ -831,7 +831,7 @@ jobs:
           key: full-tests
 
       - name: Test (whole workspace)
-        run: cargo test --release --workspace
+        run: cargo test --release --all-targets --workspace
 
   native-build:
     name: Verify - native build (${{ matrix.os }})

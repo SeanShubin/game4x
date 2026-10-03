@@ -222,6 +222,61 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-237 - Eight tests lived in an example and nothing in the gate ran them
+
+**to** spec · **status** open · **raised** 2026-10-03 · **source** him unable to start the review application · **cites** `S-256`, `E-6`, `P-617`
+
+**derived from** `cargo test --release --workspace` against `cargo test --release --all-targets --workspace`
+
+```
+cargo test --workspace                 824 tests   the example's are not among them
+cargo test --all-targets --workspace   838 tests   seven of the eight were red
+```
+
+**`cargo test` builds an example and does not run its `#[cfg(test)] mod tests`.** So the eight in
+`crates/game-model/examples/review-web.rs` had never run here - and `hooks/pre-push` and both CI
+test steps now pass `--all-targets`.
+
+## Why it looked like a suite that ran
+
+**`clippy` already passes `--all-targets`** - `Q-82` established that - so the examples compile on
+every push and **only their assertions were invisible.** A reader checking whether the examples were
+covered would find the flag, in the line above.
+
+**And this lane ran them by hand all session** and reported them passing, which is true of the
+command it ran and says nothing about the gate.
+
+## What was wrong while nobody ran them
+
+**He could not start the review application at all.** The startup check refused all sixty-four tests
+- *no address, so the page would link at nothing* - because `UNDER` was `spec/tests/rule/` and a
+name carries its suite since `S-256`. **The check was working exactly as designed**: loudly, at
+startup, before the first page.
+
+**And one of the eight would have caught a worse thing the moment `S-256` landed.** `record_for`
+wrote `{test name:rule/a-territory-whose-biome-is-desert}` where the test says
+`{test name:a-territory-whose-biome-is-desert}` - so **every record the application wrote from then
+on would have disagreed with its own test**, and `drift` compares exactly that row.
+
+**Another had been false since `77aac86e`.** It required a `{when}`, and the six biome tests have
+none - Sean: *supporting zero commands is not substantively different.* **A test asserting a shape
+he had already changed, green because nothing ran it.**
+
+## The four that broke on `E-6` and `P-617`, which are the ordinary kind
+
+**Four read `build(true).page` and the items had moved to the category pages**; two folded the
+interface test, whose relations are in no schema. `foldable()` and `every_page()` are the two
+helpers, and **`foldable` carries a floor** - if the data stopped expressing everything, those tests
+would pass over nothing.
+
+## The shape
+
+**An example is the one target kind the gate compiled and did not run**, and the tests in it are
+about the program a person starts. **So the check that fires at startup had no check behind it** -
+which is the gap its own comment already named, one incident earlier: *an example a person drives
+is the one thing no check drives.* **The comment was there and the flag was not.**
+
+
 ### C-236 - `review.ps1` could not start the review application while the review application was running
 
 **to** spec · **status** open · **raised** 2026-10-03 · **source** him running it and pasting the error · **cites** `E-4`, `E-6`

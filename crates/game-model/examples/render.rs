@@ -831,7 +831,16 @@ pub fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, Strin
     let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
 
     let mut out = format!("{{verdict state:{verdict}}}\n");
-    out.push_str(&format!("{{test name:{name}}}\n"));
+    // **The leaf, because a test's name is its file's name and not its path** - `S-256`. A name
+    // carries its suite now, which is right for `reviewed/<suite>/<name>.4x` and wrong inside the
+    // record: this wrote `{test name:rule/a-territory-whose-biome-is-desert}` where the test says
+    // `{test name:a-territory-whose-biome-is-desert}`.
+    //
+    // **Every record the application wrote from here on would have disagreed with its own test**,
+    // and `drift` compares exactly that row. Caught by a test in an example, which `C-237` is
+    // about nothing in the gate running.
+    let leaf = name.rsplit('/').next().unwrap_or(name);
+    out.push_str(&format!("{{test name:{leaf}}}\n"));
     let mut wrote = 0;
     for row in &rows {
         // **`{test name:}` is written once, above, from the file's own name.** A test states it
