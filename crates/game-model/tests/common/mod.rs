@@ -165,15 +165,34 @@ pub fn foundation_at(file: &str) -> String {
 }
 
 /// Every test file, read rather than listed - one test per file, and nothing else in `tests/`.
+///
+/// **Walked by suite** - `S-256`. `data/foundation/tests/` is a directory of suites now, mirroring
+/// `reviewed/` and `spec/tests/`, and reading it flat found **nothing at all**: the floor below is
+/// what turned that into five named failures rather than five vacuous passes.
+///
+/// **The sixth copy of *list the `.4x` files here*, and the one that stays a copy.** The other five
+/// are `render::under`; `common/` cannot borrow that module, because a test including both would
+/// hold it twice and the types would not match. **So this is small, local, and says which it is.**
 pub fn every_test() -> Vec<String> {
-    let mut found: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
-            .expect("data/foundation/tests")
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter(|name| name.ends_with(".4x"))
-            .map(|name| format!("data/foundation/tests/{name}"))
-            .collect();
+    let at = mine().join("data").join("foundation").join("tests");
+    let mut found: Vec<String> = Vec::new();
+    for entry in std::fs::read_dir(&at)
+        .expect("data/foundation/tests")
+        .flatten()
+    {
+        let path = entry.path();
+        let name = entry.file_name().to_string_lossy().to_string();
+        if path.is_dir() {
+            for inside in std::fs::read_dir(&path).into_iter().flatten().flatten() {
+                let leaf = inside.file_name().to_string_lossy().to_string();
+                if leaf.ends_with(".4x") {
+                    found.push(format!("data/foundation/tests/{name}/{leaf}"));
+                }
+            }
+        } else if name.ends_with(".4x") {
+            found.push(format!("data/foundation/tests/{name}"));
+        }
+    }
     found.sort();
     assert!(!found.is_empty(), "no tests, so passing means nothing");
     found
@@ -229,7 +248,7 @@ pub fn game_rows() -> Vec<Row> {
 pub fn section(want: &str) -> Vec<Row> {
     let mut inside = false;
     let mut out = Vec::new();
-    for row in rows("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x") {
+    for row in rows("data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x") {
         if matches!(row.relation.as_str(), "given" | "when" | "then") {
             inside = row.relation == want;
             continue;

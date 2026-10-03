@@ -48,17 +48,35 @@ fn originals() -> BTreeMap<String, String> {
     // `P-576` brought them back: every foundation file is generated now, and `CLAUDE.md` gives a
     // generated file no owner, so one directory is the whole population again. What the second loop
     // was guarding is kept below and asked of the sweep instead.
+    // **`tests/` is a directory of suites** - `S-256`. This walked it flat and found nothing, and
+    // the floor turned that into *no tests, so mutating proves nothing* rather than a sweep over
+    // an empty population.
     let root = mine().join("data").join("foundation");
-    for at in [root.clone(), root.join("tests")] {
-        let under = at == root.join("tests");
+    let mut walking: Vec<PathBuf> = vec![root.clone()];
+    for suite in std::fs::read_dir(root.join("tests"))
+        .into_iter()
+        .flatten()
+        .flatten()
+    {
+        if suite.path().is_dir() {
+            walking.push(suite.path());
+        }
+    }
+    for at in walking {
+        let under = at != root;
         for file in std::fs::read_dir(&at).expect("data") {
             let file = file.expect("a file").path();
             if file.extension().map(|it| it != "4x").unwrap_or(true) {
                 continue;
             }
             let name = file.file_name().and_then(|it| it.to_str()).expect("a name");
+            let suite = at
+                .file_name()
+                .and_then(|it| it.to_str())
+                .unwrap_or_default()
+                .to_string();
             let name = if under {
-                format!("tests/{name}")
+                format!("tests/{suite}/{name}")
             } else {
                 name.to_string()
             };
@@ -152,8 +170,13 @@ fn check(files: &InMemory) -> Result<(), String> {
         // **A test's name is its file's name**, which is checkable without a literal every new
         // test would have to add. **Dropping the literal left `{test name:...}` read by nothing**
         // and the mutation check said so immediately - both test rows became deletable.
+        // **The leaf, because the path carries a suite now** - `S-256`. `trim_start_matches`
+        // stripped `tests/` and left `rule/a-bin-...`, where a test's `{test name:}` is its file's
+        // name without either. **It said the test was misnamed and the test was fine.**
         let stem = one
-            .trim_start_matches("tests/")
+            .rsplit('/')
+            .next()
+            .unwrap_or(one)
             .trim_end_matches(".4x")
             .to_string();
         if report.test != stem {

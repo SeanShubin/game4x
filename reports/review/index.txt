@@ -2,7 +2,61 @@ The thin engine, per test: the world it starts in, what each command took and ma
 the world it leaves. (old state, commands) -> (new state, effects).
 
 ==============================================================================
-a-bin-cannot-be-built-where-the-capacity-is-taken
+interface/the-starting-menu-offers-new-game-and-exit
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 17: `saves` has no quantity, so `->` says nothing about it
+
+==============================================================================
+rule/a-bin-cannot-be-built-where-the-capacity-is-taken
 
 old state
   - root
@@ -42,7 +96,7 @@ refused
 as expected
 
 ==============================================================================
-a-bin-is-built-from-labor-and-metal
+rule/a-bin-is-built-from-labor-and-metal
 
 old state
   - root
@@ -113,7 +167,7 @@ new state
 as expected
 
 ==============================================================================
-a-citizen-breeds-once-and-its-bearing-is-spent
+rule/a-citizen-breeds-once-and-its-bearing-is-spent
 
 old state
   - root
@@ -185,7 +239,7 @@ new state
 as expected
 
 ==============================================================================
-a-citizen-eats-and-one-there-is-no-food-for-starves
+rule/a-citizen-eats-and-one-there-is-no-food-for-starves
 
 old state
   - root
@@ -256,7 +310,7 @@ new state
 as expected
 
 ==============================================================================
-a-citizen-s-labor-works-an-extractor
+rule/a-citizen-s-labor-works-an-extractor
 
 old state
   - root
@@ -337,7 +391,7 @@ new state
 as expected
 
 ==============================================================================
-a-deployment-places-what-the-ground-has-room-for
+rule/a-deployment-places-what-the-ground-has-room-for
 
 old state
   - root
@@ -412,7 +466,7 @@ new state
 as expected
 
 ==============================================================================
-a-deployment-with-nowhere-to-mine-still-costs-the-ark
+rule/a-deployment-with-nowhere-to-mine-still-costs-the-ark
 
 old state
   - root
@@ -483,7 +537,7 @@ new state
 as expected
 
 ==============================================================================
-a-food-extractor-and-a-metal-extractor-do-not-interfere
+rule/a-food-extractor-and-a-metal-extractor-do-not-interfere
 
 old state
   - root
@@ -562,7 +616,7 @@ new state
 as expected
 
 ==============================================================================
-a-pioneer-is-built-from-labor-and-metal
+rule/a-pioneer-is-built-from-labor-and-metal
 
 old state
   - root
@@ -631,7 +685,7 @@ new state
 as expected
 
 ==============================================================================
-a-pioneer-settles-the-ground-it-is-standing-on
+rule/a-pioneer-settles-the-ground-it-is-standing-on
 
 old state
   - root
@@ -708,7 +762,7 @@ new state
 as expected
 
 ==============================================================================
-a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own
+rule/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own
 
 old state
   - root
@@ -750,7 +804,7 @@ refused
 as expected
 
 ==============================================================================
-a-scout-arriving-where-one-stands-makes-two
+rule/a-scout-arriving-where-one-stands-makes-two
 
 old state
   - root
@@ -820,7 +874,7 @@ new state
 as expected
 
 ==============================================================================
-a-scout-cannot-move-where-every-berth-is-taken
+rule/a-scout-cannot-move-where-every-berth-is-taken
 
 old state
   - root
@@ -862,7 +916,7 @@ refused
 as expected
 
 ==============================================================================
-a-scout-moves-where-there-is-a-berth-to-spare
+rule/a-scout-moves-where-there-is-a-berth-to-spare
 
 old state
   - root
@@ -940,7 +994,7 @@ new state
 as expected
 
 ==============================================================================
-a-scout-that-has-moved-cannot-move-again
+rule/a-scout-that-has-moved-cannot-move-again
 
 old state
   - root
@@ -979,7 +1033,7 @@ refused
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-desert
+rule/a-territory-whose-biome-is-desert
 
 old state
   - root
@@ -1036,7 +1090,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-grassland
+rule/a-territory-whose-biome-is-grassland
 
 old state
   - root
@@ -1093,7 +1147,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-ice
+rule/a-territory-whose-biome-is-ice
 
 old state
   - root
@@ -1150,7 +1204,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-jungle
+rule/a-territory-whose-biome-is-jungle
 
 old state
   - root
@@ -1207,7 +1261,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-mountain
+rule/a-territory-whose-biome-is-mountain
 
 old state
   - root
@@ -1264,7 +1318,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-whose-biome-is-ocean
+rule/a-territory-whose-biome-is-ocean
 
 old state
   - root
@@ -1321,7 +1375,7 @@ new state
 as expected
 
 ==============================================================================
-a-territory-with-no-orbit-cannot-launch
+rule/a-territory-with-no-orbit-cannot-launch
 
 old state
   - root
@@ -1358,7 +1412,7 @@ refused
 as expected
 
 ==============================================================================
-a-transport-and-a-bin-give-room-together
+rule/a-transport-and-a-bin-give-room-together
 
 old state
   - root
@@ -1456,7 +1510,7 @@ new state
 as expected
 
 ==============================================================================
-a-yard-is-built-from-labor-and-metal
+rule/a-yard-is-built-from-labor-and-metal
 
 old state
   - root
@@ -1521,7 +1575,7 @@ new state
 as expected
 
 ==============================================================================
-an-ark-cannot-launch-where-there-is-no-yard
+rule/an-ark-cannot-launch-where-there-is-no-yard
 
 old state
   - root
@@ -1559,7 +1613,7 @@ refused
 as expected
 
 ==============================================================================
-an-ark-deploys-and-becomes-a-settlement
+rule/an-ark-deploys-and-becomes-a-settlement
 
 old state
   - root
@@ -1638,7 +1692,7 @@ new state
 as expected
 
 ==============================================================================
-an-ark-deploys-onto-the-ground-below-it
+rule/an-ark-deploys-onto-the-ground-below-it
 
 old state
   - root
@@ -1725,7 +1779,7 @@ new state
 as expected
 
 ==============================================================================
-an-ark-gathers-what-the-sun-gives
+rule/an-ark-gathers-what-the-sun-gives
 
 old state
   - root
@@ -1792,7 +1846,7 @@ new state
 as expected
 
 ==============================================================================
-an-ark-holds-one-energy-and-the-rest-is-lost
+rule/an-ark-holds-one-energy-and-the-rest-is-lost
 
 old state
   - root
@@ -1859,7 +1913,7 @@ new state
 as expected
 
 ==============================================================================
-an-ark-is-launched-from-the-ground-into-the-orbit-above
+rule/an-ark-is-launched-from-the-ground-into-the-orbit-above
 
 old state
   - root
@@ -1930,7 +1984,7 @@ new state
 as expected
 
 ==============================================================================
-an-extractor-cannot-be-built-where-the-deposits-are-taken
+rule/an-extractor-cannot-be-built-where-the-deposits-are-taken
 
 old state
   - root
@@ -1971,7 +2025,7 @@ refused
 as expected
 
 ==============================================================================
-an-extractor-cannot-be-built-where-there-is-no-deposit
+rule/an-extractor-cannot-be-built-where-there-is-no-deposit
 
 old state
   - root
@@ -2010,7 +2064,7 @@ refused
 as expected
 
 ==============================================================================
-an-extractor-cannot-be-worked-twice-on-one-readiness
+rule/an-extractor-cannot-be-worked-twice-on-one-readiness
 
 old state
   - root
@@ -2050,7 +2104,7 @@ refused
 as expected
 
 ==============================================================================
-an-extractor-cannot-be-worked-without-labor
+rule/an-extractor-cannot-be-worked-without-labor
 
 old state
   - root
@@ -2089,7 +2143,7 @@ refused
 as expected
 
 ==============================================================================
-an-extractor-is-built-from-labor-and-metal
+rule/an-extractor-is-built-from-labor-and-metal
 
 old state
   - root
@@ -2162,7 +2216,7 @@ new state
 as expected
 
 ==============================================================================
-an-extractor-pulls-its-deposits-density
+rule/an-extractor-pulls-its-deposits-density
 
 old state
   - root
@@ -2237,7 +2291,7 @@ new state
 as expected
 
 ==============================================================================
-breeding-does-not-give-a-citizen-its-labor-back
+rule/breeding-does-not-give-a-citizen-its-labor-back
 
 old state
   - root
@@ -2308,7 +2362,7 @@ new state
 as expected
 
 ==============================================================================
-breeding-does-not-reach-the-citizens-it-just-made
+rule/breeding-does-not-reach-the-citizens-it-just-made
 
 old state
   - root
@@ -2380,7 +2434,7 @@ new state
 as expected
 
 ==============================================================================
-breeding-stops-when-the-food-does
+rule/breeding-stops-when-the-food-does
 
 old state
   - root
@@ -2465,7 +2519,7 @@ new state
 as expected
 
 ==============================================================================
-discarding-disorder-can-be-fired-on-its-own
+rule/discarding-disorder-can-be-fired-on-its-own
 
 old state
   - root
@@ -2542,7 +2596,7 @@ new state
 as expected
 
 ==============================================================================
-ending-a-turn-restores-a-scout-and-an-extractor
+rule/ending-a-turn-restores-a-scout-and-an-extractor
 
 old state
   - root
@@ -2619,7 +2673,7 @@ new state
 as expected
 
 ==============================================================================
-ending-a-turn-takes-what-is-in-disorder
+rule/ending-a-turn-takes-what-is-in-disorder
 
 old state
   - root
@@ -2696,7 +2750,7 @@ new state
 as expected
 
 ==============================================================================
-metal-beyond-what-the-bins-hold-is-in-disorder
+rule/metal-beyond-what-the-bins-hold-is-in-disorder
 
 old state
   - root
@@ -2786,7 +2840,7 @@ new state
 as expected
 
 ==============================================================================
-metal-in-disorder-can-still-be-spent
+rule/metal-in-disorder-can-still-be-spent
 
 old state
   - root
@@ -2876,7 +2930,7 @@ new state
 as expected
 
 ==============================================================================
-nothing-moves-between-the-layers
+rule/nothing-moves-between-the-layers
 
 old state
   - root
@@ -2914,7 +2968,7 @@ refused
 as expected
 
 ==============================================================================
-one-extractors-readiness-is-not-anothers
+rule/one-extractors-readiness-is-not-anothers
 
 old state
   - root
@@ -2956,7 +3010,7 @@ refused
 as expected
 
 ==============================================================================
-one-refresh-reaches-a-scout-and-a-transport
+rule/one-refresh-reaches-a-scout-and-a-transport
 
 old state
   - root
@@ -3025,7 +3079,7 @@ new state
 as expected
 
 ==============================================================================
-one-scout-of-two-leaves-and-one-stays
+rule/one-scout-of-two-leaves-and-one-stays
 
 old state
   - root
@@ -3095,7 +3149,7 @@ new state
 as expected
 
 ==============================================================================
-one-territorys-food-does-not-feed-anothers-citizens
+rule/one-territorys-food-does-not-feed-anothers-citizens
 
 old state
   - root
@@ -3173,7 +3227,7 @@ new state
 as expected
 
 ==============================================================================
-refresh-lets-a-spent-extractor-work-again
+rule/refresh-lets-a-spent-extractor-work-again
 
 old state
   - root
@@ -3258,7 +3312,7 @@ new state
 as expected
 
 ==============================================================================
-refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one
+rule/refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one
 
 old state
   - root
@@ -3322,7 +3376,7 @@ new state
 as expected
 
 ==============================================================================
-the-hungry-perish-after-upkeep-and-not-before
+rule/the-hungry-perish-after-upkeep-and-not-before
 
 old state
   - root
@@ -3406,7 +3460,7 @@ new state
 as expected
 
 ==============================================================================
-the-same-free-space-admits-one-kind-and-refuses-another
+rule/the-same-free-space-admits-one-kind-and-refuses-another
 
 old state
   - root
@@ -3449,7 +3503,7 @@ refused
 as expected
 
 ==============================================================================
-the-same-territory-has-room-for-a-bin-of-another-resource
+rule/the-same-territory-has-room-for-a-bin-of-another-resource
 
 old state
   - root
@@ -3520,7 +3574,7 @@ new state
 as expected
 
 ==============================================================================
-the-scout-cannot-cross-where-there-is-no-border
+rule/the-scout-cannot-cross-where-there-is-no-border
 
 old state
   - root
@@ -3561,7 +3615,7 @@ refused
 as expected
 
 ==============================================================================
-the-scout-crosses-two-borders
+rule/the-scout-crosses-two-borders
 
 old state
   - root
@@ -3644,7 +3698,7 @@ new state
 as expected
 
 ==============================================================================
-the-scout-moves-to-an-adjacent-place
+rule/the-scout-moves-to-an-adjacent-place
 
 old state
   - root
@@ -3719,7 +3773,7 @@ new state
 as expected
 
 ==============================================================================
-the-sun-reaches-an-ark-once-a-turn
+rule/the-sun-reaches-an-ark-once-a-turn
 
 old state
   - root
@@ -3755,7 +3809,7 @@ refused
 as expected
 
 ==============================================================================
-three-citizens-and-ten-food-become-six
+rule/three-citizens-and-ten-food-become-six
 
 old state
   - root
@@ -3845,7 +3899,7 @@ new state
 as expected
 
 ==============================================================================
-toil-works-the-unworked-citizens-of-one-place
+rule/toil-works-the-unworked-citizens-of-one-place
 
 old state
   - root
@@ -3920,7 +3974,7 @@ new state
 as expected
 
 ==============================================================================
-two-extractors-in-one-territory-pull-the-density-twice
+rule/two-extractors-in-one-territory-pull-the-density-twice
 
 old state
   - root
@@ -4001,7 +4055,7 @@ new state
 as expected
 
 ==============================================================================
-unspent-labor-does-not-survive-the-turn
+rule/unspent-labor-does-not-survive-the-turn
 
 old state
   - root
@@ -4077,7 +4131,7 @@ new state
 as expected
 
 ==============================================================================
-upkeep-feeds-as-many-as-there-are-citizens
+rule/upkeep-feeds-as-many-as-there-are-citizens
 
 old state
   - root

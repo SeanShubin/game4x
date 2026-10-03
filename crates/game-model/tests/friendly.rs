@@ -132,10 +132,10 @@ fn every_file_survives_the_round_trip() {
     // **Only the prologue of the test.** Its sections are game rows, and mixing the two stores
     // gives one set of ids two meanings.
     script.extend(
-        rows("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
+        rows("data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x")
             .into_iter()
             .zip(friendly_notation::in_a_section(&rows(
-                "data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x",
+                "data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x",
             )))
             .filter(|(_, section)| !section)
             .map(|(row, _)| row),

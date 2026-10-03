@@ -62,11 +62,10 @@ fn is_compared(file: &str) -> bool {
         return true;
     }
     render::state_of(
-        std::fs::read_to_string(mine().join("../../reviewed/rule").join(file))
+        std::fs::read_to_string(mine().join("../../reviewed").join(file))
             .ok()
             .as_deref(),
-        &std::fs::read_to_string(mine().join("../../spec/tests/rule").join(file))
-            .unwrap_or_default(),
+        &std::fs::read_to_string(mine().join("../../spec/tests").join(file)).unwrap_or_default(),
     )
     .state
         == render::APPROVED

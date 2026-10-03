@@ -56,31 +56,14 @@ mod render;
 const FLOOR: usize = 40;
 
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed").join("rule")
+    mine().join("..").join("..").join("reviewed")
 }
 
 fn tests_at() -> PathBuf {
     mine().join("..").join("..").join("spec").join("tests")
 }
 
-fn names_in(at: &PathBuf) -> Vec<String> {
-    let Ok(entries) = std::fs::read_dir(at) else {
-        return Vec::new();
-    };
-    let mut found: Vec<String> = entries
-        .filter_map(|entry| entry.ok())
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
-        .filter_map(|path| {
-            path.file_name()
-                .and_then(|it| it.to_str())
-                .map(str::to_string)
-        })
-        .collect();
-    found.sort();
-    found
-}
-
+// **`render::under` lists a directory of suites** - `S-256`. This was `names_in`, one of five copies of *list the `.4x` files here*.
 /// A row with its values in a fixed order, so two spellings of one row compare equal.
 fn shape(row: &Row) -> (String, Vec<(String, String)>) {
     let mut values: Vec<(String, String)> = row
@@ -101,7 +84,7 @@ fn what_the_engine_runs_is_what_the_record_generates() {
     // every file in the directory, which was right while presence meant both *I read this* and
     // *this binds*; **a denied test is now a test the code is not bound by**, and running it is
     // the failure that looks exactly like nothing being wrong.
-    let approved: BTreeSet<String> = names_in(&records_at())
+    let approved: BTreeSet<String> = render::under(&records_at())
         .into_iter()
         .filter(|name| {
             let said = std::fs::read_to_string(records_at().join(name))
@@ -113,7 +96,7 @@ fn what_the_engine_runs_is_what_the_record_generates() {
         })
         .collect();
     let records = approved;
-    let drafts = names_in(&tests_at());
+    let drafts = render::under(&tests_at());
     let unread: Vec<String> = drafts
         .iter()
         .filter(|name| !records.contains(*name))
@@ -303,7 +286,7 @@ fn the_relations_written_in_no_declared_order_are_the_rule_names() {
     // Which of them any test actually writes a row of, and whether the schema declares it.
     let mut undeclared: BTreeMap<String, usize> = BTreeMap::new();
     let mut seen = 0;
-    for name in names_in(&records_at()) {
+    for name in render::under(&records_at()) {
         for row in rows(&format!("data/foundation/tests/{name}")) {
             seen += 1;
             if named.contains(&row.relation) && schema.relation(&row.relation).is_none() {
@@ -396,7 +379,7 @@ fn a_denied_record_is_read_as_denied_and_an_old_one_as_approved() {
     // a reader that errored on the records that exist would have failed the suite above, and this
     // says so rather than leaving it to that.
     let mut read = 0;
-    for name in names_in(&records_at()) {
+    for name in render::under(&records_at()) {
         let said = std::fs::read_to_string(records_at().join(&name)).expect("a record");
         render::verdict_of(&said).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
         read += 1;

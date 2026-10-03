@@ -212,7 +212,7 @@ fn a_test_sets_its_sections_apart() {
     let mut skipped = 0;
     let mut marks: std::collections::BTreeMap<String, [usize; 2]> =
         std::collections::BTreeMap::new();
-    for (which, directory) in ["data/foundation/tests", "../../spec/tests/rule"]
+    for (which, directory) in ["data/foundation/tests", "../../spec/tests"]
         .into_iter()
         .enumerate()
     {
@@ -264,12 +264,18 @@ fn a_test_sets_its_sections_apart() {
         // **A drifted test's two spellings are allowed to differ** - `P-611` clears its verdict, so
         // `spec/tests/` holds an unread edit and the foundation still holds what he approved.
         // Sean, 2026-10-02: *a test I have not reviewed does not fail the build.*
-        let bare = file.rsplit('/').next().unwrap_or(file).to_string();
+        // **The suite-qualified tail, not the last segment** - `S-256`. `rsplit('/')` gave
+        // `x.4x` where `reviewed/` and `spec/tests/` both want `rule/x.4x`, so every lookup
+        // landed one directory too high and read nothing.
+        let bare = file
+            .strip_prefix("data/foundation/tests/")
+            .unwrap_or(file)
+            .to_string();
         let approved = render::state_of(
-            std::fs::read_to_string(mine().join("../../reviewed/rule").join(&bare))
+            std::fs::read_to_string(mine().join("../../reviewed").join(&bare))
                 .ok()
                 .as_deref(),
-            &std::fs::read_to_string(mine().join("../../spec/tests/rule").join(&bare))
+            &std::fs::read_to_string(mine().join("../../spec/tests").join(&bare))
                 .unwrap_or_default(),
         )
         .state
@@ -388,7 +394,7 @@ fn every_test_gets_from_its_given_to_its_then() {
 /// relations, find no differences, and report success in exactly the same words.
 #[test]
 fn the_report_says_which_relations_it_compared() {
-    let report = report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x");
+    let report = report_of("data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x");
 
     assert_eq!(
         report.compared,
@@ -429,7 +435,7 @@ fn the_report_reads_as_a_report() {
     assert_eq!(
         format!(
             "{}",
-            report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
+            report_of("data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
            compared  adjacency, ark, bin, capacity, citizen, consumes, deposit, energy, extractor, food, labor, metal, pioneer, place, planet, provides, scout, terrain, territory, transport, yard\n  \
@@ -449,7 +455,8 @@ fn the_report_reads_as_a_report() {
 fn a_state_that_is_not_expected_is_reported_as_both_rows() {
     // **The script is handed in, not read through `Files`** - the sections are in it, so the
     // poison is a row rather than a file. The last scout is the `then` one.
-    let mut script = script_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x");
+    let mut script =
+        script_of("data/foundation/tests/rule/the-scout-moves-to-an-adjacent-place.4x");
     let at = script
         .iter()
         .rposition(|row| row.relation == "scout")

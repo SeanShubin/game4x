@@ -31,6 +31,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-256** - `b53fc54` S-256: the suite is part of a test's name, and the interface test is visible · still open in `docs/notes/proposals.md`
 - **S-255** - `35dd1f0` S-255: the issue-checkbox route is removed, and the dead trigger with it · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
@@ -83,7 +84,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-225** - A lint failure published a site with no reports, and my own comment said it could not · `crates/outbox.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (67)
+### To spec (68)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -95,6 +96,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-214** - Three states, and the check that would have caught the fourth · `crates/outbox.md`
 - **C-215** - Convert is a button, checks every record before writing any, and says to commit · `crates/outbox.md`
+- **C-234** - The suite is part of a test's name, and the interface test is visible · `crates/outbox.md`
 - **C-233** - `checks` installed two of four packages, and both lanes' answers read the wrong population · `crates/outbox.md`
 - **C-232** - The deploy carries the last bundle, so a test he pushes publishes without the game rebuilding · `crates/outbox.md`
 - **C-231** - The issue route is removed, and `P-615`'s two paragraphs cannot both hold by a paths filter · `crates/outbox.md`

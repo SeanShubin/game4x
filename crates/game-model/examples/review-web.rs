@@ -403,9 +403,16 @@ fn answer(
                         Ok(said) => said,
                         Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     };
-                    let into = report::records_at();
-                    let _ = std::fs::create_dir_all(&into);
-                    match std::fs::write(into.join(format!("{name}.4x")), said) {
+                    // **The suite's directory, not `reviewed/`** - `S-256`. A name carries its
+                    // suite now, so a record lands at `reviewed/<suite>/<name>.4x` and the
+                    // directory above it may not exist: approving the first interface test
+                    // creates `reviewed/interface/`. **Creating `reviewed/` alone would have
+                    // failed the write** with the page saying only *not written*.
+                    let at = report::records_at().join(format!("{name}.4x"));
+                    if let Some(parent) = at.parent() {
+                        let _ = std::fs::create_dir_all(parent);
+                    }
+                    match std::fs::write(&at, said) {
                         Ok(()) => ok(PLAIN, verdict.to_string()),
                         Err(why) => ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     }
@@ -568,8 +575,16 @@ fn field(body: &str, name: &str) -> Option<String> {
 /// **Rebuilt from its own lines rather than appended to.** A second note about one test belongs in
 /// that test's section, and a file that is also edited by hand cannot be written to blind.
 fn file(name: &str, note: &str) {
+    // **`reviewed/asked.md`, above the suites rather than inside one** - `S-256`. It was
+    // `reviewed/rule/asked.md`, because `records_at()` was that directory; **one file holds notes
+    // for every test**, so the suites are the wrong level for it. Nothing is moved: no note has
+    // been filed, so this is where the first one lands.
+    //
+    // **The reader agrees by construction** - `report::asked` joins the same name onto the same
+    // helper, which is the one thing the specification lane asked be true of whichever path I
+    // picked.
     let at = report::records_at().join("asked.md");
-    let _ = std::fs::create_dir_all(mine().join("reviewed/rule"));
+    let _ = std::fs::create_dir_all(report::records_at());
     let text = std::fs::read_to_string(&at).unwrap_or_else(|_| HEAD.to_string());
     let mut lines: Vec<String> = text.lines().map(str::to_string).collect();
     let heading = format!("## {name}");

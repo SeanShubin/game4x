@@ -643,14 +643,11 @@ pub fn write_all() -> (usize, usize) {
 
     // -- The tests Sean has read ------------------------------------------------------------
     let mut tests = Vec::new();
-    for name in named_files("spec/tests/rule") {
+    for name in render::under(&root().join("spec/tests")) {
         let stem = name.trim_end_matches(".4x");
         let record = root().join("reviewed/rule").join(&name);
         let mut beside = vec![
-            (
-                "as text".to_string(),
-                up("", &format!("spec/tests/rule/{name}")),
-            ),
+            ("as text".to_string(), up("", &format!("spec/tests/{name}"))),
             (
                 "foundation form".to_string(),
                 rendered(&format!("reports/foundation/{name}")),
@@ -674,11 +671,11 @@ pub fn write_all() -> (usize, usize) {
             beside.push(("not read yet".to_string(), "tests.html".to_string()));
         }
         tests.push(Entry {
-            at: rendered(&format!("spec/tests/rule/{name}")),
+            at: rendered(&format!("spec/tests/{name}")),
             said: format!(
                 "{} - {}",
                 stem,
-                title_of(&root().join("spec/tests/rule").join(&name))
+                title_of(&root().join("spec/tests").join(&name))
             ),
             beside,
         });

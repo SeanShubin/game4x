@@ -33,32 +33,26 @@
 
 use std::path::PathBuf;
 
+// **For `under`, which lists a directory of suites** - `S-256`.
+#[path = "render.rs"]
+#[allow(dead_code)]
+mod render;
+
 /// Where the approved tests live, and where the record of reading them does.
 ///
 /// **`P-532`, 2026-09-21**: both left this prototype for the repository root. Spelled out here
 /// rather than borrowed from `report`, because this example shares no code with it and a
 /// `#[path]` include to reach two functions would be the larger coupling.
 fn tests_at() -> PathBuf {
-    mine()
-        .join("..")
-        .join("..")
-        .join("spec")
-        .join("tests")
-        .join(SUITE)
+    mine().join("..").join("..").join("spec").join("tests")
 }
 
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed").join(SUITE)
+    mine().join("..").join("..").join("reviewed")
 }
 
-/// Which suite of `spec/tests/` this reads - `spec/tests/` split into `rule/` and `interface/` on
-/// 2026-10-01.
-///
-/// **Six files spell these two paths twenty times between them**, and `report.rs`'s own comment
-/// says they are *named once rather than spelled out ten times*. **That was a claim rather than a
-/// fact** and the split hit all six - which is why this constant is a stopgap and `C-203` asks for
-/// one source.
-const SUITE: &str = "rule";
+// **`C-203` asked for one source and `render::under` is it** - `S-256`. The comment here described
+// a constant naming the suite and called itself a stopgap; the suite is part of a test's name now.
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -66,14 +60,8 @@ fn mine() -> PathBuf {
 
 /// Every test, by stem, read rather than listed.
 fn every_test() -> Vec<String> {
-    let mut found: Vec<String> = std::fs::read_dir(tests_at())
-        .expect("spec/tests")
-        .filter_map(|it| it.ok())
-        .filter_map(|it| it.file_name().to_str().map(str::to_string))
-        .filter_map(|name| name.strip_suffix(".4x").map(str::to_string))
-        .collect();
-    found.sort();
-    found
+    // **By suite** - `S-256`. `tests_at()` is `spec/tests` now and a name carries its suite.
+    render::under(&tests_at())
 }
 
 fn main() {

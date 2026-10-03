@@ -48,12 +48,7 @@ fn mine() -> PathBuf {
 /// **Named once rather than spelled out ten times**, which is what the move cost when they were
 /// spelled out: ten files, four of them tests, and nothing to change in one place.
 pub fn tests_at() -> PathBuf {
-    mine()
-        .join("..")
-        .join("..")
-        .join("spec")
-        .join("tests")
-        .join(SUITE)
+    mine().join("..").join("..").join("spec").join("tests")
 }
 
 /// Which suite of `spec/tests/` this engine runs.
@@ -66,7 +61,11 @@ pub fn tests_at() -> PathBuf {
 /// **Sean, on what made the move cheap**: *it was always the case that my approval was about what
 /// the tests said, not where the tests were.* So moving a record is not creating or deleting one,
 /// which `CLAUDE.md` now says.
-pub const SUITE: &str = "rule";
+// **The suite is part of a test's name, not of the directory** - `S-256`. `SUITE` was `"rule"`
+// and `tests_at()` joined it, so everything walked the one subdirectory and an interface test was
+// invisible. `render::SUITES` names both; `render::under` qualifies a name with its suite.
+#[allow(unused_imports)]
+pub use render::SUITES;
 
 /// Where the form the engine actually runs lives, generated from `reviewed/`.
 ///
@@ -82,7 +81,7 @@ pub fn foundation_tests_at() -> PathBuf {
 /// **No instance writes it** - `CLAUDE.md`. The review application does, acting as him, and that
 /// application is this prototype's.
 pub fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed").join(SUITE)
+    mine().join("..").join("..").join("reviewed")
 }
 
 fn text(at: &str) -> String {
@@ -118,14 +117,7 @@ impl Files for Directory {
 /// at once and every one already had a foundation form. `ce755d39` is the first genuinely new
 /// test since, and it is what found this.
 pub fn every_test() -> Vec<String> {
-    let mut found: Vec<String> = std::fs::read_dir(tests_at())
-        .expect("spec/tests")
-        .filter_map(|it| it.ok())
-        .filter_map(|it| it.file_name().to_str().map(str::to_string))
-        .filter(|name| name.ends_with(".4x"))
-        .collect();
-    found.sort();
-    found
+    render::under(&tests_at())
 }
 
 /// What converting a test's source needs: the two name tables and the schema that folds it.
@@ -310,18 +302,11 @@ fn orphaned() -> Vec<String> {
         .iter()
         .map(|file| (file.trim_end_matches(".4x").to_string(), ()))
         .collect();
-    let Ok(entries) = std::fs::read_dir(records_at()) else {
-        return Vec::new();
-    };
-    let mut found: Vec<String> = entries
-        .filter_map(|it| it.ok())
-        .map(|it| it.path())
-        .filter(|path| path.extension().and_then(|it| it.to_str()) == Some("4x"))
-        .filter_map(|path| {
-            path.file_stem()
-                .and_then(|it| it.to_str())
-                .map(str::to_string)
-        })
+    // **Walked by suite** - `S-256`. This read `reviewed/` flat, which was right while that
+    // directory was `reviewed/rule/` and is a directory of suites now.
+    let mut found: Vec<String> = render::under(&records_at())
+        .into_iter()
+        .map(|name| name.trim_end_matches(".4x").to_string())
         .filter(|stem| !tests.contains_key(stem))
         .collect();
     found.sort();
@@ -1053,7 +1038,7 @@ not as expected
                 " · not read yet, so there is no foundation form".to_string()
             };
             format!(
-                "<p class=\"raw\">on disk: <a href=\"/spec/tests/rule/{stem}.4x\">spec/tests/rule/{stem}.4x</a>{foundation}</p>\n"
+                "<p class=\"raw\">on disk: <a href=\"/spec/tests/{stem}.4x\">spec/tests/{stem}.4x</a>{foundation}</p>\n"
             )
         } else {
             // **A `.txt` twin, because a published `.4x` is a download.** Measured in the
@@ -1062,7 +1047,7 @@ not as expected
             // written at deploy and committed nowhere, so **these two links resolve on the site
             // and not in a clone** - which the note under the tally says out loud.
             format!(
-                "<p class=\"raw\">on disk: <a href=\"spec/tests/rule/{stem}.4x.txt\">spec/tests/rule/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
+                "<p class=\"raw\">on disk: <a href=\"spec/tests/{stem}.4x.txt\">spec/tests/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
             )
         };
         let said = if why.is_empty() {
@@ -1383,7 +1368,10 @@ const WRITER: &str = r#"
         try {
           const body = atob(card.dataset.record);
           await put(
-            `reviewed/rule/${name}.4x`,
+            // **The name carries its suite** - `S-256`. This said `reviewed/rule/`, which was right
+            // while that was the only one; a card's `data-test` is `rule/x` or `interface/y` now,
+            // so the path follows it rather than naming a suite.
+            `reviewed/${name}.4x`,
             encode(`{verdict state:${state}}\n${body}`),
             `${state}: ${name}`,
           );

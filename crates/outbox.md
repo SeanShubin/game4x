@@ -222,6 +222,83 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-234 - The suite is part of a test's name, and the interface test is visible
+
+**to** spec · **status** open · **raised** 2026-10-03 · **source** `S-256`, `P-617` · **cites** `S-256`, `P-617`, `C-203`
+
+**derived from** every path naming a suite, found by compiling against the change rather than by grepping for it
+
+```
+64 tests, 63 as expected, 1 red, 63 reviewed, 1 to read
+data-test="interface/the-starting-menu-offers-new-game-and-exit"   never reviewed
+```
+
+**Red and unread, which `P-615` makes a notice** - `{saves}`, `{open-menu}`, `{item}` and
+`{attention}` are in no schema, and the specification arriving before the code is the normal
+direction here.
+
+## The shape, which is one idea rather than ninety edits
+
+**The suite moved out of the path and into the name.** `tests_at()` was `spec/tests/rule` and
+`records_at()` was `reviewed/rule`; both are the parent now, and a name is `rule/x.4x`.
+
+**So `tests_at().join(name)` is the same path it always was**, which is why the ninety call sites
+are untouched. **What had to change is every place that enumerated a directory or spelled a suite.**
+
+## `C-203` asked for one source and this is it
+
+**There were six copies of *list the `.4x` files here***: `names_in` twice, `stems`, `every_test`
+twice, and one in `tests/common/`. **Five are now `render::under`** - fourth time an argument has
+moved something into that module, after the canonical column order, `folded_record` and the record's
+state.
+
+**The sixth stays a copy and says so.** `tests/common/` cannot borrow that module: a test including
+both would hold it twice and the types would not match.
+
+**And two files carried a comment calling the suite constant a stopgap and naming `C-203`.** Both
+are closed out rather than deleted silently - **the comment was right about itself.**
+
+## Seven places that spelled a suite, and the gate found all seven
+
+**Not one was found by reading.** Each appeared as a failure, and three of them as a *plausible*
+one:
+
+```
+files()            0 in both spellings against 64 in one
+friendly_at        spec/tests/rule/rule/...
+common::every_test no tests, so passing means nothing
+mutation.rs        no tests, so mutating proves nothing
+mutation.rs        `tests/rule/a-bin-...` names the test `a-bin-...`   <- said the test was misnamed
+first_test.rs      63 of 63 file(s) were in one spelling only
+generated.rs       reviewed/rule/rule/...
+```
+
+**The fifth is the one worth keeping**: it reported a *test* as wrong when the reader was wrong, and
+it is the only one whose message pointed away from the cause. **The floors are what turned the other
+two into named failures rather than vacuous passes.**
+
+## The question `S-256` left open, answered
+
+**`reviewed/` mirrors `spec/tests/`.** A record sits at the same path under `reviewed/` as its test
+does under `spec/tests/`, so `records_at().join(name)` is right for a name that carries its suite -
+**and the page's write path and the drift check's read path are one expression rather than two that
+agree.**
+
+**`the_suites_on_disk_are_the_ones_that_are_stated`** compares the directories against
+`render::SUITES`, and against the prose in `spec/tests/README.md`. Discovery says what is there and
+nothing about what ought to be: **a suite appearing is a decision and a suite vanishing is not.**
+
+**And `reviewed/asked.md` moved up a level** - it was `reviewed/rule/asked.md` because
+`records_at()` was that directory, and **one file holds notes for every test.** Nothing is moved in
+fact: no note has been filed.
+
+## What else moved, and why it is safe
+
+**63 generated forms into `tests/rule/`, and their 126 report twins.** Generated in full, nobody
+edits them, and the suites now mirror each other all the way down - **which removes the collision a
+flat directory had**: two suites holding one name wanted one file.
+
+
 ### C-233 - `checks` installed two of four packages, and both lanes' answers read the wrong population
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** the run log, via the specification lane · **cites** `S-251`, `C-232`

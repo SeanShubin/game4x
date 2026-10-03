@@ -36,7 +36,7 @@
 //! `cargo run --example render`
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use friendly_notation as friendly;
 
@@ -85,18 +85,14 @@ pub fn files() -> Vec<(String, bool)> {
     // `every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read`'s. **This function
     // converts and builds name tables**; which files ought to exist is three other checks'
     // question and not one it can answer by falling over.
-    let named = |at: &str| -> BTreeSet<String> {
-        std::fs::read_dir(mine().join(at))
-            .unwrap_or_else(|why| panic!("{at}: {why}"))
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter(|name| name.ends_with(".4x"))
-            .collect()
-    };
-    // **`spec/tests/rule`, since the split on 2026-10-01.** The engine runs the rule suite and
-    // `data/foundation/tests` is its rendering, so the two sides compared here are that one pair -
-    // an interface test has no foundation form and is not the engine's to render.
-    let source = named("../../spec/tests/rule");
+    let named = |at: &str| -> BTreeSet<String> { under(&mine().join(at)).into_iter().collect() };
+    // **Both suites, walked by `under`** - `S-256`. This read `spec/tests/rule` flat and compared
+    // it against a flat `data/foundation/tests`, which was right while there was one suite.
+    //
+    // **The names are qualified on both sides now**, so the intersection still compares a test
+    // against its own rendering - and a test in a suite nothing has generated for appears in
+    // `source` and not in `rendered`, which is the state an unread interface test is in.
+    let source = named("../../spec/tests");
     let rendered = named("data/foundation/tests");
     let mut tests: Vec<String> = source.intersection(&rendered).cloned().collect();
     assert!(
@@ -381,6 +377,56 @@ pub fn drift(read: Option<&str>, now: &str) -> (&'static str, Vec<(&'static str,
     ("drifted", said)
 }
 
+/// The suites `spec/tests/` holds, and `reviewed/` mirrors.
+///
+/// **`spec/tests/README.md` names the two and what each is for**, so this is stated rather than
+/// invented - `P-617`, `S-256`.
+pub const SUITES: [&str; 2] = ["rule", "interface"];
+
+/// Every `.4x` under a directory of suites, as `suite/name.4x`.
+///
+/// **The suite moved out of the path and into the name** - `S-256`. `tests_at()` was
+/// `spec/tests/rule` and `records_at()` was `reviewed/rule`, so **everything walked the one
+/// subdirectory by name** and an interface test on disk was invisible: 63 tests on the page, and
+/// the sixty-fourth in a directory nothing read.
+///
+/// **Joining a qualified name onto the parent gives the same path it always did**, which is why
+/// this is one change rather than ninety: `tests_at().join("rule/x.4x")` is what
+/// `tests_at().join("x.4x")` used to be.
+///
+/// # One definition rather than five
+///
+/// **This was `names_in` in `foundation.rs`, `names_in` in `tests/generated.rs`, `stems` in
+/// `tests/reviewed.rs`, and `every_test` in both `report.rs` and `review.rs`** - five copies of
+/// *list the `.4x` files here*, which is what made adding a suite five edits. **Fourth time this
+/// argument has moved something into this module**, after the canonical column order,
+/// `folded_record` and the record's state.
+///
+/// **A file sitting directly in `at` keeps its bare name**, because `regression/` and the
+/// foundation's own `tests/` are flat and this is used on them too.
+pub fn under(at: &Path) -> Vec<String> {
+    let mut found: Vec<String> = Vec::new();
+    let Ok(entries) = std::fs::read_dir(at) else {
+        return found;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let name = entry.file_name().to_string_lossy().to_string();
+        if path.is_dir() {
+            for inside in std::fs::read_dir(&path).into_iter().flatten().flatten() {
+                let leaf = inside.file_name().to_string_lossy().to_string();
+                if leaf.ends_with(".4x") {
+                    found.push(format!("{name}/{leaf}"));
+                }
+            }
+        } else if name.ends_with(".4x") {
+            found.push(name);
+        }
+    }
+    found.sort();
+    found
+}
+
 /// A record's rows, folded - the one way to read a record's behaviour.
 ///
 /// **Four places folded a record and two of them folded the verdict row too**, so the foundation
@@ -573,7 +619,10 @@ pub fn friendly_at(file: &str) -> String {
     match file {
         "schema.4x" | "rules.4x" => format!("../../spec/data/{file}"),
         _ => match file.strip_prefix("tests/") {
-            Some(name) => format!("../../spec/tests/rule/{name}"),
+            // **The name carries its suite** - `S-256`. This joined `rule/`, which was right
+            // while there was one suite and gives `spec/tests/rule/rule/...` for a qualified
+            // name.
+            Some(name) => format!("../../spec/tests/{name}"),
             None => format!("data/friendly/{file}"),
         },
     }

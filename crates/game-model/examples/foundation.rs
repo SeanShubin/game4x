@@ -53,14 +53,10 @@ mod render;
 /// two opinions about when a run is vacuous, and the one that is lower is the one that decides.
 const FLOOR: usize = 40;
 
-/// Which suite of `spec/tests/` this reads - `spec/tests/` split into `rule/` and `interface/` on
-/// 2026-10-01.
-///
-/// **Six files spell these two paths twenty times between them**, and `report.rs`'s own comment
-/// says they are *named once rather than spelled out ten times*. **That was a claim rather than a
-/// fact** and the split hit all six - which is why this constant is a stopgap and `C-203` asks for
-/// one source.
-const SUITE: &str = "rule";
+// **`C-203` asked for one source and `render::under` is it** - `S-256`. The comment here described
+// a constant naming the suite, called itself a stopgap, and was right: the suite is part of a
+// test's name now, and the one function that lists a directory of suites is where the knowledge
+// sits. **Six files spelled these paths twenty times; none of them spells a suite.**
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -68,7 +64,7 @@ fn mine() -> PathBuf {
 
 /// The record of what Sean has read, which is what rule 3 makes the source.
 fn records_at() -> PathBuf {
-    mine().join("..").join("..").join("reviewed").join(SUITE)
+    mine().join("..").join("..").join("reviewed")
 }
 
 /// The working copies, read **only** to say which of them are waiting on him.
@@ -76,12 +72,7 @@ fn records_at() -> PathBuf {
 /// **Nothing is generated from here.** This directory is what a test says; `reviewed/` is what he
 /// has read, and rule 3 says the rendering follows the second.
 fn tests_at() -> PathBuf {
-    mine()
-        .join("..")
-        .join("..")
-        .join("spec")
-        .join("tests")
-        .join(SUITE)
+    mine().join("..").join("..").join("spec").join("tests")
 }
 
 /// Where the generated foundation form goes.
@@ -101,25 +92,8 @@ fn reports_at() -> PathBuf {
         .join("foundation")
 }
 
-/// Every `.4x` file in a directory, by name, sorted.
-fn names_in(at: &PathBuf) -> Vec<String> {
-    let Ok(entries) = std::fs::read_dir(at) else {
-        return Vec::new();
-    };
-    let mut found: Vec<String> = entries
-        .filter_map(|entry| entry.ok())
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
-        .filter_map(|path| {
-            path.file_name()
-                .and_then(|it| it.to_str())
-                .map(str::to_string)
-        })
-        .collect();
-    found.sort();
-    found
-}
-
+// **`render::under` lists a directory of suites** - `S-256`. This was `names_in`, one of five
+// copies of *list the `.4x` files here*, which is what made adding a suite five edits.
 fn rows_of(text: &str, at: &str) -> Vec<Row> {
     read(text).unwrap_or_else(|why| panic!("{at}: {why}"))
 }
@@ -170,7 +144,7 @@ fn main() {
     // **The failure this prevents looks exactly like nothing being wrong**: a denied test in the
     // suite is a red the code cannot fix, or worse a green that records agreement with something
     // he rejected.
-    let every_record: BTreeSet<String> = names_in(&records_at()).into_iter().collect();
+    let every_record: BTreeSet<String> = render::under(&records_at()).into_iter().collect();
     let mut denied: Vec<String> = Vec::new();
     let mut records: BTreeSet<String> = BTreeSet::new();
     for name in &every_record {
@@ -190,7 +164,7 @@ fn main() {
             denied.len()
         );
     }
-    let drafts = names_in(&tests_at());
+    let drafts = render::under(&tests_at());
     let unread: Vec<String> = drafts
         .iter()
         .filter(|name| !records.contains(*name))
@@ -342,16 +316,16 @@ fn main() {
     //
     // **`every_reading_reaches_the_suite_...` keeps its teeth**, because the case it guards is a
     // file arriving here by some other hand than this one.
+    // **Walked by suite** - `S-256`. A record's name carries its suite, so a generated form sits
+    // at `tests/<suite>/<name>.4x` and this directory mirrors `reviewed/`. **It was flat**, which
+    // made a name in two suites collide on one file and made every qualified record read as
+    // missing.
     std::fs::create_dir_all(suite_at()).expect("data/foundation/tests");
     let mut dropped: Vec<String> = Vec::new();
-    for entry in std::fs::read_dir(suite_at()).expect("data/foundation/tests") {
-        let path = entry.expect("an entry").path();
-        let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
-            continue;
-        };
-        if name.ends_with(".4x") && !records.iter().any(|it| it == name) {
-            let name = name.to_string();
-            std::fs::remove_file(&path).unwrap_or_else(|why| panic!("{name}: {why}"));
+    for name in render::under(&suite_at()) {
+        if !records.iter().any(|it| *it == name) {
+            std::fs::remove_file(suite_at().join(&name))
+                .unwrap_or_else(|why| panic!("{name}: {why}"));
             dropped.push(name);
         }
     }
@@ -398,7 +372,13 @@ fn main() {
              \n{}\n",
             lines.join("\n")
         );
-        std::fs::write(out.join(name), page).unwrap_or_else(|why| panic!("writing {name}: {why}"));
+        // **The suite's directory under `reports/` too** - `S-256`. A name carries its suite, so
+        // this twin mirrors the suites the same way the generated form and the record do.
+        let at = out.join(name);
+        if let Some(parent) = at.parent() {
+            std::fs::create_dir_all(parent).unwrap_or_else(|why| panic!("{name}: {why}"));
+        }
+        std::fs::write(&at, page).unwrap_or_else(|why| panic!("writing {name}: {why}"));
         written += 1;
 
         // **And the copy the suite runs, which nothing wrote until now.**
@@ -449,7 +429,13 @@ fn main() {
         // **So a file whose rows already match is left alone**, and the cost is that a stale
         // comment in one is never refreshed. That is the right way round: the rows are the
         // specification and the prose is a reader's.
+        // **The suite's directory, which may not exist** - `S-256`. The first interface test to
+        // be approved creates `tests/interface/`, the same way its record creates
+        // `reviewed/interface/`.
         let to = suite_at().join(name);
+        if let Some(parent) = to.parent() {
+            std::fs::create_dir_all(parent).unwrap_or_else(|why| panic!("{name}: {why}"));
+        }
         let before = std::fs::read_to_string(&to).unwrap_or_default();
         let same_rows = read(&before).map(|rows| rows == to_write).unwrap_or(false);
         if !same_rows {

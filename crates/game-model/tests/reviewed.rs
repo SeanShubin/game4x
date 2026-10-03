@@ -44,22 +44,21 @@ mod report;
 /// and the records in `reviewed/`, at the repository root, where they are the specification and
 /// the record of Sean having read it. **What this checks did not change**; only where it looks,
 /// and it now asks `report` where rather than spelling it out a third time.
+/// Every test or record under a directory of suites, as `suite/name` without the extension.
+///
+/// **A thin wrapper on `render::under`, which is the one enumeration** - `S-256`. This held the
+/// fifth copy of *list the `.4x` files here* and read the directory flat, so `reviewed/interface/`
+/// and `spec/tests/interface/` were invisible to every comparison below.
+///
+/// **The contract is unchanged**: a set, and stems rather than names - so every caller is
+/// untouched and the stems are qualified now, which is what makes
+/// `records_at().join(format!("{stem}.4x"))` still land on the right file.
 fn stems(at: &Path) -> BTreeSet<String> {
-    let Ok(entries) = std::fs::read_dir(at) else {
-        return BTreeSet::new();
-    };
-    entries
-        .filter_map(|it| it.ok())
-        .map(|it| it.path())
-        .filter(|path| path.extension().and_then(|it| it.to_str()) == Some("4x"))
-        .filter_map(|path| {
-            path.file_stem()
-                .and_then(|it| it.to_str())
-                .map(str::to_string)
-        })
+    report::render::under(at)
+        .into_iter()
+        .map(|name| name.trim_end_matches(".4x").to_string())
         .collect()
 }
-
 #[test]
 fn every_record_of_a_reading_names_a_test_that_is_there() {
     let tests = stems(&report::tests_at());
@@ -605,6 +604,63 @@ fn every_state_the_code_can_reach_is_one_the_rule_names() {
         assert!(
             report::STATES.contains(one),
             "the page shows `{one}`, which rule 3 does not name"
+        );
+    }
+}
+
+/// **The suites on disk are the two `spec/tests/README.md` names, and `reviewed/` mirrors them.**
+///
+/// `P-617` settled the interface test's form and `S-256` made everything walk both suites. **The
+/// list is stated in two places - `spec/tests/README.md` in prose and `render::SUITES` in code -
+/// and this is what stops them drifting.**
+///
+/// # Why a list at all, when `render::under` discovers the directories
+///
+/// **Discovery is what makes a test visible and says nothing about what ought to be there.** A
+/// third suite appearing is a thing somebody decided; a suite disappearing is a thing nobody
+/// decided. **`under` would report either without comment**, which is the shape of a check that
+/// pins the present state: it reads the outcome where the question is the rule.
+///
+/// **And `reviewed/` mirroring `spec/tests/` is the answer to the question `S-256` left open.** A
+/// record sits at the same path under `reviewed/` as its test does under `spec/tests/`, which is
+/// what makes `records_at().join(name)` right for a name that carries its suite - **the page's
+/// write path and the drift check's read path are then one expression rather than two that agree.**
+#[test]
+fn the_suites_on_disk_are_the_ones_that_are_stated() {
+    let at = report::tests_at();
+    let mut found: Vec<String> = std::fs::read_dir(&at)
+        .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
+        .flatten()
+        .filter(|it| it.path().is_dir())
+        .map(|it| it.file_name().to_string_lossy().to_string())
+        .collect();
+    found.sort();
+    let mut wanted: Vec<String> = report::SUITES.iter().map(|it| it.to_string()).collect();
+    wanted.sort();
+    assert_eq!(
+        found, wanted,
+        "the suites under spec/tests/ and the ones render::SUITES names have drifted"
+    );
+
+    // **And the prose says the same**, which is where the list is for a reader.
+    let said = std::fs::read_to_string(at.join("README.md")).expect("spec/tests/README.md");
+    for suite in report::SUITES {
+        assert!(
+            said.contains(suite),
+            "spec/tests/README.md does not name the `{suite}` suite"
+        );
+    }
+
+    // **`reviewed/` holds no suite that is not a test suite.** The other direction is allowed: a
+    // suite nobody has approved a test in has no directory, which is `interface/` today.
+    for suite in report::render::under(&report::records_at())
+        .iter()
+        .filter_map(|name| name.split('/').next().map(str::to_string))
+        .filter(|it| !it.ends_with(".4x"))
+    {
+        assert!(
+            report::SUITES.contains(&suite.as_str()),
+            "`reviewed/{suite}/` is not a suite of spec/tests/"
         );
     }
 }
