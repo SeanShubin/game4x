@@ -8,7 +8,9 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-618** - One link per category, each saying how much attention it needs · `decide/proposals.md`
 
 ## Answer a question
 
