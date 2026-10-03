@@ -8,9 +8,7 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Say *promote P-n*, or say what to change.
-
-- **P-617** - What a user interface test is written in · `decide/proposals.md`
+Nothing.
 
 ## Answer a question
 

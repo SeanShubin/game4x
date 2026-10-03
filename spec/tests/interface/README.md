@@ -10,11 +10,18 @@ second set and nothing is in it yet.
 menu items are displayed, whether each is active, and whether one has the user's attention. The
 first set is [`../rule/`](../rule/).
 
-**What they are written in is not settled.** The friendly form states game rows, and *displayed*,
-*active* and *has attention* are not game rows - so the form a test here takes is an open question
-and is recorded in [`docs/notes/spec-backlog.md`](../../../docs/notes/spec-backlog.md) rather than
-decided.
+**An interface test is written in the same form as a rule test.** Rows in, one command, rows out -
+and the `then` is the whole of what the interface shows, so **an item that is not in it is not
+displayed**, and how many items there are is asserted by the rows being all of them.
 
-**One thing already known about the shape.** *Has the user's attention* is a property of the
-interface naming at most one item, not a flag on each item - so a test that models it per item can
-assert two items hold it at once.
+**`active` is a column and `displayed` is not.** An item is displayed by being in the `then`, so a
+column saying so could hold only one value. An item that is shown and unusable says `active:0`.
+
+**Attention is one row naming at most one item**, rather than a column on each - `{attention
+of:new-game}`. *Has the user's attention* is a property of the interface, and a column would let
+two items hold it at once.
+
+**What this form cannot say is order.** The rows are a multiset, so no test can require *new game*
+above *exit*. **A known limitation rather than an oversight**, and what settles it arrives when a
+test needs it.
+

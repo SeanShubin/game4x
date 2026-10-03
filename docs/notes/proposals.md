@@ -12226,6 +12226,7 @@ work the release exists to order.
 | P-613, A failed run publishes, and the report root says what failed                                                          | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
 | P-614, The suspension of the deletion rule goes, and removing it tightens rather than loosens                                | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-10-02 |
 | P-615, Approving a test does not deploy the app                                                                              | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-03 |
+| P-617, What a user interface test is written in                                                                              | `spec/tests/interface/README.md` -> after *What goes here is a test about what the interface shows*                                                                                                      | 2026-10-03 |
 
 ## Forecast cleanups that were checked and not filed
 
