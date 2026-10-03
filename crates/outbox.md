@@ -222,6 +222,59 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-232 - The deploy carries the last bundle, so a test he pushes publishes without the game rebuilding
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `P-615` and his confirmation · **cites** `P-615`, `P-613`, `X-43`
+
+**derived from** the job graph as `yaml.safe_load` reads it
+
+```
+changes   no needs           says whether this push touched anything but the review surface
+gate      needs changes      runs only when it did. Uploads `bundle`, not the Pages artifact
+deploy    needs gate, always takes the newest bundle, copies the reports in, publishes
+```
+
+**So a push touching only `spec/tests/` or `reviewed/` skips the gate and publishes in seconds**,
+and the game is whatever last built - *I get what you mean about the game being one cycle behind,
+which I am fine with.*
+
+## Why a paths filter alone could not do it
+
+**A path filter lives on `on:`, so it skips the whole workflow and the deploy with it.** The
+question is asked in a job instead, and `gate` is gated on the answer.
+
+**The list is of what he reads, and the default is that it is the app.** An unlisted path runs the
+gate rather than skipping it - **a new crate is app code without anyone remembering to add it.**
+
+## One mechanism rather than a branch
+
+**`deploy` asks the API for the newest `bundle` and does not know which case it is in** - the gate
+skipped, or the gate ran and built one. The artifact list is newest first, so one call answers both.
+
+**And `if: success()` on the upload is the carry.** A build that failed uploads nothing, so the
+newest bundle is the previous run's: **the last game that built, beside the freshly committed
+reports.** That is better than `P-613` settled for and does not contradict it - that paragraph
+refused *nothing published* and accepted a broken game.
+
+## My own check found a gap in the restructure
+
+**`Deploy to GitHub Pages` had no `if: always()`**, so a failure in carrying the bundle or copying
+the reports would have skipped the publish - **`X-43` in the new shape.**
+`every_step_that_assembles_or_publishes_survives_a_failure` named the step the moment the assembly
+moved into that job.
+
+**And it then failed for a second reason worth recording**: its floor was `> 8`, calibrated for
+`gate`'s fourteen steps, and `deploy` has six. **A correct parse failed a number chosen for a
+different job** - the number moved with the subject and nothing said so. The population guard is
+what has teeth; the floor only says the text was read.
+
+## What `Say what this run did` now reports
+
+**The gate's result, not the deploy's.** `job.status` in that job is always `success` at that point,
+so the page would have said the build passed while it was red - **a sentence true of something
+adjacent to its subject**, which is the class, in a page whose whole job is to say what broke.
+
+
 ### C-231 - The issue route is removed, and `P-615`'s two paragraphs cannot both hold by a paths filter
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `S-255`, `P-615` · **cites** `S-255`, `C-194`, `P-615`, `P-613`

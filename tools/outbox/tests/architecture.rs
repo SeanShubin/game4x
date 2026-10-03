@@ -769,14 +769,32 @@ fn every_step_that_assembles_or_publishes_survives_a_failure() {
     let text = std::fs::read_to_string(root().join(".github/workflows/pipeline.yml"))
         .expect(".github/workflows/pipeline.yml");
 
-    // The `gate` job, up to the next job at the same indent.
-    let from = text.find("\n  gate:\n").expect("a gate job") + 1;
+    // **The `deploy` job, because that is where the site is assembled now** - `P-615`. It was
+    // `gate`, and the three assembling steps moved: `deploy` has to be able to publish when the
+    // gate did not run at all, so a push touching only the review surface still shows up.
+    let from = text
+        .find(
+            "
+  deploy:
+",
+        )
+        .expect("a deploy job")
+        + 1;
     let rest = &text[from..];
     let to = rest
-        .find("\n  checks:\n")
-        .or_else(|| rest.find("\n  sweep:\n"))
-        .or_else(|| rest.find("\n  deploy:\n"))
-        .expect("a job after gate");
+        .find(
+            "
+  full-tests:
+",
+        )
+        .or_else(|| {
+            rest.find(
+                "
+  native-build:
+",
+            )
+        })
+        .expect("a job after deploy");
     let job = &rest[..to];
 
     // Each step is a `- name:` or `- uses:` at the steps' indent, with whatever follows it: whether
@@ -808,9 +826,13 @@ fn every_step_that_assembles_or_publishes_survives_a_failure() {
         }
     }
 
+    // **A floor on the parse rather than on the job.** It was `> 8`, calibrated for `gate`'s
+    // fourteen steps, and `deploy` has six - so moving the assembly made a correct parse fail a
+    // number chosen for a different job. **The population guard below is what has teeth**; this
+    // only says the text was read at all.
     assert!(
-        steps.len() > 8,
-        "only {} step(s) read from the gate job, so this said almost nothing",
+        steps.len() >= 4,
+        "only {} step(s) read from the deploy job, so the parse found almost nothing",
         steps.len()
     );
 
