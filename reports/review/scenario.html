@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scenario cases</title>
+<style>
+:root { color-scheme: light dark }
+body {
+  font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 2rem auto; max-width: 62rem; padding: 0 1rem;
+}
+h1 { font-size: 1.3rem; margin: 0 0 .25rem }
+p { margin: .4rem 0 }
+.tally { font-size: 1rem }
+.note { opacity: .7; font-size: .85rem; margin-bottom: 1.5rem }
+/* **What the writer says is not a footnote** - `S-253`. The bar reporting a write sits at the
+   same weight as the tally, because the one thing it says is whether what he pressed landed. */
+.note.ok, .note.red { opacity: 1; font-size: 1rem; font-weight: bold }
+.ok { color: rgb(30 130 60) }
+.red { color: rgb(190 50 50) }
+@media (prefers-color-scheme: dark) {
+  .ok { color: rgb(110 200 140) }
+  .red { color: rgb(255 130 130) }
+}
+.test {
+  border: 1px solid rgba(127,127,127,.35);
+  border-left: 4px solid rgba(127,127,127,.5);
+  border-radius: .3rem; padding: .7rem .9rem; margin: .7rem 0;
+}
+.test.red { border-left-color: rgb(190 50 50) }
+.test.ok { border-left-color: rgb(30 130 60) }
+summary { cursor: pointer; font-weight: 600 }
+summary::marker { opacity: .5 }
+details[open] > summary { margin-bottom: .45rem }
+.name { font-weight: 600 }
+.badge {
+  font-size: .75rem; font-weight: 600; letter-spacing: .02em;
+  padding: .1rem .45rem; border-radius: .2rem; border: 1px solid currentColor;
+}
+.why { font-size: .9rem; margin: 0 0 .6rem }
+.raw { font-size: .8rem; opacity: .7; margin: 0 0 .5rem }
+pre {
+  margin: 0; overflow-x: auto; background: rgba(127,127,127,.08);
+  padding: .7rem .9rem; border-radius: .25rem;
+}
+pre > span { display: block; padding: 0 .3rem; border-left: 3px solid transparent }
+.said { opacity: .55 }
+.gap { height: .8em }
+.mark { font-weight: 700 }
+.same { opacity: .5 }
+.changed { border-left-color: rgba(90,130,220,.75) }
+.cell { background: rgba(90,130,220,.28); border-radius: .2rem; padding: 0 .15rem }
+.gone { border-left-color: rgba(140,140,140,.9) }
+.gone::after { content: " <- gone by then"; opacity: .55; font-size: .8em }
+.new { border-left-color: rgba(40,150,110,.9) }
+.new::after { content: " <- new in then"; opacity: .55; font-size: .8em }
+@media (prefers-color-scheme: dark) {
+  .cell { background: rgba(120,160,250,.3) }
+}
+.missing { background: rgba(200,40,40,.16); border-left-color: rgb(190 50 50) }
+.missing::after { content: " <- wanted, not got"; opacity: .7; font-size: .8em }
+.extra { background: rgba(210,130,0,.18); border-left-color: rgb(200 120 0) }
+.extra::after { content: " <- got, not wanted"; opacity: .7; font-size: .8em }
+.seen { color: rgb(70 110 160) }
+.unseen { color: rgb(170 100 0) }
+@media (prefers-color-scheme: dark) {
+  .seen { color: rgb(140 180 230) }
+  .unseen { color: rgb(230 180 90) }
+}
+.drift { background: rgba(120,120,200,.16); border-left-color: rgb(90 110 190) }
+.drift::after { opacity: .7; font-size: .8em }
+.drift.now::after { content: " <- not what you read" }
+.drift.was::after { content: " <- what you read" }
+.keys { font-size: .85rem; opacity: .8; margin: -1rem 0 1rem }
+.keys b { font-weight: 700; opacity: 1 }
+.flash { color: rgb(190 50 50); font-size: .9rem; margin-bottom: 1rem }
+.test.here { outline: 2px solid rgba(90,130,220,.8); outline-offset: 2px }
+.acts { float: right; font-weight: 400 }
+.acts button {
+  font: inherit; font-size: .75rem; cursor: pointer; margin-left: .3rem;
+  padding: .1rem .5rem; border-radius: .2rem; color: inherit;
+  border: 1px solid rgba(127,127,127,.5); background: rgba(127,127,127,.1);
+}
+.acts button:hover { background: rgba(127,127,127,.25) }
+.asked { margin: .2rem 0 .6rem; padding-left: 1.2rem; font-size: .9rem }
+.asked li, .noted { color: rgb(170 100 0) }
+@media (prefers-color-scheme: dark) { .asked li, .noted { color: rgb(230 180 90) } }
+.ask { margin: .3rem 0 .6rem }
+.ask input { font: inherit; font-size: .85rem; width: 100%; padding: .3rem .4rem;
+  border-radius: .2rem; border: 1px solid rgba(127,127,127,.5);
+  background: rgba(127,127,127,.08); color: inherit }
+.key { display: inline; padding: 0 .3rem; border-left: 3px solid }
+.key::after { content: "" }
+</style>
+</head>
+<body>
+<h1>scenario cases</h1>
+<p class="tally"><strong>36</strong> item(s) &middot; <span class="unseen"><strong>36</strong> waiting</span> &middot; <strong>672</strong> rows to read</p>
+<p class="note"><a href="index.html">Every category</a></p>
+<details class="suite" data-suite="scenario"><summary><b>scenario</b> &middot;              36 case(s) &middot; <span class="note">markable when served</span></summary>
+<ul class="cases">
+<li data-case="scenario/01/01-move"><a href="../../regression/scenario/01/01-move.4x"><code>01/01-move.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/01/02-gather"><a href="../../regression/scenario/01/02-gather.4x"><code>01/02-gather.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/01/03-deploy"><a href="../../regression/scenario/01/03-deploy.4x"><code>01/03-deploy.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/01/04-toil"><a href="../../regression/scenario/01/04-toil.4x"><code>01/04-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/01/05-work"><a href="../../regression/scenario/01/05-work.4x"><code>01/05-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/01/06-end-turn"><a href="../../regression/scenario/01/06-end-turn.4x"><code>01/06-end-turn.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/01-toil"><a href="../../regression/scenario/02/01-toil.4x"><code>02/01-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/02-work"><a href="../../regression/scenario/02/02-work.4x"><code>02/02-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/03-work"><a href="../../regression/scenario/02/03-work.4x"><code>02/03-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/04-build-pioneer"><a href="../../regression/scenario/02/04-build-pioneer.4x"><code>02/04-build-pioneer.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/05-move"><a href="../../regression/scenario/02/05-move.4x"><code>02/05-move.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/02/06-end-turn"><a href="../../regression/scenario/02/06-end-turn.4x"><code>02/06-end-turn.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/01-deploy"><a href="../../regression/scenario/03/01-deploy.4x"><code>03/01-deploy.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/02-toil"><a href="../../regression/scenario/03/02-toil.4x"><code>03/02-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/03-work"><a href="../../regression/scenario/03/03-work.4x"><code>03/03-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/04-toil"><a href="../../regression/scenario/03/04-toil.4x"><code>03/04-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/05-work"><a href="../../regression/scenario/03/05-work.4x"><code>03/05-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/03/06-end-turn"><a href="../../regression/scenario/03/06-end-turn.4x"><code>03/06-end-turn.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/01-toil"><a href="../../regression/scenario/04/01-toil.4x"><code>04/01-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/02-work"><a href="../../regression/scenario/04/02-work.4x"><code>04/02-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/03-work"><a href="../../regression/scenario/04/03-work.4x"><code>04/03-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/04-build-bin"><a href="../../regression/scenario/04/04-build-bin.4x"><code>04/04-build-bin.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/05-toil"><a href="../../regression/scenario/04/05-toil.4x"><code>04/05-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/06-work"><a href="../../regression/scenario/04/06-work.4x"><code>04/06-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/07-work"><a href="../../regression/scenario/04/07-work.4x"><code>04/07-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/04/08-end-turn"><a href="../../regression/scenario/04/08-end-turn.4x"><code>04/08-end-turn.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/01-toil"><a href="../../regression/scenario/05/01-toil.4x"><code>05/01-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/02-work"><a href="../../regression/scenario/05/02-work.4x"><code>05/02-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/03-toil"><a href="../../regression/scenario/05/03-toil.4x"><code>05/03-toil.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/04-work"><a href="../../regression/scenario/05/04-work.4x"><code>05/04-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/05-work"><a href="../../regression/scenario/05/05-work.4x"><code>05/05-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/06-build-extractor"><a href="../../regression/scenario/05/06-build-extractor.4x"><code>05/06-build-extractor.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/07-work"><a href="../../regression/scenario/05/07-work.4x"><code>05/07-work.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/08-build-yard"><a href="../../regression/scenario/05/08-build-yard.4x"><code>05/08-build-yard.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/09-launch"><a href="../../regression/scenario/05/09-launch.4x"><code>05/09-launch.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+<li data-case="scenario/05/10-end-turn"><a href="../../regression/scenario/05/10-end-turn.4x"><code>05/10-end-turn.4x</code></a> <button data-mark="approved">approve</button>                     <button data-mark="denied">deny</button></li>
+</ul></details>
+<script>
+// **The hosted page writes a verdict, and starts nothing** - `E-4`. Sean, 2026-10-01: *I can
+// drop the regenerate feature for now, does that make it simpler.* It does: a verdict is a file
+// write, so this needs `Contents: write` and never `Actions: write`.
+//
+// **The token is his and this page is him writing.** It is held in `localStorage` on this origin,
+// sent only as an `Authorization` header to `api.github.com`, and never put in a URL, a query
+// string, a log line or the DOM. **Nothing here reads it back out for display.**
+(() => {
+  const cards = [...document.querySelectorAll('details[data-test][data-record]')];
+  const cases = [...document.querySelectorAll('li[data-case] button[data-mark]')];
+  if (!cards.length && !cases.length) return;
+
+  // **Derived from where the page is, rather than written in.** A Pages URL says who owns it:
+  // `https://<owner>.github.io/<repo>/...`. So the page carries no repository name to go stale,
+  // and a copy served from anywhere else simply offers no writing.
+  const host = location.hostname.match(/^([^.]+)\.github\.io$/);
+  const repo = host && location.pathname.split('/').filter(Boolean)[0];
+  const owner = host && host[1];
+  const api = owner && repo ? `https://api.github.com/repos/${owner}/${repo}/contents` : null;
+
+  const KEY = 'game4x-token';
+  const bar = document.createElement('p');
+  bar.className = 'note';
+  document.querySelector('.tally').after(bar);
+
+  const held = () => {
+    try { return localStorage.getItem(KEY) || ''; } catch { return ''; }
+  };
+
+  // **A write that worked and a write that failed must not look alike** - `S-253`. Sean wrote a
+  // record from his phone, the bar said *is approved.* at `opacity: .7`, the card went on reading
+  // *never reviewed*, and he reported it as nothing having happened. **That is the one
+  // distinction this surface exists to make.**
+  const say = (what, how) => {
+    bar.textContent = what;
+    bar.className = how ? `note ${how}` : 'note';
+  };
+
+  const draw = () => {
+    if (!api) {
+      say('Reading only: this page writes just from its Pages URL, which says which repository to write to.');
+      return;
+    }
+    bar.textContent = '';
+    if (held()) {
+      const out = document.createElement('button');
+      out.textContent = 'forget token';
+      out.onclick = () => {
+        try { localStorage.removeItem(KEY); } catch {}
+        draw();
+      };
+      bar.append(`Writing to ${owner}/${repo} as you. `, out);
+      return;
+    }
+    const field = document.createElement('input');
+    field.type = 'password';
+    field.placeholder = 'fine-grained token, Contents: write';
+    field.autocomplete = 'off';
+    const save = document.createElement('button');
+    save.textContent = 'hold it';
+    save.onclick = () => {
+      if (!field.value) return;
+      try { localStorage.setItem(KEY, field.value); } catch {}
+      field.value = '';
+      draw();
+    };
+    bar.append('Reading only until you paste a token. It stays in this browser. ', field, ' ', save);
+  };
+  draw();
+
+  // **Read before writing, because the API needs the blob it is replacing.** A file that is not
+  // there has no sha and is created instead, which is what an unread test is.
+  const put = async (path, content, message) => {
+    const token = held();
+    if (!token || !api) throw new Error('no token');
+    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
+    let sha;
+    const found = await fetch(`${api}/${path}`, { headers });
+    if (found.ok) sha = (await found.json()).sha;
+    else if (found.status !== 404) throw new Error(`reading ${path}: ${found.status}`);
+    const sent = await fetch(`${api}/${path}`, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, content, sha }),
+    });
+    if (!sent.ok) throw new Error(`writing ${path}: ${sent.status}`);
+  };
+
+  const encode = (text) => btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+
+  // **The badge the page rendered, moved to what he just said.** One place, because a test's card
+  // and a case's row carry the same three words and would otherwise drift apart.
+  const WORD = { approved: 'reviewed', denied: 'denied' };
+  const CLASS = { approved: 'seen', denied: 'denied' };
+  const mark = (card, state) => {
+    const badge = card.querySelector('[data-mark]');
+    if (!badge) return;
+    badge.textContent = WORD[state] || state;
+    badge.className = `badge ${CLASS[state] || 'unseen'}`;
+    // **The colour beside it goes, because it was about a verdict that is no longer the latest
+    // one.** *You approved an earlier version* is true until he says something newer.
+    card.querySelector('[data-earlier]')?.remove();
+  };
+  const said = (row, state) => {
+    row.querySelector('.verdict')?.remove();
+    const badge = document.createElement('span');
+    badge.className = `verdict ${state === 'denied' ? 'red' : 'ok'}`;
+    badge.textContent = ` ${state}`;
+    row.append(badge);
+  };
+
+  // **A test's record is the verdict line and the body the page carries.** The body is identical
+  // for both verdicts, which is why one copy travels.
+  for (const card of cards) {
+    const name = card.dataset.test;
+    for (const [state, label] of [['approved', 'approve'], ['denied', 'deny']]) {
+      const press = document.createElement('button');
+      press.textContent = label;
+      press.onclick = async () => {
+        press.disabled = true;
+        try {
+          const body = atob(card.dataset.record);
+          await put(
+            // **The name carries its suite** - `S-256`. This said `reviewed/rule/`, which was right
+            // while that was the only one; a card's `data-test` is `rule/x` or `interface/y` now,
+            // so the path follows it rather than naming a suite.
+            `reviewed/${name}.4x`,
+            encode(`{verdict state:${state}}\n${body}`),
+            `${state}: ${name}`,
+          );
+          // **Flipped from what this already knows, not fetched.** The page is static, so a
+          // refresh cannot help - it is rendered at build time and would come back saying the
+          // same thing until the pipeline runs again.
+          mark(card, state);
+          say(`${name} is ${state}.`, 'ok');
+        } catch (why) {
+          say(`${name} was not written: ${why.message}`, 'red');
+        }
+        press.disabled = false;
+      };
+      card.querySelector('summary').append(' ', press);
+    }
+  }
+
+  // **A case's verdict is a row in one file**, so writing one is read, replace, write - and the
+  // row for that case is replaced rather than appended, or a second press would say both things.
+  for (const press of cases) {
+    const row = press.closest('li[data-case]');
+    const name = row.dataset.case;
+    const state = press.dataset.mark;
+    press.onclick = async () => {
+      press.disabled = true;
+      try {
+        const token = held();
+        let was = '';
+        const found = await fetch(`${api}/reviewed/cases.4x`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+        });
+        if (found.ok) was = atob((await found.json()).content.replace(/\s/g, ''));
+        const kept = was
+          .split('\n')
+          .filter((line) => line.trim() && !line.includes(`case:${name} `) && !line.includes(`case:${name}}`));
+        kept.push(`{verdict case:${name} state:${state}}`);
+        await put('reviewed/cases.4x', encode(kept.join('\n') + '\n'), `${state}: ${name}`);
+        said(row, state);
+        say(`${name} is ${state}.`, 'ok');
+      } catch (why) {
+        say(`${name} was not written: ${why.message}`, 'red');
+      }
+      press.disabled = false;
+    };
+  }
+})();
+</script>
+</body>
+</html>
