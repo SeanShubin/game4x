@@ -876,3 +876,87 @@ fn every_step_that_assembles_or_publishes_survives_a_failure() {
         steps[first].named
     );
 }
+
+/// **Every job that installs Bevy's Linux dependencies installs the same packages.**
+///
+/// # The failure this is written from
+///
+/// **`checks` installed two of four.** This lane wrote that job when `S-251` split the tests out of
+/// `gate`, **copied the step's name and not its package list**, and left `libwayland-dev` and
+/// `libxkbcommon-dev` behind. So `wayland-sys`'s `build.rs` failed in `pkg-config` - *Package
+/// wayland-client was not found in the pkg-config search path* - and the job went red on three runs
+/// while `Verify - full test suite`, which has all four, passed over the same commit in the same
+/// run.
+///
+/// # Two wrong answers before the log, and both read the wrong population
+///
+/// **The specification lane guessed `wayland-sys` and named the right mechanism for the wrong
+/// reason**: that `checks` installed a *plain* toolchain where `gate` installed Bevy's dependencies.
+///
+/// **This lane refuted that with `bevy deps: True` per job** - a true reading of *does the step
+/// exist*, where the question was *which packages does it install*. **So the refutation was correct
+/// about its own predicate and wrong about the thing**, and it sent both lanes to cargo's feature
+/// resolution instead.
+///
+/// **Neither of us read the package list until the log forced it.** *The step is there* and *the
+/// step installs what is needed* are different claims, and the first is what a grep for the step
+/// name answers.
+///
+/// **And reading the whole list found one more than the log named.** `libxkbcommon-dev` was missing
+/// too and would have failed next - which is the same habit paying out immediately: the log names
+/// the first package to fail, not the set that is absent.
+#[test]
+fn every_job_that_links_bevy_installs_the_same_packages() {
+    let text = std::fs::read_to_string(root().join(".github/workflows/pipeline.yml"))
+        .expect(".github/workflows/pipeline.yml");
+
+    // Each `apt-get install` line, with the job it is in - found by indentation, since a job
+    // opens at two spaces and nothing inside one does.
+    let mut lists: Vec<(String, Vec<String>)> = Vec::new();
+    let mut job = String::new();
+    for line in text.lines() {
+        if let Some(named) = line.strip_prefix("  ")
+            && !named.starts_with(' ')
+            && !named.starts_with('#')
+            && let Some(named) = named.strip_suffix(':')
+        {
+            job = named.to_string();
+        }
+        if line.contains("apt-get install") {
+            let mut packages: Vec<String> = line
+                .split_whitespace()
+                .filter(|it| it.starts_with("lib") && it.ends_with("-dev"))
+                .map(str::to_string)
+                .collect();
+            packages.sort();
+            lists.push((job.clone(), packages));
+        }
+    }
+
+    // **The population, or an equality over one list passes for the wrong reason.** Four jobs
+    // install these today and the whole point is that four copies agreed with nothing comparing
+    // them.
+    assert!(
+        lists.len() >= 3,
+        "only {} job(s) install Bevy's dependencies, so comparing them says little: {lists:?}",
+        lists.len()
+    );
+    // And each list is non-empty, or jobs installing nothing would agree with each other.
+    for (job, packages) in &lists {
+        assert!(
+            packages.len() >= 4,
+            "`{job}` installs {} package(s), which is fewer than the four every job needs: \
+             {packages:?}",
+            packages.len()
+        );
+    }
+
+    let (first, wanted) = &lists[0];
+    for (job, packages) in &lists[1..] {
+        assert_eq!(
+            packages, wanted,
+            "`{job}` and `{first}` install different packages, so one of them builds Bevy without \
+             what its build scripts need"
+        );
+    }
+}

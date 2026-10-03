@@ -285,11 +285,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      # The engine-facing crates link Bevy, so this job needs what `gate` needs.
+      # **The engine-facing crates link Bevy, so this job needs what `gate` needs - and it did
+      # not.** This lane wrote the step when `S-251` split the tests out of `gate`, **copied its
+      # name and not its package list**, and left two of the four behind:
+      # `libwayland-dev` and `libxkbcommon-dev`.
+      #
+      # **So `wayland-sys`'s `build.rs` failed in `pkg-config`** - *Package wayland-client was not
+      # found in the pkg-config search path* - and the job went red on three runs while
+      # `Verify - full test suite`, which has all four, passed over the same commit in the same
+      # run. **The difference was never the command.**
+      #
+      # **`every_job_that_links_bevy_installs_the_same_packages` is the carrier**, because the
+      # failure was a list drifting from three other copies of itself and nothing compared them.
       - name: Install Bevy Linux dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libasound2-dev libudev-dev
+          sudo apt-get update             || echo "apt-get update failed; the install below is what decides this step"
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable

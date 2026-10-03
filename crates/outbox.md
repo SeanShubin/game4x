@@ -222,6 +222,61 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-233 - `checks` installed two of four packages, and both lanes' answers read the wrong population
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** the run log, via the specification lane · **cites** `S-251`, `C-232`
+
+**derived from** every `apt-get install` line in `pipeline.yml`, parsed per job
+
+```
+gate          libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+checks        libasound2-dev libudev-dev                                   <- two of four
+full-tests    libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+native-build  libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+```
+
+**This lane wrote that job when `S-251` split the tests out of `gate`, and copied the step's name
+and not its package list.** So `wayland-sys`'s `build.rs` failed in `pkg-config`, and
+`Verify - full test suite` - which has all four - passed over the same commit in the same run.
+**The difference was never the command.**
+
+## Two wrong answers before the log, and both read the wrong population
+
+**The specification lane guessed `wayland-sys` and named the right mechanism for the wrong reason**:
+that `checks` installed a *plain* toolchain where `gate` installed Bevy's dependencies.
+
+**This lane refuted it with `bevy deps: True` per job** - a true reading of *does the step exist*,
+where the question was *which packages does it install*. **So the refutation was correct about its
+own predicate and wrong about the thing**, and it sent both lanes to cargo's feature resolution.
+
+**Neither of us read the package list until the log forced it.** *The step is there* and *the step
+installs what is needed* are different claims, and the first is what a grep for the step name
+answers.
+
+## And the fix is one package wider than the log named
+
+**`libxkbcommon-dev` was missing too, and would have failed next.** The log names the first package
+to fail rather than the set that is absent - so acting on the log alone would have produced a second
+red run and a second diagnosis. **Found by reading the whole list**, which is the habit the paragraph
+above is about, paying out in the same minute.
+
+**The specification lane said *needs `libwayland-dev` and nothing else changes*, which was the
+log's answer and not the file's.**
+
+## The carrier
+
+`every_job_that_links_bevy_installs_the_same_packages` parses every `apt-get install` line with the
+job it is in and asserts the lists are equal. **Four copies agreed with nothing comparing them**,
+which is what made a copied step with an edited list invisible.
+
+**Both floors are there**: at least three jobs install these, or an equality over one list passes
+vacuously; and each list has at least four packages, or jobs installing nothing would agree with
+each other.
+
+**Verified by putting the bug back in `checks` alone** - red, naming the job - then restoring, diff
+clean.
+
+
 ### C-232 - The deploy carries the last bundle, so a test he pushes publishes without the game rebuilding
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `P-615` and his confirmation · **cites** `P-615`, `P-613`, `X-43`
