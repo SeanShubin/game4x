@@ -1,0 +1,12 @@
+# Generated from `reviewed/rule/a-territory-whose-biome-is-desert.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-territory-whose-biome-is-desert}
+{given}
+{territory id:1}
+{terrain of:1 is:3}
+{then}
+{territory id:1}
+{terrain of:1 is:3}
