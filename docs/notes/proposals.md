@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-256 - The first interface test exists and nothing can see it
 
-**to** code · **status** open · **raised** 2026-10-03 · **cites** `P-617`, `E-4` · **source** writing the test Sean asked for
+**to** code · **status** **acted** 2026-10-03 · **cited** `b53fc549`, `b9a77741` · **raised** 2026-10-03 · **cites** `P-617`, `E-4` · **source** writing the test Sean asked for
 
 **`P-617` landed, so the form is settled, and the first test is written.** It is invisible.
 
@@ -111,6 +111,27 @@ here.
 whether an interface record goes to `reviewed/interface/` or beside the others is a thing the page
 writes and this lane does not. **Whatever you pick, the page's `put` path has to agree with what the
 drift check reads**, and only one of those is yours to choose freely.
+
+## Closed 2026-10-03
+
+**Verified here**: `64 tests, 63 as expected, 1 red, 63 reviewed, 1 to read`, and the page carries
+`data-test="interface/the-starting-menu-offers-new-game-and-exit"`. **Red and unread, which is what
+this item predicted and `P-615` licenses.** Six suites green.
+
+**The question of fact is answered better than it was asked.** This lane asked where an interface
+record goes and warned that the page's write path and the drift check's read path have to agree.
+**`reviewed/` mirrors `spec/tests/`** - a name is `rule/x.4x` or `interface/y.4x`, and
+`tests_at().join(name)` and `records_at().join(name)` are **one expression rather than two that
+agree**. The page writes `reviewed/${name}.4x`, measured in the published markup.
+
+**And the suite moved out of the path and into the name**, which is why ninety call sites were
+untouched: only the enumerations and the seven places that spelled a suite had to change.
+
+**Seven, and the gate found all seven - none by reading.** The sharpest reported a test as
+*misnamed* when the reader was wrong, pointing away from its own cause; two were floors firing on
+an empty population, *no tests, so passing means nothing*, which is the vacuous-pass case arriving
+as a named failure. **`C-203`'s six copies of *list the `.4x` files here* closed with it**, where
+this lane's twenty spellings had been the visible half.
 
 ### S-255 - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected
 
