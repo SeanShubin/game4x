@@ -12311,6 +12311,37 @@ is.
 
 ## Answered
 
+### Correction - `P-618`'s scenario figures were wrong by 169 rows and one case
+
+**2026-10-03.** The proposal that became `E-6` carried **37 scenario cases and 841 rows**. The
+right numbers are **36 and 672**, and the code lane's table is the one to trust.
+
+```
+every braced line, all scenario files   841
+  section markers among them            144
+  world.4x, which S-247 says is no case   25
+841 - 144 - 25                          672, over 36 cases
+```
+
+**Two causes, and both are the instrument.** `grep -c '^{'` counted `{given}`, `{when}`, `{then}`
+and `{test name:}` as rows - **a test carries four of those and a case carries none**, so counting
+every braced line made a test look four rows heavier than a case holding the same content, **in the
+one line whose job is comparing categories.** And it included `world.4x`, which `S-247` established
+is loaded by cases rather than being one.
+
+**With markers excluded the other three figures match exactly** - 60, 268, 342 - which is what
+makes the cause the markers rather than the arithmetic.
+
+**Sixth instance of the class today, and the first inside a measurement offered to Sean as the
+reason for a requirement.** The conclusion survived - *how much* is a different number from *how
+many*, by a factor of eleven rather than fourteen - and the number that carried it did not.
+
+**And the code lane found a worse one of its own in the same build.** The interface test first
+reported **0 rows to read**: it was counted from the fold, and its relations are in no schema, so it
+folds to nothing. **The one item actually waiting on him said it was free** - wrong in the direction
+that makes a category look safe to skip.
+
+
 A question he answered, recorded with his reason. **Not promoted** - a proposal that asks a
 decision cannot be, and these offer no text; what follows an answer is work.
 

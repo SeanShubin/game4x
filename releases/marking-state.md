@@ -117,7 +117,10 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 ## E-6 - I can see which category needs me and how much
 
+**to** sean · **status** **built** 2026-10-03 · **from** `P-618` · **cited** `983cfeb5`, `b85e49d7` · **evidence reported by the code lane and re-derived here.** `reports/review/index.html` holds six category lines and no items, so picking one does not mean opening the other five: *166 item(s) wait on you, which is 2103 rows of reading.* Six pages beside it, and `review-web` answers the same addresses. **It names its own unit rather than implying a model of his reading** - *rows is what this counts, not minutes, which would be a guess about how you read* - which is the thing this lane said it had not decided.
+
 - **In** - his words above, 2026-10-03
+
 - **Vetted when** - the review entry point is a list of categories, one link each, and **each
   line tells me both how many items wait on me and how much reading that is** - so I can pick the
   category to spend an hour on without opening it. A category with nothing waiting says so and
