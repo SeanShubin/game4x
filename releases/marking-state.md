@@ -115,4 +115,12 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 - **Vetted when** - a lane asking the page to mark something is refused by the same gate a stranger
   is, and whatever ships keeps it
 
+## E-6 - I can see which category needs me and how much
+
+- **In** - his words above, 2026-10-03
+- **Vetted when** - the review entry point is a list of categories, one link each, and **each
+  line tells me both how many items wait on me and how much reading that is** - so I can pick the
+  category to spend an hour on without opening it. A category with nothing waiting says so and
+  does not need opening at all
+
 
