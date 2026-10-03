@@ -222,6 +222,67 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-231 - The issue route is removed, and `P-615`'s two paragraphs cannot both hold by a paths filter
+
+**to** spec · **status** open · **raised** 2026-10-02 · **source** `S-255`, `P-615` · **cites** `S-255`, `C-194`, `P-615`, `P-613`
+
+**derived from** the job graph as `yaml.safe_load` reads it, and `git ls-files` for the bundle
+
+## `S-255` is done, and the dead trigger went with it
+
+```
+.github/workflows/review.yml          deleted
+tools/outbox/tests/review.rs          deleted
+--review-issue, --review-plan, --review-apply   deleted, with their header lines
+review_issue, ticked_in, gestures, carry_out, Gesture   deleted - 144 lines
+generate.yml's workflow_run: [Review] deleted
+```
+
+**The library half went too**, because those five existed only to serve the three commands. Checked
+each for callers first: the `Gesture` and `gestures` hits elsewhere are `planet-presentation`'s
+different type and the word in prose.
+
+**And the question of fact is moot rather than answered.** Whether GitHub treats a `workflow_run`
+naming a deleted workflow as inert or as an error did not need deciding: **the thing it reached is
+gone, so the trigger is dead either way** - and a trigger naming a workflow that is not there is a
+sentence about something that does not exist, which is the class this tree has spent two days on.
+
+**The remaining routes both push**, so `push: paths:` sees them: the page writing through the API
+with his own token, and a lane committing a record by hand.
+
+## `P-615`: the single change breaks the sixth paragraph
+
+**`paths-ignore` on the pipeline's push would stop the page publishing**, because the deploy is
+downstream of the build and the artifact is the whole site:
+
+```
+deploy needs gate · gate builds the bundle and uploads the artifact · no .wasm is committed
+```
+
+**So a push touching only `spec/tests/` would skip the gate, skip the deploy, and publish nothing** -
+and the sixth paragraph says *I write a test, push it, and it shows up browsable on my page.*
+
+**Three shapes, and the third is new since the last time this came up:**
+
+- **Build anyway** - the page updates and he waits for the game to compile, which the first
+  paragraph refuses.
+- **Publish without the game** - the page updates and **the game disappears from the site**,
+  because Pages replaces the whole thing.
+- **Carry the last bundle** - the deploy downloads the most recent successful build's artifact and
+  combines it with the freshly committed reports. **Satisfies both paragraphs and commits nothing.**
+
+**The third is what this lane would build**, and it is not obviously what he means by *one site is
+enough*, so it is not built yet. **One sentence from him settles it.**
+
+## And the gate is red on something that is not this lane's
+
+`tools/spec/tests/queue.rs:163` refuses `## Answered` at `docs/notes/proposals.md:12246` - *a
+section the tool does not know*. **Their tool, their file, their commit** - `12787ec9`, the one that
+filed `S-255`. Reported rather than repaired.
+
+**Everything else is green**: 770 across 97 suites, and every `tools/outbox` suite passes.
+
+
 ### C-230 - The checkbox route cannot be exercised yet, because the issue it needs does not exist
 
 **to** spec · **status** open · **raised** 2026-10-02 · **source** `X-48`, routed via `S-?` · **cites** `X-47`, `S-228`, `P-615`

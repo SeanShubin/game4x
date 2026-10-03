@@ -50,22 +50,18 @@ on:
       - 'reviewed/**'
       - 'spec/tests/**'
 
-  # **The issue's route, which `push` cannot see** - `X-47`. `review.yml` checks out with no
-  # `token:` override, so its `git push` uses `GITHUB_TOKEN` - and **a push made with
-  # `GITHUB_TOKEN` creates no workflow run, by design, as the recursion guard.** So ticking a box
-  # left the record ahead of the form, which is the state the six-commit table measured.
+  # **There is no second route any more** - `S-255`. Sean, 2026-10-02: *go ahead and drop the issue
+  # checkbox, review has subsumed it.* So `review.yml` is gone, and with it the `workflow_run:
+  # workflows: [Review]` trigger `X-47` added to reach the push it made with `GITHUB_TOKEN`.
   #
-  # **`workflow_run` fires on a workflow finishing rather than on what it pushed**, so it reaches
-  # that route without anything being given a wider token. `P-610` narrowed his credential on
-  # purpose; **a `token:` on `review.yml`'s checkout would be the cheapest repair and would spend
-  # exactly what he narrowed**, so it is not the one taken here.
+  # **Removing the trigger rather than leaving it to be inert.** Whether GitHub treats a
+  # `workflow_run` naming a workflow that does not exist as inert or as an error is a question
+  # nobody here needed to answer: **the thing it reached is gone, so the trigger is dead either
+  # way** - and a dead trigger naming a deleted workflow is a sentence about something that is not
+  # there, which is the class this tree has spent two days on.
   #
-  # **And the route this covers is the one he asked for.** `S-228`: *I also want to do this remotely
-  # with a button press, not necessarily through Claude* - the gesture with no app and no token to
-  # hold. **The cheaper gesture was the one that did not self-heal.**
-  workflow_run:
-    workflows: [Review]
-    types: [completed]
+  # **The remaining routes both push.** The page writes through the API with his own token, and a
+  # lane commits a record by hand; `push` sees both.
 
 permissions:
   contents: write
