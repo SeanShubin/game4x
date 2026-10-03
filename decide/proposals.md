@@ -15,7 +15,7 @@ of it needs you.
 
 **to** sean · **status** open · **raised** 2026-10-02 · **kind** his requirement, with the research lens's measurements behind it · **shape** text · **asks** approval · **into** `docs/process.md` -> What I am pushing out
 
-**Five paragraphs, each added to the end of that section, in this order.** `X-48` is the lens's
+**Six paragraphs, each added to the end of that section, in this order.** `X-48` is the lens's
 item; the words below are this lane's draft of your requirement.
 
 > **Approving a test does not deploy the app.** A push that touches only what I review runs what
@@ -38,6 +38,10 @@ item; the words below are this lane's draft of your requirement.
 > **One site is enough.** The app at the root and what I read below it, as long as I can navigate
 > from the root to either - so nothing here asks for a second publisher.
 
+> **Adding a test is the same loop as approving one.** I write a test, push it, and it shows up
+> browsable on my page - without the build failing, and without waiting for the game to compile. A
+> test I have not read yet fails nothing; it is a notice that something is waiting on me.
+
 ## It is violated now, and your own approvals are the evidence
 
 **`pipeline.yml` has no `paths:` filter.** So a commit touching nothing but `reviewed/` runs clippy
@@ -55,6 +59,20 @@ the deploy itself        9s · 11s · 28s
 `cancel-in-progress` keyed on the ref - and **the one that completed failed because a Wayland system
 library would not build.** You approved a test about a territory's biome and the run went red over a
 graphics dependency.
+
+## Three of the sixth paragraph's four halves are already true
+
+**Measured here, so you know what it costs:**
+
+```
+the page shows an unread test          yes - "never reviewed", 6 of them before today
+an unread test fails nothing           yes - reviewed.rs prints "constrain nothing"
+generate.yml fires on spec/tests/**    yes - so adding a test already triggers it
+pipeline.yml has a paths: filter       no  - so the game's gate runs anyway
+```
+
+**So the only missing half is the one the first paragraph already asks for.** Adding a test and
+approving one want the same single change, which is why they belong in one proposal.
 
 ## Half of the first paragraph is already built, which you may not know
 
