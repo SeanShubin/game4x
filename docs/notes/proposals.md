@@ -12182,6 +12182,7 @@ work the release exists to order.
 | P-612, Nothing withholds the review page                                                                                     | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
 | P-613, A failed run publishes, and the report root says what failed                                                          | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-02 |
 | P-614, The suspension of the deletion rule goes, and removing it tightens rather than loosens                                | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-10-02 |
+| P-615, Approving a test does not deploy the app                                                                              | `docs/process.md` -> What I am pushing out                                                                                                                                                               | 2026-10-03 |
 
 ## Forecast cleanups that were checked and not filed
 

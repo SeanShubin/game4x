@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-615** - Approving a test does not deploy the app · `decide/proposals.md`
 - **P-616** - Do you still want the issue-checkbox route, now that you use the page? · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -186,6 +185,7 @@ it exists to ask.
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
+- `docs/process.md` -> What I am pushing out - P-612, P-613, P-615
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
@@ -197,7 +197,6 @@ it exists to ask.
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
-- `docs/process.md` -> What I am pushing out - P-612, P-613
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
 - `releases/first-release.md` - P-85, P-522

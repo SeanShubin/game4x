@@ -255,6 +255,30 @@ area that vanishes when it breaks is no use to me.
 index rather than by reading a run's log, so a run that fails leaves a page saying what failed,
 linked from there.
 
+**Approving a test does not deploy the app.** A push that touches only what I review runs what
+produces what I read and nothing else - not the app's gate, not its build, not its deployment.
+My loop is approve and look, and nothing in it waits on the game compiling.
+
+**A test about the code stays with the code.** This is about which pushes run which jobs rather
+than about where a test lives. There may be other tests in the code, and those are fine to be
+with the code.
+
+**What produces something I read stays in the light dependency closure.** That is what makes the
+rule above cheap rather than merely desirable, and it is the half nothing checks: a convenient
+dependency acquired by whatever writes my reports would put the game's build back in front of my
+approval without anyone deciding to.
+
+**Deploying the app is a different deployment, and so is any slow analysis.** Deploying the game,
+and any analysis of the game or of the tests that takes a long time, belong somewhere that is not
+between me and a page I am reading.
+
+**One site is enough.** The app at the root and what I read below it, as long as I can navigate
+from the root to either - so nothing here asks for a second publisher.
+
+**Adding a test is the same loop as approving one.** I write a test, push it, and it shows up
+browsable on my page - without the build failing, and without waiting for the game to compile. A
+test I have not read yet fails nothing; it is a notice that something is waiting on me.
+
 ## What verification requires
 
 ### State
