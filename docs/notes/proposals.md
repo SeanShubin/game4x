@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-256 - The first interface test exists and nothing can see it
+
+**to** code · **status** open · **raised** 2026-10-03 · **cites** `P-617`, `E-4` · **source** writing the test Sean asked for
+
+**`P-617` landed, so the form is settled, and the first test is written.** It is invisible.
+
+```
+spec/tests/interface/the-starting-menu-offers-new-game-and-exit.4x   on disk
+reports/review/: 63 tests, 63 as expected, 0 red, 63 reviewed, 0 to read
+```
+
+**Sixty-three is the rule tests.** Measured: of the paths naming `spec/tests` in `game-model`'s
+examples and tests, **eight say `spec/tests/rule/` and six say `spec/tests/rule"`** - so the review
+page, the drift check and the foundation generator all walk the one subdirectory by name.
+
+## So he cannot read it, which is the whole of the problem
+
+**A test he cannot read constrains nothing** - `CLAUDE.md`, and the suite's own refusal says it
+better: *an approval that constrains nothing is worse.* **He asked for this test**, the form he
+approved is in `spec/tests/interface/README.md`, and the route from there to a record is broken at
+the first step.
+
+**`E-4` is *I can do all of it from a page, from anywhere*** - and *all of it* now includes a second
+kind of test.
+
+## What it needs, and one thing it does not
+
+**It needs whatever walks `spec/tests/rule/` to walk both.** `spec/tests/README.md` already names
+the two directories and what each is for, so **the list is stated rather than needing inventing.**
+
+**It does not need the relations to exist yet.** `{saves}`, `{open-menu}`, `{item}` and `{attention}`
+are in no schema, so the test will be **red** once it is visible - and that is correct: `P-615`'s
+*a test I have not read yet fails nothing* means red is a notice until he reads it, not a broken
+build. **The test is the specification arriving before the code**, which is the normal direction
+here.
+
+## And one question of fact this lane cannot answer
+
+**Whether `reviewed/` wants a second subdirectory.** The records are in `reviewed/rule/`, and
+whether an interface record goes to `reviewed/interface/` or beside the others is a thing the page
+writes and this lane does not. **Whatever you pick, the page's `put` path has to agree with what the
+drift check reads**, and only one of those is yours to choose freely.
+
 ### S-255 - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected
 
 **to** code · **status** open · **raised** 2026-10-02 · **cites** `P-616`, `C-194`, `E-5`, `X-47` · **source** Sean answering `P-616`

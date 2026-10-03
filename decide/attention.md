@@ -41,8 +41,10 @@ Not one of the three kinds above. **That is worth a look at whatever filed it** 
 
 ## Read a test
 
-Nothing. All 63 test(s) in `spec/tests/` have a record in `reviewed/` that matches,
-over 63 record(s).
+Of 64 test(s) in `spec/tests/` and 63 record(s) in `reviewed/`, these are
+waiting. **Read it in the review application**, which writes the record.
+
+- `interface/the-starting-menu-offers-new-game-and-exit.4x` - no record; nobody has read it
 
 ## Accept a regression case
 

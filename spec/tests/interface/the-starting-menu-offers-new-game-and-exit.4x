@@ -1,0 +1,25 @@
+# The starting menu, with nothing saved.
+#
+# **`spec/tests/interface/README.md`: *an interface test is written in the same form as a rule
+# test... the `then` is the whole of what the interface shows.*** So two rows and nothing else
+# means two items, and a third appearing makes this red.
+#
+# **No `displayed` column**, because an item is displayed by being here. **No order**, because the
+# rows are a multiset - the known limitation that form records.
+#
+# **Sean, 2026-10-01**: *top menu items are continue, load, new game, exit.* With nothing saved,
+# *continue* and *load* are not shown at all - which under this form is the same as their not being
+# there.
+
+{test name:the-starting-menu-offers-new-game-and-exit}
+
+{given}
+{saves} -> 0
+
+{when}
+{open-menu}
+
+{then}
+{item name:new-game active:1} -> 1
+{item name:exit active:1} -> 1
+{attention of:new-game}
