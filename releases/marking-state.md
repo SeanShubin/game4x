@@ -112,6 +112,7 @@ shows an empty set rather than a missing one - which is the state it is in rathe
 
 - **In** - `CLAUDE.md`, *the record is the one artifact whose whole value is that nobody judged by
   it can touch it*
-- **Vetted when** - a lane asking the page or the workflow to mark something is refused by the same
-  gate a stranger is. **`review.yml` already holds this** with
-  `github.actor == github.repository_owner`, and whatever ships keeps it
+- **Vetted when** - a lane asking the page to mark something is refused by the same gate a stranger
+  is, and whatever ships keeps it
+
+

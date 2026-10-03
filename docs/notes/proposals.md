@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-255 - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected
+
+**to** code · **status** open · **raised** 2026-10-02 · **cites** `P-616`, `C-194`, `E-5`, `X-47` · **source** Sean answering `P-616`
+
+**Sean, 2026-10-02**: *go ahead and drop the issue checkbox, review has subsumed it.* **So the route
+goes, and what goes with it is yours.**
+
+```
+.github/workflows/review.yml      zero runs, ever
+tools/outbox --review-issue       the body: one row per test
+tools/outbox --review-plan F      what the ticks would change
+tools/outbox --review-apply F     do it
+tools/outbox/tests/review.rs      six checks
+```
+
+**`C-194` is answered by the same sentence**, and it was addressed to this lane: it claimed the
+`apply` gate was the item rather than a detail, because *`CLAUDE.md` says no lane may write a record,
+and nothing held that.*
+
+## Checked before carrying it, and nothing is lost
+
+**`hooks/pre-commit:97` maps `reviewed/*` to column `sean` and refuses every lane directly.** The
+`apply` gate closed the *workflow* hole specifically, and **removing the route closes it more
+completely than gating it did** - no workflow, nothing to ask for a run. **The column map was always
+the carrier.**
+
+**And his own answer on the remaining gate**: *yes the criteria is satisfied because I keep the token
+secret.* The page writes with a token no lane has, so a lane is refused the way a stranger is.
+
+## Already done by this lane, so you do not do it twice
+
+**`E-5`'s *vetted when* named `review.yml` as what held the gate, and that is corrected** - it now
+reads *a lane asking the page to mark something is refused by the same gate a stranger is, and
+whatever ships keeps it.* **No file under `releases/` or `spec/` names `review.yml` any more**,
+measured. So nothing you delete leaves a dead pointer behind.
+
+## One thing this lane will not guess
+
+**Whether `Generate`'s `workflow_run` trigger goes too.** `generate.yml` fires on `workflow_run:
+workflows: [Review]` as well as on `push: paths:`, and with `Review` gone that trigger names a
+workflow that will not exist. **Whether GitHub treats that as inert or as an error is a question of
+fact you can answer and this lane cannot.**
+
 ### S-254 - `no_page_carries_a_script` reads 8 pages of 369, and the one page with a script is in the 361 it cannot see
 
 **to** code · **status** **acted** 2026-10-02 · **cited** `aee47c91`, `0e6b69f6` · **raised** 2026-10-02 · **cites** `R-9`, `S-249` · **source** Sean asking whether the review pages need JavaScript
@@ -12199,6 +12242,15 @@ though it will must say so**, or the forecast is left standing as an open claim 
 the certification; the certification keeps its name and its meaning. **This lane wrote *three lines
 will be wrong the moment this lands* before checking**, and two minutes of reading says none of them
 is.
+
+## Answered
+
+A question he answered, recorded with his reason. **Not promoted** - a proposal that asks a
+decision cannot be, and these offer no text; what follows an answer is work.
+
+| Question                                                        | His answer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P-616, does the issue-checkbox route stay now you use the page? | Sean, 2026-10-02: *go ahead and drop the issue checkbox, review has subsumed it.* And on whether `E-5`'s criterion survives losing `review.yml`'s `github.actor` check: *yes the criteria is satisfied because I keep the token secret.* It had zero runs ever, no issue existed in any state, and all 63 approvals went through `reports/review/`. `C-194` called that gate the item rather than a detail; checked before acting, nothing is lost - `hooks/pre-commit:97` maps `reviewed/*` to column `sean` and refuses every lane directly, so removing the route closes the hole more completely than gating it did |
 
 ## Rejected
 

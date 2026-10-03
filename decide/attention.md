@@ -12,9 +12,7 @@ Nothing.
 
 ## Answer a question
 
-No wording can be final until you do.
-
-- **P-616** - Do you still want the issue-checkbox route, now that you use the page? · `decide/questions.md`
+Nothing.
 
 ## Vet a capability
 
