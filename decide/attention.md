@@ -8,7 +8,9 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-619** - What ran is decided by what changed, and both can run at once · `decide/proposals.md`
 
 ## Answer a question
 
