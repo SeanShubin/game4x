@@ -766,36 +766,19 @@ fn every_rust_file(under: &Path) -> Vec<PathBuf> {
 /// `X-44` notes that splitting it is the natural next edit.
 #[test]
 fn every_step_that_assembles_or_publishes_survives_a_failure() {
-    let text = std::fs::read_to_string(root().join(".github/workflows/pipeline.yml"))
-        .expect(".github/workflows/pipeline.yml");
+    // **The composite action, because that is where the site is assembled now** - `P-619`. It was
+    // the `gate` job, then the `deploy` job, and now one definition that `publish` and `republish`
+    // both call: *a push that touched both gets the short one and then the long one.*
+    //
+    // **So the subject moved twice and the check followed twice**, which is the cost of a predicate
+    // anchored to a place rather than to a property - and there is nowhere better to anchor it,
+    // because *what assembles the site* is a fact about a file.
+    let at = root().join(".github/actions/publish/action.yml");
+    let text = std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
 
-    // **The `deploy` job, because that is where the site is assembled now** - `P-615`. It was
-    // `gate`, and the three assembling steps moved: `deploy` has to be able to publish when the
-    // gate did not run at all, so a push touching only the review surface still shows up.
-    let from = text
-        .find(
-            "
-  deploy:
-",
-        )
-        .expect("a deploy job")
-        + 1;
-    let rest = &text[from..];
-    let to = rest
-        .find(
-            "
-  full-tests:
-",
-        )
-        .or_else(|| {
-            rest.find(
-                "
-  native-build:
-",
-            )
-        })
-        .expect("a job after deploy");
-    let job = &rest[..to];
+    // **Every step of it, because a composite action is nothing but steps.** There is no job to
+    // find the end of.
+    let job = text.as_str();
 
     // Each step is a `- name:` or `- uses:` at the steps' indent, with whatever follows it: whether
     // it carries the condition, and the script it runs.

@@ -38,6 +38,7 @@ Not one of the three kinds above. **That is worth a look at whatever filed it** 
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
+- **C-238** - What runs is decided by what changed, and the fourth outcome needs a word from him · `crates/outbox.md`
 
 ## Read a test
 

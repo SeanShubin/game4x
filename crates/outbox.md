@@ -222,6 +222,66 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-238 - What runs is decided by what changed, and the fourth outcome needs a word from him
+
+**to** sean · **status** open · **raised** 2026-10-04 · **source** `P-619` · **cites** `P-619`, `P-615`, `P-613`
+
+**asks** a decision
+
+**derived from** the job graph as `yaml.safe_load` reads it, against his four outcomes
+
+```
+              gate  checks  sweep  publish  republish  nothing
+code            y      y      y       -         y         -
+tests           -      -      -       y         -         -
+both            y      y      y       y         y         -
+neither         -      -      -       -         -         y
+```
+
+**`checks` and `sweep` had no condition at all**, so twenty-four of the last forty commits paid
+1399 and 3176 seconds for nothing. They have `gate`'s condition now.
+
+**The short publish stops needing `gate`** - everything it publishes is committed and the game is
+carried - and **`republish` is the second one**, after the build, which is the *both* case: fresh
+reports with yesterday's game at twenty-six seconds, fresh reports with today's twelve minutes
+later.
+
+## One definition rather than two copies
+
+**`.github/actions/publish/` is a composite action, and `publish` and `republish` both call it.**
+Three hundred lines of steps copied twice is the shape this tree spent 2026-10-03 removing five of.
+
+**Two things a composite action cannot do, both handled**: `needs` is not available inside one, so
+the gate's result is an input; and **the Pages artifact is named by the caller**, because two
+publishes in one run would otherwise collide on the default name and the second would fail rather
+than replace the first.
+
+**It is a mechanism this repository did not have**, and nothing local can run it. The parts that
+could be checked are: the action's schema, that every `run` step carries a `shell`, and that the
+assembling steps still survive a failure - which my own check now reads there, having followed the
+subject from `gate` to `deploy` to here.
+
+## The question, which is yours
+
+**`P-619` says a push that touched neither *does nothing and tells me so*, and does not say how you
+are told.**
+
+**A green run whose only job says *nothing to build* is what is built now** - it ends in seconds and
+says what it decided. **But it is still something you have to open**, and for a person who is not
+looking that is the same as silence.
+
+**What would reach you without looking?** The options I can see, none of which I would pick for you:
+
+- **nothing further** - the run is green and quiet, and you find out by not being told
+- **a commit status or a check name you see in the repository** without opening the run
+- **the review page saying it** - the site is not republished on such a push, so this would mean
+  publishing a page whose only news is that there was none
+- **a notification** - which needs an address and is the only one that reaches you while you are
+  elsewhere
+
+**I have built the half that does not depend on your answer.**
+
+
 ### C-237 - Eight tests lived in an example and nothing in the gate ran them
 
 **to** spec · **status** open · **raised** 2026-10-03 · **source** him unable to start the review application · **cites** `S-256`, `E-6`, `P-617`
