@@ -11,52 +11,54 @@ of it needs you.
 
 ## Open
 
-### P-619 - What ran is decided by what changed, and both can run at once
+### P-619 - What runs is decided by what changed, in four cases
 
-**to** sean · **status** open · **raised** 2026-10-04 · **kind** his requirement · **shape** text · **asks** approval · **into** `docs/process.md` -> What I am pushing out
+**to** sean · **status** open · **raised** 2026-10-04 · **kind** his requirement, in his own four cases · **shape** text · **asks** approval · **into** `docs/process.md` -> What I am pushing out
 
-**Sean, 2026-10-04**: *why do I have to ask for the long one at all? What about a setup where if the
-code changed I get the long one, if the tests changed I get the short one, and if both changed I get
-both.*
+**Sean, 2026-10-04**, after rejecting this lane's suggestion that he ask for the long one:
 
-**Measured today, per job, from run `37137539481`:**
+> code changes: long build and deploy / test changes: short build and deploy / both change: short
+> build and deploy, then long build and deploy / neither change: does nothing but give me a message
+
+**Measured over the last 40 commits**, with `reports/` counted as the tests' published form:
 
 ```
-                      what changed:  tests only   code only   both
-publish the reports                        26s         26s   * 12 min
-the long analysis                      * 76 min     76 min     76 min
+          commits   today                        under his rule
+code            9   long, 76 min                 long
+tests           4   short 26s + 76 min of noise  short, 26s
+both            3   long only - the page waits    short, then long
+neither        24   publish + 76 min of noise    a message
 ```
 
-**Two stars, and both are the asking you object to.** A tests-only push runs `Checks` and `Sweep`
-anyway - 23 and 53 minutes of analysing code nobody touched - and a push that changed both makes you
-wait for the gate before the page updates, though the reports were ready in six seconds.
+**Twenty-four of forty is the commonest case and it is the one that does nothing**, which is the
+opposite of what this lane would have guessed. Every one of them runs `Checks` and `Sweep` today.
 
 The paragraph offered:
 
-> **What runs is decided by what changed, and both can run at once.** A push that touched only what I
-> review publishes the page and runs nothing else. A push that touched code runs the long analysis.
-> **A push that touched both does both** - the page first, because it was ready first, and the long
-> one on its own schedule.
+> **What runs is decided by what changed.** A push that touched code gets the long build and the
+> deploy. A push that touched the tests gets the short one. **A push that touched both gets the
+> short one and then the long one**, because the page was ready first and the analysis has its own
+> schedule. **A push that touched neither does nothing and tells me so** - which is most of what
+> lands here, and none of it needs a build.
 
-## What it costs to build, which is small
+## One boundary this lane settled, and says so
 
-**`Checks` and `Sweep` get the condition `gate` already has.** They have no `needs:` at all today,
-which is why they run on everything.
+**`reports/` counts as the tests, not as neither.** It is their published form - the page he reads
+is generated from them - so a commit that regenerates reports without touching a test still has to
+publish, or the site goes stale while the run says it did nothing. **Three of the forty move bucket
+on this**: with `reports/` as neither, the counts are 12 / 3 / 0 / 25.
 
-**And publishing stops waiting for the gate.** The deploy that carries the last bundle needs nothing
-from the gate - that is what `P-615` built - so it can run at 26 seconds and **a second deploy after
-the gate republishes with the new game.** Pages replaces the whole site each time, so the first
-publish is *fresh reports with yesterday's game* and the second is *fresh reports with today's*.
+**It is a judgement rather than a measurement**, which is why it is named here rather than left in
+the words.
 
-## The one choice this lane will not make quietly
+## What *a message* is, which this lane will not invent
 
-**Whether the fast publish runs on a code-only push.** It would publish reports that did not change,
-which is harmless and pointless - 26 seconds of nothing. **Leaving it in makes the rule one sentence
-with no exceptions; taking it out saves nothing you would notice.** This lane would leave it in and
-says so rather than deciding it inside the words above.
+**It has to be something you see without looking**, or it is the same as silence. **A green run whose
+only job says *nothing to build* is the cheap version** and it is still something you have to open.
+**Whether that is enough is yours** - the alternative is a notification, which is a mechanism this
+lane has no view on.
 
-## And one thing it does not change
+## And one thing that does not change
 
-**Nothing here makes a failure stop publishing.** `P-613` settled that and this builds on it - the
-difference is only *when* the page appears, not *whether*.
-
+**`P-613` still holds.** Nothing here makes a failure withhold the page; the difference is only
+which jobs start and when.
