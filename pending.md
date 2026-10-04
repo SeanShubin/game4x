@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-619** - What runs is decided by what changed, in four cases · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
@@ -186,6 +185,7 @@ it exists to ask.
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-449, P-409
+- `docs/process.md` -> What I am pushing out - P-612, P-613, P-615, P-619
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384, P-429
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
@@ -194,7 +194,6 @@ it exists to ask.
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
-- `docs/process.md` -> What I am pushing out - P-612, P-613, P-615
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334

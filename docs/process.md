@@ -279,6 +279,12 @@ from the root to either - so nothing here asks for a second publisher.
 browsable on my page - without the build failing, and without waiting for the game to compile. A
 test I have not read yet fails nothing; it is a notice that something is waiting on me.
 
+**What runs is decided by what changed.** A push that touched code gets the long build and the
+deploy. A push that touched the tests gets the short one. **A push that touched both gets the
+short one and then the long one**, because the page was ready first and the analysis has its own
+schedule. **A push that touched neither does nothing and tells me so** - which is most of what
+lands here, and none of it needs a build.
+
 ## What verification requires
 
 ### State
