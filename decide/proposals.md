@@ -17,8 +17,13 @@ of it needs you.
 
 **Sean, 2026-10-04**, after rejecting this lane's suggestion that he ask for the long one:
 
-> code changes: long build and deploy / test changes: short build and deploy / both change: short
-> build and deploy, then long build and deploy / neither change: does nothing but give me a message
+```
+code changes:    long build and deploy
+test changes:    short build and deploy
+both change:     short build and deploy, then long build and deploy
+neither change:  does nothing but give me a message
+```
+
 
 **Measured over the last 40 commits**, with `reports/` counted as the tests' published form:
 
