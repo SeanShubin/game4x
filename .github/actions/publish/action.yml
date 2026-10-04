@@ -1,0 +1,372 @@
+# Assembling the site and publishing it, which happens twice in a run that touched both.
+#
+# **`P-619`**: *a push that touched both gets the short one and then the long one, because the page
+# was ready first and the analysis has its own schedule.* **So this is one definition called twice**
+# rather than two copies of three hundred lines - the shape this repository spent 2026-10-03
+# removing five of.
+#
+# **The Pages artifact is named by the caller**, because two publishes in one run would otherwise
+# collide on the default name and the second would fail rather than replace the first.
+#
+# **`needs` is not available here**, so the caller passes the gate's result as `outcome`; the page
+# this writes is about the build job and not about whichever job called this.
+name: Publish the site
+description: Carry the newest bundle, add the committed reports, and deploy to Pages.
+
+inputs:
+  artifact:
+    description: The Pages artifact name, so two publishes in one run do not collide.
+    required: true
+  outcome:
+    description: What the build job did, for the page that says what this run did.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v7
+
+    # **The newest bundle there is: this run's when the gate built one, the previous run's when
+    # it did not** - `P-615`, and Sean: *I get what you mean about the game being one cycle
+    # behind, which I am fine with.*
+    #
+    # **One mechanism rather than a branch.** The API lists artifacts newest first, so asking for
+    # the newest `bundle` answers both cases without this job knowing which happened - the gate
+    # skipped because only the review surface changed, or the gate ran and built one.
+    #
+    # **An expired or absent bundle is not fatal.** The reports are what he reads and they are
+    # committed; a site with no game is worse than one with a stale game and better than no site
+    # at all, which is `P-613`'s sentence. So this says so and carries on.
+    - name: Take the newest bundle
+      env:
+        GH_TOKEN: ${{ github.token }}
+      shell: bash
+      run: |
+        mkdir -p crates/game4x/dist
+        id=$(gh api "repos/${{ github.repository }}/actions/artifacts?name=bundle&per_page=1" \
+               --jq '.artifacts[0] | select(.expired == false) | .id' 2>/dev/null || true)
+        if [ -z "$id" ]; then
+          echo "no bundle to carry - publishing the reports without the game"
+          exit 0
+        fi
+        gh api "repos/${{ github.repository }}/actions/artifacts/$id/zip" > bundle.zip
+        unzip -q -o bundle.zip -d crates/game4x/dist
+        rm -f bundle.zip
+        echo "carried bundle $id: $(find crates/game4x/dist -type f | wc -l) file(s)"
+        test -f crates/game4x/dist/index.html || echo "the bundle has no index.html"
+
+
+          # **The reports go out with the game** - `S-80`. They serve at `/game4x/reports/`, and
+    # the game keeps the root: `dist/` has no `reports` or `scenario` of its own.
+    #
+    # **`scenario/` goes too, and that is the detail the whole thing turns on.** Every link
+    # in the reports is relative, so any subpath serves them - but some leave the directory,
+    # `../scenario/main.4x` and `../spec/data/` among them. They have to land beside
+    # `reports/` rather than inside it, or those 404 on the published page while working
+    # perfectly in a clone. `tests/browsable.rs` asserts that links reaching outward still
+    # resolve, so one arriving that does not fails the gate rather than the page.
+    #
+    # **Copied as committed rather than regenerated, and the gate is what makes that safe.**
+    # `the_committed_catalog_is_what_the_release_generates` and
+    # `every_committed_dump_is_what_the_scenario_produces` have already run by here, and
+    # both fail if a committed report differs from what the generator produces. So
+    # regenerating would either write identical bytes or publish bytes no test has seen -
+    # and this step runs after the tests, which is the wrong side of them to be generating
+    # anything.
+    #
+    # **The markdown siblings go out too**, because the pages link to them: `catalog.html`
+    # has `href="catalog.md"`. `R-9` asks that every reference be a link the reader can
+    # follow, so dropping them for rendering badly would leave every page with a dead link.
+    # `reports/index.html` links outward at four paths and every one of them is copied
+    # here. Two kinds of copy, deliberately: `scenario/` goes whole because all of it is
+    # canonical data, and the research lens's files go one at a time because `lenses/` is
+    # a working directory - its outbox, its dated reports, its notes to itself - and none
+    # of that belongs on the site. `X-16`.
+    #
+    # The link is the repository's own path in both cases, so the same href works in a
+    # clone and here, and there is no second copy of anything to go stale.
+    #
+    # `tests/browsable.rs` reads this file and fails if a linked path is not named in it.
+    # That check can see the name and not the copy, so every copy asserts its own result
+    # below - `cp` of a moved file is loud, but a `cp -r` of a moved directory is not.
+    # **The reports as committed, which is a change the sweep moving out made.** They used
+    # to be whatever the sweep had just rewritten in this job, because it ran a few steps
+    # above; now it runs elsewhere and these are the copies the last local run committed.
+    #
+    # **That is the right version to publish and worth saying out loud**: `reports/` is
+    # generated but committed deliberately, a person reads it and decides from it, and the
+    # sweep's own job keeps its fresh copies as an artifact for comparison.
+    # **Runs whether or not the build did** - `X-43`. Everything it copies is committed, so it
+    # needs no toolchain and no bundle; `mkdir -p` is what lets it work when `trunk` never ran.
+    # **Without this, a `cargo fmt` failure published a site with no reports.**
+    - name: Copy the reports into the artifact
+      if: always()
+      shell: bash
+      run: |
+        mkdir -p crates/game4x/dist
+        cp -r reports crates/game4x/dist/reports
+        cp -r scenario crates/game4x/dist/scenario
+        mkdir -p crates/game4x/dist/spec
+        cp -r spec/data crates/game4x/dist/spec/data
+        # **The four the hand list did not have** - `S-230`, found by Sean clicking the
+        # first outward link he came to. 574 of the reports' 584 outward links 404ed on
+        # the published site and 10 worked, and the two the comment above names are two
+        # of the ten. **The hazard was understood and the enumeration was by hand**, which
+        # is the shape this file has now met four times.
+        cp -r regression crates/game4x/dist/regression
+        cp -r reviewed crates/game4x/dist/reviewed
+        cp -r spec/tests crates/game4x/dist/spec/tests
+        mkdir -p crates/game4x/dist/crates/game-model
+        cp -r crates/game-model/data crates/game4x/dist/crates/game-model/data
+        mkdir -p crates/game4x/dist/lenses/research crates/game4x/dist/tools/research/formulas
+        cp lenses/research/formulas.html crates/game4x/dist/lenses/research/formulas.html
+        cp tools/research/formulas/data.json crates/game4x/dist/tools/research/formulas/data.json
+        cp tools/research/formulas/results.json crates/game4x/dist/tools/research/formulas/results.json
+        # **A `.txt` twin beside every input, because the site serves a `.4x` as a
+        # download.** Measured: `spec/data/kinds.4x` answers 200 with
+        # `application/octet-stream`. Pages picks the type from the extension, does not know
+        # this one, and offers no way to override it - no `.htaccess`, no `_headers`.
+        #
+        # **Nothing `.txt` is committed.** Sean scoped this to the published site: *I don't
+        # necessarily need it to be rendered when I browse it as source*. So the twin is made
+        # here and `reports/index.html` links it, which is why a clone's copy of that page
+        # has links that resolve only once deployed - `S-134`, and `R-11` permits a
+        # non-canonical generated copy so long as the page says it is one.
+        find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' \
+          -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
+        # **`reports/index.html` is gone with the old ruleset's reports** - `D-4`, and
+        # `S-207` measured the directory at forty because `ls` counts `foundation` as one
+        # entry. It is thirty-nine files of the old run and fifty-four of the engine's, and
+        # only the first thirty-nine went. **So this asserts what is left rather than what
+        # was**: the foundation forms `R-12` serves.
+        test -d crates/game4x/dist/reports/foundation
+        test "$(find crates/game4x/dist/reports/foundation -name '*.4x' | wc -l)" -ge 40
+        # **`scenario/main.4x` rather than `scenario/expected/play.4x`.** `D-4` deleted the
+        # old ruleset's playthrough and the expectation beside it; the scenario is one file
+        # now and it is the one the reports link.
+        test -f crates/game4x/dist/scenario/main.4x
+        # **`schema.4x` rather than `kinds.4x`, which stopped existing before today.**
+        # `spec/data/` is the engine's friendly source now and holds two files. This line
+        # named a third and **the deploy job is the only thing that reads it**, so it would
+        # have failed an hour into a run rather than on a push - found by re-deriving what
+        # the step copies, not by anything going red.
+        test -f crates/game4x/dist/spec/data/schema.4x
+        # **Every twin, counted against every input**, so a copy that silently made none
+        # fails here rather than on the site. Nineteen today: eleven in `spec/data` and eight
+        # in `scenario`.
+        #
+        # **A floor rather than that number, and the reason is that the number broke the
+        # build.** It said twenty, `P-557` deleted `spec/data/above.4x`, and this step failed
+        # fifty-six minutes into a run - **the only hard-coded count in the step, and the only
+        # thing in it that broke.** Its two neighbours derive what they compare against and
+        # neither noticed.
+        #
+        # **And the floor broke it a second time, for the same reason.** It said fifteen; `D-6`
+        # moved `scenario/regression/` out of `scenario/` to sit beside `reviewed/`, and the two
+        # directories this counts went from 46 `.4x` files to 11. **A floor is still a literal
+        # about a population**, so replacing a count with a smaller count bought one move's
+        # grace rather than a different kind of check.
+        #
+        # **The neighbours that derive what they compare against have still never broken**,
+        # which is the whole lesson: so the copy is compared against the source it was made
+        # from, and the only number left is a floor on the source being there at all.
+        #
+        # **The sentence about `browsable.rs` is gone with the file.** It said the exact count
+        # was asserted where the local gate could see it; `D-4` deleted that test with the
+        # reports it was about, so the claim had stopped being true as well.
+        source=$(find spec/data scenario -name '*.4x' | wc -l)
+        inputs=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' | wc -l)
+        twins=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x.txt' | wc -l)
+        test "$source" -ge 5
+        test "$inputs" -eq "$source"
+        test "$twins" -eq "$inputs"
+        test -f crates/game4x/dist/lenses/research/formulas.html
+        test -f crates/game4x/dist/tools/research/formulas/data.json
+        test -f crates/game4x/dist/tools/research/formulas/results.json
+        # **The engine's tests, served where they are asked for.** Sean, 2026-09-21:
+        # *can I render the tests from somewhere under
+        # https://seanshubin.github.io/game4x/reports/*. They land at
+        # `/game4x/reports/review/`, and the data beside the page so that every link in
+        # it is relative and resolves at any subpath - the same property the other reports
+        # already turn on.
+        #
+        # **The twins are `S-134` again and not a second decision.** A `.4x` is served as a
+        # download here and as text by `review-web`, so the page links `.4x.txt` when it is a
+        # file and `/data/...4x` when something is serving - and says which, because a clone's
+        # copy has links that resolve only once deployed.
+        #
+        # **The page is copied as committed**, so it is as fresh as the last
+        # `cargo run --example report`. Nothing compares it against a generator, which is why
+        # this says so rather than asserting it.
+        #
+        # **Two roots since `P-532`, because the tests moved out of the prototype.** The page
+        # links `spec/tests/<name>.4x.txt` for the form Sean reads and `data/foundation/...`
+        # for the form the engine runs, and both are relative to this directory - so both roots
+        # are copied under it. **Copying only `data/` published a page whose every *on disk*
+        # link was dead**, which is what this step looked like between the move and now.
+        #
+        # **It was published at `thin-engine` until 2026-10-02, and the reason given for
+        # keeping that name was false.** The comment here said it was *a URL Sean asked for
+        # and has, so renaming it would break a link he holds* - and on 2026-10-02 he went
+        # looking for this page, could not find it, and `S-249` found why: **nothing in the
+        # tree linked it**, `reports/index.md` listed twelve pages and not this one, and the
+        # last thing still carrying that name was the address of a crate that stopped
+        # existing on 2026-09-25.
+        #
+        # **So the link he held did not exist**, and the trade the comment described was
+        # tidiness against nothing. Sean, asked where it should be: *reports review is good*,
+        # and *it should be reachable from the root reports page.*
+        #
+        # **The old path does not keep answering**, which is this lane's call and he left it
+        # here. Nothing links it, he holds no working link to lose - that is what `S-249`
+        # established - and two addresses for one page, one named after a crate that is gone,
+        # is how a wrong name survives a rename. **A stale URL that still works is what
+        # stopped anyone noticing this one.**
+        mkdir -p crates/game4x/dist/reports/review/spec
+        # **Already there from `cp -r reports` above**, since `S-249` moved the generator's
+        # output under `reports/`. Kept as an assertion rather than a copy: if it is missing,
+        # the page nobody can find is the page nobody published.
+        test -f crates/game4x/dist/reports/review/index.html
+        cp -r crates/game-model/data crates/game4x/dist/reports/review/data
+        cp -r spec/tests crates/game4x/dist/reports/review/spec/tests
+        find crates/game4x/dist/reports/review -name '*.4x' \
+          -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
+        # **Every twin against every input**, so a copy that made none fails here rather than
+        # on the site - the same count the twenty above are held by.
+        review=$(find crates/game4x/dist/reports/review -name '*.4x' | wc -l)
+        review_twins=$(find crates/game4x/dist/reports/review -name '*.4x.txt' | wc -l)
+        test "$review" -gt 100
+        test "$review_twins" -eq "$review"
+        # **The tests counted against the repository rather than against a number**, so a root
+        # that failed to copy fails here even if the other one grew enough to cover it. The
+        # total above could not tell those apart: it was `-gt 100` while `data/` alone was 118,
+        # and the move took it to 64 without anyone editing this file.
+        published=$(find crates/game4x/dist/reports/review/spec/tests -name '*.4x' | wc -l)
+        test "$published" -eq "$(find spec/tests -name '*.4x' | wc -l)"
+        test "$published" -gt 40
+        test -f crates/game4x/dist/reports/review/index.html
+        # **And a twin for every `.4x` anywhere under the artifact, because naming the roots
+        # is what went wrong.** The two passes above each name a pair of directories, and
+        # `R-12` added `reports/foundation/` - 54 generated files - which neither covers. They
+        # would have published as downloads with nothing saying so.
+        #
+        # **Coverage by default**, which is the argument this file already makes twice: the
+        # crate list is *selected by exclusion* and the tools are *found rather than listed*,
+        # both after a name list went stale. A root that is forgotten is now twinned anyway,
+        # and the assertion below is over the whole tree rather than over a directory somebody
+        # remembered.
+        find crates/game4x/dist -name '*.4x' -exec sh -c 'test -f "$1.txt" || cp "$1" "$1.txt"' _ {} \;
+        all_inputs=$(find crates/game4x/dist -name '*.4x' | wc -l)
+        all_twins=$(find crates/game4x/dist -name '*.4x.txt' | wc -l)
+        test "$all_inputs" -gt 150
+        test "$all_twins" -eq "$all_inputs"
+        # **Every outward link a report makes, resolved against the artifact** - `S-230`.
+        # The copies above are a list and a list goes stale; this asks the question the
+        # list is an answer to, over every link rather than every directory.
+        #
+        # **Derived from the reports rather than from anything anyone remembered.** The
+        # population is whatever `../` paths the reports actually contain, so a report that
+        # starts linking somewhere new fails here on the run that publishes it, instead of
+        # on the page.
+        #
+        # **A link's fragment is not part of its path**, which is why the pattern stops at
+        # the characters a path may hold - `../spec/logistics.md#shape` is a link to the
+        # file.
+        outward=$(grep -oh '\.\./[a-zA-Z0-9_./-]*' reports/*.md reports/*.html \
+          | sed 's|^\.\./||' | sort -u)
+        dead=0
+        reached=0
+        for link in $outward; do
+          reached=$((reached + 1))
+          if [ ! -e "crates/game4x/dist/$link" ]; then
+            echo "  404 on the published site: ../$link"
+            dead=$((dead + 1))
+          fi
+        done
+        # **Both populations, because zero dead over zero links is the same green.** The
+        # floor is on the scan finding links at all; the equality is the finding itself.
+        test "$reached" -gt 100
+        test "$dead" -eq 0
+        echo "Resolved $reached distinct outward link(s) from the reports, none dead"
+        echo "Published $review review-app inputs with $review_twins twins, $published of them tests"
+        echo "Published $all_inputs .4x files with $all_twins twins, over the whole artifact"
+        echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
+
+    # **What this run made of the tree, written where the reports index already links it** -
+    # `P-613`: *what broke is reachable from the report root. I find out by navigating from the
+    # reports index rather than by reading a run's log, so a run that fails leaves a page saying
+    # what failed, linked from there.*
+    #
+    # **The step's name and its conclusion, which is the choice `S-252` left open.** His words ask
+    # for the name and do not forbid the output; the name plus a link is what makes the page
+    # answer *what broke* without reproducing a log that would be stale the moment it is read.
+    # **The link is to the run, not instead of the page** - he said he finds out by navigating.
+    #
+    # **Only this job's steps, because `checks` and `sweep` run in parallel** and their results do
+    # not exist yet. Waiting for them would delay the page, which is the thing `P-612` forbids.
+    # The page says so rather than implying it covered them.
+    - name: Say what this run did
+      if: always()
+      shell: bash
+      run: |
+        mkdir -p crates/game4x/dist/reports
+        # **The gate's result, not this job's** - `job.status` here is `deploy`'s, which is
+        # always running at this point and would have said `success` while the build was red.
+        # **A page reporting the status of the job that wrote it says nothing**, which is the
+        # shape `X-43` was: a sentence true of something adjacent to its subject.
+        outcome="${{ inputs.outcome }}"
+        cat > crates/game4x/dist/reports/run.html <<HTML
+        <!doctype html>
+        <html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>This run</title>
+        <link rel="stylesheet" href="report.css">
+        </head>
+        <body>
+        <h1>This run</h1>
+        <p class="tally">The build job <strong>$outcome</strong>.</p>
+        <p class="note">Commit <code>${{ github.sha }}</code>. The test suites and the mutation
+        sweep run in their own jobs, in parallel with this one, so their results are not known
+        here - <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">this run</a>
+        has all of them.</p>
+        <p class="note">The whole site publishes whether or not the run succeeded, so a broken
+        game is published rather than nothing. If something here is wrong, this is where the
+        build said so.</p>
+        <p><a href="index.html">The index</a></p>
+        </body>
+        </html>
+        HTML
+        {
+          echo "# This run"
+          echo
+          echo "The build job **$outcome**."
+          echo
+          echo "Commit \`${{ github.sha }}\`. The test suites and the mutation sweep run in their own jobs, in parallel with this one, so their results are not known here."
+          echo
+          echo "[The index](index.md)"
+        } > crates/game4x/dist/reports/run.md
+
+    # **Uploaded whether or not anything above succeeded** - `P-613`: *the whole site publishes
+    # whether or not the run succeeded. A failing build leaves a broken game published rather
+    # than nothing published, because deploying is how I verify and a staging area that vanishes
+    # when it breaks is no use to me.*
+    #
+    # **`mkdir -p` above is what makes that work**: a build that failed leaves no `dist/`, and an
+    # upload of a missing directory fails rather than publishing the committed half.
+    - name: Upload Pages artifact
+      if: always()
+      uses: actions/upload-pages-artifact@v5
+      with:
+        path: crates/game4x/dist
+
+    # **`always()`, and the check is what said so.** Without it a failure in any step above -
+    # carrying the bundle, copying the reports - skips the publish, which is `X-43` in the new
+    # shape: the deploy succeeds at doing nothing, or does not run, and the site is whatever was
+    # there before. **`every_step_that_assembles_or_publishes_survives_a_failure` named this
+    # step** the moment the assembly moved here.
+    - name: Deploy to GitHub Pages
+      if: always()
+      id: deployment
+      uses: actions/deploy-pages@v5
