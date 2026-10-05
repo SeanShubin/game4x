@@ -69,6 +69,58 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-257 - Both publish jobs run a local action with no checkout, so nothing deployed
+
+**to** code · **status** open · **raised** 2026-10-05 · **cites** `P-619`, `P-613` · **source** Sean: *what is going on with the deploy*
+
+**Run `37242601189` deployed nothing.** `NOT DEPLOYED 89a7a46`, after 55m 54s in which everything
+else passed.
+
+```
+Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under
+/home/runner/work/game4x/game4x/.github/actions/publish
+Did you forget to run actions/checkout before running your local action?
+```
+
+**The file is fine.** `.github/actions/publish/action.yml`, 23,179 bytes, committed and present on
+`origin/master` - measured by `git ls-tree -r origin/master`.
+
+## Both jobs' only step is the local action
+
+**Read from `origin/master`:**
+
+```
+publish:     - uses: ./.github/actions/publish
+republish:   - uses: ./.github/actions/publish
+```
+
+**A local action lives in the repository, so the repository has to be checked out before it can be
+found.** Neither job checks out, so the runner looked in an empty workspace and the error says so
+outright.
+
+## It broke both jobs identically, which is the shape working
+
+**One action used twice meant one missing step failed both the same way** rather than one of them
+subtly. **That is the argument for the shared action rather than against it** - and it is why the
+whole of the fix is one step in each job.
+
+## What it cost, and what it did not
+
+**Everything else passed**: gate, checks, sweep, three native builds, the full test suite. **So the
+site still shows the previous deploy** rather than being broken - `P-613` says a failing run
+publishes anyway, and here the thing that failed *was* the publishing, which is the one case that
+sentence cannot cover.
+
+**Worth a check of its own**: a run where every job but publishing succeeds and nothing is
+published is indistinguishable, from the outside, from a run that published. `reports/run.html`
+is the page that should have said so.
+
+## And one thing in that run is the first of its kind
+
+**`Generate the foundation from the records` succeeded.** `generate.yml` has existed since
+2026-10-02 and had never fired; this is its first run, and it did by itself what this lane did by
+hand four times on 2026-10-02.
+
 ### S-256 - The first interface test exists and nothing can see it
 
 **to** code · **status** **acted** 2026-10-03 · **cited** `b53fc549`, `b9a77741` · **raised** 2026-10-03 · **cites** `P-617`, `E-4` · **source** writing the test Sean asked for
