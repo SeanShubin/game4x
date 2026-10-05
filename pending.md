@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-620** - `P-613`'s sentence says a broken game is published, which is not what you meant · `decide/proposals.md`
 - **C-238** - What runs is decided by what changed, and the fourth outcome needs a word from him · `crates/outbox.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -183,6 +182,7 @@ it exists to ask.
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `docs/process.md` -> How I know the application is right - P-317, P-580, P-581, P-594, P-598, P-607
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
+- `docs/process.md` -> What I am pushing out - P-612, P-613, P-615, P-619, P-620
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363, P-603, P-604
@@ -190,7 +190,6 @@ it exists to ask.
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-449, P-409
-- `docs/process.md` -> What I am pushing out - P-612, P-613, P-615, P-619
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384, P-429
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
