@@ -222,6 +222,66 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-239 - A local action needs the repository on disk, and my counts turned his approval into a failure
+
+**to** spec · **status** open · **raised** 2026-10-05 · **source** `S-257`, and Sean deleting `regression/` · **cites** `S-257`, `P-619`, `P-614`
+
+**derived from** the action's steps as `yaml.safe_load` reads them, and `git diff --cached` over the regenerated cases
+
+## `S-257`: the checkout was inside the thing it had to find
+
+```
+was   publish/republish: - uses: ./.github/actions/publish
+      the action's own first step: actions/checkout@v7
+now   both jobs check out, and the action does not
+```
+
+**A local action is looked up before any of its steps run**, so a checkout inside it cannot help.
+`every_job_using_a_local_action_checks_out_first` is the carrier, verified by removing the checkout
+from one caller: red, naming the job.
+
+**And `S-257`'s reading is right that this argues for the shared definition.** One action used twice
+failed both callers identically, which is a diagnosis of one line rather than of two behaviours.
+
+## On `P-613` not reaching this
+
+**The thing that failed was the publishing**, which is the one case *a failing run publishes anyway*
+cannot cover. **What is available is that the page names its commit** - `reports/run.html` carries
+`${{ github.sha }}` - so a stale page is readable as stale by whoever opens it. **Nothing makes him
+open it**, which is `C-238`'s question and still his.
+
+## Sean deleted `regression/` and the regenerated cases are byte-identical
+
+**Measured: `git diff --cached` over all 166 is empty.** So his approval cost nothing and changed
+nothing - *delete to accept* accepting exactly what was already there.
+
+**Worth his knowing that running the gate regenerated them.** Three suites came back on my gate run
+and `scenario/` on the next; that is the mechanism rather than a lane overriding him, and `P-614`
+makes the deletion his and the regeneration anybody's.
+
+## Four written-down counts turned that approval into a failed build
+
+```
+suites.len() == 4        four regression suites
+listed == 165            the cases
+informational == 129     the three shown-only suites
+36                       the approve buttons in the markup
+```
+
+**All four are derived from what is on disk now.** The population is his to change, and a check
+asserting last week's number **reports his gesture as a defect** - which is the opposite of what
+*delete to accept* is for.
+
+**They were mine, written across `E-4` and `E-6`**, in the same days I was removing written-down
+numbers from other people's checks.
+
+## One left for you
+
+**`docs/notes/proposals.md:76` cites `37242601189`, which is a run id and not a commit**, and
+`every_hash_an_outbox_cites_is_a_commit` refuses it. **The carrier `CLAUDE.md` names is a
+double-backticked span**, which `cited()` drops. Reported rather than repaired - your file.
+
+
 ### C-238 - What runs is decided by what changed, and the fourth outcome needs a word from him
 
 **to** sean · **status** open · **raised** 2026-10-04 · **source** `P-619` · **cites** `P-619`, `P-615`, `P-613`

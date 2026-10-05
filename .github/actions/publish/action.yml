@@ -21,11 +21,17 @@ inputs:
     description: What the build job did, for the page that says what this run did.
     required: true
 
+# **The caller checks out, not this.** `S-257`: the first version had `actions/checkout` as the
+# step below, and **a local action cannot be found until the repository is on disk** - so the run
+# failed with *Can't find action.yml under .github/actions/publish* and **deployed nothing**, while
+# every other job passed.
+#
+# **It broke both callers identically, which is the argument for one definition rather than
+# against it.** One action used twice meant one missing step failed both the same way, and the fix
+# is one line in two places rather than a diagnosis.
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v7
-
     # **The newest bundle there is: this run's when the gate built one, the previous run's when
     # it did not** - `P-615`, and Sean: *I get what you mean about the game being one cycle
     # behind, which I am fine with.*

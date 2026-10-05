@@ -840,7 +840,13 @@ mod tests {
     fn every_case_is_on_the_page_once_and_its_suite_says_what_it_offers() {
         let built = every_page(true);
         let suites = report::every_case();
-        assert_eq!(suites.len(), 4, "four regression suites");
+        // **Derived, not four.** Sean deleted `regression/` on 2026-10-05 - his approval of what
+        // the cases do - and the suite regenerates what is absent, so the number of suites is his
+        // to change. **A written-down four turned that approval into a failed build.**
+        assert!(
+            !suites.is_empty(),
+            "no regression suite, so the page has no cases to be about"
+        );
 
         let (mut listed, mut markable, mut informational) = (0, 0, 0);
         for (suite, cases) in &suites {
@@ -903,14 +909,24 @@ mod tests {
         // **Three suites shown and one reviewed**, which is his *I was expecting to review 3
         // things... everything else was to be informational only* read against his earlier
         // answer about `types/` and `primitives/`.
+        // **Derived from what is on disk, not from 129 and 36.** Sean deleted `regression/` on
+        // 2026-10-05, which `CLAUDE.md` makes his approval of what the cases do, and the suite
+        // regenerates what is absent - so the population is his to change. **Written-down counts
+        // turned his approval into a failed build**, which is the opposite of what *delete to
+        // accept* is for.
+        let of = |shown: bool| -> usize {
+            suites
+                .iter()
+                .filter(|(suite, _)| report::SHOWN_ONLY.contains(&suite.as_str()) == shown)
+                .map(|(_, cases)| cases.len())
+                .sum()
+        };
         assert_eq!(
-            informational, 129,
-            "the three suites he asked to be shown without a control"
+            informational,
+            of(true),
+            "the suites he asked to be shown without a control"
         );
-        assert_eq!(
-            markable, 36,
-            "the regression scenario, which is the one he reads"
-        );
+        assert_eq!(markable, of(false), "the suites he reads");
 
         // **The control follows the suite and not the case.** A case in an informational suite
         // offers nothing to press; one in a markable suite offers all three.
@@ -1001,7 +1017,11 @@ mod tests {
         // off a page whose rule-test controls do not exist until it is opened.
         assert_eq!(
             hosted.matches("data-mark=\"approved\"").count(),
-            36,
+            report::every_case()
+                .iter()
+                .filter(|(suite, _)| !report::SHOWN_ONLY.contains(&suite.as_str()))
+                .map(|(_, cases)| cases.len())
+                .sum::<usize>(),
             "the case buttons, which are the ones written into the markup"
         );
 

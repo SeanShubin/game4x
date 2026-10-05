@@ -943,3 +943,82 @@ fn every_job_that_links_bevy_installs_the_same_packages() {
         );
     }
 }
+
+/// **A job that uses a local action checks out the repository first.**
+///
+/// # The failure this is written from
+///
+/// **`S-257`: run `37242601189` deployed nothing**, and every job but publishing passed.
+///
+/// ```text
+/// Can't find 'action.yml' under .github/actions/publish
+/// Did you forget to run actions/checkout before running your local action?
+/// ```
+///
+/// **A local action lives in the repository, so the repository has to be on disk before it can be
+/// found.** The first version of `.github/actions/publish` had `actions/checkout` as its own first
+/// step - which cannot help, because the action is looked up before any of its steps run.
+///
+/// **It broke both callers identically, which is the argument for one shared definition rather than
+/// against it.** One action used twice meant one missing step failed both the same way, and the fix
+/// was one line in two places rather than a diagnosis.
+///
+/// # Why this is a check and `P-613` could not cover it
+///
+/// **`P-613` says a failing run publishes anyway.** Here the thing that failed *was* the publishing,
+/// which is the one case that sentence cannot reach - **and a run where everything but publishing
+/// succeeds looks, from outside, exactly like a run that published.** Sean had to ask.
+///
+/// **So the gate is where it has to be caught**, before a push rather than after one.
+#[test]
+fn every_job_using_a_local_action_checks_out_first() {
+    let at = root().join(".github/workflows/pipeline.yml");
+    let text = std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+
+    let mut job = String::new();
+    let mut checked_out = false;
+    let mut local: Vec<(String, String)> = Vec::new();
+    let mut jobs = 0;
+    for line in text.lines() {
+        // A job opens at two spaces; nothing inside one does.
+        if let Some(named) = line.strip_prefix("  ")
+            && !named.starts_with(' ')
+            && !named.starts_with('#')
+            && let Some(named) = named.strip_suffix(':')
+        {
+            job = named.to_string();
+            checked_out = false;
+            jobs += 1;
+            continue;
+        }
+        let bare = line.trim();
+        if bare.starts_with("- uses:") || bare.starts_with("uses:") {
+            let what = bare
+                .trim_start_matches("- ")
+                .trim_start_matches("uses:")
+                .trim();
+            if what.starts_with("actions/checkout") {
+                checked_out = true;
+            } else if what.starts_with("./") && !checked_out {
+                local.push((job.clone(), what.to_string()));
+            }
+        }
+    }
+
+    assert!(
+        jobs >= 5,
+        "only {jobs} job(s) read from the workflow, so this said almost nothing"
+    );
+    // **Both populations.** A workflow using no local action would pass the assertion below
+    // vacuously, and this check exists because two jobs use one.
+    let using = text.matches("uses: ./.github/").count();
+    assert!(
+        using >= 2,
+        "only {using} use(s) of a local action, so this is about almost nothing"
+    );
+    assert!(
+        local.is_empty(),
+        "these jobs use a local action without checking out first, so the action cannot be \
+         found and the job fails having done nothing: {local:?}"
+    );
+}
