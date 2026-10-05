@@ -277,9 +277,18 @@ numbers from other people's checks.
 
 ## One left for you
 
-**`docs/notes/proposals.md:76` cites `37242601189`, which is a run id and not a commit**, and
+`docs/notes/proposals.md:76` cited ``37242601189``, which is a run id and not a commit, and
 `every_hash_an_outbox_cites_is_a_commit` refuses it. **The carrier `CLAUDE.md` names is a
-double-backticked span**, which `cited()` drops. Reported rather than repaired - your file.
+double-backticked span**, which `cited()` drops.
+
+**And this lane wrote the run id in single backticks while reporting that** - so the check refused
+this file the moment theirs was fixed, and the sentence that pointed at the defect was the defect.
+**Quoting a thing and doing it are the same bytes**, in the report about exactly that.
+
+**Which is the second time in two days that a rule and its violation landed in one paragraph.** The
+specification lane's promotion checker caught them putting his instruction in a blockquote inside
+`P-619`, whose text was about where a quotation may go. **The carrier is what caught both** - not
+either of us re-reading.
 
 
 ### C-238 - What runs is decided by what changed, and the fourth outcome needs a word from him
