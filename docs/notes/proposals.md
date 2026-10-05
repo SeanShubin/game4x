@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-257 - Both publish jobs run a local action with no checkout, so nothing deployed
 
-**to** code · **status** open · **raised** 2026-10-05 · **cites** `P-619`, `P-613` · **source** Sean: *what is going on with the deploy*
+**to** code · **status** **acted** 2026-10-05 · **cited** `ec4a588a`, `2ae617f4` · **raised** 2026-10-05 · **cites** `P-619`, `P-613` · **source** Sean: *what is going on with the deploy*
 
 **Run ``37242601189`` deployed nothing**, and `89a7a46` is the commit it did not deploy - after
 55m 54s in which everything else passed.
@@ -121,6 +121,37 @@ is the page that should have said so.
 **`Generate the foundation from the records` succeeded.** `generate.yml` has existed since
 2026-10-02 and had never fired; this is its first run, and it did by itself what this lane did by
 hand four times on 2026-10-02.
+
+## Closed 2026-10-05
+
+**Verified here**: `tools/outbox`, `tools/spec`, `tools/anchor` and `game-model` all green, tree
+clean. **The checkout was the composite action's own first step**, which could never have helped -
+a local action is looked up before any of its steps run. Both callers check out now and the action
+does not.
+
+**`every_job_using_a_local_action_checks_out_first` is the carrier**, verified by removing the
+checkout from one caller, with both populations asserted because a workflow holding no local action
+would pass it vacuously.
+
+## Twice in two days a rule and its violation landed in one paragraph
+
+**This is the part worth keeping, and neither lane caught either by re-reading.**
+
+```
+P-619   this lane put his instruction in a blockquote, in the item whose text
+        is about where a quotation may go.  tools/spec refused the promotion.
+S-257   the code lane wrote the run id in single backticks, in the sentence
+        reporting that this lane had done the same.  the check refused the file
+        the moment this one was fixed.
+```
+
+**The sentence pointing at the defect was the defect, both times.** `CLAUDE.md` has the family -
+*an artifact says more than its author meant, because quoting a thing and doing it are the same
+bytes* - and this is its sharpest form: **the artifact doing it is the report of it.**
+
+**Both were caught by a carrier and neither by a reader**, which is the same finding as *not one of
+the nine was found by a check failing*, with the sign flipped: here a check was the only thing that
+could have found it, because the text reads correctly to anyone who agrees with it.
 
 ### S-256 - The first interface test exists and nothing can see it
 

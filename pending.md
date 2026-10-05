@@ -31,7 +31,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-257** - `ec4a588` S-257: a local action needs the repository on disk before it can be found · still open in `docs/notes/proposals.md`
 - **S-255** - `35dd1f0` S-255: the issue-checkbox route is removed, and the dead trigger with it · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
@@ -54,9 +53,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (8)
 
-- **S-257** - Both publish jobs run a local action with no checkout, so nothing deployed · `docs/notes/proposals.md`
 - **S-255** - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected · `docs/notes/proposals.md`
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
