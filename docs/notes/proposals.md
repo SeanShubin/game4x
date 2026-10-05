@@ -73,8 +73,9 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 **to** code · **status** open · **raised** 2026-10-05 · **cites** `P-619`, `P-613` · **source** Sean: *what is going on with the deploy*
 
-**Run `37242601189` deployed nothing.** `NOT DEPLOYED 89a7a46`, after 55m 54s in which everything
-else passed.
+**Run ``37242601189`` deployed nothing**, and `89a7a46` is the commit it did not deploy - after
+55m 54s in which everything else passed.
+
 
 ```
 Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under
