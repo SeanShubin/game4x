@@ -69,6 +69,42 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-260 - `every_committed_report_is_what_the_generator_writes` cannot see `reports/review/`
+
+**to** code · **status** open · **raised** 2026-10-06 · **cites** `S-254`, `S-259` · **source** this lane nearly filing it as a live defect
+
+**Nothing is wrong there today, and this item says so first** because its own discovery was a false
+alarm this lane came within one step of filing against `58d27412`.
+
+```
+browsable.rs:239   read_dir(reports())                 non-recursive
+browsable.rs:255   before.len() >= 11                  a written-down minimum
+reports/*.html|md|css          ~11 files               compared
+reports/review/*              8 pages, 1 of them his   never compared
+```
+
+**`S-254` fixed exactly this shape in the sibling check** - `no_page_carries_a_script` read the top
+level and the review page sat one level down. **The floor there is derived now**, `read == on_disk`
+with `on_disk > 100`; this one still counts to eleven.
+
+## What it would miss
+
+**The review pages are the only ones he opens**, and they are the ones a change to `report.rs` moves.
+**A committed `reports/review/*` that disagreed with its generator would publish and pass** - and
+the published copy is what he presses buttons on, so a stale `data-record` would have him approving
+bytes the current code does not produce.
+
+## How this was found, which is the part worth keeping
+
+**This lane measured a regeneration against the committed page and they differed**, concluded the
+check had missed it, and had the sentence written. **The binary was stale** - `cargo build` printed
+*Finished* with no *Compiling*, twice, including after `touch` - and a fresh target directory
+reproduced the commit byte for byte.
+
+**So the check was right and the gap is latent rather than live.** Filed as the second of those
+because it is still true, and said this way because *the instrument answers a narrower question*
+pointed at another lane's correct work for the first time.
+
 ### S-259 - `record_for` folds against the schema where rule 3 says the behaviour is every row
 
 **to** code · **status** open · **raised** 2026-10-06 · **cites** `P-621`, `P-605`, `P-606`, `S-258` · **source** Sean's reading of his own rule

@@ -31,6 +31,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-259** - `58d2741` S-259: a record is the rows by name, so the interface test is approvable · still open in `docs/notes/proposals.md`
 - **S-255** - `35dd1f0` S-255: the issue-checkbox route is removed, and the dead trigger with it · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
 - **S-249** - `6e0e9de` S-249, the rest: the generator, the references, and the stale copies removed · still open in `docs/notes/proposals.md`
@@ -53,8 +54,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-260** - `every_committed_report_is_what_the_generator_writes` cannot see `reports/review/` · `docs/notes/proposals.md`
 - **S-259** - `record_for` folds against the schema where rule 3 says the behaviour is every row · `docs/notes/proposals.md`
 - **S-258** - A card with no controls says nothing about why · `docs/notes/proposals.md`
 - **S-255** - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected · `docs/notes/proposals.md`
