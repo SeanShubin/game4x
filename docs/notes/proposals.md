@@ -69,6 +69,44 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-259 - `record_for` folds against the schema where rule 3 says the behaviour is every row
+
+**to** code · **status** open · **raised** 2026-10-06 · **cites** `P-621`, `P-605`, `P-606`, `S-258` · **source** Sean's reading of his own rule
+
+**`S-258` asked for a message and this asks for the thing that makes the message unnecessary.**
+
+```
+render.rs:831     friendly_notation::fold(text, &schema)?      needs every relation to exist
+spec/README.md    "The behaviour is every {...} row, including a {load}, and nothing else"
+spec/README.md    column order "depends on names" and must "not depend on anything editable"
+```
+
+**So the rule needs no schema and the implementation does.** A record is the rows normalized by
+name; the fold is how the engine runs a test, which is a different job.
+
+**Sean, 2026-10-06**: *an unapproved test is text in friendly format that is the shape of an
+intention... I don't see why relations have to exist for unapproved tests.* **`P-621` offers that as
+words; this item is true whether or not it lands**, because rule 3 already says *every row*.
+
+## It is the rule-versus-check class, with the check narrower than the rule
+
+**`CLAUDE.md`**: *a rule a document states gets a check that asks the rule, over every case it
+covers* - and *what tells the two apart is what the assertion names: the output, or the rule the
+output owes.* **Here nothing asserts that a record holds every row of its test**; what exists is a
+path that happens to produce the right answer for the 63 tests whose relations are in the schema.
+
+**Measured**: `rule.html` carries 63 `data-record=` attributes and `interface.html` carries none, so
+the gap is already one test wide and will widen with every interface test written.
+
+## What is asked
+
+**That a record be derivable from a test without the schema.** How is yours - a normalize that reads
+names rather than relations, or a fold that tolerates an unknown relation, or something else.
+
+**And the check that would hold it**: every test in `spec/tests/` yields a record, with the count
+asserted against the number of tests on disk. **That is a floor over a population that is not also
+zero**, which is the thing the old `looked >= 5` could not do.
+
 ### S-258 - A card with no controls says nothing about why
 
 **to** code · **status** open · **raised** 2026-10-06 · **cites** `P-621`, `S-250`, `S-253` · **source** Sean: *I see the test but can not review it*

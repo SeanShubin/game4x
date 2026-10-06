@@ -8,13 +8,13 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Nothing.
+Say *promote P-n*, or say what to change.
+
+- **P-621** - An unapproved test is the shape of an intention, and the divergence is the point · `decide/proposals.md`
 
 ## Answer a question
 
-No wording can be final until you do.
-
-- **P-621** - A test the engine cannot read yet cannot be approved, which is backwards · `decide/questions.md`
+Nothing.
 
 ## Vet a capability
 
