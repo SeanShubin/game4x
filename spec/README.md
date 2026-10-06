@@ -113,6 +113,12 @@ Add a file when a topic firms up. Add its row here first.
    that compares delegates to it** - so no comparison can disagree with another about whether two
    tests say the same thing.
 
+   **An unapproved test is text in the friendly form, and it is the shape of an intention.** The code
+   is bound to the tests I have approved. **So approving a test the code does not implement creates a
+   divergence, which I expect** - and from there the code lane is compelled to resolve it. **Relations
+   do not have to exist for a test I have not approved**, and a test whose relations do not exist yet
+   is the normal way a thing I want becomes a thing that is built.
+
    **The order that function puts columns in must not depend on anything editable.** `id` first,
    then every other trait alphabetically, then `occupied`, `free` and `capacity` last - **the order
    this specification already states for an entry**, which depends on names. **An order taken from

@@ -8,9 +8,7 @@ here is a claim that disagrees with its source and loses at the next commit.
 
 ## Approve words
 
-Say *promote P-n*, or say what to change.
-
-- **P-621** - An unapproved test is the shape of an intention, and the divergence is the point · `decide/proposals.md`
+Nothing.
 
 ## Answer a question
 

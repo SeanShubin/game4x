@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
-- **P-621** - An unapproved test is the shape of an intention, and the divergence is the point · `decide/proposals.md`
 - **C-238** - What runs is decided by what changed, and the fourth outcome needs a word from him · `crates/outbox.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -39,7 +38,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-243** - `c1f523e` S-243: GOLDEN is the library's constant, and my gate could not have caught it · still open in `docs/notes/proposals.md`
 - **P-609** - `0c690d8` P-609: rules sixteen cases are in neither half of what he said about the suites · still open in `docs/notes/decisions.md`
 - **P-610** - `43a123a` P-610: two ways the page can write, and they want different reach on his token · still open in `docs/notes/decisions.md`
-- **P-621** - `cd92e19` P-621 and S-258: a test the engine cannot read yet cannot be approved · still open in `decide/proposals.md`
 - **C-216** - `c04747e` S-248: C-216 fix was verified against one record and is wrong for fifty-nine · still open in `crates/outbox.md`
 - **C-192** - `a12685d` S-232: the seven rows are landed and C-192's check can go · still open in `crates/outbox.md`
 - **C-189** - `52ebd84` S-244: rustup was installed all along, and C-189 premise is false · still open in `crates/outbox.md`
