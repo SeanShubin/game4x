@@ -1176,11 +1176,20 @@ not as expected
         // `E-4`: the hosted page writes a verdict with a `Contents: write` token, so it has to
         // know the bytes - there is no server to ask. **The body is identical for both
         // verdicts**, so one copy travels and the script writes the state line above it.
-        let would_write = render::record_for(&stem, &source, "approved")
-            .ok()
-            .and_then(|it| it.split_once('\n').map(|(_, rest)| rest.to_string()))
-            .map(|body| format!(" data-record=\"{}\"", encoded(&body)))
-            .unwrap_or_default();
+        // **A refusal says why, on the card** - `S-258`. This was `.ok()`, which threw the reason
+        // away: *this test cannot be recorded yet* and *the page is broken* were the same bytes to
+        // a reader - a card with no button and no explanation.
+        //
+        // **`S-259` removed today's instance** - every test yields a record now - **and the silence
+        // stayed available until this.** A reason that exists and is discarded is the shape that
+        // outlives the one case that produced it.
+        let would_write = match render::record_for(&stem, &source, "approved") {
+            Ok(said) => said
+                .split_once('\n')
+                .map(|(_, rest)| format!(" data-record=\"{}\"", encoded(rest)))
+                .unwrap_or_default(),
+            Err(why) => format!(" data-unrecordable=\"{}\"", escaped(&why)),
+        };
         let suite = stem.split('/').next().unwrap_or("rule").to_string();
         let counted = weight.entry(suite.clone()).or_default();
         counted.0 += 1;

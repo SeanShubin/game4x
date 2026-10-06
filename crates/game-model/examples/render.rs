@@ -827,36 +827,44 @@ pub fn canonical(written: &str) -> String {
 }
 
 pub fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, String> {
-    let (names, schema) = table(true);
-    let rows = friendly_notation::fold(text, &schema).map_err(|why| why.to_string())?;
-
-    let mut out = format!("{{verdict state:{verdict}}}\n");
-    // **The leaf, because a test's name is its file's name and not its path** - `S-256`. A name
-    // carries its suite now, which is right for `reviewed/<suite>/<name>.4x` and wrong inside the
-    // record: this wrote `{test name:rule/a-territory-whose-biome-is-desert}` where the test says
-    // `{test name:a-territory-whose-biome-is-desert}`.
+    // **The rows, by name, with no schema** - `S-259`, and `spec/README.md` rule 3: *the behaviour
+    // is every `{...}` row, including a `{load}`, and nothing else*, in an order that *depends on
+    // names* and *must not depend on anything editable*.
     //
-    // **Every record the application wrote from here on would have disagreed with its own test**,
-    // and `drift` compares exactly that row. Caught by a test in an example, which `C-237` is
-    // about nothing in the gate running.
+    // **This folded against the schema, which is narrower than the rule it implements.** A schema
+    // is the engine's business; a record is what he approved. So a test whose relations no schema
+    // declares - the first is `interface/the-starting-menu-offers-new-game-and-exit` - **could not
+    // be recorded at all**, and `P-621` says that is the normal way a thing he wants becomes a
+    // thing that is built: *relations do not have to exist for a test I have not approved.*
+    //
+    // **Measured before changing it: all 63 records come out byte-identical**, so no approval of
+    // his moves. The old path folded to rows and rendered them back to the friendly form; this
+    // reads the friendly form it was going to reproduce.
     let leaf = name.rsplit('/').next().unwrap_or(name);
-    out.push_str(&format!("{{test name:{leaf}}}\n"));
+    let mut out = format!("{{verdict state:{verdict}}}\n{{test name:{leaf}}}\n");
     let mut wrote = 0;
-    for row in &rows {
+    for line in text.lines().map(str::trim) {
+        // **Prose is not behaviour** - a record carries the rows and not the words around them.
+        if !line.starts_with('{') {
+            continue;
+        }
+        let relation = line
+            .trim_start_matches('{')
+            .split([' ', '}'])
+            .next()
+            .unwrap_or_default();
         // **`{test name:}` is written once, above, from the file's own name.** A test states it
         // too and the two have always agreed; writing the row from the name rather than copying it
         // is what makes a disagreement impossible rather than unlikely.
-        if row.relation == "test" {
+        if relation == "test" {
             continue;
         }
         // **A section marker keeps its own line and takes a blank line before it**, so the record
-        // reads the way a test reads. It is a row of no relation, which `Names::row` writes as it
-        // is.
-        let written = canonical(&names.row(row));
-        if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+        // reads the way a test reads.
+        if matches!(relation, "given" | "when" | "then" | "refused") {
             out.push('\n');
         }
-        out.push_str(&written);
+        out.push_str(&canonical(line));
         out.push('\n');
         wrote += 1;
     }
@@ -864,7 +872,7 @@ pub fn record_for(name: &str, text: &str, verdict: &str) -> Result<String, Strin
     // the shape a reader would take for an approval of something.
     if wrote == 0 {
         return Err(format!(
-            "`{name}` folded to no rows, so there is no behaviour to record"
+            "`{name}` has no rows, so there is no behaviour to record"
         ));
     }
     Ok(out)

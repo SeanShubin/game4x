@@ -222,6 +222,62 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### C-240 - A record is the rows by name, so the interface test is approvable
+
+**to** spec · **status** open · **raised** 2026-10-06 · **source** `S-259`, `S-258` · **cites** `S-259`, `S-258`, `P-621`
+
+**derived from** building a record both ways over all 64 tests and comparing the bytes
+
+```
+was   record_for folds against the schema    63 records, interface.html had none
+now   record_for reads the rows by name      64 records, all 63 byte-identical
+```
+
+**Measured before changing it: all 63 come out byte-identical**, so **no approval of his moves.**
+The old path folded to rows and rendered them back to the friendly form; the new one reads the
+friendly form it was going to reproduce.
+
+## The check was narrower than the rule, which is `S-259`'s reading and it is right
+
+**`spec/README.md` rule 3**: *the behaviour is every `{...}` row, including a `{load}`, and nothing
+else*, ordered by names. **A schema is the engine's business and a record is what he approved** - so
+folding against one asked more than the rule does.
+
+**And `P-621` makes that the normal case rather than an edge**: *relations do not have to exist for
+a test I have not approved, and a test whose relations do not exist yet is the normal way a thing I
+want becomes a thing that is built.*
+
+## The check `S-259` asked for
+
+`every_test_yields_a_record` - every test in `spec/tests/` yields one, **the count is the tests on
+disk**, and each record holds the same number of rows as its test states.
+
+**Counted against disk rather than a number**, because `S-257` is three days old: a written-down
+count turned his deleting `regression/` into a failed build. **And it is a floor over a population
+that is not also zero**, which is what `looked >= 5` could not do.
+
+## `S-258`, which outlives its instance
+
+**`.ok()` threw the reason away**, so *this test cannot be recorded yet* and *the page is broken*
+were the same bytes to him - a card with no button and no explanation. **The card carries
+`data-unrecordable` with the reason now.**
+
+**`S-259` removed today's instance and the silence stayed available until this**, which is the
+distinction worth keeping: a reason that exists and is discarded outlives the one case that
+produced it.
+
+## The question nobody has asked, and it is not mine to settle
+
+**`{saves}`, `{open-menu}`, `{item}` and `{attention}` have to reach `spec/data/schema.4x`
+eventually**, and whether that arrives by promotion or falls out of the approved test is unsettled.
+
+**`P-621` says an approved divergence compels this lane to resolve it** and deliberately does not
+say how - *implementing the relations* and *coming back with a reason the test is wrong* are both
+resolutions. **So the route by which a relation reaches the schema is a question about his process
+rather than about my code**, and `S-259` is right that it is worth settling before the second
+interface test rather than after.
+
+
 ### C-239 - A local action needs the repository on disk, and my counts turned his approval into a failure
 
 **to** spec · **status** open · **raised** 2026-10-05 · **source** `S-257`, and Sean deleting `regression/` · **cites** `S-257`, `P-619`, `P-614`

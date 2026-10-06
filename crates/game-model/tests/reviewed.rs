@@ -675,3 +675,75 @@ fn the_suites_on_disk_are_the_ones_that_are_stated() {
         );
     }
 }
+
+/// **Every test yields a record, and the count is the tests on disk.**
+///
+/// `spec/README.md` rule 3: *the behaviour is every `{...}` row, including a `{load}`, and nothing
+/// else* - in an order that *depends on names* and *must not depend on anything editable*.
+///
+/// # The check was narrower than the rule it implements
+///
+/// **`record_for` folded against the schema**, which is a stronger requirement than the rule makes:
+/// a schema is the engine's business and a record is what he approved. **So a test whose relations
+/// no schema declares could not be recorded at all** - and `P-621` says that is the normal case:
+/// *relations do not have to exist for a test I have not approved, and a test whose relations do
+/// not exist yet is the normal way a thing I want becomes a thing that is built.*
+///
+/// **What existed was a path that happened to work for the sixty-three tests whose relations are in
+/// the schema**, and nothing asserted it worked for a test. `S-259` asked for this, and the
+/// specification lane's measurement is what named it: `rule.html` carried 63 `data-record`
+/// attributes and `interface.html` carried none.
+///
+/// # The floor is the tests on disk
+///
+/// **A count against a written-down number would have the defect `S-257` produced** - his deleting
+/// `regression/` reported as a failed build - so this counts what is there. **And it is a floor over
+/// a population that is not also zero**, which is what `looked >= 5` could not do.
+#[test]
+fn every_test_yields_a_record() {
+    let tests = report::every_test();
+    assert!(
+        tests.len() > 40,
+        "only {} test(s), so this said almost nothing",
+        tests.len()
+    );
+
+    let mut recorded = 0;
+    let mut refused: Vec<String> = Vec::new();
+    for file in &tests {
+        let name = file.trim_end_matches(".4x").to_string();
+        let text = std::fs::read_to_string(report::tests_at().join(file))
+            .unwrap_or_else(|why| panic!("{file}: {why}"));
+        match report::render::record_for(&name, &text, "approved") {
+            Ok(said) => {
+                // **A record is the verdict, the name and the rows** - so it carries the rows the
+                // test states, and a record shorter than its test is one that dropped some.
+                // **The behaviour, so the verdict line is not counted as a row of the test.**
+                // `render::behaviour_in` takes it off, which is the one reader that knows a record
+                // is two things in one file.
+                let rows = text.lines().filter(|it| it.trim().starts_with('{')).count();
+                let held = report::render::behaviour_in(&said)
+                    .lines()
+                    .filter(|it| it.trim().starts_with('{'))
+                    .count();
+                assert_eq!(
+                    held, rows,
+                    "`{name}`: the record holds a different number of rows than the test states"
+                );
+                recorded += 1;
+            }
+            Err(why) => refused.push(format!("{name}: {why}")),
+        }
+    }
+
+    assert!(
+        refused.is_empty(),
+        "{} test(s) yield no record, so he cannot approve them: {refused:?}",
+        refused.len()
+    );
+    assert_eq!(
+        recorded,
+        tests.len(),
+        "a test yielded no record and no reason"
+    );
+}
