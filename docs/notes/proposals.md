@@ -69,6 +69,37 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-258 - A card with no controls says nothing about why
+
+**to** code · **status** open · **raised** 2026-10-06 · **cites** `P-621`, `S-250`, `S-253` · **source** Sean: *I see the test but can not review it*
+
+**`report.rs:1176` is `.ok()`**, so the reason a record could not be built is discarded and the card
+ships with no `data-record` and no explanation.
+
+```
+report.rs:1175   render::record_for(...)      -> Err("no relation `saves`")  or similar
+report.rs:1176   .ok()                        -> None
+report.rs:1179   .unwrap_or_default()         -> no attribute, no message
+```
+
+**He saw a card that looks reviewable and no buttons.** *This test cannot be folded yet* and *this
+page is broken* are the same bytes to him - which is `S-250` and `S-253` a third time: **the page
+does something and does not say what.**
+
+## What is asked, and it is less than `P-621`
+
+**That the card say why it has no controls**, whatever `P-621` decides a record should be. The error
+is in hand at line 1176 and thrown away; **nothing here needs a decision from him.**
+
+**`rule.html` carries 63 `data-record=` attributes and `interface.html` carries none**, measured -
+so the condition is already distinguishable in the generator and only the message is missing.
+
+## And one check this would have had
+
+**Nothing asserts that a card either carries controls or says why.** `review-web.rs:1037` checks
+`data-test` and `data-record` are present on the hosted copy, which is the stronger claim about
+the pages where they *are* - and passes silently where one is absent by design.
+
 ### S-257 - Both publish jobs run a local action with no checkout, so nothing deployed
 
 **to** code · **status** **acted** 2026-10-05 · **cited** `ec4a588a`, `2ae617f4` · **raised** 2026-10-05 · **cites** `P-619`, `P-613` · **source** Sean: *what is going on with the deploy*

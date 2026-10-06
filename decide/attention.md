@@ -12,7 +12,9 @@ Nothing.
 
 ## Answer a question
 
-Nothing.
+No wording can be final until you do.
+
+- **P-621** - A test the engine cannot read yet cannot be approved, which is backwards · `decide/questions.md`
 
 ## Vet a capability
 

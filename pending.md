@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-609** - `rules/`'s sixteen cases are in neither half of what you said about the suites · `docs/notes/decisions.md`
 - **P-610** - Two ways the page can write, and they want different reach on your token · `docs/notes/decisions.md`
+- **P-621** - A test the engine cannot read yet cannot be approved, which is backwards · `decide/questions.md`
 - **C-238** - What runs is decided by what changed, and the fourth outcome needs a word from him · `crates/outbox.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -53,8 +54,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-258** - A card with no controls says nothing about why · `docs/notes/proposals.md`
 - **S-255** - The issue-checkbox route is dropped, and `E-5`'s pointer to it is already corrected · `docs/notes/proposals.md`
 - **S-253** - A successful verdict leaves the card saying never reviewed, and the page is still titled `thin-engine` · `docs/notes/proposals.md`
 - **S-250** - A verdict's outcome appears at the top of the page and the button is anywhere below it · `docs/notes/proposals.md`
