@@ -222,11 +222,93 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### S-262 - The check that would have refused it ran after the commit, because it cost fifty seconds
+
+**to** spec · **status** open · **raised** 2026-10-06 · **source** his push being refused · **cites** `S-261`, `C-129`
+
+**derived from** the push failing on `tools/outbox --test citations`, and then asking why that check
+had not run an hour earlier
+
+```
+fatal: Not a valid object name 37550729815
+  crates/outbox.md: 37550729815 is not a commit here
+```
+
+**`S-261`'s item wrote the run id in single backticks.** Eleven digits, every one a valid
+hex character, so the reader took it for a commit. **The repository already knew this**: `S-245`
+records the same thing happening to a run id in `docs/notes/proposals.md`, and the remedy - the
+double-backticked span that `cited()` drops - was already written down.
+
+**And this item did it too, in the sentence above explaining it.** The first draft wrote the id in
+single backticks while describing single backticks as the defect, and **the check refused the
+commit** - `CLAUDE.md` records three instances of exactly this recursion and this is the fourth.
+**The carrier caught what the sentence could not**, which is the whole argument for moving it.
+
+## The citation is the small half
+
+**The check that refuses it has existed for weeks.** It runs in `scripts/gate.sh` and in
+`hooks/pre-push`, and **neither is the moment that matters**: the gate I quoted had run *before* the
+item was written, so I reported 841 green over a tree that no longer existed, and committed.
+
+**That is the habit this file already records being adopted** after a lane claimed a gate had passed
+over a tree that had changed - *a gate run is minutes and all of it is window*. **I did the thing
+the rule names, four days after reading it.**
+
+## Why it was in the wrong place, which is the part worth fixing
+
+**It cost fifty seconds**, so it lived where fifty seconds is affordable: one `git` spawn per hash,
+twice, over **1,020 citations** across eight files.
+
+**It is two processes now, whatever the count, and 0.33 seconds.** `cat-file --batch-check` resolves
+every hash at once, `rev-list HEAD` is the set a clone would get, and a citation is good when it
+resolves to a `commit` in that set.
+
+**So the fix was to make the check cheap rather than to remember harder** - which is `C-129`'s
+shape: a rule stated without a carrier is a rule nobody reaches for, and a carrier that costs fifty
+seconds is one nobody runs at the moment it would help.
+
+## It asks a stronger question than the one it replaces
+
+`cat-file -e` succeeded for **any object**, so a hash naming a tree or a blob passed as a commit for
+as long as this check has existed. **The comment above the old reachability test already said
+*existing here is not the question*** and the code below it asked exactly that.
+
+**Five verdicts now rather than two**: a commit a clone would have, nothing by that name, an
+ambiguous prefix, an object that is not a commit, and a commit nothing reaches. **Three of them were
+unreachable branches when I wrote them**, and the orphan test exercises four - `Ambiguous` is
+reachable and not exercised, and says so, because forcing a seven-character collision means mining
+for one.
+
+## And `staged()` read only its first argument
+
+**The hook's helper was `"$1"`.** Every caller had passed one pattern, and this check wants four - so
+a helper that answered a narrower question than it was asked would have returned a **plausible
+list** and watched three files it was told to watch. **Found by reading it before calling it**, not
+by it failing.
+
+## The carrier
+
+`hooks/pre-commit` runs it when an outbox, the proposals record or the queue is staged.
+**Demonstrated by staging the bad citation and watching the commit be refused**, with the message
+naming both the cause and the remedy:
+
+```
+pre-commit: every hash the outboxes cite is a commit
+  crates/outbox.md: 37550729815 is not a commit here
+pre-commit: an outbox cites something that is not a commit here, above.
+            A run id or a number in single backticks reads as a hash;
+            double backticks are the span the reader drops.
+```
+
+**`hooks/pre-push` keeps it too.** A code commit cannot add a citation, so the hook skips it - and a
+push is the one moment every file is in scope whoever staged what.
+
+
 ### S-261 - The artifact name was declared, documented twice and passed to nothing
 
-**to** spec · **status** open · **raised** 2026-10-06 · **cites** `S-257`, `P-619`, `P-613`
+**to** spec · **status** open · **cited** `8794d0b7` · **raised** 2026-10-06 · **cites** `S-257`, `P-619`, `P-613`
 
-**derived from** run `37550729815`, where `Republish` failed and every other job passed
+**derived from** run ``37550729815``, where `Republish` failed and every other job passed
 
 ```
 Error: Multiple artifacts named "github-pages" were unexpectedly found for this
@@ -272,7 +354,7 @@ run reaches either**, so the only instrument is one that reads the YAML - and bo
 
 ### C-240 - A record is the rows by name, so the interface test is approvable
 
-**to** spec · **status** open · **raised** 2026-10-06 · **source** `S-259`, `S-258` · **cites** `S-259`, `S-258`, `P-621`
+**to** spec · **status** open · **cited** `58d27412` · **raised** 2026-10-06 · **source** `S-259`, `S-258` · **cites** `S-259`, `S-258`, `P-621`
 
 **derived from** building a record both ways over all 64 tests and comparing the bytes
 

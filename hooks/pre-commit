@@ -212,8 +212,12 @@ outbox_says() {
     printf '%s\n' "$out"
 }
 
+# **`"$@"` rather than `"$1"`, so a second pattern is not silently dropped.** Every caller passed
+# one until the citations check below wanted four, and a helper that reads only the first would
+# have answered a narrower question than it was asked and returned a plausible list. git takes
+# any number of pathspecs, so one argument behaves exactly as before.
 staged() {
-    git diff --cached --name-only --diff-filter=ACMR -- "$1"
+    git diff --cached --name-only --diff-filter=ACMR -- "$@"
 }
 
 files=$(staged '*.md')
@@ -408,4 +412,32 @@ fi
 # returning and git reading the index, so a commit can still be raced in that instant -
 # `hooks/post-commit` reports that case afterwards, which is all anything can do about it. What
 # this removes is the ten seconds, which is where the one instance anybody has caught happened.
+# Every hash an outbox cites, checked before the commit rather than after it.
+#
+# **`S-262`: a run id in single backticks reached `HEAD`** - ``37550729815``, eleven digits, every
+# one a hex character - and the push that followed was refused. The check that refuses it has
+# existed for weeks and ran in `scripts/gate.sh` and `hooks/pre-push`, which are both the wrong
+# moment: the gate had run **before** the item was written, and the lane that wrote it reported a
+# green gate over a tree that no longer existed.
+#
+# **It could not run here before, because it took fifty seconds** - one `git` spawn per hash, twice,
+# over 1,020 citations. It is two processes now, whatever the count, and 0.33 seconds. **The reason
+# it was in the wrong place was its cost**, so the fix was to make it cheap rather than to remember
+# harder.
+#
+# **Only when something that holds citations is staged**, because a code commit cannot add one. The
+# generated `decide/attention.md` is excluded: it is rewritten from the outboxes a few lines above
+# and carries their hashes, so staging it is not a reason to re-ask.
+citing=$(staged '*outbox.md' 'docs/notes/proposals.md' 'decide/proposals.md' 'decide/questions.md')
+if [ -n "$citing" ]; then
+    echo "pre-commit: every hash the outboxes cite is a commit"
+    if ! cargo test --quiet --manifest-path tools/outbox/Cargo.toml \
+        --test citations every_hash_an_outbox_cites_is_a_commit; then
+        echo "pre-commit: an outbox cites something that is not a commit here, above." >&2
+        echo "            A run id or a number in single backticks reads as a hash;" >&2
+        echo "            double backticks are the span the reader drops." >&2
+        exit 1
+    fi
+fi
+
 refuse_if_two_columns " - the index changed while this hook was running"

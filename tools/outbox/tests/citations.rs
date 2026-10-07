@@ -130,36 +130,125 @@ fn is_a_commit(root: &Path, hash: &str) -> bool {
         .unwrap_or(false)
 }
 
-/// Whether a fresh clone of this repository would have the commit.
+/// What a clone of this repository would make of one cited hash.
 ///
-/// **Existing here is not the question.** `git cat-file -e` succeeds for any object in the
-/// local database, including one no ref points at - an amended commit, a reset branch, a
-/// `commit-tree` - and a clone only ever receives what is reachable. So a citation to an
-/// orphan passes on the machine that wrote it and fails in CI, which is the most confusing
-/// direction for a check to fail in.
+/// **Five answers rather than two.** `is_a_commit` and `is_reachable` together could say *absent*
+/// or *present*, and a reader of a failure had to guess which of several causes it was. **An
+/// ambiguous short hash and a hash naming a tree used to read as the same thing** as a hash that
+/// was never here.
+#[derive(Debug, PartialEq, Eq)]
+enum Verdict {
+    /// Resolves to a commit a fresh clone would have.
+    Good,
+    /// No object here by that name.
+    NotAnObject,
+    /// Several objects share the prefix, so it names no one commit.
+    Ambiguous,
+    /// An object, and not a commit - a blob or a tree. `cat-file -e` passed these.
+    NotACommit(String),
+    /// A commit this clone holds and nothing reaches: what an amend or a reset leaves behind.
+    Unreachable,
+}
+
+/// What this clone can say about a batch of cited hashes, in two `git` processes.
 ///
-/// Latent rather than theoretical: all 61 citations were reachable when this was written,
-/// and `6650161` had just made the check run in CI for the first time. The gap was found
-/// looking for what the first live run could hit.
+/// # Why a batch at all
 ///
-/// **Known and deliberately not handled: this asks *ancestor of `HEAD`*.** Every lane
-/// commits to `master` and there are no branches, so the two questions coincide. If this
-/// repository ever grows one, a citation to a commit on a pushed side branch is reachable
-/// in a clone and would be reported here as unreachable. That is where the false positive
-/// will come from, and it is written down so it costs nobody any attention until it does.
+/// **One `git` spawn per hash, twice, over 1,020 citations was fifty seconds** - and fifty seconds
+/// is why this ran in the gate and in `hooks/pre-push` and **not in `hooks/pre-commit`**, which is
+/// the only moment that would have caught `S-262`: a run id written in single backticks, committed
+/// because the gate that would have refused it had run before the item was written.
 ///
-/// The fix then is a containment test over **all** refs - `git branch --all --contains` -
-/// and not over remote ones alone. At pre-push time the commit being pushed is on no remote
-/// branch yet: `git branch -r --contains HEAD` is empty right now, so remote-only
-/// containment would reject exactly the citations this repository routinely writes, which
-/// is how `C-13` cited `ae14f4b` before it was pushed.
-fn is_reachable(root: &Path, hash: &str) -> bool {
-    Command::new("git")
-        .current_dir(root)
-        .args(["merge-base", "--is-ancestor", hash, "HEAD"])
-        .status()
-        .map(|status| status.success())
-        .unwrap_or(false)
+/// **Two processes regardless of how many citations there are.** `cat-file --batch-check` resolves
+/// every hash at once and says what each object *is*; `rev-list HEAD` is the set a fresh clone
+/// would get. A citation is good when it resolves to a `commit` that is in that set.
+///
+/// # It is a stronger question than the one it replaces
+///
+/// `cat-file -e` succeeded for **any** object - a blob or a tree would have passed as a commit, and
+/// the comment above `is_reachable` already said *existing here is not the question*. This reads the
+/// type, so a hash naming a tree now fails and says which it was.
+fn verdicts(root: &Path, hashes: &[String]) -> std::collections::HashMap<String, Verdict> {
+    let mut out = std::collections::HashMap::new();
+    if hashes.is_empty() {
+        return out;
+    }
+
+    // **Every hash resolved in one call.** The input line is echoed back, so a reply is matched to
+    // its request by that rather than by position - `cat-file` reorders nothing, and relying on
+    // that would be a premise nothing checks.
+    // **Each hash is sent twice and comes back once**, because `--batch-check` does not echo
+    // the input it found - it prints `<oid> <type> <size>`, and **the first version of this
+    // read the size as the type**: a committed commit came back `NotACommit("160")` and every
+    // short hash in the tree came back *not a commit here*, because the map was keyed by full
+    // oids that nothing looked up. **`%(rest)` is everything after the first space of the
+    // input**, so the second copy travels through and the reply names what was asked.
+    let asked = hashes
+        .iter()
+        .map(|it| format!("{it} {it}"))
+        .collect::<Vec<String>>()
+        .join("\n")
+        + "\n";
+    let resolved = {
+        let mut child = Command::new("git")
+            .current_dir(root)
+            .args([
+                "cat-file",
+                "--batch-check=%(objectname) %(objecttype) %(rest)",
+            ])
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::piped())
+            .spawn()
+            .unwrap_or_else(|why| panic!("git cat-file --batch-check: {why}"));
+        use std::io::Write;
+        child
+            .stdin
+            .take()
+            .expect("a pipe to cat-file")
+            .write_all(asked.as_bytes())
+            .expect("to send the hashes");
+        let out = child.wait_with_output().expect("cat-file to finish");
+        String::from_utf8_lossy(&out.stdout).to_string()
+    };
+
+    // **The reachable set, which is what a clone would have.** An orphan - what an amend or a reset
+    // leaves behind - is an object this clone holds and no clone would fetch.
+    let reachable: std::collections::HashSet<String> = {
+        let out = Command::new("git")
+            .current_dir(root)
+            .args(["rev-list", "HEAD"])
+            .output()
+            .unwrap_or_else(|why| panic!("git rev-list HEAD: {why}"));
+        String::from_utf8_lossy(&out.stdout)
+            .lines()
+            .map(|it| it.trim().to_string())
+            .filter(|it| !it.is_empty())
+            .collect()
+    };
+
+    for line in resolved.lines() {
+        // **A refusal names the whole input line**, so `<hash> <hash> missing` has the
+        // asked-for hash first; a hit is `<oid> <type> <hash>` with the echo last. **Read by
+        // shape rather than by position alone**, which is what the size being mistaken for a
+        // type cost.
+        let parts: Vec<&str> = line.split_whitespace().collect();
+        let (asked_for, verdict) = match parts.as_slice() {
+            [asked, .., "missing"] => (*asked, Verdict::NotAnObject),
+            [asked, .., "ambiguous"] => (*asked, Verdict::Ambiguous),
+            [oid, "commit", asked] => (
+                *asked,
+                if reachable.contains(*oid) {
+                    Verdict::Good
+                } else {
+                    Verdict::Unreachable
+                },
+            ),
+            [_, kind, asked] => (*asked, Verdict::NotACommit((*kind).to_string())),
+            _ => continue,
+        };
+        out.insert(asked_for.to_string(), verdict);
+    }
+    out
 }
 
 /// Whether this clone has the files without the history.
@@ -219,15 +308,42 @@ fn an_unreachable_commit_exists_here_and_would_not_survive_a_clone() {
     let tree = git(&["rev-parse", "HEAD^{tree}"]);
     let orphan = git(&["commit-tree", &tree, "-p", &reachable, "-m", "unreachable"]);
 
-    assert!(is_a_commit(&at, &reachable) && is_reachable(&at, &reachable));
-    assert!(
-        is_a_commit(&at, &orphan),
-        "the old question: the object is here"
+    // **The batch path, which is what the sweep runs** - a writer and a reader each checked alone
+    // leaves the composition unchecked, and this is the only test that has an unreachable commit
+    // to check it against.
+    let said = verdicts(&at, &[reachable.clone(), orphan.clone()]);
+    assert_eq!(
+        said.get(&reachable),
+        Some(&Verdict::Good),
+        "a committed commit is good"
     );
-    assert!(
-        !is_reachable(&at, &orphan),
-        "the question that matters: nothing reaches it, so a clone gets nothing"
+    assert_eq!(
+        said.get(&orphan),
+        Some(&Verdict::Unreachable),
+        "the question that matters: the object is here and nothing reaches it, so a clone gets          nothing"
     );
+    // **Both answers came from one pair of processes**, which is the property that let this move
+    // into `hooks/pre-commit`.
+    assert_eq!(said.len(), 2, "one call answered both");
+
+    // **The other verdicts, so none of them is a branch nothing runs.** `NotACommit` is the one
+    // `cat-file -e` could not see at all - it succeeds for any object, so a hash naming a tree
+    // passed as a commit for as long as this check has existed.
+    let tree_said = verdicts(&at, &[tree.clone(), "0123456789abcdef".to_string()]);
+    assert_eq!(
+        tree_said.get(&tree),
+        Some(&Verdict::NotACommit("tree".to_string())),
+        "a tree is an object and not a commit, which the old question could not ask"
+    );
+    assert_eq!(
+        tree_said.get("0123456789abcdef"),
+        Some(&Verdict::NotAnObject),
+        "nothing here by that name"
+    );
+
+    // **`Ambiguous` is not constructed here and that is deliberate.** Forcing two objects to share
+    // a seven-character prefix means mining for a collision, which would make this test slow and
+    // non-deterministic for one message. **It is reachable rather than exercised**, and says so.
 
     std::fs::remove_dir_all(&at).ok();
 }
@@ -243,6 +359,7 @@ fn every_hash_an_outbox_cites_is_a_commit() {
 
     let mut checked = 0usize;
     let mut missing = Vec::new();
+    let mut asked: Vec<(PathBuf, String)> = Vec::new();
     for at in outbox::places(&root) {
         let Ok(text) = std::fs::read_to_string(&at) else {
             continue;
@@ -251,16 +368,30 @@ fn every_hash_an_outbox_cites_is_a_commit() {
             if names_nothing(&hash) {
                 continue;
             }
-            checked += 1;
-            if !is_a_commit(&root, &hash) {
-                missing.push(format!("{}: {hash} is not a commit here", at.display()));
-            } else if !is_reachable(&root, &hash) {
-                missing.push(format!(
-                    "{}: {hash} exists here but nothing reaches it, so a clone will not have it",
-                    at.display()
-                ));
-            }
+            asked.push((at.clone(), hash));
         }
+    }
+
+    // **One pair of `git` processes for every citation in the tree**, which is what makes this
+    // cheap enough to run before a commit rather than after one.
+    let wanted: Vec<String> = asked.iter().map(|(_, hash)| hash.clone()).collect();
+    let said = verdicts(&root, &wanted);
+    for (at, hash) in &asked {
+        checked += 1;
+        let why = match said.get(hash) {
+            Some(Verdict::Good) => continue,
+            Some(Verdict::NotAnObject) | None => "is not a commit here".to_string(),
+            Some(Verdict::Ambiguous) => {
+                "names more than one object here, so it names no one commit".to_string()
+            }
+            Some(Verdict::NotACommit(kind)) => {
+                format!("is a {kind} rather than a commit")
+            }
+            Some(Verdict::Unreachable) => {
+                "exists here but nothing reaches it, so a clone will not have it".to_string()
+            }
+        };
+        missing.push(format!("{}: {hash} {why}", at.display()));
     }
 
     // Over every case, and how many cases there were: a run that found no citations would
