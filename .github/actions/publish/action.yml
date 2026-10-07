@@ -29,6 +29,25 @@ inputs:
 # **It broke both callers identically, which is the argument for one definition rather than
 # against it.** One action used twice meant one missing step failed both the same way, and the fix
 # is one line in two places rather than a diagnosis.
+# **The deployed URL, declared so the job can show it** - `S-264`.
+#
+# **Sean: *I remember being able to navigate to the deployed link and I don't see it now.* He was
+# right.** Before `89a7a464` the deploy job carried
+# `url: ${{ steps.deployment.outputs.page_url }}`, and GitHub drew that link beside the job on the
+# run page. **`P-619` split one deploy job into two and dropped the line from both.**
+#
+# **It cannot simply go back.** `steps.deployment` is a step of *this action* now, and a job can
+# only read `steps.<id>` of its own steps - so the value exists, is correct, and **has no way out
+# of the boundary** unless the action says so here.
+#
+# **Third instance of one class in a day.** `S-261` was an input declared and spent nowhere;
+# `S-263` was a name spent and declared nowhere; this is a value that exists and is not declared,
+# so nothing can spend it. **All three sat on the side that reads correctly.**
+outputs:
+  page_url:
+    description: Where the site was deployed, for the job's environment link.
+    value: ${{ steps.deployment.outputs.page_url }}
+
 runs:
   using: composite
   steps:

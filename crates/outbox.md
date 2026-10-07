@@ -222,9 +222,69 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### S-264 - The deployed link vanished because P-619 dropped the environment url
+
+**to** spec · **status** open · **raised** 2026-10-07 · **source** Sean noticing the link was gone · **cites** `P-619`, `S-261`, `S-263`
+
+**derived from** `git log -S"steps.deployment.outputs.page_url"`, which names the commit
+
+```
+before 89a7a464   url: ${{ steps.deployment.outputs.page_url }}    <- the link showed
+at     89a7a464   name: github-pages   (and nothing else, twice)
+```
+
+**Sean: *I remember being able to navigate to the deployed link and I don't see it now.*** He was
+right. GitHub draws that link beside the job on the run page when the job's environment declares a
+`url`, and **`P-619` split one deploy job into two and dropped the line from both.**
+
+## It could not simply go back
+
+**`steps.deployment` is a step of the action now**, and a job may only read `steps.<id>` of its own
+steps - so the value exists, is correct, and **has no way out of the boundary** until the action
+declares it as an output. The action does, and both jobs give the step an `id` and read it.
+
+## Nothing could have caught it, which is the finding rather than the fix
+
+**A missing environment URL cannot fail a run.** The deploy deploys, every job passes, and the only
+symptom is a link that is not there - **invisible to every check in this repository and visible to
+the one person who uses the page.**
+
+## Third instance of one class in a day
+
+| item    | what crossed the boundary                                     |
+| ------- | ------------------------------------------------------------- |
+| `S-261` | an input declared and spent nowhere                           |
+| `S-263` | a name spent and declared nowhere                             |
+| `S-264` | a value that exists and is not declared, so nothing spends it |
+
+**All three sat on the side that reads correctly**, and all three crossed a boundary whose two
+sides were each checked alone. **A composite action is a seam this lane had no instrument for**
+until today, and `S-257` - a checkout inside a local action - was the first of the four.
+
+## The carrier
+
+`every_job_that_deploys_says_where_it_deployed_to`, in `tools/outbox/tests/architecture.rs`:
+**every job using the publish action declares an environment with a name and a url, the url reads
+the id its own publish step carries, and the action declares the output it reads.**
+
+**Both halves, because either alone leaves the link broken** - a job may reference an output the
+action does not declare, and the expression resolves to **empty rather than failing**, which is this
+defect wearing the other mask.
+
+**Verified against `89a7a464` itself**, the commit that dropped the line: *`publish` uses the
+publish action and its environment declares no `url`*.
+
+## And the locator was wrong first, in the way this file keeps recording
+
+The first version searched backwards for a line starting with two spaces to find the job, which
+matches **any** indented line - so it found the step it had just located and reported the step's own
+text as the job's name. **An instrument answering *an* indented line when asked for *the job's*
+line.** Found by running it, not by reading it.
+
+
 ### S-263 - NOT DEPLOYED was printed by a script watching a job that has never existed
 
-**to** spec · **status** open · **raised** 2026-10-06 · **source** Sean asking whether the run output looked right · **cites** `S-261`, `P-613`, `P-619`
+**to** spec · **status** open · **cited** `15ac4013` · **raised** 2026-10-06 · **source** Sean asking whether the run output looked right · **cites** `S-261`, `P-613`, `P-619`
 
 **derived from** run ``37573381461``, where `Republish` succeeded and the report said the site had
 not moved

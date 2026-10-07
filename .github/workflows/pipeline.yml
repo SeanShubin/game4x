@@ -504,11 +504,16 @@ jobs:
       cancel-in-progress: true
     environment:
       name: github-pages
+      # **The link GitHub draws beside the job on the run page** - `S-264`, and the thing Sean
+      # noticed was gone. It comes from the action's own output, because the step that knows it
+      # is inside the action.
+      url: ${{ steps.site.outputs.page_url }}
     steps:
       # **Before the local action, because a local action lives in the repository** - `S-257`.
       # Without this the run cannot find `.github/actions/publish` and deploys nothing.
       - uses: actions/checkout@v7
       - uses: ./.github/actions/publish
+        id: site
         with:
           artifact: site-fast
           outcome: not run for this publish
@@ -535,10 +540,15 @@ jobs:
       cancel-in-progress: true
     environment:
       name: github-pages
+      # **The link GitHub draws beside the job on the run page** - `S-264`, and the thing Sean
+      # noticed was gone. It comes from the action's own output, because the step that knows it
+      # is inside the action.
+      url: ${{ steps.site.outputs.page_url }}
     steps:
       # **Before the local action** - `S-257`, the same as `publish` above.
       - uses: actions/checkout@v7
       - uses: ./.github/actions/publish
+        id: site
         with:
           artifact: site-full
           outcome: ${{ needs.gate.result }}

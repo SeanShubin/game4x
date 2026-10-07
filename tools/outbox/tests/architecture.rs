@@ -1237,3 +1237,118 @@ fn every_job_that_deploys_is_one_the_push_script_watches() {
         a.len()
     );
 }
+
+/// **Every job that deploys shows where it deployed to.**
+///
+/// # The link Sean noticed was gone
+///
+/// `S-264`. He said *I remember being able to navigate to the deployed link and I don't see it
+/// now*, and he was right. Before `89a7a464` the single deploy job carried
+/// `url: ${{ steps.deployment.outputs.page_url }}` under its environment, and GitHub drew that link
+/// beside the job on the run page. **`P-619` split one deploy job into two and dropped the line
+/// from both.**
+///
+/// # Nothing could have caught it, and that is the point
+///
+/// **A missing environment URL cannot fail a run.** The deploy still deploys, every job still
+/// passes, and the only symptom is a link that is not there - which is invisible to every check in
+/// this repository and visible to the one person who uses the page.
+///
+/// **It is the third instance of one class in a day**: `S-261` an input declared and spent nowhere,
+/// `S-263` a name spent and declared nowhere, and this a value that exists and is not declared so
+/// nothing can spend it. **All three sat on the side that reads correctly**, and all three crossed a
+/// boundary the checks only read one side of.
+///
+/// # What this asserts
+///
+/// Every job using the publish action declares an environment with both a `name` and a `url`, and
+/// the action declares the output that `url` reads. **Both halves, because either one alone leaves
+/// the link broken** - a job can reference an output the action does not declare, and the
+/// expression then resolves to empty rather than failing.
+#[test]
+fn every_job_that_deploys_says_where_it_deployed_to() {
+    let pipeline = std::fs::read_to_string("../../.github/workflows/pipeline.yml")
+        .expect("the pipeline to read");
+    let action = std::fs::read_to_string("../../.github/actions/publish/action.yml")
+        .expect("the publish action to read");
+
+    // The action's declared outputs, so a job reading one is reading something that exists.
+    let declared: Vec<String> = match action.split_once("\noutputs:") {
+        None => Vec::new(),
+        Some((_, rest)) => rest
+            .lines()
+            .take_while(|it| it.trim().is_empty() || it.starts_with("  ") || it.starts_with('#'))
+            .filter(|it| it.starts_with("  ") && !it.starts_with("    "))
+            .filter_map(|it| it.trim().strip_suffix(':').map(str::to_string))
+            .collect(),
+    };
+    assert!(
+        declared.contains(&"page_url".to_string()),
+        "the publish action declares no `page_url` output, so a job's environment url resolves to \
+         empty and the run page shows no link - which is `S-264`: {declared:?}"
+    );
+
+    // **The jobs, grouped by their own header rather than by the nearest indented line.**
+    //
+    // The first version of this searched backwards for a line starting with two spaces, which
+    // matches **any** indented line - so it found the step it had just located and reported the
+    // step's own text as the job's name: *`- uses: ./.github/actions/publish` names no
+    // environment*. **A locator that answers *an* indented line when asked for *the job's* line**,
+    // which is the class this file is full of. A job header is two spaces then a non-space.
+    let mut jobs: Vec<(String, Vec<&str>)> = Vec::new();
+    for line in pipeline.lines() {
+        let header = line.starts_with("  ")
+            && !line.starts_with("   ")
+            && line.trim_end().ends_with(':')
+            && !line.trim_start().starts_with('#');
+        if header {
+            jobs.push((line.trim().trim_end_matches(':').to_string(), Vec::new()));
+        } else if let Some(last) = jobs.last_mut() {
+            last.1.push(line);
+        }
+    }
+    assert!(
+        jobs.len() >= 5,
+        "found {} job(s) in the pipeline, so the grouping is wrong rather than the pipeline small",
+        jobs.len()
+    );
+
+    let mut checked = 0;
+    for (title, body) in &jobs {
+        if !body
+            .iter()
+            .any(|it| it.contains("uses: ./.github/actions/publish"))
+        {
+            continue;
+        }
+        let joined = body.join("\n");
+        assert!(
+            joined.contains("name: github-pages"),
+            "`{title}` uses the publish action and names no environment, so GitHub records the \
+             deployment against nothing"
+        );
+        assert!(
+            joined.contains("url: ${{ steps."),
+            "`{title}` uses the publish action and its environment declares no `url`, so the run \
+             page shows no link to the deployed site - which is `S-264`, the line `P-619` dropped"
+        );
+        // The id the url reads must be the id given to the step that produces it.
+        let id = body
+            .iter()
+            .find_map(|it| it.trim().strip_prefix("id: "))
+            .unwrap_or_else(|| {
+                panic!("`{title}`: the publish step carries no `id:` for the url to read")
+            });
+        assert!(
+            joined.contains(&format!("url: ${{{{ steps.{id}.outputs.page_url }}}}")),
+            "`{title}`: the environment url does not read `steps.{id}.outputs.page_url`, so it \
+             resolves to empty and no link is shown"
+        );
+        checked += 1;
+    }
+    assert!(
+        checked >= 2,
+        "only {checked} job(s) use the publish action, so this checked almost nothing"
+    );
+    println!("{checked} deploying job(s), each showing where it deployed to");
+}
