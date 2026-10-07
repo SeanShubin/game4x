@@ -8,6 +8,41 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-06 - the interface carries its own data, and the two schemas do not know each other
+
+**Sean**, to the code lane, relayed because an idea said in chat reaches `spec/` only by being
+written down first:
+
+> The user interface is going to carry data in the database just like the game mechanics do,
+> although the code will be arranged such that the schemas don't know about each other.
+>
+> This state should be test driven, though I expect it will be necessary to keep name menu states
+> and keep track of which we are on.
+
+**Three new things and one confirmation.** New: that the interface carries its own data in the
+database; that the two schemas do not know about each other; and that menu states are **named**,
+with which one we are on kept. **Not new**: *this state should be test driven* - `spec/README.md`
+rule 3 already says *a test is the primary statement*, verified, so that sentence is **him
+confirming the interface is in scope for rule 3** rather than asking for anything. Worth recording
+as a confirmation, because a reader would otherwise wonder whether rule 3 reached the interface at
+all.
+
+**The second sentence answers what the entry below left open.** *Which menu we are on* is state the
+interface holds, in a schema of its own - so an interface test's `given` states it, and `P-604`'s
+two runs sharing no state is satisfied by construction rather than by discipline.
+
+**And *the schemas don't know about each other* is a property rather than an arrangement**, which is
+the code lane's observation and worth keeping in its words: it resembles `docs/architecture.md`
+rule 1, *dependencies point one way*, and rule 11, *what a thing is belongs to the data* - both
+verified. **Two schemas, neither naming a relation the other declares**, is cheap to hold and
+currently held by nothing.
+
+**Nothing is built for it and nothing is filed as work**, deliberately: there is no interface schema
+yet, so a check would range over an empty population - the failure this tree has spent a week
+naming. **The code lane's position is that the check arrives with the first interface relation
+rather than after it**, which is this lane's reading of *a rule stated without its carrier* said
+from the other side.
+
 ## 2026-10-06 - menu entries are data, so the interface cannot work without reading it
 
 **Sean**, to the code lane, which relayed the words rather than writing them:
@@ -28,10 +63,12 @@ column on the entry or a thing beside it.
 
 **A menu entry that transforms state and causes an effect is structurally a rule.**
 `(old-state, commands) -> (new-state, effects)` is what `docs/process.md` requires of state, and
-`spec/data/rules.4x` writes one as `{rule}` with `{input}` and `{clause role:...}`. **So his menu
-entries may want to arrive by the route rules already take** - which is the question this lane kept
-out of `P-621`: whether `{saves}`, `{open-menu}`, `{item}` and `{attention}` reach
-`spec/data/schema.4x` by promotion or by falling out of an approved test.
+`spec/data/rules.4x` writes one as `{rule}` with `{input}` and `{clause role:...}`. **So his menu entries looked like they might arrive by the route rules already take** - but see the
+entry above: *the schemas don't know about each other* cuts against that, and the route is a
+parallel one rather than the same one. **What the question this lane kept out of `P-621` is about
+has moved with it**: not whether `{saves}` and the rest reach `spec/data/schema.4x`, but whether
+they reach a schema of the interface's own.
+
 
 **His second sentence is `docs/architecture.md` rule 11 said about the interface.** Verified: rule 11
 is *a relation or a rule the data declares may not appear in engine code that runs. What a thing is
