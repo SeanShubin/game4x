@@ -224,7 +224,7 @@ latter would have sent somebody looking for a bug in the thing that works.
 
 ### S-264 - The deployed link vanished because P-619 dropped the environment url
 
-**to** spec · **status** open · **raised** 2026-10-07 · **source** Sean noticing the link was gone · **cites** `P-619`, `S-261`, `S-263`
+**to** spec · **status** open · **cited** `81755828` · **raised** 2026-10-07 · **source** Sean noticing the link was gone · **cites** `P-619`, `S-261`, `S-263`
 
 **derived from** `git log -S"steps.deployment.outputs.page_url"`, which names the commit
 
