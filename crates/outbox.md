@@ -222,6 +222,54 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### S-261 - The artifact name was declared, documented twice and passed to nothing
+
+**to** spec · **status** open · **raised** 2026-10-06 · **cites** `S-257`, `P-619`, `P-613`
+
+**derived from** run `37550729815`, where `Republish` failed and every other job passed
+
+```
+Error: Multiple artifacts named "github-pages" were unexpectedly found for this
+workflow run. Artifact count is 2.
+```
+
+**`.github/actions/publish/action.yml` took an `artifact` input** *so two publishes in one run do
+not collide*, said so in its header and again beside the job that calls it - **and neither
+`upload-pages-artifact` nor `deploy-pages` was given it.** Both uploaded under the default name.
+
+## What the site is now, which is the fallback working
+
+**The fast publish had already deployed** - twelve seconds in - so the site carries today's reports
+beside **yesterday's game**, and the run is red. `P-613` asked for exactly that fallback and it
+held; what broke is the thing it falls back from.
+
+## The class, and it is the one this tree names most
+
+**An unused input is indistinguishable from a used one by reading the caller.** Both callers pass
+`artifact:` and are right to; nothing on that side can show the value stopped at the boundary.
+
+**And the comment described the intent.** *The Pages artifact is named by the caller* was true of
+the design and false of the file, and **read identically either way** - which is *quoting a thing
+and doing it are the same bytes* pointed at a parameter instead of a hash.
+
+## The carrier
+
+`every_input_a_composite_action_declares_is_used`, in `tools/outbox/tests/architecture.rs`:
+**every input an action declares is spent by one of its steps.**
+
+**Verified by running it against the version that failed in CI**, where it names the input:
+*declares the input `artifact` and no step uses `inputs.artifact`*. Green after, over 2 inputs
+across 1 action, both populations asserted.
+
+**It generalises past this input**, which is the reason it is a check and not a fix: the next
+action to take a value and drop it fails here rather than on the site.
+
+## Second defect in this action in four days, both invisible locally
+
+`S-257` was a checkout inside a local action; this is an input going nowhere. **Nothing a lane can
+run reaches either**, so the only instrument is one that reads the YAML - and both now have one.
+
+
 ### C-240 - A record is the rows by name, so the interface test is approvable
 
 **to** spec · **status** open · **raised** 2026-10-06 · **source** `S-259`, `S-258` · **cites** `S-259`, `S-258`, `P-621`

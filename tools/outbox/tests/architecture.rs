@@ -1022,3 +1022,94 @@ fn every_job_using_a_local_action_checks_out_first() {
          found and the job fails having done nothing: {local:?}"
     );
 }
+
+/// **Every input a composite action declares is referenced by one of its steps.**
+///
+/// # The input was declared, documented twice, and passed to nothing
+///
+/// `S-261`. `.github/actions/publish/action.yml` took an `artifact` input *so two publishes in one
+/// run do not collide*, said so in its header and again beside the job that calls it - **and
+/// neither `upload-pages-artifact` nor `deploy-pages` was given it.** Both publishes uploaded under
+/// the default name, and the second deploy refused:
+///
+/// ```text
+/// Error: Multiple artifacts named "github-pages" were unexpectedly found for this
+/// workflow run. Artifact count is 2.
+/// ```
+///
+/// **The fast publish had already deployed**, so the site was current with yesterday's game and the
+/// run was red - which is the designed fallback working and the thing it falls back from broken.
+///
+/// # Why a check rather than care
+///
+/// **An unused input is indistinguishable from a used one by reading the caller.** Both callers
+/// passed `artifact:` and were correct to; nothing on that side could show that the value stopped
+/// there. **And the comment described the intent**, which is `CLAUDE.md`'s *quoting a thing and
+/// doing it are the same bytes* in the other direction: a sentence saying the artifact is named by
+/// the caller was true of the design and false of the file, and read identically either way.
+///
+/// **This is the second defect in this action in four days and both were invisible locally.**
+/// `S-257` was a checkout inside a local action; this is an input going nowhere. Nothing a lane can
+/// run reaches either, so the check has to read the YAML.
+#[test]
+fn every_input_a_composite_action_declares_is_used() {
+    let mut actions: Vec<std::path::PathBuf> = Vec::new();
+    let root = std::path::Path::new("../../.github/actions");
+    if let Ok(entries) = std::fs::read_dir(root) {
+        for entry in entries.flatten() {
+            let file = entry.path().join("action.yml");
+            if file.is_file() {
+                actions.push(file);
+            }
+        }
+    }
+    assert!(
+        !actions.is_empty(),
+        "no composite action found under {}, so this checked nothing",
+        root.display()
+    );
+
+    let mut checked = 0;
+    for file in &actions {
+        let text = std::fs::read_to_string(file).unwrap_or_else(|why| panic!("{file:?}: {why}"));
+        let (head, body) = text
+            .split_once("\nruns:")
+            .unwrap_or_else(|| panic!("{file:?} declares no `runs:`, so it is not an action"));
+
+        // **The input names, read from the `inputs:` block rather than from a list of my own.**
+        let declared: Vec<String> = match head.split_once("\ninputs:") {
+            None => Vec::new(),
+            Some((_, rest)) => rest
+                .lines()
+                .take_while(|it| it.trim().is_empty() || it.starts_with("  "))
+                .filter(|it| it.starts_with("  ") && !it.starts_with("    "))
+                .filter_map(|it| it.trim().strip_suffix(':').map(str::to_string))
+                .collect(),
+        };
+        assert!(
+            !declared.is_empty(),
+            "{file:?} declares no inputs, so this file proves nothing - delete it from the sweep \
+             or give the check a reason to skip it"
+        );
+
+        for input in &declared {
+            // **`inputs.<name>` in the steps, which is the only place a value can be spent.**
+            let spent = format!("inputs.{input}");
+            assert!(
+                body.contains(&spent),
+                "{file:?} declares the input `{input}` and no step uses `{spent}`, so the value \
+                 stops at the boundary while both callers look correct - which is `S-261`"
+            );
+            checked += 1;
+        }
+    }
+    assert!(
+        checked >= 2,
+        "only {checked} input(s) across {} action(s), which is too few to be a check",
+        actions.len()
+    );
+    println!(
+        "{checked} declared input(s) across {} action(s), all used",
+        actions.len()
+    );
+}

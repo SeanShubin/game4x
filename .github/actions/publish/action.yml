@@ -361,10 +361,17 @@ runs:
     #
     # **`mkdir -p` above is what makes that work**: a build that failed leaves no `dist/`, and an
     # upload of a missing directory fails rather than publishing the committed half.
+    # **The name is the caller's, and this step is where that stops being a comment** - `S-261`.
+    # The `artifact` input was declared, documented in two places and **passed to nothing**: both
+    # publishes uploaded under the default `github-pages`, and `deploy-pages` refused the second
+    # with *Multiple artifacts named "github-pages" were unexpectedly found for this workflow run.
+    # Artifact count is 2.* **The comment above describes what this line does now and described
+    # nothing before it.**
     - name: Upload Pages artifact
       if: always()
       uses: actions/upload-pages-artifact@v5
       with:
+        name: ${{ inputs.artifact }}
         path: crates/game4x/dist
 
     # **`always()`, and the check is what said so.** Without it a failure in any step above -
@@ -376,3 +383,5 @@ runs:
       if: always()
       id: deployment
       uses: actions/deploy-pages@v5
+      with:
+        artifact_name: ${{ inputs.artifact }}
