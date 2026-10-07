@@ -49,7 +49,27 @@ $env:GIT_PAGER = "cat"
 $env:GH_PAGER = "cat"
 
 $site = "https://seanshubin.github.io/game4x"
-$deployJob = "Deploy to GitHub Pages"
+# The jobs that deploy, by the first word of their name.
+#
+# **`S-263`: this said `Deploy to GitHub Pages`, which is a step inside
+# `.github/actions/publish` and has never been the name of a job.** So no job ever matched, and
+# every push since the publish/republish split reported `NOT DEPLOYED` whatever happened -
+# including run ``37573381461``, where `Republish` succeeded and a Pages deployment for
+# `273f4ac` landed inside the run window.
+#
+# **It read as correct for as long as it was wrong**, because the failing case and the working
+# case print the same line. The run before it genuinely did not republish, so the report was
+# right by accident on the one occasion anybody checked it.
+#
+# **Either one deploying means the site moved**, so both count: the fast publish replaces the
+# whole site with committed reports, and the slow one replaces it again with the game this run
+# built. `P-613` is why a failed gate still deploys, so the deploy is not evidence the run
+# passed - which is what `failed_after` below is for.
+#
+# **Checked against the workflow rather than remembered** -
+# `every_job_that_deploys_is_one_the_push_script_watches` asserts this list and the jobs that
+# use the publish action name each other, in both directions.
+$deployJobs = @("Publish", "Republish")
 
 # --- How long it took, on every way out ---------------------------------------------------
 #
@@ -270,7 +290,8 @@ try {
         }
 
         $thisRunDeployed = @($jobs | Where-Object {
-                (Get-Field $_ "name") -eq $deployJob -and (Get-Field $_ "conclusion") -eq "success"
+                $first = (Get-Field $_ "name") -split " " | Select-Object -First 1
+                $deployJobs -contains $first -and (Get-Field $_ "conclusion") -eq "success"
             }).Count -gt 0
         if ($thisRunDeployed) { $deployed = $true }
 

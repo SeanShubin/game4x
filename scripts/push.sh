@@ -100,7 +100,27 @@ took() {
 trap took EXIT
 
 SITE="https://seanshubin.github.io/game4x"
-DEPLOY_JOB="Deploy to GitHub Pages"
+# The jobs that deploy, by the first word of their name.
+#
+# **`S-263`: this said `Deploy to GitHub Pages`, which is a step inside
+# `.github/actions/publish` and has never been the name of a job.** So no job ever matched, and
+# every push since the publish/republish split reported `NOT DEPLOYED` whatever happened -
+# including run ``37573381461``, where `Republish` succeeded and a Pages deployment for
+# `273f4ac` landed inside the run window.
+#
+# **It read as correct for as long as it was wrong**, because the failing case and the working
+# case print the same line. The run before it genuinely did not republish, so the report was
+# right by accident on the one occasion anybody checked it.
+#
+# **Either one deploying means the site moved**, so both count: the fast publish replaces the
+# whole site with committed reports, and the slow one replaces it again with the game this run
+# built. `P-613` is why a failed gate still deploys, so the deploy is not evidence the run
+# passed - which is what `failed_after` below is for.
+#
+# **Checked against the workflow rather than remembered** -
+# `every_job_that_deploys_is_one_the_push_script_watches` asserts this list and the jobs that
+# use the publish action name each other, in both directions.
+DEPLOY_JOBS="Publish Republish"
 GATE=1
 DEPLOY_ONLY=0
 
@@ -251,13 +271,17 @@ for id in $runs; do
     gh run view "$id" --json jobs \
         --jq '.jobs[] | "  " + (.conclusion // .status) + "  " + .name' 2>/dev/null
 
-    deploy="$(gh run view "$id" --json jobs \
-        --jq ".jobs[] | select(.name == \"$DEPLOY_JOB\") | .conclusion" 2>/dev/null)"
+    # Every job's first word beside its conclusion, so the match is on the name the workflow
+    # gives rather than on a position in a list.
+    verdicts="$(gh run view "$id" --json jobs \
+        --jq '.jobs[] | (.name | split(" ")[0]) + " " + (.conclusion // "")' 2>/dev/null)"
     this_run_deployed=0
-    if [ "$deploy" = "success" ]; then
-        this_run_deployed=1
-        deployed=1
-    fi
+    for job in $DEPLOY_JOBS; do
+        if echo "$verdicts" | grep -qx "$job success"; then
+            this_run_deployed=1
+            deployed=1
+        fi
+    done
 
     if [ "$conclusion" != "success" ]; then
         # Which half of *this* run failed decides what its failure means. Asked per run

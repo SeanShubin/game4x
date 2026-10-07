@@ -222,9 +222,75 @@ wrote it in the new format. **An ordinary approval, not a half-finished pass**, 
 latter would have sent somebody looking for a bug in the thing that works.
 
 
+### S-263 - NOT DEPLOYED was printed by a script watching a job that has never existed
+
+**to** spec · **status** open · **raised** 2026-10-06 · **source** Sean asking whether the run output looked right · **cites** `S-261`, `P-613`, `P-619`
+
+**derived from** run ``37573381461``, where `Republish` succeeded and the report said the site had
+not moved
+
+```
+success  Republish (the reports, with the game this run built)
+NOT DEPLOYED  273f4ac
+```
+
+**Both push scripts watched a job called `Deploy to GitHub Pages`**, which is a **step** inside
+`.github/actions/publish`. **No job has ever been called that.** The jobs that deploy are `Publish`
+and `Republish`, so nothing matched, and every push since that split reported `NOT DEPLOYED`
+whatever happened.
+
+## It did deploy, and that is measured
+
+**A Pages deployment for `273f4ac` landed at 05:00:22**, inside the run's window of 04:50:25 to
+05:17:32. **And the live page carries `273f4ac6eaae8bffa899133e70dbde60c513240a`** - fetched, not
+inferred, after one transient TLS failure that is not part of this.
+
+## Why reading it could not catch it
+
+**The failing case and the working case print the same line.** A run that truly did not deploy and a
+run whose deploy the script cannot see are one string.
+
+**So it was right by accident on the one occasion anybody checked it.** The previous run,
+``37550729815``, genuinely failed to republish - `S-261` - and `NOT DEPLOYED` was correct there for
+a reason that had nothing to do with the predicate. **The two runs together are the whole defect: it
+agreed with reality exactly once, by coincidence, immediately before disagreeing.**
+
+## This is `S-261` mirrored, four hours apart
+
+**There a value was declared and spent nowhere; here a name was spent and declared nowhere.** Both
+sat on the side that reads correctly - a caller passing `artifact:` is right to, and a script
+naming a deploy job looks like a script that watches the deploy.
+
+**Neither was reachable by any check that existed**, and both are now reachable by one that reads
+across the boundary rather than down one side of it.
+
+## The carrier, in both directions
+
+`every_job_that_deploys_is_one_the_push_script_watches`, in `tools/outbox/tests/architecture.rs`.
+
+**Every job using the publish action is watched, and every watched name is such a job.** The second
+direction is what caught this one; **the first is what catches the next publishing job nobody adds
+to the list**, which is the failure that arrives when the pipeline grows rather than when it breaks.
+
+**And the two spellings are asserted to agree**, because Sean runs `push.ps1`, the gate runs
+neither, and a difference between them would be invisible to everybody.
+
+**Verified by putting the old name back**: *`Publish` deploys and push.sh does not watch it, so a
+push that moved the site will report that it did not*.
+
+## What the rest of the output said, which was right
+
+**The classification was correct and this was its first code-only push.** `Publish` skipped,
+`Republish` ran - `P-619`: *a push that touched code gets the long build and the deploy*, and there
+is nothing for the fast one to publish that the slow one will not publish better.
+
+**`S-261` is confirmed fixed by the same run**, which is what it needed and could not get locally:
+two named artifacts, the second deploy no longer refused.
+
+
 ### S-262 - The check that would have refused it ran after the commit, because it cost fifty seconds
 
-**to** spec · **status** open · **raised** 2026-10-06 · **source** his push being refused · **cites** `S-261`, `C-129`
+**to** spec · **status** open · **cited** `273f4ac6` · **raised** 2026-10-06 · **source** his push being refused · **cites** `S-261`, `C-129`
 
 **derived from** the push failing on `tools/outbox --test citations`, and then asking why that check
 had not run an hour earlier

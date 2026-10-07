@@ -1113,3 +1113,127 @@ fn every_input_a_composite_action_declares_is_used() {
         actions.len()
     );
 }
+
+/// **Every job that deploys is one the push scripts watch, and every name they watch is such a
+/// job.**
+///
+/// # The name had never been a job
+///
+/// `S-263`. Both scripts looked for a job called `Deploy to GitHub Pages`, which is a **step** inside
+/// `.github/actions/publish`. No job has ever been called that, so nothing matched and every push
+/// since the publish/republish split printed `NOT DEPLOYED` whatever happened.
+///
+/// **Run `37573381461` is the one that showed it**: `Republish` succeeded, a Pages deployment for
+/// `273f4ac` landed inside the run's window, and the report said the site had not moved.
+///
+/// # Why reading it could not catch it
+///
+/// **The failing case and the working case print the same line.** A run that truly did not deploy
+/// and a run whose deploy the script cannot see are one string, so the report was *right by
+/// accident* on the previous run - where `Republish` had genuinely failed - which is the occasion
+/// somebody looked at it.
+///
+/// **This is `S-261` in the other direction.** There a value was declared and never spent; here a
+/// name was spent and never declared. Both were invisible from the side that looked correct.
+///
+/// # Both directions, because one of them is the cheap half
+///
+/// Asserting that each watched name exists would not have caught a *new* publishing job nobody
+/// watches - which is the failure that arrives when the pipeline grows. So this asks both, and
+/// asserts each population is not empty.
+#[test]
+fn every_job_that_deploys_is_one_the_push_script_watches() {
+    let pipeline = std::fs::read_to_string("../../.github/workflows/pipeline.yml")
+        .expect("the pipeline to read");
+
+    // The jobs whose steps use the publish action, by the first word of their name - which is what
+    // the scripts match on, because a full name carries punctuation two shells would have to quote.
+    let mut deploying: Vec<String> = Vec::new();
+    let mut seen_name: Option<String> = None;
+    for line in pipeline.lines() {
+        if let Some(rest) = line.strip_prefix("    name: ") {
+            seen_name = Some(rest.trim().to_string());
+        }
+        if line.contains("uses: ./.github/actions/publish") {
+            let name = seen_name
+                .clone()
+                .expect("a job to carry a name before its steps");
+            let first = name
+                .split_whitespace()
+                .next()
+                .expect("a name with a word in it")
+                .to_string();
+            if !deploying.contains(&first) {
+                deploying.push(first);
+            }
+        }
+    }
+    assert!(
+        deploying.len() >= 2,
+        "found {} job(s) using the publish action, so this checked almost nothing: {deploying:?}",
+        deploying.len()
+    );
+
+    // What each script watches, read from the script rather than restated here.
+    let sh = std::fs::read_to_string("../../scripts/push.sh").expect("push.sh to read");
+    let ps = std::fs::read_to_string("../../scripts/push.ps1").expect("push.ps1 to read");
+
+    let watched_sh: Vec<String> = sh
+        .lines()
+        .find_map(|it| it.strip_prefix("DEPLOY_JOBS=\""))
+        .map(|it| {
+            it.trim_end_matches('"')
+                .split_whitespace()
+                .map(str::to_string)
+                .collect()
+        })
+        .expect("push.sh to declare DEPLOY_JOBS");
+    let watched_ps: Vec<String> = ps
+        .lines()
+        .find_map(|it| it.strip_prefix("$deployJobs = @("))
+        .map(|it| {
+            it.trim_end_matches(')')
+                .split(',')
+                .map(|piece| piece.trim().trim_matches('"').to_string())
+                .filter(|piece| !piece.is_empty())
+                .collect()
+        })
+        .expect("push.ps1 to declare $deployJobs");
+
+    for (which, watched) in [("push.sh", &watched_sh), ("push.ps1", &watched_ps)] {
+        assert!(
+            !watched.is_empty(),
+            "{which} watches nothing, so every push would report NOT DEPLOYED - which is `S-263`"
+        );
+        for job in &deploying {
+            assert!(
+                watched.contains(job),
+                "`{job}` deploys and {which} does not watch it, so a push that moved the site \
+                 will report that it did not: {watched:?}"
+            );
+        }
+        for job in watched {
+            assert!(
+                deploying.contains(job),
+                "{which} watches `{job}` and no job using the publish action is named that, so \
+                 nothing will ever match it - which is `S-263` exactly: the name was \
+                 `Deploy to GitHub Pages`, a step inside the action"
+            );
+        }
+    }
+
+    // **The two spellings agree**, because Sean runs the PowerShell one and the gate runs neither.
+    let mut a = watched_sh.clone();
+    let mut b = watched_ps.clone();
+    a.sort();
+    b.sort();
+    assert_eq!(
+        a, b,
+        "the two push scripts watch different jobs, so they would report differently about the \
+         same run"
+    );
+    println!(
+        "{} deploying job(s), watched by both scripts: {a:?}",
+        a.len()
+    );
+}
