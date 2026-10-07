@@ -69,7 +69,6 @@ parallel one rather than the same one. **What the question this lane kept out of
 has moved with it**: not whether `{saves}` and the rest reach `spec/data/schema.4x`, but whether
 they reach a schema of the interface's own.
 
-
 **His second sentence is `docs/architecture.md` rule 11 said about the interface.** Verified: rule 11
 is *a relation or a rule the data declares may not appear in engine code that runs. What a thing is
 belongs to the data.* **If menu entries are data the interface cannot name `new-game` and has to
