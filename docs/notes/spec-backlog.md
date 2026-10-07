@@ -8,6 +8,44 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-06 - menu entries are data, so the interface cannot work without reading it
+
+**Sean**, to the code lane, which relayed the words rather than writing them:
+
+> I am thinking the user interface will read prose from the menu entries, and that menu entries are
+> going to define both state transformations and effects, such as which menu we are on and commands
+> invoked by menu items.
+
+> So the user interface menus won't be able to work at all without accessing the database
+
+**What is unstated.** Where a menu entry is written, and in what. Whether *which menu we are on* is
+state the engine holds or state the interface holds - `P-603` says *the user interface is state like
+any other* and `P-604` says the two runs share none, so a menu's position may be either and the
+answer decides what an interface test's `given` contains. And whether the prose a menu shows is a
+column on the entry or a thing beside it.
+
+**Two observations from the code lane, neither of them a decision, both checked here.**
+
+**A menu entry that transforms state and causes an effect is structurally a rule.**
+`(old-state, commands) -> (new-state, effects)` is what `docs/process.md` requires of state, and
+`spec/data/rules.4x` writes one as `{rule}` with `{input}` and `{clause role:...}`. **So his menu
+entries may want to arrive by the route rules already take** - which is the question this lane kept
+out of `P-621`: whether `{saves}`, `{open-menu}`, `{item}` and `{attention}` reach
+`spec/data/schema.4x` by promotion or by falling out of an approved test.
+
+**His second sentence is `docs/architecture.md` rule 11 said about the interface.** Verified: rule 11
+is *a relation or a rule the data declares may not appear in engine code that runs. What a thing is
+belongs to the data.* **If menu entries are data the interface cannot name `new-game` and has to
+read it**, which is *the menus won't work at all without accessing the database* exactly. **So he has
+derived an existing rule rather than proposed a new one**, and if it is promoted it is as a
+consequence another rule leans on rather than as a new constraint.
+
+**And the check holding rule 11 does not reach the interface.** `common::engine_modules` reads
+`crates/game-model/src` and nothing else, verified. So **when menu entries become data, nothing
+checks the interface against the rule his sentence is about** - the code lane's to act on once there
+is a menu entry to name, and recorded here because the gap arrives with the data rather than with
+the code.
+
 ## 2026-10-01 - one function logically, state behind interfaces architecturally
 
 **Sean**: *conceptually the game is a single function, but that does not have to mean there is
