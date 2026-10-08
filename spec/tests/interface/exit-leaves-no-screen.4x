@@ -1,0 +1,17 @@
+# `exit` ends the application, so there is no screen afterwards.
+#
+# **The absence is the assertion.** `P-617`: *the `then` is the whole of what the interface shows*,
+# so a `then` with no `{screen}` row says no screen is shown. **`{running}` is this lane's choice**
+# for saying the application is up, and the alternative - an empty `then` - cannot tell *exited*
+# from *a test that forgot to say anything*.
+
+{test name:exit-leaves-no-screen}
+
+{given}
+{running} -> 1
+{screen name:menu}
+
+{when}
+{exit}
+
+{then}

@@ -1,0 +1,20 @@
+# `delete save`, and the consequence two screens away.
+#
+# **This is the pair of `continue-is-offered-once-a-game-has-been-saved`** - that one says the item
+# appears, this one says it goes. **Two tests rather than one** because what makes `continue`
+# conditional is the condition changing in both directions.
+
+{test name:deleting-the-last-save-takes-continue-off-the-menu}
+
+{given}
+{screen name:saves}
+{save name:first-game turn:3} -> 1
+
+{when}
+{delete-save name:first-game}
+
+{then}
+{screen name:saves}
+{item of:saves name:start active:0} -> 1
+{item of:saves name:back active:1} -> 1
+{attention of:back}

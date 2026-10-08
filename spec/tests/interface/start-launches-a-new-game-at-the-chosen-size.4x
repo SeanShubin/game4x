@@ -1,0 +1,24 @@
+# `start` on `configure` launches the game.
+#
+# **The game screen is the first one whose contents are not all items.** `goldberg view` and
+# `status area` are components; `next turn` and `menu` are action buttons. **This states the view as
+# one row naming it and the status as one row carrying its text**, which is `P-608`'s *a status bar,
+# always present, that I can check the text of*.
+
+{test name:start-launches-a-new-game-at-the-chosen-size}
+
+{given}
+{screen name:configure}
+{size name:large chosen:1} -> 1
+{item of:configure name:start active:1} -> 1
+
+{when}
+{start}
+
+{then}
+{screen name:game}
+{view of:game name:goldberg size:large} -> 1
+{status text:turn 1} -> 1
+{item of:game name:next-turn active:1} -> 1
+{item of:game name:menu active:1} -> 1
+{attention of:next-turn}

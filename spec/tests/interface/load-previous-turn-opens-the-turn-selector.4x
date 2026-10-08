@@ -1,0 +1,25 @@
+# The saves screen navigates to the turn selector.
+#
+# **One row per turn the save holds**, which is the third screen listing one row per thing and the
+# reason that shape is worth settling once. **A save at turn 3 offers three turns**, so the rows are
+# derived from the save rather than stored beside it - and whether the engine agrees is exactly the
+# divergence `P-621` expects.
+
+{test name:load-previous-turn-opens-the-turn-selector}
+
+{given}
+{screen name:saves}
+{save name:first-game turn:3} -> 1
+
+{when}
+{load-previous-turn name:first-game}
+
+{then}
+{screen name:load-turn}
+{save name:first-game turn:3} -> 1
+{turn number:1 chosen:0} -> 1
+{turn number:2 chosen:0} -> 1
+{turn number:3 chosen:1} -> 1
+{item of:load-turn name:start active:1} -> 1
+{item of:load-turn name:back active:1} -> 1
+{attention of:3}

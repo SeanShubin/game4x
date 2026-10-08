@@ -1,0 +1,22 @@
+# `rename save` on the saves screen.
+#
+# **One row changes and the screen does not.** The turn, the other save and every item are the same
+# afterwards, which is what an exhaustive `then` makes cheap to assert.
+
+{test name:renaming-a-save-changes-its-name-and-nothing-else}
+
+{given}
+{screen name:saves}
+{save name:first-game turn:3} -> 1
+{save name:second-game turn:7} -> 1
+
+{when}
+{rename-save from:first-game to:the-cold-one}
+
+{then}
+{screen name:saves}
+{save name:the-cold-one turn:3} -> 1
+{save name:second-game turn:7} -> 1
+{item of:saves name:start active:0} -> 1
+{item of:saves name:back active:1} -> 1
+{attention of:the-cold-one}

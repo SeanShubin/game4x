@@ -1,0 +1,25 @@
+# The menu screen, with nothing saved.
+#
+# **`spec/tests/interface/README.md`: *the `then` is the whole of what the interface shows*.** So
+# three rows and nothing else means three items, and a fourth appearing makes this red.
+#
+# **Sean's design, 2026-10-07**: the `menu` screen offers *create new game*, *load existing game*
+# and *quit*. **`load existing game` is shown and not active**, because there is nothing to load -
+# `active:0` is the form `README.md` names for an item that is shown and unusable.
+#
+# **Three choices this lane made and did not decide**: that `{screen name:...}` is how *which menu
+# we are on* is stated, that an item says which screen it belongs to with `of:`, and that `continue`
+# is absent here rather than shown inactive. All three are in `docs/notes/spec-backlog.md`.
+
+{test name:the-menu-offers-three-items-with-nothing-saved}
+
+{given}
+{screen name:menu}
+{save} -> 0
+
+{then}
+{screen name:menu}
+{item of:menu name:create-new-game active:1} -> 1
+{item of:menu name:load-existing-game active:0} -> 1
+{item of:menu name:quit active:1} -> 1
+{attention of:create-new-game}

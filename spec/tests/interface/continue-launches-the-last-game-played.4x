@@ -1,0 +1,25 @@
+# `continue` goes straight to the game, with no screen in between.
+#
+# **Which game is *the last played* is a fact the save carries**, not a thing the command takes.
+# `{save ... last:1}` is this lane's choice; the alternative is ordering the saves, which `P-617`
+# rules out because the rows are a multiset.
+
+{test name:continue-launches-the-last-game-played}
+
+{given}
+{screen name:menu}
+{save name:first-game turn:3 last:0} -> 1
+{save name:second-game turn:7 last:1} -> 1
+
+{when}
+{continue}
+
+{then}
+{screen name:game}
+{save name:first-game turn:3 last:0} -> 1
+{save name:second-game turn:7 last:1} -> 1
+{view of:game name:goldberg} -> 1
+{status text:turn 7} -> 1
+{item of:game name:next-turn active:1} -> 1
+{item of:game name:menu active:1} -> 1
+{attention of:next-turn}

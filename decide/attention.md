@@ -42,10 +42,22 @@ Not one of the three kinds above. **That is worth a look at whatever filed it** 
 
 ## Read a test
 
-Of 64 test(s) in `spec/tests/` and 63 record(s) in `reviewed/`, these are
+Of 76 test(s) in `spec/tests/` and 63 record(s) in `reviewed/`, these are
 waiting. **Read it in the review application**, which writes the record.
 
-- `interface/the-starting-menu-offers-new-game-and-exit.4x` - no record; nobody has read it
+- `interface/choosing-a-size-makes-start-active.4x` - no record; nobody has read it
+- `interface/continue-is-offered-once-a-game-has-been-saved.4x` - no record; nobody has read it
+- `interface/continue-launches-the-last-game-played.4x` - no record; nobody has read it
+- `interface/create-new-game-goes-to-the-configure-screen.4x` - no record; nobody has read it
+- `interface/deleting-the-last-save-takes-continue-off-the-menu.4x` - no record; nobody has read it
+- `interface/exit-leaves-no-screen.4x` - no record; nobody has read it
+- `interface/load-existing-game-goes-to-the-saves-screen.4x` - no record; nobody has read it
+- `interface/load-previous-turn-opens-the-turn-selector.4x` - no record; nobody has read it
+- `interface/menu-from-the-game-returns-to-the-menu-screen.4x` - no record; nobody has read it
+- `interface/next-turn-advances-the-turn-and-the-status.4x` - no record; nobody has read it
+- `interface/renaming-a-save-changes-its-name-and-nothing-else.4x` - no record; nobody has read it
+- `interface/start-launches-a-new-game-at-the-chosen-size.4x` - no record; nobody has read it
+- `interface/the-menu-offers-three-items-with-nothing-saved.4x` - no record; nobody has read it
 
 ## Accept a regression case
 

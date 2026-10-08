@@ -1,0 +1,22 @@
+# The same screen, with one save, and two items change.
+#
+# **This is the conditional half of the menu**, and the reason there are two menu tests rather than
+# one: `load existing game` becomes active and `continue` appears at all. **Sean, 2026-10-01**: *top
+# menu items are continue, load, new game, exit* - four - where his 2026-10-07 design lists three.
+# **So this test is what says the fourth is conditional** rather than dropped.
+#
+# **A save has a name**, which `P-608`'s *save games will have a name* already requires.
+
+{test name:continue-is-offered-once-a-game-has-been-saved}
+
+{given}
+{screen name:menu}
+{save name:first-game} -> 1
+
+{then}
+{screen name:menu}
+{item of:menu name:continue active:1} -> 1
+{item of:menu name:create-new-game active:1} -> 1
+{item of:menu name:load-existing-game active:1} -> 1
+{item of:menu name:quit active:1} -> 1
+{attention of:continue}

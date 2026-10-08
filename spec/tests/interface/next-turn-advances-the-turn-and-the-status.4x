@@ -1,0 +1,21 @@
+# `next turn` on the game screen.
+#
+# **The status text is the assertion.** `P-608`: *a status bar, always present, that I can check the
+# text of* - so a turn advancing is visible as the text changing, and the screen does not move.
+
+{test name:next-turn-advances-the-turn-and-the-status}
+
+{given}
+{screen name:game}
+{status text:turn 7} -> 1
+
+{when}
+{next-turn}
+
+{then}
+{screen name:game}
+{status text:turn 8} -> 1
+{view of:game name:goldberg} -> 1
+{item of:game name:next-turn active:1} -> 1
+{item of:game name:menu active:1} -> 1
+{attention of:next-turn}

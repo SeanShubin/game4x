@@ -1,0 +1,23 @@
+# `menu` navigates back, and the game is still saved.
+#
+# **The save survives the navigation**, which is what makes `continue` work afterwards - so this
+# test and `continue-launches-the-last-game-played` are the two halves of one round trip.
+
+{test name:menu-from-the-game-returns-to-the-menu-screen}
+
+{given}
+{screen name:game}
+{save name:first-game turn:7 last:1} -> 1
+{status text:turn 7} -> 1
+
+{when}
+{menu}
+
+{then}
+{screen name:menu}
+{save name:first-game turn:7 last:1} -> 1
+{item of:menu name:continue active:1} -> 1
+{item of:menu name:create-new-game active:1} -> 1
+{item of:menu name:load-existing-game active:1} -> 1
+{item of:menu name:quit active:1} -> 1
+{attention of:continue}

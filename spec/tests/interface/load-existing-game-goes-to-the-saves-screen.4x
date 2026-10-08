@@ -1,0 +1,21 @@
+# `load existing game` navigates to the save selector.
+#
+# **The saves screen lists one row per save**, which is the same shape as `configure` listing one
+# row per size. **A save carries its turn**, because `load previous turn` needs something to select
+# from and `{save}` is where it lives.
+
+{test name:load-existing-game-goes-to-the-saves-screen}
+
+{given}
+{screen name:menu}
+{save name:first-game turn:3} -> 1
+
+{when}
+{load-existing-game}
+
+{then}
+{screen name:saves}
+{save name:first-game turn:3} -> 1
+{item of:saves name:start active:0} -> 1
+{item of:saves name:back active:1} -> 1
+{attention of:first-game}

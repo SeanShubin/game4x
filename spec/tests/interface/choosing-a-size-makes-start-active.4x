@@ -1,0 +1,24 @@
+# `choose size` is the only command on `configure` that does not navigate.
+#
+# **Two rows change and the screen does not.** The chosen size becomes `chosen:1` and `start`
+# becomes active, which is what makes `active` a column worth having - `start` is shown before a
+# size is chosen and cannot be used.
+
+{test name:choosing-a-size-makes-start-active}
+
+{given}
+{screen name:configure}
+{size name:small chosen:0} -> 1
+{size name:large chosen:0} -> 1
+{item of:configure name:start active:0} -> 1
+
+{when}
+{choose-size name:large}
+
+{then}
+{screen name:configure}
+{size name:small chosen:0} -> 1
+{size name:large chosen:1} -> 1
+{item of:configure name:start active:1} -> 1
+{item of:configure name:back active:1} -> 1
+{attention of:large}

@@ -1,0 +1,26 @@
+# One command, one screen change.
+#
+# **The command is the `when` and the screen is state.** `create new game` navigates to the planet
+# size selector - Sean's design, 2026-10-07 - so the test is that `{screen name:...}` moved and the
+# configure screen's own contents are what it shows.
+#
+# **`configure` offers a selector and two buttons**, which is where a screen's contents stop being
+# all one kind: `start` and `back` are action buttons and the selector is a component. **This states
+# the selector as one row per size**, which is a choice and is recorded as one.
+
+{test name:create-new-game-goes-to-the-configure-screen}
+
+{given}
+{screen name:menu}
+{save} -> 0
+
+{when}
+{create-new-game}
+
+{then}
+{screen name:configure}
+{size name:small chosen:0} -> 1
+{size name:large chosen:0} -> 1
+{item of:configure name:start active:0} -> 1
+{item of:configure name:back active:1} -> 1
+{attention of:back}
