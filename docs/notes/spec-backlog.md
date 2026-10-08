@@ -8,6 +8,46 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-10-07 - the user interface design: eleven commands, five screens, four components
+
+**Sean**, offering a design and saying he is *open to renaming and rearranging things as
+necessary*:
+
+```
+Commands                         Screens
+  exit                             menu      create new game / load existing game / quit
+  create new game                  configure planet size selector / start / back
+  load existing game               saves     save selector (rename, delete, -> turn selector)
+  continue                                   start / back
+  choose size                      load turn turn selector / start / back
+  start                            game      goldberg view / status area
+  rename save                                actions: next turn / menu
+  delete save
+  load previous turn             Components
+  next turn                        menu item / action button / status area / goldberg view
+  menu
+```
+
+**Three places it disagrees with something he has already said**, all of them the kind of thing a
+test has to resolve and none of them a criticism:
+
+**`exit` is a command and `quit` is the menu's item.** One of them is a renaming he is open to, and
+a test cannot name both.
+
+**`continue` is a command with no screen offering it.** On 2026-10-01 he said *top menu items are
+continue, load, new game, exit* - four - and this menu lists three without it. **Either it is
+conditional on a save existing or it has dropped out.**
+
+**A screen's contents mix items and components.** `start` and `back` are action buttons; *planet
+size selector* and *goldberg view* are components. **`P-617` makes a test's `then` the whole of
+what the interface shows**, so a test of the `configure` screen has to state the selector as well
+as the two buttons, and what a selector's rows look like is unstated.
+
+**What this lane did with it is three tests rather than fifteen**, and the reason is in
+[`spec/tests/interface/README.md`](../../spec/tests/interface/README.md)'s own terms: every choice
+about the notation is one he reads once and then every later test inherits. **Fifteen tests in a
+form he then renames is fifteen readings wasted**; three that establish the form cost one.
+
 ## 2026-10-06 - the interface carries its own data, and the two schemas do not know each other
 
 **Sean**, to the code lane, relayed because an idea said in chat reaches `spec/` only by being
