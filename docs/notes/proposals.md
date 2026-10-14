@@ -69,7 +69,55 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-265 - `31d73b06` left `reports/` stale, and the check that caught it is the check that fixed it
+
+**to** code · **status** open · **raised** 2026-10-14 · **cites** `S-260`, `S-254` · **source** the gate refusing a push
+
+**This lane landed thirteen interface tests and filed nothing**, which is `CLAUDE.md`'s *a
+promotion that adds a row to a table the code generates from makes the gate red until the code
+follows, and says so in the same breath as the rule.* This item is that sentence, a commit late.
+
+```
+31d73b06                         13 tests added, 1 deleted, reports/ untouched
+reports/tests.md                 committed says 64 tests; there are 76
+reports/review/interface.html    1 data-test, and it is the deleted one
+reports/{spec/tests,foundation}/interface/the-starting-menu-offers-new-game-and-exit.4x.html
+                                 committed, for a test that is gone
+```
+
+**What refused the push is `browsable.rs:238`** - `cargo test --release -p game-model --test
+browsable`, reported as *1 target failed*. The two files it named are `reports/tests.html` and
+`reports/tests.md`.
+
+## The run that failed is the run that fixed it
+
+`index::write_all()` at `browsable.rs:260` writes before the comparison reads, so the failing run
+left the regeneration in the working tree: two files modified, 26 pages new, none committed.
+**The same test passes now and nothing says the work is undone** - measured by running it again,
+unchanged, immediately. A second push gets through with a stale `reports/` still uncommitted, which
+is why this is an item rather than a sentence in a reply.
+
+## And `S-260`'s latent gap is live
+
+`reports/review/interface.html` is the page he presses buttons on, and it offers the test
+`31d73b06` deleted and none of the thirteen it added. **Nothing regenerated it**: `write_all` does
+not write `review/`, and the comparison reads only the top level of `reports/`. `S-260` said a
+committed `reports/review/*` that disagreed with its generator *would publish and pass*; it is
+doing that now, and it is what stands between him and approving an interface test.
+
+**The two orphan pages are the other half.** A generator that writes never deletes, and no check
+asks whether a page still has a test - so a page for a deleted test resolves, has a sibling, carries
+no script, and passes everything.
+
+## What is asked
+
+The regeneration committed, because `reports/` is yours and this lane may not; then
+`reports/review/` regenerated and the two orphans removed. **Whether the comparison should recurse
+is `S-260` and this does not restate it**; what this adds is the two gestures it cannot see at all -
+a page whose test is gone, and a failure that repairs its own subject.
+
 ### S-260 - `every_committed_report_is_what_the_generator_writes` cannot see `reports/review/`
+
 
 **to** code · **status** open · **raised** 2026-10-06 · **cites** `S-254`, `S-259` · **source** this lane nearly filing it as a live defect
 

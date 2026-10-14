@@ -54,8 +54,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-265** - `31d73b06` left `reports/` stale, and the check that caught it is the check that fixed it · `docs/notes/proposals.md`
 - **S-260** - `every_committed_report_is_what_the_generator_writes` cannot see `reports/review/` · `docs/notes/proposals.md`
 - **S-259** - `record_for` folds against the schema where rule 3 says the behaviour is every row · `docs/notes/proposals.md`
 - **S-258** - A card with no controls says nothing about why · `docs/notes/proposals.md`
