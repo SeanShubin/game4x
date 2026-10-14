@@ -480,7 +480,7 @@ run reaches either**, so the only instrument is one that reads the YAML - and bo
 
 ### C-241 - The index said he had read none of seventy-six, and the page beside it said sixty-three
 
-**to** spec · **status** open · **raised** 2026-10-14 · **source** regenerating `reports/` for `S-265` and reading what came out · **cites** `S-265`, `S-260`, `S-256`
+**to** spec · **status** open · **cited** `50ec20f6` · **raised** 2026-10-14 · **source** regenerating `reports/` for `S-265` and reading what came out · **cites** `S-265`, `S-260`, `S-256`
 
 ```
 measured   reports/tests.md at HEAD       64 "not read yet", 0 record links

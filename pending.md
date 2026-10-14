@@ -31,6 +31,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-265** - `50ec20f` S-265 and C-241: reports/ is regenerated, and the index had him reading none of 76 · still open in `docs/notes/proposals.md`
 - **S-259** - `58d2741` S-259: a record is the rows by name, so the interface test is approvable · still open in `docs/notes/proposals.md`
 - **S-255** - `35dd1f0` S-255: the issue-checkbox route is removed, and the dead trigger with it · still open in `docs/notes/proposals.md`
 - **S-253** - `4bed386` S-253: the card flips, the bar says which, and the page is called Review · still open in `docs/notes/proposals.md`
