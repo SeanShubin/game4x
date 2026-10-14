@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/interface/choosing-a-size-makes-start-active.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/interface/choosing-a-size-makes-start-active.4x</code></h1>
+<p class="note">`choose size` is the only command on `configure` that does not navigate.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/interface/choosing-a-size-makes-start-active.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/interface/choosing-a-size-makes-start-active.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose"><code>choose size</code> is the only command on <code>configure</code> that does not navigate.</span>
+<span class="prose"></span>
+<span class="prose"><strong>Two rows change and the screen does not.</strong> The chosen size becomes <code>chosen:1</code> and <code>start</code></span>
+<span class="prose">becomes active, which is what makes <code>active</code> a column worth having - <code>start</code> is shown before a</span>
+<span class="prose">size is chosen and cannot be used.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">choosing-a-size-makes-start-active</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">screen</span> <span class="key">name</span><span class="colon">:</span><span class="value">configure</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">size</span> <span class="key">name</span><span class="colon">:</span><span class="value">small</span> <span class="key">chosen</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">size</span> <span class="key">name</span><span class="colon">:</span><span class="value">large</span> <span class="key">chosen</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">configure</span> <span class="key">name</span><span class="colon">:</span><span class="value">start</span> <span class="key">active</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">choose-size</span> <span class="key">name</span><span class="colon">:</span><span class="value">large</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">screen</span> <span class="key">name</span><span class="colon">:</span><span class="value">configure</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">size</span> <span class="key">name</span><span class="colon">:</span><span class="value">small</span> <span class="key">chosen</span><span class="colon">:</span><span class="value">0</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">size</span> <span class="key">name</span><span class="colon">:</span><span class="value">large</span> <span class="key">chosen</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">configure</span> <span class="key">name</span><span class="colon">:</span><span class="value">start</span> <span class="key">active</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">configure</span> <span class="key">name</span><span class="colon">:</span><span class="value">back</span> <span class="key">active</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">attention</span> <span class="key">of</span><span class="colon">:</span><span class="value">large</span><span class="brace">}</span>
+</pre>
+</body>
+</html>

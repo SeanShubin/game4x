@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>spec/tests/interface/start-launches-a-new-game-at-the-chosen-size.4x</title>
+<link rel="stylesheet" href="../../../report.css">
+</head>
+<body>
+<h1><code>spec/tests/interface/start-launches-a-new-game-at-the-chosen-size.4x</code></h1>
+<p class="note">`start` on `configure` launches the game.</p>
+<p class="where"><a href="../../../index.html">The index</a> · <a href="../../../../spec/tests/interface/start-launches-a-new-game-at-the-chosen-size.4x">the file itself, as text</a></p>
+<p class="generated">Generated from <code>spec/tests/interface/start-launches-a-new-game-at-the-chosen-size.4x</code> by <code>scripts/reports.sh</code>. <strong>Not canonical</strong> - the file it came from is, and this is a rendering of it.</p>
+<pre class="four-x"><span class="prose"><code>start</code> on <code>configure</code> launches the game.</span>
+<span class="prose"></span>
+<span class="prose"><strong>The game screen is the first one whose contents are not all items.</strong> <code>goldberg view</code> and</span>
+<span class="prose"><code>status area</code> are components; <code>next turn</code> and <code>menu</code> are action buttons. <em></em>This states the view as</span>
+<span class="prose">one row naming it and the status as one row carrying its text<em></em>, which is <code>P-608</code>'s *a status bar,</span>
+<span class="prose">always present, that I can check the text of*.</span>
+
+<span class="brace">{</span><span class="relation">test</span> <span class="key">name</span><span class="colon">:</span><span class="value">start-launches-a-new-game-at-the-chosen-size</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">given</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">screen</span> <span class="key">name</span><span class="colon">:</span><span class="value">configure</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">size</span> <span class="key">name</span><span class="colon">:</span><span class="value">large</span> <span class="key">chosen</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">configure</span> <span class="key">name</span><span class="colon">:</span><span class="value">start</span> <span class="key">active</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+
+<span class="brace">{</span><span class="relation">when</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">start</span><span class="brace">}</span>
+
+<span class="brace">{</span><span class="relation">then</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">screen</span> <span class="key">name</span><span class="colon">:</span><span class="value">game</span><span class="brace">}</span>
+<span class="brace">{</span><span class="relation">view</span> <span class="key">of</span><span class="colon">:</span><span class="value">game</span> <span class="key">name</span><span class="colon">:</span><span class="value">goldberg</span> <span class="key">size</span><span class="colon">:</span><span class="value">large</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">status</span> <span class="key">text</span><span class="colon">:</span><span class="value">turn</span> <span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">game</span> <span class="key">name</span><span class="colon">:</span><span class="value">next-turn</span> <span class="key">active</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">item</span> <span class="key">of</span><span class="colon">:</span><span class="value">game</span> <span class="key">name</span><span class="colon">:</span><span class="value">menu</span> <span class="key">active</span><span class="colon">:</span><span class="value">1</span><span class="brace">}</span><span class="arrow"> -&gt; 1</span>
+<span class="brace">{</span><span class="relation">attention</span> <span class="key">of</span><span class="colon">:</span><span class="value">next-turn</span><span class="brace">}</span>
+</pre>
+</body>
+</html>

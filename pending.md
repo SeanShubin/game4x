@@ -87,7 +87,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-225** - A lint failure published a site with no reports, and my own comment said it could not · `crates/outbox.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (77)
+### To spec (78)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -103,6 +103,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-263** - NOT DEPLOYED was printed by a script watching a job that has never existed · `crates/outbox.md`
 - **S-262** - The check that would have refused it ran after the commit, because it cost fifty seconds · `crates/outbox.md`
 - **S-261** - The artifact name was declared, documented twice and passed to nothing · `crates/outbox.md`
+- **C-241** - The index said he had read none of seventy-six, and the page beside it said sixty-three · `crates/outbox.md`
 - **C-240** - A record is the rows by name, so the interface test is approvable · `crates/outbox.md`
 - **C-239** - A local action needs the repository on disk, and my counts turned his approval into a failure · `crates/outbox.md`
 - **C-237** - Eight tests lived in an example and nothing in the gate ran them · `crates/outbox.md`

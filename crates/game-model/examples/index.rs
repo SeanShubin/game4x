@@ -645,14 +645,33 @@ pub fn write_all() -> (usize, usize) {
     let mut tests = Vec::new();
     for name in render::under(&root().join("spec/tests")) {
         let stem = name.trim_end_matches(".4x");
-        let record = root().join("reviewed/rule").join(&name);
-        let mut beside = vec![
-            ("as text".to_string(), up("", &format!("spec/tests/{name}"))),
-            (
+        // **`reviewed/` is a directory of suites and `name` carries the suite** - `S-256`, which
+        // made `render::under` return `rule/a-bin-....4x` rather than `a-bin-....4x`. Joining
+        // `reviewed/rule` to that asked for `reviewed/rule/rule/a-bin-....4x`, which has never
+        // existed, so **every one of the seventy-six tests said *not read yet* and sixty-three of
+        // them had been read.** `87dd8cc5` followed the split here by prepending the suite that
+        // the name had just started carrying.
+        //
+        // **`report.rs` does it correctly and that is what makes this findable** - `review_of`
+        // joins `records_at()` to the suite-prefixed stem, so the review page and this index
+        // disagreed about what he had read and only one of them was wrong.
+        let record = root().join("reviewed").join(&name);
+        let mut beside = vec![("as text".to_string(), up("", &format!("spec/tests/{name}")))];
+        // **A foundation form exists only for a test with a record** - `spec/README.md` rule 3,
+        // which generates it from `reviewed/` and not from `spec/tests/`. Rendering one
+        // unconditionally wrote **fourteen pages whose source is not there**: an empty `<pre>`, a
+        // title of `-`, and a *the file itself, as text* link pointing at a `.4x` that does not
+        // exist. **`every_link_in_every_report_resolves` reads the top level of `reports/`**, so a
+        // dangling link one directory down is outside what it asks.
+        //
+        // **The unread case already has a line that says why** - *not read yet*, below - so a link
+        // to a blank page is the one thing this entry can say that is worse than saying nothing.
+        if root().join("reports/foundation").join(&name).is_file() {
+            beside.push((
                 "foundation form".to_string(),
                 rendered(&format!("reports/foundation/{name}")),
-            ),
-        ];
+            ));
+        }
         if record.is_file() {
             // **The record is linked as text and not rendered**, because a rendering of it would
             // sit at `reports/reviewed/...` - and `hooks/pre-commit` puts `*/reviewed/*` in
@@ -665,7 +684,7 @@ pub fn write_all() -> (usize, usize) {
             // is `no_test_differs_from_what_sean_read`'s job rather than a reader's.
             beside.push((
                 "the record he read it, as text".to_string(),
-                up("", &format!("reviewed/rule/{name}")),
+                up("", &format!("reviewed/{name}")),
             ));
         } else {
             beside.push(("not read yet".to_string(), "tests.html".to_string()));

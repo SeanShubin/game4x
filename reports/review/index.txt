@@ -2,7 +2,7 @@ The thin engine, per test: the world it starts in, what each command took and ma
 the world it leaves. (old state, commands) -> (new state, effects).
 
 ==============================================================================
-interface/the-starting-menu-offers-new-game-and-exit
+interface/choosing-a-size-makes-start-active
 
 old state
   - root
@@ -53,7 +53,655 @@ new state
     - yard
 
 cannot be read against the data as it stands
-  line 17: `saves` has no quantity, so `->` says nothing about it
+  line 11: `size` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/continue-is-offered-once-a-game-has-been-saved
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 14: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/continue-launches-the-last-game-played
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 11: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/create-new-game-goes-to-the-configure-screen
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 15: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/deleting-the-last-save-takes-continue-off-the-menu
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 11: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/exit-leaves-no-screen
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 11: `running` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/load-existing-game-goes-to-the-saves-screen
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 11: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/load-previous-turn-opens-the-turn-selector
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 12: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/menu-from-the-game-returns-to-the-menu-screen
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 10: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/next-turn-advances-the-turn-and-the-status
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 10: line 1: `7` is a bare word; every value is named
+
+==============================================================================
+interface/renaming-a-save-changes-its-name-and-nothing-else
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 10: `save` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/start-launches-a-new-game-at-the-chosen-size
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 12: `size` has no quantity, so `->` says nothing about it
+
+==============================================================================
+interface/the-menu-offers-three-items-with-nothing-saved
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+    - planet
+    - provides
+    - scout
+    - terrain
+    - territory
+    - transport
+    - yard
+
+cannot be read against the data as it stands
+  line 18: `save` has no quantity, so `->` says nothing about it
 
 ==============================================================================
 rule/a-bin-cannot-be-built-where-the-capacity-is-taken

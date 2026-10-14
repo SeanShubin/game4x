@@ -478,6 +478,71 @@ action to take a value and drop it fails here rather than on the site.
 run reaches either**, so the only instrument is one that reads the YAML - and both now have one.
 
 
+### C-241 - The index said he had read none of seventy-six, and the page beside it said sixty-three
+
+**to** spec · **status** open · **raised** 2026-10-14 · **source** regenerating `reports/` for `S-265` and reading what came out · **cites** `S-265`, `S-260`, `S-256`
+
+```
+measured   reports/tests.md at HEAD       64 "not read yet", 0 record links
+           reviewed/rule/                 63 records
+           reports/review/index.html      63 reviewed, and it was right
+```
+
+**Two readers of the same thing and only one of them was wrong**, which is why this was visible at
+all. `report.rs`'s `review_of` joins `records_at()` to the suite-prefixed stem and finds the
+record; `index.rs` joined `reviewed/rule` to the *same* suite-prefixed name and asked for
+`reviewed/rule/rule/a-bin-....4x`, which has never existed. **So every test said *not read yet* and
+sixty-three of them had been read.**
+
+`87dd8cc5` is where it came in - *Follow `spec/tests`' split into rule and interface, in twelve
+places*. `render::under` started returning `rule/<stem>.4x` in that commit, and this line was
+updated by prepending the suite that the name had just started carrying. **The fix is to stop
+prepending it**: `root().join("reviewed")`, which is what `records_at()` is.
+
+## What the instrument asked
+
+**Nothing asked it.** There is no check that a record reachable by one reader is reachable by the
+other - and the page that was wrong is generated, committed and compared byte for byte by
+`every_committed_report_is_what_the_generator_writes`, which passed on every push because the
+generator and the committed copy agreed about the wrong answer. **A comparison of a file against
+its own generator cannot see a generator that is wrong**; it can only see one that has moved.
+
+That is *a check that pins the present state cannot report a gap against what should be*, in the
+one place this lane had assumed was covered.
+
+## Fourteen pages whose source is not there
+
+`rendered()` reads its source with `unwrap_or_default()`, and `write_all` asked it for
+`reports/foundation/<name>` for every test in `spec/tests/` - including the thirteen nobody has
+read. **A foundation form exists only for a test with a record**, which is `spec/README.md` rule 3,
+so those thirteen rendered an empty `<pre>`, a title of `-`, and a *the file itself, as text* link
+pointing at a `.4x` that is not there.
+
+**`every_link_in_every_report_resolves` reads the top level of `reports/`**, so a dangling link one
+directory down is outside what it asks - `S-260`'s shape again, in the sibling check rather than in
+the one `S-260` names. The entry says *not read yet* already, so the foundation link is now written
+only where the form exists.
+
+## Two orphans, removed by hand, and nothing stops the next
+
+`31d73b06` deleted `interface/the-starting-menu-offers-new-game-and-exit` and left its two
+renderings committed - under `reports/foundation/interface/` and `reports/spec/tests/interface/`.
+**The generators add and never remove**, so a rendering outlives its source silently and no check
+counts renderings against sources.
+
+**Removed by hand here, which is housekeeping and not an approval**: a rendering is a generated
+file with no owner, and neither path is a record or a regression case. **The assumption this lane
+proceeded under is that removal belongs to the generator** rather than to a hand, and that is not
+built - so the next deleted test strands its pages the same way.
+
+## And one the same shape, still latent
+
+`index.rs:589` reads `named_files("reviewed/rule")` flat, for the rule-coverage counts. That is a
+true answer today, because every record is a rule record. **It becomes a wrong one the day a record
+lands under another suite**, which is the thing `S-256` already moved every other reader off.
+Left alone deliberately: changing it would fold interface records into a rule-coverage number this
+lane cannot check against anything.
+
 ### C-240 - A record is the rows by name, so the interface test is approvable
 
 **to** spec · **status** open · **cited** `58d27412` · **raised** 2026-10-06 · **source** `S-259`, `S-258` · **cites** `S-259`, `S-258`, `P-621`
